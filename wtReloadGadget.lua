@@ -22,7 +22,6 @@ local dialog = false
 local function ConfigDialog(container)
 	dialog = WT.Dialog(container)
 		:Label("The Reload UI button is useful for addon development. You probably don't want to use this if you're not a developer.")
-		:Label("A future enhancement to this control is to allow the selection of which addons to monitor.")	
 end
 
 local function GetConfiguration()

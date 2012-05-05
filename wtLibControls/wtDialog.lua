@@ -83,7 +83,7 @@ end
 
 function CDialog:FieldNote(note)
 	-- Double span notes... (note - setting stretch to true with no control will make the label span the full width)
-	self:add(nil, note, nil, 10, true, "img/wtInfo12.png")	
+	self:add(nil, note, nil, 11, true, "img/wtInfo12.png")	
 	return self
 end
 

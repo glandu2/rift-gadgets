@@ -46,6 +46,7 @@ local dialog = false
 local function ConfigDialog(container)	
 	dialog = WT.Dialog(container)
 		:Label("The CPU monitor displays the percentage of Rift's processing time used by all addons.")
+		:Label("A future enhancement to this control is to allow the selection of which addons to monitor.")	
 end
 
 local function GetConfiguration()

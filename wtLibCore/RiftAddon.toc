@@ -1,0 +1,39 @@
+Identifier = "wtLibCore"
+
+Name = "wtLibCore"
+Description = "WT Core Library"
+
+Author = "Wildtide"
+Website = "http://www.wildtide.net"
+Email = "wildtide@wildtide.net"
+
+Version = "0.31"
+
+Environment = "1.8"
+
+RunOnStartup = 
+{
+  "wtCore.lua",
+  "wtStrings.lua",
+  "wtLog.lua",
+  "wtLocalization.lua",
+  "wtLocalization_de.lua",
+  "wtLocalization_fr.lua",
+  "wtLocalization_ko.lua",
+  "wtLocalization_ru.lua",
+  "wtUtility.lua",
+}
+
+SavedVariables = 
+{
+	wtxOptions = "account",
+	wtxLogLevel = "account",	
+}
+
+Embed = 
+{
+}
+
+Dependencies = 
+{
+}

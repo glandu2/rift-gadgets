@@ -1,0 +1,42 @@
+Identifier = "Gadgets"
+
+Name = "Gadgets"
+Description = "This is a common set of gadgets, packaged into a single addon. Dependent on various embedded WT library components."
+
+Author = "Wildtide"
+Website = "http://www.wildtide.net"
+Email = "wildtide@wildtide.net"
+
+Version = "0.3.3"
+
+Environment = "1.8"
+
+RunOnStartup = 
+{
+  "wtLocalization.lua",
+  "wtFPSGadget.lua",
+  "wtRangeFinderGadget.lua",
+  "wtCPUGadget.lua",
+  "wtReloadGadget.lua",
+  "wtUnitFrameGadget.lua",
+  "wtChargeMeterGadget.lua",
+  "wtComboPointsGadget.lua",
+}
+
+SavedVariables = 
+{
+}
+
+Embed = 
+{
+	wtLibCore = true,
+	wtLibControls = true,
+	wtLibUnitDatabase = true,
+	wtLibGadget = true,
+	wtLibUnitFrame = true,
+}
+
+Dependencies = 
+{
+	wtLibUnitFrame = {"required", "before"},
+}

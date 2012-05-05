@@ -1,0 +1,33 @@
+Identifier = "wtLibControls"
+
+Name = "wtLibControls"
+Description = "WT Control Library"
+
+Author = "Wildtide"
+Website = "http://www.wildtide.net"
+Email = "wildtide@wildtide.net"
+
+Version = "0.31"
+
+Environment = "1.8"
+
+RunOnStartup = 
+{
+  "wtControl.lua",
+  "wtMenu.lua",
+  "wtComboBox.lua",
+  "wtDialog.lua",
+}
+
+SavedVariables = 
+{
+}
+
+Embed = 
+{
+}
+
+Dependencies = 
+{
+	wtLibCore = {"required", "before"},	
+}

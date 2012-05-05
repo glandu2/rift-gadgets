@@ -1,0 +1,44 @@
+Identifier = "wtLibUnitFrame"
+
+Name = "wtLibUnitFrame"
+Description = "WT UnitFrame Library"
+
+Author = "Wildtide"
+Website = "http://www.wildtide.net"
+Email = "wildtide@wildtide.net"
+
+Version = "0.31"
+
+Environment = "1.8"
+
+RunOnStartup = 
+{
+  "wtUnitFrame.lua",
+  "wtElement.lua",
+  "elements/wtFrame.lua",
+  "elements/wtLabel.lua",
+  "elements/wtStaticLabel.lua",
+  "elements/wtBar.lua",
+  "elements/wtImage.lua",
+  "elements/wtImageSet.lua",
+  "elements/wtBuffPanel.lua",
+  "templates/StandardFrame.lua",
+  "templates/RaidFrame.lua",
+  "templates/SimpleFrame.lua",
+  "templates/HealthOrb.lua",
+  "templates/ManaOrb.lua",
+}
+
+SavedVariables = 
+{
+}
+
+Embed = 
+{
+}
+
+Dependencies = 
+{
+	wtLibUnitDatabase = {"required", "before"},	
+	wtLibGadget = {"required", "before"},	
+}

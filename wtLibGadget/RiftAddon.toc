@@ -1,0 +1,35 @@
+Identifier = "wtLibGadget"
+
+Name = "wtLibGadget"
+Description = "WT Gadget Library"
+
+Author = "Wildtide"
+Website = "http://www.wildtide.net"
+Email = "wildtide@wildtide.net"
+
+Version = "0.31"
+
+Environment = "1.8"
+
+RunOnStartup = 
+{
+  "wtGadget.lua",
+  "wtGadgetRecommendReload.lua",
+  "wtGadget_CreateDialog.lua",
+  "wtGadget_ModifyDialog.lua",
+}
+
+SavedVariables = 
+{
+	wtxGadgets="character",
+}
+
+Embed = 
+{
+}
+
+Dependencies = 
+{
+	wtLibCore = {"required", "before"},	
+	wtLibControls = {"required", "before"},	
+}

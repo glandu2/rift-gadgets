@@ -1,0 +1,33 @@
+Identifier = "wtLibUnitDatabase"
+
+Name = "wtLibUnitDatabase"
+Description = "WT Unit Database Library"
+
+Author = "Wildtide"
+Website = "http://www.wildtide.net"
+Email = "wildtide@wildtide.net"
+
+Version = "0.31"
+
+Environment = "1.8"
+
+RunOnStartup = 
+{
+  "wtUnit.lua",
+  "wtUnitDatabase.lua",
+}
+
+SavedVariables = 
+{
+}
+
+Embed = 
+{
+	LibUnitChange = true,
+}
+
+Dependencies = 
+{
+	LibUnitChange = {"required", "before"},
+	wtLibCore = {"required", "before"},	
+}

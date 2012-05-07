@@ -52,7 +52,7 @@ end
 WT.Gadget.RegisterFactory("SoulVitality",
 	{
 		name="Soul Vitality",
-		description="Display Soul Vitality",
+		description="Displays Soul Vitality",
 		author="Wildtide",
 		version="1.0.0",
 		iconTexAddon=AddonId,

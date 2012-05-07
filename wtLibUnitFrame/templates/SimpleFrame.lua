@@ -16,6 +16,7 @@ SimpleFrame.Configuration.RaidSuitable = true
 SimpleFrame.Configuration.FrameType = "Frame"
 SimpleFrame.Configuration.Width = simpleFrameWidth + 2
 SimpleFrame.Configuration.Height = simpleFrameHeight + 2
+SimpleFrame.Configuration.Resizable = { simpleFrameWidth + 2, simpleFrameHeight + 2, 300, 100 }
 ---------------------------------------------------------------------------------
 
 -- Override the buff filter to hide some buffs ----------------------------------
@@ -59,25 +60,41 @@ function SimpleFrame:Construct(options)
 				color={r=0,g=0,b=0},alpha=0.6,
 				attach = 
 				{ 
-					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=3, offsetY=3 },
-					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT", offsetX=-3, offsetY=-3 } 
+					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=1, offsetY=1 },
+					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT", offsetX=-1, offsetY=-1 } 
 				},
 			}, 
 			{
 				-- Generic Element Configuration
+				id="barResource", type="Bar", parent="frameBackdrop", layer=10,
+				attach = {
+					{ point="BOTTOMLEFT", element="frame", targetPoint="BOTTOMLEFT", offsetX=1, offsetY=-1 },
+					{ point="RIGHT", element="frame", targetPoint="RIGHT", offsetX=-1 },
+				},
+				-- visibilityBinding="id",
+				-- Type Specific Element Configuration
+				binding="resourcePercent", height=simpleFrameBottomBarHeight, colorBinding="resourceColor",
+				texAddon=AddonId, texFile="img/Diagonal.png",
+				backgroundColor={r=0, g=0, b=0, a=1}
+			},
+			{
+				-- Generic Element Configuration
 				id="barHealth", type="Bar", parent="frameBackdrop", layer=10,
-				attach = {{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=1, offsetY=1 }},
+				attach = {
+					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=1, offsetY=1 },
+					{ point="BOTTOMRIGHT", element="barResource", targetPoint="TOPRIGHT" },
+				},
 				-- visibilityBinding="id",
 				growthDirection="right",
 				-- Type Specific Element Configuration
-				binding="healthPercent", width=simpleFrameWidth, height=simpleFrameTopBarHeight,color={r=0,g=0.7,b=0,a=1}, 
+				binding="healthPercent", color={r=0,g=0.7,b=0,a=1}, 
 				texAddon=AddonId, texFile="img/Diagonal.png", 
 				backgroundColor={r=0, g=0, b=0, a=1}
 			},
 			{
 				-- Generic Element Configuration
 				id="labelHealthR", type="Label", parent="barHealth", layer=20,
-				attach = {{ point="CENTERRIGHT", element="barHealth", targetPoint="CENTERRIGHT" }},
+				attach = {{ point="CENTERRIGHT", element="barHealth", targetPoint="CENTERRIGHT", offsetX=-2, offsetY=0 }},
 				visibilityBinding="health",
 				-- Type Specific Element Configuration
 				text="{health}", default="", fontSize=12
@@ -97,22 +114,19 @@ function SimpleFrame:Construct(options)
 					 }, defaultIndex = "hide"
 			},
 			{
-				-- Generic Element Configuration
-				id="labelName", type="Label", parent="frameBackdrop", layer=20,
+				id="imgRole", type="ImageSet", parent="frameBackdrop", layer=20,
 				attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT", offsetX=2, offsetY=0 }},
-				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				text="{nameShort}", default="", fontSize=12
+				texAddon=AddonId, texFile="img/Roles12.png", nameBinding="role", cols=1, rows=5, 
+				names = { ["tank"] = 0, ["heal"] = 1, ["dps"] = 2, ["support"] = 3 }, defaultIndex = "hide"
 			},
 			{
 				-- Generic Element Configuration
-				id="barResource", type="Bar", parent="frameBackdrop", layer=10,
-				attach = {{ point="TOPLEFT", element="barHealth", targetPoint="BOTTOMLEFT" }},
-				-- visibilityBinding="id",
+				id="labelName", type="Label", parent="frameBackdrop", layer=20,
+				attach = {{ point="CENTERLEFT", element="imgRole", targetPoint="CENTERRIGHT", offsetX=2, offsetY=0 }},
+				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				binding="resourcePercent", width=simpleFrameWidth, height=simpleFrameBottomBarHeight, colorBinding="resourceColor",
-				texAddon=AddonId, texFile="img/Diagonal.png",
-				backgroundColor={r=0, g=0, b=0, a=1}
+				text="{nameShort}", default="", fontSize=12
 			},
 			{
 				-- Generic Element Configuration
@@ -129,7 +143,17 @@ function SimpleFrame:Construct(options)
 				visibilityBinding="resource",
 				-- Type Specific Element Configuration
 				text="{resourcePercent}%", default="", fontSize=10
-			},			
+			},
+			{
+				id="buffPanelDebuffs", type="BuffPanel", parent="frameBackdrop", layer=30,
+				attach = {{ point="BOTTOMRIGHT", element="frameBackdrop", targetPoint="BOTTOMRIGHT", offsetX=-2, offsetY=-2 }},
+				rows=2, cols=4, iconSize=18, iconSpacingHorizontal=1, iconSpacingVertical=1, borderThickness=1, 
+				acceptLowPriorityBuffs=false, acceptMediumPriorityBuffs=false, acceptHighPriorityBuffs=false, acceptCriticalPriorityBuffs=false,
+				acceptLowPriorityDebuffs=true, acceptMediumPriorityDebuffs=true, acceptHighPriorityDebuffs=true, acceptCriticalPriorityDebuffs=true,
+				growthDirection = "left_up",
+				sweepOverlay=false,
+			},
+			
 		}
 	}
 	
@@ -145,5 +169,4 @@ function SimpleFrame:Construct(options)
 	self:SetMouseoverUnit(self.UnitSpec)
 	self.Event.LeftClick = "target @" .. self.UnitSpec
 	self.Event.RightClick = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
-	
 end

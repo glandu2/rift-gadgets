@@ -48,32 +48,38 @@ function wtBar:Construct()
 
 	self.Mask = UI.CreateFrame("Mask", WT.UnitFrame.UniqueName(), self)
 
-	self:SetWidth(config.width)
-	self:SetHeight(config.height)
+	if (config.width) then self:SetWidth(config.width) end
+	if (config.height) then self:SetHeight(config.height) end
 
 	self.growthDirection = config.growthDirection or "right"
 
-	self.Mask:SetWidth(config.width)
-	self.Mask:SetHeight(config.height)
-	
 	if self.growthDirection == "left" then
 		self.Mask:SetPoint("TOPRIGHT", self, "TOPRIGHT")
+		self.Mask:SetPoint("BOTTOM", self, "BOTTOM")
+		self.Mask:SetWidth(self:GetWidth())
 	elseif self.growthDirection == "up" then
 		self.Mask:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT")
+		self.Mask:SetPoint("RIGHT", self, "RIGHT")
+		self.Mask:SetHeight(self:GetHeight())
 	elseif self.growthDirection == "down" then
 		self.Mask:SetPoint("TOPLEFT", self, "TOPLEFT")
+		self.Mask:SetPoint("RIGHT", self, "RIGHT")
+		self.Mask:SetHeight(self:GetHeight())
 	else
 		self.Mask:SetPoint("TOPLEFT", self, "TOPLEFT")
+		self.Mask:SetPoint("BOTTOM", self, "BOTTOM")
+		self.Mask:SetWidth(self:GetWidth())
 	end
 	
-	self.MaxWidth = config.width	
-	self.MaxHeight = config.height	
+	--self.MaxWidth = config.width	
+	--self.MaxHeight = config.height	
 	
 	self.Image = UI.CreateFrame("Texture", WT.UnitFrame.UniqueName(), self.Mask)
-	self.Image:SetWidth(config.width)
-	self.Image:SetHeight(config.height)
 	self.Image:SetTexture(config.texAddon, config.texFile)
 	self.Image:SetPoint("TOPLEFT", self, "TOPLEFT")
+	self.Image:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
+	--self.Image:SetWidth(config.width)
+	--self.Image:SetHeight(config.height)
 		
 	unitFrame:CreateBinding(config.binding, self, self.BindPercent, 0)
 	
@@ -94,9 +100,9 @@ end
 function wtBar:BindPercent(percentage)
 	WT.Log.Verbose("Bar percent binding triggered")
 	if (self.growthDirection == "up") or (self.growthDirection == "down") then 
-		self.Mask:SetHeight((percentage / 100) * self.MaxHeight)
+		self.Mask:SetHeight((percentage / 100) * self:GetHeight())
 	else
-		self.Mask:SetWidth((percentage / 100) * self.MaxWidth)
+		self.Mask:SetWidth((percentage / 100) * self:GetWidth())
 	end
 end
 

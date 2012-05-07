@@ -89,6 +89,7 @@ end
 
 function CDialog:Textfield(id, label, text)
 	local control = UI.CreateFrame("RiftTextfield", "DialogField", self.container)
+	control:SetBackgroundColor(0.2,0.2,0.2,0.9)
 	control:SetText(text)
 	local frm = self:add(id, label, control)
 	frm.getValue = control.GetText

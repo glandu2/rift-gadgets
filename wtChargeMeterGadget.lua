@@ -20,8 +20,11 @@ local function Create(configuration)
 	{
 		-- Generic Element Configuration
 		id="barCharge", type="Bar", parent="frame", layer=10,
-		attach = {{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=1, offsetY=1 }},
-		binding="chargePercent", width=168, height=28, color={r=0,g=0.8,b=0.8,a=0.8},
+		attach = {
+			{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=1, offsetY=1 },
+			{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT", offsetX=-1, offsetY=-1 },
+		},
+		binding="chargePercent", color={r=0,g=0.8,b=0.8,a=0.8},
 		texAddon="wtLibUnitFrame", texFile="img/Glaze2.png",
 		backgroundColor={r=0, g=0, b=0, a=0.4}
 	});
@@ -33,7 +36,7 @@ local function Create(configuration)
 		text="{chargePercent}% CHARGE", fontSize=10,
 	});
 
-	return chargeMeter
+	return chargeMeter, { resizable = { 140, 30, 300, 50 } }
 end
 
 
@@ -57,7 +60,7 @@ WT.Gadget.RegisterFactory("ChargeMeter",
 		name="Charge Meter",
 		description="Display Mage's Charge",
 		author="Wildtide",
-		version="1.0.0",
+		version="1.1.0",
 		iconTexAddon=AddonId,
 		iconTexFile="img/wtCharge.png",
 		["Create"] = Create,

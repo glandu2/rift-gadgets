@@ -219,7 +219,7 @@ function wtBuffPanel:Construct()
 	end
 	
 	table.insert(unitFrame.BuffPanels, self)
-	unitFrame:CreateBinding("id", self, self.Clear, nil) 
+	unitFrame:CreateBinding("id", self, self.Refresh, nil) 
 
 end
 
@@ -290,6 +290,13 @@ function wtBuffPanel:Clear()
 		self:HideIcon(index)
 	end 
 	self.currIcons = 0
+end
+
+function wtBuffPanel:Refresh(id)
+	if (not self.UnitFrame.rebinding) or (not id) or (self.lastId ~= id) then
+		self:Clear()
+	end
+	self.lastId = id
 end
 
 

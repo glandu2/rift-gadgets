@@ -31,7 +31,8 @@ local function Create(configuration)
 	fpsFrame:SetPoint("TOPCENTER", fpsHeading, "BOTTOMCENTER", 0, -5)
 
 	table.insert(fpsGadgets, fpsFrame)
-	return wrapper
+	return wrapper, { resizable={150, 52, 150, 70} }
+	
 end
 
 

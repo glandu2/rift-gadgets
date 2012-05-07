@@ -32,6 +32,73 @@ catchAllClicks:SetAllPoints(UIParent)
 catchAllClicks.Event.LeftClick = OnClickOutside
 catchAllClicks.Event.RightClick = OnClickOutside
 
+local function MenuItemClicked(menu, itemIndex)
+	local clicked = menu.items[itemIndex]
+	local item = clicked.menuItem
+	if type(item) == "table" then
+		value = item.value or item.text
+		if type(item.value) == "function" then item.value(item.text) end 
+	else
+		value = item
+	end			
+	if menu.callback then menu.callback(value) end
+	menu.Hide()
+end
+
+local function LoadItems(control, listItems)
+
+	local last = nil
+	local maxWidth = 0
+
+	if not control.items then control.items = {} end
+	for i,item in ipairs(control.items) do item:SetVisible(false) end
+
+	for i,v in ipairs(listItems) do
+	
+		local txtOption = control.items[i]
+		
+		if not txtOption then 
+			txtOption = UI.CreateFrame("Text", WT.UniqueName("ComboOption"), control.dropDownBackground) 
+			txtOption.Event.LeftClick = function() MenuItemClicked(control, i) end
+			table.insert(control.items, txtOption)
+		end
+
+		txtOption:SetVisible(true)
+
+		txtOption.menuItem = v
+		if type(v) == "table" then
+			txtOption:SetText(v.text or v.value)
+		else
+			txtOption:SetText(v)
+		end
+		local w = txtOption:GetWidth()
+		if w > maxWidth then maxWidth = w end 
+		if not last then
+			txtOption:SetPoint("TOPLEFT", control.dropDownBackground, "TOPLEFT", 4, 4)
+		else
+			txtOption:SetPoint("TOPLEFT", last, "BOTTOMLEFT", 0, 2)
+		end
+
+		last = txtOption
+	end
+
+	if last then	
+		local top = control:GetTop()
+		local bottom = last:GetBottom() + 5 
+		control:SetHeight(bottom-top)
+	else
+		control:SetHeight(10)
+	end
+	control:SetWidth(maxWidth + 10)
+	
+	for idx,item in ipairs(control.items) do
+		item:SetWidth(maxWidth)
+		item.Event.MouseIn = function() item:SetBackgroundColor(0.2, 0.4, 0.6, 1.0) end
+		item.Event.MouseOut = function() item:SetBackgroundColor(0.0, 0.0, 0.0, 0.0) end
+	end
+
+end
+
 function WT.Control.Menu.Create(parent, listItems, callback, sort)
 
 	local sorted = sort
@@ -54,19 +121,22 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 	control:SetLayer(10001)
 	control:SetVisible(false)
 	control:SetBackgroundColor(1,1,1,1)
+	control.callback = callback
 
-	local dropDownBackground = UI.CreateFrame("Frame", WT.UniqueName("MenuBG"), control)
-	dropDownBackground:SetBackgroundColor(0,0,0,1)
-	dropDownBackground:SetPoint("TOPLEFT", control, "TOPLEFT", 1, 1)
-	dropDownBackground:SetPoint("BOTTOMRIGHT", control, "BOTTOMRIGHT", -1, -1)
+	control.dropDownBackground = UI.CreateFrame("Frame", WT.UniqueName("MenuBG"), control)
+	control.dropDownBackground:SetBackgroundColor(0,0,0,1)
+	control.dropDownBackground:SetPoint("TOPLEFT", control, "TOPLEFT", 1, 1)
+	control.dropDownBackground:SetPoint("BOTTOMRIGHT", control, "BOTTOMRIGHT", -1, -1)
 
 	local value = nil
 
+	control.items = {}
+
 	local last = nil
 	local maxWidth = 0
-	local items = {}
 	for i,v in ipairs(listItems) do
-		local txtOption = UI.CreateFrame("Text", WT.UniqueName("ComboOption"), dropDownBackground)
+		local txtOption = UI.CreateFrame("Text", WT.UniqueName("ComboOption"), control.dropDownBackground)
+		txtOption.menuItem = v
 		if type(v) == "table" then
 			txtOption:SetText(v.text or v.value)
 		else
@@ -75,11 +145,12 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 		local w = txtOption:GetWidth()
 		if w > maxWidth then maxWidth = w end 
 		if not last then
-			txtOption:SetPoint("TOPLEFT", dropDownBackground, "TOPLEFT", 4, 4)
+			txtOption:SetPoint("TOPLEFT", control.dropDownBackground, "TOPLEFT", 4, 4)
 		else
 			txtOption:SetPoint("TOPLEFT", last, "BOTTOMLEFT", 0, 2)
 		end
-		txtOption.Event.LeftClick = 
+		txtOption.Event.LeftClick = function() MenuItemClicked(control, i) end
+		--[[ 
 			function()
 				if type(v) == "table" then
 					value = v.value or v.text
@@ -90,8 +161,9 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 				if callback then callback(value) end
 				control.Hide()
 			end
+		--]]
 		last = txtOption
-		table.insert(items, txtOption)
+		table.insert(control.items, txtOption)
 	end
 	
 	local top = control:GetTop()
@@ -99,7 +171,7 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 	control:SetHeight(bottom-top)
 	control:SetWidth(maxWidth + 10)
 	
-	for idx,item in ipairs(items) do
+	for idx,item in ipairs(control.items) do
 		item:SetWidth(maxWidth)
 		item.Event.MouseIn = function() item:SetBackgroundColor(0.2, 0.4, 0.6, 1.0) end
 		item.Event.MouseOut = function() item:SetBackgroundColor(0.0, 0.0, 0.0, 0.0) end
@@ -133,6 +205,11 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 			else
 				control.Show()
 			end 
+		end
+	
+	control.SetItems =
+		function(control, itemList)
+			LoadItems(control, itemList)
 		end
 		
 	return control

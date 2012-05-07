@@ -31,12 +31,13 @@ function WT.Element:Subclass(elementTypeName, baseFrameType)
 end
 
 function WT.Element:Create(unitFrame, configuration, overrideParent)
-	local obj = UI.CreateFrame(self.BaseFrameType, WT.UniqueName("WT_ELEM", configuration.id), overrideParent or unitFrame)
-	obj._class = self
-	obj._baseFrame = getmetatable(obj).__index 
-	obj.UnitFrame = unitFrame
-	obj.Configuration = configuration
-	setmetatable(obj, WT.Element_mt)
+
+	local element = UI.CreateFrame(self.BaseFrameType, WT.UniqueName("WT_ELEM", configuration.id), overrideParent or unitFrame)
+	element._class = self
+	element._baseFrame = getmetatable(element).__index 
+	element.UnitFrame = unitFrame
+	element.Configuration = configuration
+	setmetatable(element, WT.Element_mt)
 	
 	-- Validate configuration
 	local valid = true
@@ -48,10 +49,67 @@ function WT.Element:Create(unitFrame, configuration, overrideParent)
 			end
 		end
 	end
-	if valid then
-		obj:Construct()
-		return obj
-	else
-		return nil
+	
+	if not valid then return nil end
+	
+	if configuration.layer then
+		element:SetLayer(configuration.layer)
 	end
+
+	if configuration.alpha then
+		element:SetAlpha(configuration.alpha)
+	end
+	
+	if configuration.visibilityBinding then
+		unitFrame:CreateBinding(configuration.visibilityBinding, element, element.SetVisible, false, WT.Utility.ToBoolean)
+	end
+	
+	-- string valued parents need to be handled at unit frame level where the parent can actually be found
+	if configuration.parent and (type(configuration.parent) == "string") then
+		local parentElement = unitFrame.Elements[configuration.parent]
+		if parentElement then
+			element:SetParent(parentElement)
+		end
+	end
+		
+	-- allow for direct allocation of the parent frame, rather than by name
+	if configuration.parent and (type(configuration.parent) == "table") then
+		element:SetParent(configuration.parent)
+	end
+	
+	-- wrap this in a pcall, as it's easy to get this wrong in a template
+	if not pcall(
+		function() 
+			if configuration.attach then
+				for idx, attachTo in ipairs(configuration.attach) do
+					local attachToElement = unitFrame.Elements[attachTo.element]
+					if attachToElement then
+						local attachPoint = attachTo.point or "TOPLEFT"
+						local attachTargetPoint = attachTo.targetPoint or "TOPLEFT"
+						local attachOffsetX = attachTo.offsetX
+						local attachOffsetY = attachTo.offsetY
+						if attachOffsetX and attachOffsetY then
+							element:SetPoint(attachPoint, attachToElement, attachTargetPoint, attachOffsetX, attachOffsetY)
+						elseif attachOffsetX and not attachOffsetY then
+							element:SetPoint(attachPoint, attachToElement, attachTargetPoint, attachOffsetX, nil)
+						elseif not attachOffsetX and attachOffsetY then
+							element:SetPoint(attachPoint, attachToElement, attachTargetPoint, nil, attachOffsetY)
+						else
+							element:SetPoint(attachPoint, attachToElement, attachTargetPoint)
+						end
+					else
+						WT.Log.Error("Could not find attachTo element: " .. tostring(attachTo.element))
+					end
+				end	
+			end
+		end
+	) 
+	then 
+		WT.Log.Warning("Incorrect attachment options in element " .. configuration.id) 
+	end
+	
+	-- All standard configuration has been handled, now call the construct method for the specific instance
+	element:Construct()
+	return element
+	
 end

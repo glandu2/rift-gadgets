@@ -28,6 +28,8 @@
 local toc, data = ...
 local AddonId = toc.identifier
 
+local STR = WT.Strings
+
 WT.Gadget = {}
 WT.Gadget.Command = {}
 
@@ -82,19 +84,16 @@ local function btnDragStop()
 	end
 end
 
-local btnMenu = nil
-local menuItems = 
-{
-	{text="Add Gadget", value=function() WT.Gadget.ShowCreationUI() end },
-	{text="Lock Gadgets", value=function() WT.Gadget.Command.lock() end },
-	{text="Unlock Gadgets", value=function() WT.Gadget.Command.unlock() end },
-}
+local menuItems = {}
+local menuItemsAdd = 1
+local menuItemsToggleLock = 2
+menuItems[menuItemsAdd] = {text=STR.AddGadget, value=function() WT.Gadget.ShowCreationUI() end } 
+menuItems[menuItemsToggleLock] = {text=STR.UnlockGadgets, value=function() WT.Gadget.Command.toggle() end }
+
+local btnMenu = WT.Control.Menu.Create(btnGadget, menuItems)
+btnMenu:SetPoint("TOPRIGHT", btnGadget, "CENTER")
 
 local function btnShowMenu()
-	if not btnMenu then
-		btnMenu =  WT.Control.Menu.Create(btnGadget, menuItems)
-		btnMenu:SetPoint("TOPRIGHT", btnGadget, "CENTER") 
-	end
 	btnMenu:Toggle()
 end
 
@@ -176,16 +175,25 @@ function WT.Gadget.Create(configuration)
 		return nil
 	end
 
-	local gadget = gadgetFactory.Create(configuration)
+	local gadget, createOptions = gadgetFactory.Create(configuration)
+	if not createOptions then createOptions = {} end
 	if not gadget then
 		WT.Log.Warning("Factory for gadget type " .. gadgetType .. " failed to create gadget")
 		return nil
 	end
 	
+	if configuration.width then gadget:SetWidth(configuration.width) end
+	if configuration.height then gadget:SetHeight(configuration.height) end
+	
+	if configuration.width or configuration.height then 
+		if gadget.OnResize then gadget:OnResize(configuration.width, configuration.height) end
+	end 
+	
+	
 	WT.Gadgets[gadgetId] = gadget
 	
 	-- "Gadgetize" the returned frame, giving it a movement handle 
-	WT.Gadget.AttachHandle(gadgetId, gadget)
+	WT.Gadget.AttachHandle(gadgetId, gadget, createOptions)
 	
 	WT.Log.Debug("Created gadget " .. gadgetId .. " of type " .. gadgetType)
 	
@@ -196,7 +204,7 @@ function WT.Gadget.Create(configuration)
 	
 	-- store the configuration table
 	wtxGadgets[gadgetId] = configuration
-	
+		
 	return gadget
 end
 
@@ -211,17 +219,21 @@ local function OnMenuHandleClick(value)
 	if value == "modify" then
 	 	WT.Gadget.Command.modify(menuHandleForGadget)
 	end
+	if value == "copy" then
+	 	WT.Gadget.Command.copy(menuHandleForGadget)
+	end
 end
 
 local function handleShowMenu()
 	if not menuHandle then
-		menuHandle =  WT.Control.Menu.Create(WT.Context, { {text="Modify Gadget", value="modify"}, {text="Delete Gadget", value="delete"}, "Cancel"}, OnMenuHandleClick)
+		menuHandle =  WT.Control.Menu.Create(WT.Context, { 
+			{text=STR.ModifyGadget, value="modify"}, {text=STR.CopyGadget, value="copy"}, {text=STR.DeleteGadget, value="delete"}, {text=STR.Cancel, value="cancel"} }, OnMenuHandleClick)
 	end
 	menuHandle:Show()
 end
 
 -- Initialises a gadget, configuring the frame to include the movement handle
-function WT.Gadget.AttachHandle(gadgetId, frame)
+function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 
 	local currX = frame:GetLeft()
 	local currY = frame:GetTop()
@@ -240,6 +252,20 @@ function WT.Gadget.AttachHandle(gadgetId, frame)
 	mvHandle.Event.RightClick = function() handleShowMenu(); menuHandle:SetPoint("TOPLEFT", mvHandle, "BOTTOMLEFT"); menuHandleForGadget=gadgetId; end
 	mvHandle.frame = frame
 	mvHandle.gadgetId = gadgetId
+	
+	if createOptions.resizable then
+		local szHandle = UI.CreateFrame("Texture", frame:GetName() .. "_szHandle", mvHandle) -- child of mvHandle, so will show/hide automatically 
+		szHandle:SetLayer(9999)
+		szHandle:SetTexture(AddonId, "img/wtResizeHandle.png")
+		szHandle:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 2, 2)
+		szHandle.Event.MouseMove = function() WT.Gadget.SizeMove(szHandle) end
+		szHandle.Event.LeftDown = function() WT.Gadget.SizeStart(szHandle) end
+		szHandle.Event.LeftUp = function() WT.Gadget.SizeStop(szHandle) end
+		szHandle.Event.LeftUpoutside = function() WT.Gadget.SizeStop(szHandle) end
+		szHandle.frame = frame
+		szHandle.gadgetId = gadgetId
+		szHandle.minX, szHandle.minY, szHandle.maxX, szHandle.maxY = unpack(createOptions.resizable)  
+	end
 	
 	--table.insert(WT.Gadgets, mvHandle)
 	WT.Gadgets[gadgetId].mvHandle = mvHandle
@@ -301,8 +327,8 @@ end
 function WT.Gadget:DragMove()
 	if self.dragging then
 		local mouse = Inspect.Mouse()
-		local x = mouse.x - self.mouseStartX + self.startX
-		local y = mouse.y - self.mouseStartY + self.startY
+		local x = math.ceil(mouse.x - self.mouseStartX + self.startX)
+		local y = math.ceil(mouse.y - self.mouseStartY + self.startY)
 			
 		if WT.Gadget.alignTo then
 			local alignTop = WT.Gadget.alignTo.frame:GetTop()
@@ -355,6 +381,58 @@ function WT.Gadget:MouseIn()
 	end
 end
 
+
+
+-- RESIZING FUNCTIONALITY
+
+function WT.Gadget:SizeStart()
+	if not WT.Gadget.InSizeMode then
+		self.sizing = true	
+		WT.Gadget.InSizeMode = true
+		WT.Gadget.Sizing = self
+		local mouse = Inspect.Mouse()
+		self.startX = self.frame:GetRight()
+		self.startY = self.frame:GetBottom()
+		self.mouseStartX = mouse.x
+		self.mouseStartY = mouse.y	
+		WT.Log.Debug("SizeStart " .. self.startX .. "," .. self.startY)
+	end
+end
+
+function WT.Gadget:SizeStop()
+	if self.sizing then 
+		WT.Log.Debug("SizeStop")
+		self.sizing = false
+		WT.Gadget.Sizing = nil
+		WT.Gadget.InSizeMode = false	
+		wtxGadgets[self.gadgetId] = wtxGadgets[self.gadgetId] or {}
+		wtxGadgets[self.gadgetId].width = self.frame:GetWidth()
+		wtxGadgets[self.gadgetId].height = self.frame:GetHeight()
+	end 
+end
+
+function WT.Gadget:SizeMove()
+	if self.sizing then
+		local mouse = Inspect.Mouse()
+		local x = mouse.x - self.mouseStartX + self.startX
+		local y = mouse.y - self.mouseStartY + self.startY
+		local newWidth = math.ceil(x - self.frame:GetLeft() + 1)		
+		local newHeight = math.ceil(y - self.frame:GetTop() + 1)
+		if newWidth < self.minX then newWidth = self.minX end
+		if newWidth > self.maxX then newWidth = self.maxX end
+		if newHeight < self.minY then newHeight = self.minY end
+		if newHeight > self.maxY then newHeight = self.maxY end
+		self.frame:SetWidth(newWidth)
+		self.frame:SetHeight(newHeight)
+		wtxGadgets[self.gadgetId].width = newWidth
+		wtxGadgets[self.gadgetId].height = newHeight
+		if self.frame.OnResize then self.frame:OnResize(newWidth, newHeight) end
+	end
+end
+
+
+
+
 function WT.Gadget.Command.unlock()
 	if WT.Gadget.isSecure then
 		print("Cannot alter gadgets in combat")
@@ -364,6 +442,8 @@ function WT.Gadget.Command.unlock()
 		gadget.mvHandle:SetVisible(true)
 	end
 	gadgetsLocked = false
+	menuItems[menuItemsToggleLock].text = STR.LockGadgets
+	btnMenu:SetItems(menuItems)
 end
 
 function WT.Gadget.Command.lock()
@@ -371,6 +451,16 @@ function WT.Gadget.Command.lock()
 		gadget.mvHandle:SetVisible(false)
 	end
 	gadgetsLocked = true
+	menuItems[menuItemsToggleLock].text = STR.UnlockGadgets
+	btnMenu:SetItems(menuItems)
+end
+
+function WT.Gadget.Command.toggle()
+	if gadgetsLocked then
+		WT.Gadget.Command.unlock()
+	else
+		WT.Gadget.Command.lock()
+	end
 end
 
 
@@ -401,6 +491,36 @@ function WT.Gadget.Command.add(gadgetType, gadgetId, ...)
 	end
 	WT.Gadget.Create(config)
 	
+end
+
+-- e.g. /gadget add UnitFrame ufPlayer unit player
+function WT.Gadget.Command.copy(gadgetId)
+	if not gadgetId then
+		print("Syntax: /gadget copy <gadgetid>")
+		return
+	end
+	if not wtxGadgets[gadgetId] then
+		print("Gadget not found. Use '/gadget list' to display all gadgets")
+		return
+	end
+	if WT.Gadget.isSecure then
+		print("Cannot alter gadgets in combat")
+		return
+	end
+	
+	local newIdx = 1
+	local newId = gadgetId .. "_Copy_" .. newIdx
+	while wtxGadgets[newId] do
+		newIdx = newIdx + 1
+		newId = gadgetId .. "_Copy_" .. newIdx
+	end
+	local gadgetConfig = wtxGadgets[gadgetId]
+	local newConfig = {}
+	for k,v in pairs(gadgetConfig) do newConfig[k] = v end
+	newConfig.id = newId
+	newConfig.xpos = gadgetConfig.xpos + 50 or 200
+	newConfig.ypos = gadgetConfig.ypos + 50 or 200
+	WT.Gadget.Create(newConfig)
 end
 
 function WT.Gadget.Command.list()

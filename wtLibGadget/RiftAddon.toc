@@ -13,6 +13,7 @@ Environment = "1.8"
 
 RunOnStartup = 
 {
+  "wtLocalization.lua",
   "wtGadget.lua",
   "wtGadgetRecommendReload.lua",
   "wtGadget_CreateDialog.lua",
@@ -33,3 +34,7 @@ Dependencies =
 	wtLibCore = {"required", "before"},	
 	wtLibControls = {"required", "before"},	
 }
+-- X-Curse-Packaged-Version: r20120505105758
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline

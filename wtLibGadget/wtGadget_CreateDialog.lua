@@ -65,6 +65,7 @@ function WT.Gadget.ShowCreationUI()
 				while WT.Gadgets[gadget.gadgetType .. idx] do idx = idx + 1 end
 				config.id = gadget.gadgetType .. idx
 				WT.Gadget.Create(config)
+				WT.Utility.ClearKeyFocus(window)
 				window:SetVisible(false) 
 				return
 			end

@@ -37,7 +37,8 @@ local function Create(configuration)
 	txtDetail:SetPoint("TOPCENTER", cpuFrame, "BOTTOMCENTER", 0, -6)
 
 	table.insert(cpuGadgets, cpuFrame)
-	return wrapper
+	return wrapper, { resizable={150, 64, 150, 70} }
+	
 end
 
 

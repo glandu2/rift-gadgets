@@ -42,3 +42,17 @@ function wtLabel:Construct()
 	end
 	
 end
+
+
+-- Fluent Configuration Methods
+
+function wtLabel.Text(template, value)
+	template.current.text = value
+	return template
+end
+
+-- Configuration Dialog for this element type
+
+function wtLabel:BuildConfig(dialog)
+	dialog:TextField(self.id, "Label Text", self.text)
+end

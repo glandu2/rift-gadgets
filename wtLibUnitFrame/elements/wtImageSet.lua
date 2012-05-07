@@ -74,6 +74,31 @@ function wtImageSet:Construct()
 		unitFrame:CreateBinding(config.nameBinding, self, self.SetName, config.defaultName or "")
 	end
 
+	self.Event.Size = 
+		function()
+			local newWidth = self:GetWidth()
+			local newHeight = self:GetHeight()
+
+			self.totalWidth = newWidth * self.cols
+			self.image:SetWidth(self.totalWidth)
+			self.tileWidth = newWidth
+	
+			self.totalHeight = newHeight * self.rows
+			self.image:SetHeight(self.totalHeight)
+			self.tileHeight = newHeight		
+
+			self:Refresh()
+		end
+
+end
+
+function wtImageSet:Refresh()
+	if self:GetWidth() < 0.5 or self.currIndex == "hide" then return end
+	self:SetWidth(self.tileWidth)
+	local idx = self.currIndex % self.wrapIndex 
+	local col = (idx % self.cols)
+	local row = math.floor(idx / self.cols)
+	self.image:SetPoint("TOPLEFT", self, "TOPLEFT", -col * self.tileWidth, -row * self.tileHeight)
 end
 
 function wtImageSet:SetIndex(index)
@@ -86,6 +111,7 @@ function wtImageSet:SetIndex(index)
 		local row = math.floor(idx / self.cols)
 		self.image:SetPoint("TOPLEFT", self, "TOPLEFT", -col * self.tileWidth, -row * self.tileHeight)
 	end
+	self.currIndex = index
 end
 
 function wtImageSet:SetName(name)

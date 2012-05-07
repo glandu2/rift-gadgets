@@ -174,46 +174,6 @@ function WT.UnitFrame:CreateElement(configuration, forceParent)
 
 	self.Elements[configuration.id] = element
 	
-	-- Handle common configuration
-	
-	if configuration.attach then
-		for idx, attachTo in ipairs(configuration.attach) do
-			local attachToElement = self.Elements[attachTo.element]
-			if attachToElement then
-				local attachPoint = attachTo.point or "TOPLEFT"
-				local attachTargetPoint = attachTo.targetPoint or "TOPLEFT"
-				local attachOffsetX = attachTo.offsetX
-				local attachOffsetY = attachTo.offsetY
-				if attachOffsetX and attachOffsetY then
-					element:SetPoint(attachPoint, attachToElement, attachTargetPoint, attachOffsetX, attachOffsetY)
-				else
-					element:SetPoint(attachPoint, attachToElement, attachTargetPoint)
-				end
-			else
-				WT.Log.Error("Could not find attachTo element: " .. tostring(attachTo.element))
-			end
-		end	
-	end
-	
-	if configuration.parent then
-		local parentElement = self.Elements[configuration.parent]
-		if parentElement then
-			element:SetParent(parentElement)
-		end
-	end
-		
-	if configuration.layer then
-		element:SetLayer(configuration.layer)
-	end
-
-	if configuration.alpha then
-		element:SetAlpha(configuration.alpha)
-	end
-	
-	if configuration.visibilityBinding then
-		self:CreateBinding(configuration.visibilityBinding, element, element.SetVisible, false, WT.Utility.ToBoolean)
-	end
-	
 	return element
 
 end
@@ -265,6 +225,7 @@ function WT.UnitFrame:Create(unitSpec, options)
 	frame.UnitSpec = unitSpec
 	frame.Bindings = {}
 	frame.Elements = {}	
+	frame.Options = options or {}
 		
 	frame.Elements["frame"] = frame
 		
@@ -281,9 +242,16 @@ function WT.UnitFrame:Create(unitSpec, options)
 	local unitId = Inspect.Unit.Lookup(unitSpec)
 	if unitId then frame:PopulateUnit(unitId) end
 	
-	return frame
+	local createOptions = {}
+	createOptions.resizable = self.Configuration.Resizable 
+	
+	return frame, createOptions
 end
 
+
+function WT.UnitFrame:OnResize(width, height)
+	self:ApplyBindings()
+end
 
 function WT.UnitFrame:PopulateUnit(unitId)
 	self.UnitId = unitId
@@ -395,6 +363,7 @@ end
 
 -- Applies the bindings on this unit frame
 function WT.UnitFrame:ApplyBindings()
+	self.rebinding = true
 	if self.Unit and self.Bindings then
 		for property, bindings in pairs(self.Bindings) do
 			for idx, binding in pairs(bindings) do
@@ -406,6 +375,7 @@ function WT.UnitFrame:ApplyBindings()
 	else
 		self:ApplyDefaultBindings()
 	end
+	self.rebinding = false
 end
 
 

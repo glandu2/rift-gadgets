@@ -14,8 +14,9 @@ local StandardFrame = WT.UnitFrame:Template("StandardFrame")
 StandardFrame.Configuration.Name = "Default Unit Frame"
 StandardFrame.Configuration.RaidSuitable = false
 StandardFrame.Configuration.FrameType = "Frame"
-StandardFrame.Configuration.Width = standardFrameWidth
+StandardFrame.Configuration.Width = standardFrameWidth + 2
 StandardFrame.Configuration.Height = standardFrameHeight
+StandardFrame.Configuration.Resizable = { standardFrameWidth + 2, standardFrameHeight, 300, 70 }
 ---------------------------------------------------------------------------------
 
 -- Override the buff filter to hide some buffs ----------------------------------
@@ -67,10 +68,24 @@ function StandardFrame:Construct(options)
 			},
 		}, 
 		{
+			id="barResource", type="Bar", parent="frameBackdrop", layer=10,
+			attach = 
+			{
+				{ point="BOTTOMLEFT", element="frameBackdrop", targetPoint="BOTTOMLEFT" },
+				{ point="RIGHT", element="frameBackdrop", targetPoint="RIGHT" },
+			},
+			binding="resourcePercent", height=standardFrameBottomBarHeight, colorBinding="resourceColor",
+			texAddon=AddonId, texFile="img/Diagonal.png",
+			backgroundColor={r=0, g=0, b=0, a=1}
+		},
+		{
 			id="barHealth", type="Bar", parent="frameBackdrop", layer=10,
-			attach = {{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=1, offsetY=1 }},
+			attach = {
+				{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=1, offsetY=1 },
+				{ point="BOTTOMRIGHT", element="barResource", targetPoint="TOPRIGHT" },
+			},
 			growthDirection="right",
-			binding="healthPercent", width=standardFrameWidth, height=standardFrameTopBarHeight,color={r=0,g=0.7,b=0,a=1}, 
+			binding="healthPercent", color={r=0,g=0.7,b=0,a=1}, 
 			texAddon=AddonId, texFile="img/Diagonal.png", 
 			backgroundColor={r=0, g=0, b=0, a=1}
 		},
@@ -110,13 +125,6 @@ function StandardFrame:Construct(options)
 			text="{nameShort}", default="", fontSize=14
 		},
 		{
-			id="barResource", type="Bar", parent="frameBackdrop", layer=10,
-			attach = {{ point="TOPLEFT", element="barHealth", targetPoint="BOTTOMLEFT" }},
-			binding="resourcePercent", width=standardFrameWidth, height=standardFrameBottomBarHeight, colorBinding="resourceColor",
-			texAddon=AddonId, texFile="img/Diagonal.png",
-			backgroundColor={r=0, g=0, b=0, a=1}
-		},
-		{
 			id="labelresource", type="Label", parent="barResource", layer=20,
 			attach = {{ point="CENTERLEFT", element="barResource", targetPoint="CENTERLEFT" }},
 			visibilityBinding="resource",
@@ -144,7 +152,7 @@ function StandardFrame:Construct(options)
 		},
 		{
 			id="labelCast", type="Label", parent="frameBackdrop", layer=26,
-			attach = {{ point="CENTERLEFT", element="barCast", targetPoint="CENTERLEFT", offsetX=6 }},
+			attach = {{ point="CENTERLEFT", element="barCast", targetPoint="CENTERLEFT", offsetX=6, offsetY=0 }},
 			visibilityBinding="castName",
 			text="{castName}", default="", fontSize=11
 		},

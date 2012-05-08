@@ -6,7 +6,7 @@
 local toc, data = ...
 local AddonId = toc.identifier
 
-local chargeFontSize = 18
+local chargeFontSize = 32
 
 -- Displays current Planar Charge count
 
@@ -68,6 +68,8 @@ local function Create(configuration)
 		chargeMeter.txt03:SetFontSize(height*0.66)
 		chargeMeter.txtHover:SetFontSize(height*0.50)
 	end
+
+	chargeMeter:ApplyBindings()
 
 	return chargeMeter, { resizable = { 24,24, 64,64 } }
 end

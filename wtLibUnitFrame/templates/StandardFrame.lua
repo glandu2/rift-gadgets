@@ -71,8 +71,8 @@ function StandardFrame:Construct(options)
 			id="barResource", type="Bar", parent="frameBackdrop", layer=10,
 			attach = 
 			{
-				{ point="BOTTOMLEFT", element="frameBackdrop", targetPoint="BOTTOMLEFT" },
-				{ point="RIGHT", element="frameBackdrop", targetPoint="RIGHT" },
+				{ point="BOTTOMLEFT", element="frameBackdrop", targetPoint="BOTTOMLEFT", offsetX=1, offsetY=-1 },
+				{ point="RIGHT", element="frameBackdrop", targetPoint="RIGHT", offsetX=-1 },
 			},
 			binding="resourcePercent", height=standardFrameBottomBarHeight, colorBinding="resourceColor",
 			texAddon=AddonId, texFile="img/Diagonal.png",

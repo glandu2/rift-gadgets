@@ -67,14 +67,14 @@ function HealthOrb:Construct(options)
 				id="name", type="Label", parent="frame", layer=18,
 				attach = 
 				{ 
-					{ point="BOTTOMCENTER", element="healthPercent", targetPoint="TOPCENTER", offsetY=-5, },
+					{ point="BOTTOMCENTER", element="healthPercent", targetPoint="TOPCENTER", offsetX=0, offsetY=0 },
 				}, visibilityBinding="id", text="{nameShort}",fontSize=13,		
 			}, 
 			{
 				id="health", type="Label", parent="frame", layer=18,
 				attach = 
 				{ 
-					{ point="TOPCENTER", element="healthPercent", targetPoint="BOTTOMCENTER", offsetY=5, },
+					{ point="TOPCENTER", element="healthPercent", targetPoint="BOTTOMCENTER", offsetX=0, offsetY=0 },
 				}, visibilityBinding="id", text="{health}",fontSize=13,		
 			}, 
 		}

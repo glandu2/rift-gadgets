@@ -60,9 +60,21 @@ local function btnDragStart()
 	btnDragged = false	
 end
 
+local draggedEnough = false
 local function btnDragMove()
 	if btnDragging then
 		local mouse = Inspect.Mouse()
+
+		if not draggedEnough then
+			local deltaX = math.abs(mouse.x - btnMouseStartX)
+			local deltaY = math.abs(mouse.y - btnMouseStartY)
+			if deltaX > 8 or deltaY > 8 then
+				draggedEnough = true
+			end
+		end
+
+		if not draggedEnough then return end
+
 		local x = mouse.x - btnMouseStartX + btnStartX
 		local y = mouse.y - btnMouseStartY + btnStartY
 		btnGadget:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
@@ -74,6 +86,7 @@ end
 
 local function btnDragStop()
 	btnDragging = false
+	draggedEnough = false
 	-- try to detect a left click instead of a drag
 	if not btnDragged then
 		if gadgetsLocked then

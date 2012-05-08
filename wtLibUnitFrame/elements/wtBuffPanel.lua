@@ -26,6 +26,19 @@ local AddonId = toc.identifier
 
 local wtBuffPanel = WT.Element:Subclass("BuffPanel", "Frame")
 
+local tooltipIcon = false
+
+local function ShowTooltip(icon)
+	if icon.buffId then
+		tooltipIcon = icon
+		Command.Tooltip(icon.unitSpec, icon.buffId)
+	end
+end
+
+local function HideTooltip(icon)
+	if tooltipIcon == icon then Command.Tooltip(nil) end
+end
+
 function wtBuffPanel:Construct()
 
 	local config = self.Configuration
@@ -125,6 +138,7 @@ function wtBuffPanel:Construct()
 		icon.Row = row
 		icon.Col = col
 		icon.Border = border
+		icon.unitSpec = unitFrame.UnitSpec
 
 		-- Are timers required?
 		if self.config.timerSize > 0 then
@@ -203,6 +217,9 @@ function wtBuffPanel:Construct()
 			row = (row + 1) % self.config.rows
 			if row == 0 then col = col - 1 end
 		end
+		
+		icon.Event.MouseIn = ShowTooltip
+		icon.Event.MouseOut = HideTooltip
 	end
 
 	-- Set up the buff bindings and BuffPanels table if needed

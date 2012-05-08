@@ -67,14 +67,14 @@ function ManaOrb:Construct(options)
 				id="name", type="Label", parent="frame", layer=18,
 				attach = 
 				{ 
-					{ point="BOTTOMCENTER", element="manaPercent", targetPoint="TOPCENTER", offsetY=-5, },
+					{ point="BOTTOMCENTER", element="manaPercent", targetPoint="TOPCENTER" },
 				}, visibilityBinding="id", text="{resourceText}",fontSize=13,		
 			}, 
 			{
 				id="mana", type="Label", parent="frame", layer=18,
 				attach = 
 				{ 
-					{ point="TOPCENTER", element="manaPercent", targetPoint="BOTTOMCENTER", offsetY=5, },
+					{ point="TOPCENTER", element="manaPercent", targetPoint="BOTTOMCENTER" },
 				}, visibilityBinding="id", text="{resource}",fontSize=13,		
 			}, 
 		}

@@ -12,12 +12,12 @@ local chargeFontSize = 18
 
 local function Create(configuration)
 
-	local chargeMeter = WT.UnitFrame:Create("player")
-	chargeMeter:SetWidth(48)
-	chargeMeter:SetHeight(48)
-	chargeMeter:SetLayer(100)
+	local vitalityMeter = WT.UnitFrame:Create("player")
+	vitalityMeter:SetWidth(48)
+	vitalityMeter:SetHeight(48)
+	vitalityMeter:SetLayer(100)
 
-	chargeMeter.img = chargeMeter:CreateElement(
+	vitalityMeter.img = vitalityMeter:CreateElement(
 	{
 		-- Generic Element Configuration
 		id="imgCharge", type="ImageSet", parent="frame", layer=0, alpha=1.0,
@@ -27,25 +27,27 @@ local function Create(configuration)
 		texAddon=AddonId, texFile="img/wtVitality.png", rows=10,cols=1,
 		indexBinding="vitalityIndex", visibilityBinding="vitalityIndex",width=48,height=48,
 	});
-	chargeMeter.txtVitality = chargeMeter:CreateElement(
+	vitalityMeter.txtVitality = vitalityMeter:CreateElement(
 	{
 		-- Generic Element Configuration
 		id="txtVitality", type="Label", parent="imgCharge", layer=20,
 		attach = {{ point="CENTER", element="imgCharge", targetPoint="CENTER", offsetX=0, offsetY=0 }},
 		text="{vitality}%", fontSize=chargeFontSize,
 	});
-	chargeMeter.txtVitality:SetVisible(false)
+	vitalityMeter.txtVitality:SetVisible(false)
 
-	chargeMeter.Event.MouseIn = function() chargeMeter.txtVitality:SetVisible(true) end
-	chargeMeter.Event.MouseOut = function() chargeMeter.txtVitality:SetVisible(false) end
+	vitalityMeter.Event.MouseIn = function() vitalityMeter.txtVitality:SetVisible(true) end
+	vitalityMeter.Event.MouseOut = function() vitalityMeter.txtVitality:SetVisible(false) end
 
-	chargeMeter.OnResize = function(frame, width,height)
-		chargeMeter.txtVitality:SetFontSize(height*0.35)
-		chargeMeter.img:SetWidth(width)
-		chargeMeter.img:SetHeight(height)
+	vitalityMeter.OnResize = function(frame, width,height)
+		vitalityMeter.txtVitality:SetFontSize(height*0.35)
+		vitalityMeter.img:SetWidth(width)
+		vitalityMeter.img:SetHeight(height)
 	end
 
-	return chargeMeter, { resizable = { 24,24, 64,64 } }
+	vitalityMeter:ApplyBindings()
+
+	return vitalityMeter, { resizable = { 24,24, 64,64 } }
 end
 
 

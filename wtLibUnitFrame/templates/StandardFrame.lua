@@ -144,9 +144,12 @@ function StandardFrame:Construct(options)
 		},
 		{
 			id="barCast", type="Bar", parent="frameBackdrop", layer=25,
-			attach = {{ point="TOPLEFT", element="barHealth", targetPoint="BOTTOMLEFT" }},
+			attach = {
+				{ point="TOPLEFT", element="barResource", targetPoint="TOPLEFT" },
+				{ point="BOTTOMRIGHT", element="barResource", targetPoint="BOTTOMRIGHT" },
+			},
 			visibilityBinding="castName",
-			binding="castPercent", width=standardFrameWidth, height=standardFrameBottomBarHeight, --color={r=1, g=0.7, b=0, a=1},
+			binding="castPercent",
 			texAddon=AddonId, texFile="img/BantoBar.png", colorBinding="castColor",
 			backgroundColor={r=0, g=0, b=0, a=1}
 		},

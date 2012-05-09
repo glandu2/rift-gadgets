@@ -66,7 +66,10 @@ function WT.Gadget.ShowCreationUI()
 				config.id = gadget.gadgetType .. idx
 				WT.Gadget.Create(config)
 				WT.Utility.ClearKeyFocus(window)
-				window:SetVisible(false) 
+				window:SetVisible(false)
+				
+				WT.Gadget.UnlockAll() -- Always unlock gadgets when adding a new one through the dialog, so it can be moved
+				 
 				return
 			end
 		

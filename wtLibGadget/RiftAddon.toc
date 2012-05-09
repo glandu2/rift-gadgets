@@ -15,6 +15,7 @@ RunOnStartup =
 {
   "wtLocalization.lua",
   "wtGadget.lua",
+  "wtGadgetButton.lua",
   "wtGadgetRecommendReload.lua",
   "wtGadget_CreateDialog.lua",
   "wtGadget_ModifyDialog.lua",

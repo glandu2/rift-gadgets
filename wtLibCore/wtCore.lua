@@ -197,6 +197,11 @@ function WT.FadeOut(frame, duration)
 end
 
 
+function WT.RegisterInitializer(init)
+	table.insert(WT.Initializers, init)
+end
+
+
 local initializersRun = false
 local function OnUnitAvailable(units)
 

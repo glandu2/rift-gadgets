@@ -30,6 +30,11 @@ local AddonId = toc.identifier
 
 local STR = WT.Strings
 
+-- Events -----------------------------------------------------------------------------------------------------
+WT.Event.Trigger.GadgetsLocked, WT.Event.GadgetsLocked = Utility.Event.Create(AddonId, "GadgetsLocked")
+WT.Event.Trigger.GadgetsUnlocked, WT.Event.GadgetsUnlocked = Utility.Event.Create(AddonId, "GadgetsUnlocked")
+---------------------------------------------------------------------------------------------------------------
+
 WT.Gadget = {}
 WT.Gadget.Command = {}
 
@@ -38,83 +43,7 @@ wtxGadgets = wtxGadgets or {}
 
 WT.GadgetFactories = {}
 
-local btnGadget = UI.CreateFrame("Texture", AddonId .. "_btnGadget", WT.Context)
-btnGadget:SetTexture(AddonId, "img/btnGadgetMenu.png")
-
-local btnDragging = false
-local btnStartX = 0
-local btnStartY = 0
-local btnMouseStartX = 0
-local btnMouseStartY = 0
-local btnDragged = false
 local gadgetsLocked = true
-
-local function btnDragStart()
-	WT.Utility.DeAnchor(btnGadget)
-	local mouse = Inspect.Mouse()
-	btnDragging = true
-	btnStartX = btnGadget:GetLeft()
-	btnStartY = btnGadget:GetTop()
-	btnMouseStartX = mouse.x
-	btnMouseStartY = mouse.y
-	btnDragged = false	
-end
-
-local draggedEnough = false
-local function btnDragMove()
-	if btnDragging then
-		local mouse = Inspect.Mouse()
-
-		if not draggedEnough then
-			local deltaX = math.abs(mouse.x - btnMouseStartX)
-			local deltaY = math.abs(mouse.y - btnMouseStartY)
-			if deltaX > 8 or deltaY > 8 then
-				draggedEnough = true
-			end
-		end
-
-		if not draggedEnough then return end
-
-		local x = mouse.x - btnMouseStartX + btnStartX
-		local y = mouse.y - btnMouseStartY + btnStartY
-		btnGadget:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
-		wtxOptions.btnGadgetX = x
-		wtxOptions.btnGadgetY = y
-		btnDragged = true	
-	end
-end
-
-local function btnDragStop()
-	btnDragging = false
-	draggedEnough = false
-	-- try to detect a left click instead of a drag
-	if not btnDragged then
-		if gadgetsLocked then
-			WT.Gadget.Command.unlock()
-		else
-			WT.Gadget.Command.lock()
-		end
-	end
-end
-
-local menuItems = {}
-local menuItemsAdd = 1
-local menuItemsToggleLock = 2
-menuItems[menuItemsAdd] = {text=STR.AddGadget, value=function() WT.Gadget.ShowCreationUI() end } 
-menuItems[menuItemsToggleLock] = {text=STR.UnlockGadgets, value=function() WT.Gadget.Command.toggle() end }
-
-local btnMenu = WT.Control.Menu.Create(btnGadget, menuItems)
-btnMenu:SetPoint("TOPRIGHT", btnGadget, "CENTER")
-
-local function btnShowMenu()
-	btnMenu:Toggle()
-end
-
-btnGadget.Event.LeftDown = btnDragStart
-btnGadget.Event.MouseMove = btnDragMove
-btnGadget.Event.LeftUp = btnDragStop
-btnGadget.Event.LeftUpoutside = btnDragStop
-btnGadget.Event.RightClick = btnShowMenu
 
 -- Register a Gadget Factory by providing a configuration table
 -- The descriptive elements of the configuration will be used in configuration dialogs when they become available  
@@ -162,7 +91,13 @@ end
 
 
 -- Create a gadget given a gadget configuration table
+-- This is a paranoid call, as an uncaught error here stops all subsequent gadgets loading
 function WT.Gadget.Create(configuration)
+
+	if not configuration or type(configuration) ~= "table" then
+		WT.Log.Warning("Invalid configuration when creating gadget")
+		return nil
+	end
 
 	local gadgetId = configuration.id
 	local gadgetType = configuration.type
@@ -188,37 +123,47 @@ function WT.Gadget.Create(configuration)
 		return nil
 	end
 
-	local gadget, createOptions = gadgetFactory.Create(configuration)
-	if not createOptions then createOptions = {} end
-	if not gadget then
-		WT.Log.Warning("Factory for gadget type " .. gadgetType .. " failed to create gadget")
+	local gadget = nil
+	local createOptions = nil
+
+	success, errMessage = pcall(
+		function()
+			gadget, createOptions = gadgetFactory.Create(configuration)
+			if not createOptions then createOptions = {} end
+			if not gadget then
+				WT.Log.Warning("Factory for gadget type " .. gadgetType .. " failed to create gadget")
+				return
+			end
+			
+			if configuration.width then gadget:SetWidth(configuration.width) end
+			if configuration.height then gadget:SetHeight(configuration.height) end
+			
+			if configuration.width or configuration.height then 
+				if gadget.OnResize then gadget:OnResize(configuration.width, configuration.height) end
+			end 	
+			
+			WT.Gadgets[gadgetId] = gadget
+			
+			-- "Gadgetize" the returned frame, giving it a movement handle 
+			WT.Gadget.AttachHandle(gadgetId, gadget, createOptions)
+			
+			WT.Log.Debug("Created gadget " .. gadgetId .. " of type " .. gadgetType)
+			
+			-- For now, default all gadgets to (200,200) on creation
+			if not gadget.xpos then gadget.xpos = configuration.xpos or 200 end 
+			if not gadget.ypos then gadget.ypos = configuration.ypos or 200 end 
+			gadget:SetPoint("TOPLEFT", UIParent, "TOPLEFT", gadget.xpos, gadget.ypos) 
+			
+			-- store the configuration table
+			wtxGadgets[gadgetId] = configuration
+		end
+	)		
+	if not success then
+		WT.Log.Warning("Error creating gadget " .. gadgetId .. ": " .. errMessage)
 		return nil
+	else
+		return gadget
 	end
-	
-	if configuration.width then gadget:SetWidth(configuration.width) end
-	if configuration.height then gadget:SetHeight(configuration.height) end
-	
-	if configuration.width or configuration.height then 
-		if gadget.OnResize then gadget:OnResize(configuration.width, configuration.height) end
-	end 
-	
-	
-	WT.Gadgets[gadgetId] = gadget
-	
-	-- "Gadgetize" the returned frame, giving it a movement handle 
-	WT.Gadget.AttachHandle(gadgetId, gadget, createOptions)
-	
-	WT.Log.Debug("Created gadget " .. gadgetId .. " of type " .. gadgetType)
-	
-	-- For now, default all gadgets to (200,200) on creation
-	if not gadget.xpos then gadget.xpos = configuration.xpos or 200 end 
-	if not gadget.ypos then gadget.ypos = configuration.ypos or 200 end 
-	gadget:SetPoint("TOPLEFT", UIParent, "TOPLEFT", gadget.xpos, gadget.ypos) 
-	
-	-- store the configuration table
-	wtxGadgets[gadgetId] = configuration
-		
-	return gadget
 end
 
 
@@ -445,8 +390,7 @@ end
 
 
 
-
-function WT.Gadget.Command.unlock()
+function WT.Gadget.UnlockAll()
 	if WT.Gadget.isSecure then
 		print("Cannot alter gadgets in combat")
 		return
@@ -455,25 +399,43 @@ function WT.Gadget.Command.unlock()
 		gadget.mvHandle:SetVisible(true)
 	end
 	gadgetsLocked = false
-	menuItems[menuItemsToggleLock].text = STR.LockGadgets
-	btnMenu:SetItems(menuItems)
+	WT.Event.Trigger.GadgetsUnlocked()
 end
 
-function WT.Gadget.Command.lock()
+
+function WT.Gadget.LockAll()
 	for idx, gadget in pairs(WT.Gadgets) do
 		gadget.mvHandle:SetVisible(false)
 	end
 	gadgetsLocked = true
-	menuItems[menuItemsToggleLock].text = STR.UnlockGadgets
-	btnMenu:SetItems(menuItems)
+	WT.Event.Trigger.GadgetsLocked()
+end
+
+
+function WT.Gadget.ToggleAll()
+	if gadgetsLocked then
+		WT.Gadget.UnlockAll()
+	else
+		WT.Gadget.LockAll()
+	end
+end
+
+
+function WT.Gadget.Locked()
+	return gadgetsLocked
+end
+
+
+function WT.Gadget.Command.unlock()
+	WT.Gadget.UnlockAll()
+end
+
+function WT.Gadget.Command.lock()
+	WT.Gadget.LockAll()
 end
 
 function WT.Gadget.Command.toggle()
-	if gadgetsLocked then
-		WT.Gadget.Command.unlock()
-	else
-		WT.Gadget.Command.lock()
-	end
+	WT.Gadget.ToggleAll()
 end
 
 
@@ -623,12 +585,7 @@ function WT.Gadget.SecureLeave()
 end
 
 
-function WT.Gadget.Initializer()
-	if (wtxOptions.btnGadgetX and wtxOptions.btnGadgetY) then
-		btnGadget:SetPoint("TOPLEFT", UIParent, "TOPLEFT", wtxOptions.btnGadgetX, wtxOptions.btnGadgetY)
-	else
-		btnGadget:SetPoint("CENTER", UIParent, "CENTER")
-	end
+local function Initialize()
 	for id, config in pairs(wtxGadgets) do
 		WT.Log.Info("Loading Gadget: " .. config.id)
 		WT.Gadget.Create(config)
@@ -637,12 +594,10 @@ function WT.Gadget.Initializer()
 	local gadgetList = ""
 	for k,v in pairs(WT.GadgetFactories) do gadgetList = gadgetList .. v.name .. "; " end
 	print("Gadgets initialized: " .. gadgetList)
-
 end
 
-
 -- Register an initializer to handle loading of gadgets
-table.insert(WT.Initializers, WT.Gadget.Initializer)
+WT.RegisterInitializer(Initialize)
 
 
 --table.insert(Event.Addon.SavedVariables.Load.End, { WT.Gadget.LoadVariables, AddonId, AddonId .. "_Gadget_LoadVariables" })

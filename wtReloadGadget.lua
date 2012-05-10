@@ -5,6 +5,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT=Library.Translate
 
 -- Provides a simple button that reloads the UI when clicked
 
@@ -35,8 +36,8 @@ end
 
 WT.Gadget.RegisterFactory("ReloadUI",
 {
-	name="Reload UI",
-	description="Reload UI Button",
+	name=TXT.gadgetReloadUI_name,
+	description=TXT.gadgetReloadUI_desc,
 	author="Wildtide",
 	version="1.0.0",
 	iconTexAddon=AddonId,

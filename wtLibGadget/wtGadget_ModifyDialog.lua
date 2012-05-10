@@ -5,6 +5,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT = Library.Translate
 
 local gadgetDetails = false
 local frameOptions = false
@@ -42,7 +43,7 @@ function WT.Gadget.ShowModifyUI(id)
 		window:SetWidth(800)
 		window:SetHeight(600)
 		window:SetLayer(11000)
-		window:SetTitle("Modify Gadget")
+		window:SetTitle(TXT.ModifyGadget)
 		WT.Gadget.ModifyGadgetWindow = window
 		
 		local content = window:GetContent()
@@ -52,12 +53,12 @@ function WT.Gadget.ShowModifyUI(id)
 		frameOptions:SetPoint("BOTTOMRIGHT", content, "BOTTOMRIGHT" ,0, 0)		
 
 		local btnCancel = UI.CreateFrame("RiftButton", "WTGadgetBtnCancel", frameOptions)
-		btnCancel:SetText("Cancel")
+		btnCancel:SetText(TXT.Cancel)
 		btnCancel:SetPoint("BOTTOMRIGHT", frameOptions, "BOTTOMRIGHT", -8, -8)
 		btnCancel.Event.LeftPress = function() window:SetVisible(false); WT.Utility.ClearKeyFocus(window); end
 		
 		local btnOK = UI.CreateFrame("RiftButton", "WTGadgetBtnOK", frameOptions)
-		btnOK:SetText("Modify")
+		btnOK:SetText(TXT.Modify)
 		btnOK:SetPoint("CENTERRIGHT", btnCancel, "CENTERLEFT", 8, 0)
 		btnOK:SetEnabled(true)
 		btnOK.Event.LeftPress = OnModifyClick 
@@ -66,12 +67,12 @@ function WT.Gadget.ShowModifyUI(id)
 
 		local frameOptionsHeading = UI.CreateFrame("Text", "WTGadgetOptionsHeading", frameOptions)
 		frameOptionsHeading:SetFontSize(18)
-		frameOptionsHeading:SetText("Modify Gadget")
+		frameOptionsHeading:SetText(TXT.ModifyGadget)
 		frameOptionsHeading:SetPoint("TOPLEFT", frameOptions, "TOPLEFT", 8, 8)
 
 		gadgetDetails = UI.CreateFrame("Text", "WTGadgetDetails", frameOptions)
 		gadgetDetails:SetFontSize(10)
-		gadgetDetails:SetText("Alter the configuration options for this gadget below, and click Modify")
+		gadgetDetails:SetText(TXT.ModifyMessage)
 		gadgetDetails:SetPoint("TOPLEFT", frameOptionsHeading, "BOTTOMLEFT", 0, -4)
 		gadgetDetails:SetFontColor(0.8, 0.8, 0.8, 1.0)
 	else

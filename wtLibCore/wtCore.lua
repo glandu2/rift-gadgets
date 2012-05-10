@@ -28,6 +28,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT = Library.Translate
 
 -- Public Interface
 WT = {}
@@ -153,7 +154,7 @@ function WT.Command.cpu(options)
 	for addonId, cpuData in pairs(Inspect.Addon.Cpu()) do
 		if cpuData then
 			if options[1] == "detail" then
-				print("-- CPU Usage " .. addonId .. " ------------------------------------")
+				print("-- " .. TXT.CPUUsage .. " " .. addonId .. " ------------------------------------")
 			end
 			local total = 0
 			for k,v in pairs(cpuData) do
@@ -162,7 +163,7 @@ function WT.Command.cpu(options)
 				end
 				total = total + v
 			end
-			print("TOTAL " .. addonId .. " " .. string.format("%.3f", total * 100))
+			print(TXT.TOTAL .. " " .. addonId .. " " .. string.format("%.3f", total * 100))
 		end
 	end
 end

@@ -5,6 +5,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT=Library.Translate
 
 -- wtComboPoints provides a simple bar for the player's charge
 -- Only useful for mages, and it only exists because I didn't want to add a charge bar to the standard frame
@@ -53,8 +54,8 @@ end
 
 WT.Gadget.RegisterFactory("ComboPoints",
 	{
-		name="Combo Points",
-		description="Combo or Attack Points",
+		name=TXT.gadgetComboPoints_name,
+		description=TXT.gadgetComboPoints_desc,
 		author="Wildtide",
 		version="1.0.0",
 		iconTexAddon=AddonId,

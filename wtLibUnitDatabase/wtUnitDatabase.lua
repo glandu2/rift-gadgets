@@ -50,7 +50,7 @@
 local toc, data = ...
 local AddonId = toc.identifier
 
-local STR = WT.Strings
+local TXT = Library.Translate
 
 -- Global store of all WT.Unit instances
 WT.Units = {}
@@ -248,15 +248,15 @@ local function PopulateUnit(unitId, unitObject)
 
 		if detail["manaMax"] then 
 			unit["resourceName"] = "mana"
-			unit["resourceText"] = STR.Mana
+			unit["resourceText"] = TXT.Mana
 			unit["resourceColor"] = { r = 0.1, g = 0.3, b = 1.0, a = 1.0 }
 		elseif detail["energyMax"] then 
 			unit["resourceName"] = "energy" 
-			unit["resourceText"] = STR.Energy
+			unit["resourceText"] = TXT.Energy
 			unit["resourceColor"] = { r = 1.0, g = 0.0, b = 1.0, a = 1.0 }
 		elseif detail["power"] then 
 			unit["resourceName"] = "power"
-			unit["resourceText"] = STR.Power
+			unit["resourceText"] = TXT.Power
 			unit["resourceColor"] = { r = 1.0, g = 1.0, b = 0.0, a = 1.0 }
 		else 
 			unit["resourceName"] = "" 
@@ -266,16 +266,16 @@ local function PopulateUnit(unitId, unitObject)
 
 		if detail.calling == "mage" then
 			unit.callingColor = { r = 0.6, g = 0.0, b = 0.8, a = 1.0 }
-			unit.callingText = STR.Mage
+			unit.callingText = TXT.Mage
 		elseif detail.calling == "cleric" then
 			unit.callingColor = { r = 0.0, g = 0.8, b = 0.0, a = 1.0 }
-			unit.callingText = STR.Cleric
+			unit.callingText = TXT.Cleric
 		elseif detail.calling == "rogue" then
 			unit.callingColor = { r = 0.7, g = 0.6, b = 0.0, a = 1.0 }
-			unit.callingText = STR.Rogue
+			unit.callingText = TXT.Rogue
 		elseif detail.calling == "warrior" then
 			unit.callingColor = { r = 0.8, g = 0.0, b = 0.0, a = 1.0 }
-			unit.callingText = STR.Warrior
+			unit.callingText = TXT.Warrior
 		else
 			unit.callingColor = { r = 0.2, g = 0.4, b = 0.6, a = 1.0 }
 			unit.callingText = ""

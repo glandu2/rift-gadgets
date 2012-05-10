@@ -1,0 +1,29 @@
+Identifier = "wtLibTranslate"
+
+Name = "wtLibTranslate"
+Description = "Handles localization of text"
+
+Author = "Wildtide"
+Website = "http://www.wildtide.net"
+Email = "wildtide@wildtide.net"
+
+Version = "0.3.5"
+
+Environment = "1.8"
+
+RunOnStartup = 
+{
+  "wtTranslate.lua",
+}
+
+SavedVariables = 
+{
+}
+
+Embed = 
+{
+}
+
+Dependencies = 
+{
+}

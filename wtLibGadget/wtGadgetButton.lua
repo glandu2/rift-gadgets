@@ -91,6 +91,19 @@ btnGadget.Event.RightClick = btnShowMenu
 
 
 
+-- API METHODS
+
+function WT.Gadget.ResetButton()
+	WT.Utility.DeAnchor(btnGadget)
+	btnGadget:ClearPoint("LEFT")
+	btnGadget:ClearPoint("TOP")
+	btnGadget:SetPoint("CENTER", UIParent, "CENTER")
+	wtxOptions.btnGadgetX = btnGadget:GetLeft()
+	wtxOptions.btnGadgetY = btnGadget:GetTop()
+end
+
+
+
 local function Initialize()
 	if (wtxOptions.btnGadgetX and wtxOptions.btnGadgetY) then
 		btnGadget:SetPoint("TOPLEFT", UIParent, "TOPLEFT", wtxOptions.btnGadgetX, wtxOptions.btnGadgetY)

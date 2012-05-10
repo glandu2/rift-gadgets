@@ -461,11 +461,6 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	for i = 2,20 do
 		frames[i] = WT.UnitFrame.CreateFromTemplate(template, string.format("group%02d", i), configuration)
 		frames[i]:SetParent(wrapper)
-		if ((i-1) % 5) == 0 then
-			frames[i]:SetPoint("TOPLEFT", frames[i-5], "TOPRIGHT", 1, 0)
-		else
-			frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT", 0, 1)
-		end
 	end
 	
 	-- Layout the frames appropriately

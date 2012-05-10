@@ -30,13 +30,14 @@ local AddonId = toc.identifier
 
 local STR = WT.Strings
 
+local GRAB_KEYBOARD_ON_UNLOCK = false
+
 -- Events -----------------------------------------------------------------------------------------------------
 WT.Event.Trigger.GadgetsLocked, WT.Event.GadgetsLocked = Utility.Event.Create(AddonId, "GadgetsLocked")
 WT.Event.Trigger.GadgetsUnlocked, WT.Event.GadgetsUnlocked = Utility.Event.Create(AddonId, "GadgetsUnlocked")
 ---------------------------------------------------------------------------------------------------------------
 
 WT.Gadget = {}
-WT.Gadget.Command = {}
 
 WT.Gadgets = {}
 wtxGadgets = wtxGadgets or {}
@@ -126,7 +127,7 @@ function WT.Gadget.Create(configuration)
 	local gadget = nil
 	local createOptions = nil
 
-	success, errMessage = pcall(
+	local success, errMessage = pcall(
 		function()
 			gadget, createOptions = gadgetFactory.Create(configuration)
 			if not createOptions then createOptions = {} end
@@ -172,10 +173,10 @@ local menuHandleForGadget = false
 
 local function OnMenuHandleClick(value)
 	if value == "delete" then
-	 	WT.Gadget.Command.remove(menuHandleForGadget)
+	 	WT.Gadget.Command.delete(menuHandleForGadget)
 	end
 	if value == "modify" then
-	 	WT.Gadget.Command.modify(menuHandleForGadget)
+	 	WT.Gadget.Modify(menuHandleForGadget)
 	end
 	if value == "copy" then
 	 	WT.Gadget.Command.copy(menuHandleForGadget)
@@ -389,6 +390,22 @@ function WT.Gadget:SizeMove()
 end
 
 
+local keyFocusFrame = nil
+local escMessageShown = false
+
+local function GadgetKeyDown(frame, key)
+end
+
+local function GadgetKeyUp(frame, key)
+	if key:byte() == 27 then
+		WT.Gadget.LockAll()
+	else
+		if not escMessageShown then
+			print("To lock gadgets and get your keyboard back, press [ESC] or click the Gadget button")
+			escMessageShown = true
+		end 
+	end
+end
 
 function WT.Gadget.UnlockAll()
 	if WT.Gadget.isSecure then
@@ -399,6 +416,20 @@ function WT.Gadget.UnlockAll()
 		gadget.mvHandle:SetVisible(true)
 	end
 	gadgetsLocked = false
+
+	if GRAB_KEYBOARD_ON_UNLOCK then
+		if not keyFocusFrame then
+			keyFocusFrame = UI.CreateFrame("Frame", "Gadgets_KeyHandler", WT.Context)
+			keyFocusFrame:SetAllPoints(UIParent)
+			keyFocusFrame:SetLayer(9900)
+			keyFocusFrame.Event.KeyDown = GadgetKeyDown
+			keyFocusFrame.Event.KeyUp = GadgetKeyUp
+		end
+		keyFocusFrame:SetVisible(true)
+		keyFocusFrame:SetKeyFocus(true)	
+		escMessageShown = false
+	end
+	
 	WT.Event.Trigger.GadgetsUnlocked()
 end
 
@@ -408,6 +439,12 @@ function WT.Gadget.LockAll()
 		gadget.mvHandle:SetVisible(false)
 	end
 	gadgetsLocked = true
+
+	if keyFocusFrame then
+		keyFocusFrame:SetVisible(false)
+		keyFocusFrame:SetKeyFocus(false)
+	end
+	
 	WT.Event.Trigger.GadgetsLocked()
 end
 
@@ -421,57 +458,50 @@ function WT.Gadget.ToggleAll()
 end
 
 
-function WT.Gadget.Locked()
-	return gadgetsLocked
-end
-
-
-function WT.Gadget.Command.unlock()
-	WT.Gadget.UnlockAll()
-end
-
-function WT.Gadget.Command.lock()
-	WT.Gadget.LockAll()
-end
-
-function WT.Gadget.Command.toggle()
-	WT.Gadget.ToggleAll()
-end
-
-
--- e.g. /gadget add UnitFrame ufPlayer unit player
-function WT.Gadget.Command.add(gadgetType, gadgetId, ...)
-
+function WT.Gadget.Modify(gadgetId)
+	if not gadgetId then
+		print("Missing <gadgetid>, cannot modify")
+		return
+	end
+	if not wtxGadgets[gadgetId] then
+		print("Gadget not found. Use '/gadget list' to display all gadgets")
+		return
+	end
 	if WT.Gadget.isSecure then
 		print("Cannot alter gadgets in combat")
 		return
 	end
-
-	if not gadgetType then
-		WT.Gadget.ShowCreationUI()
-		return
-	end
-
-	local arg = { ... }
-	arg.n = #arg
-
-	local config = {}
-	config.type = gadgetType
-	config.id = gadgetId
-
-	local i = 1
-	while i < arg.n do
-		config[arg[i]] = arg[i+1]
-		i = i + 2
-	end
-	WT.Gadget.Create(config)
-	
+	WT.Gadget.ShowModifyUI(gadgetId)
 end
 
--- e.g. /gadget add UnitFrame ufPlayer unit player
-function WT.Gadget.Command.copy(gadgetId)
+function WT.Gadget.Delete(gadgetId)
 	if not gadgetId then
-		print("Syntax: /gadget copy <gadgetid>")
+		print("Missing <gadgetid>, cannot delete")
+		return
+	end
+	if not wtxGadgets[gadgetId] then
+		print("Gadget not found. Use '/gadget list' to display all gadgets")
+		return
+	end
+	if WT.Gadget.isSecure then
+		print("Cannot alter gadgets in combat")
+		return
+	end
+	
+	WT.Gadgets[gadgetId]:SetVisible(false)
+	WT.Gadgets[gadgetId].mvHandle:SetVisible(false)
+	WT.Gadgets[gadgetId] = nil
+	wtxGadgets[gadgetId] = nil
+	
+	-- Recommend a reload following deletions 
+	WT.Gadget.RecommendReload()
+end
+
+
+function WT.Gadget.Copy(gadgetId)
+
+	if not gadgetId then
+		print("Missing <gadgetid>, cannot copy")
 		return
 	end
 	if not wtxGadgets[gadgetId] then
@@ -493,84 +523,18 @@ function WT.Gadget.Command.copy(gadgetId)
 	local newConfig = {}
 	for k,v in pairs(gadgetConfig) do newConfig[k] = v end
 	newConfig.id = newId
-	newConfig.xpos = gadgetConfig.xpos + 50 or 200
-	newConfig.ypos = gadgetConfig.ypos + 50 or 200
+	newConfig.xpos = (gadgetConfig.xpos or 200) + 50
+	newConfig.ypos = (gadgetConfig.ypos or 200) + 50
 	WT.Gadget.Create(newConfig)
-end
-
-function WT.Gadget.Command.list()
-	for gadgetId,config in pairs(wtxGadgets) do
-		print(string.format("Gadget: %s (%s)", gadgetId, config.type)) 
-	end
-end
-
-function WT.Gadget.Command.remove(gadgetId)
-	if not gadgetId then
-		print("Syntax: /gadget remove <gadgetid>")
-		return
-	end
-	if not wtxGadgets[gadgetId] then
-		print("Gadget not found. Use '/gadget list' to display all gadgets")
-		return
-	end
-	if WT.Gadget.isSecure then
-		print("Cannot alter gadgets in combat")
-		return
-	end
 	
-	WT.Gadgets[gadgetId]:SetVisible(false)
-	WT.Gadgets[gadgetId].mvHandle:SetVisible(false)
-	WT.Gadgets[gadgetId] = nil
-	wtxGadgets[gadgetId] = nil
-	
-	-- Recommend a reload following deletions 
-	WT.Gadget.RecommendReload()
-	
+	return newId
 end
 
 
-function WT.Gadget.Command.modify(gadgetId)
-	if not gadgetId then
-		print("Syntax: /gadget modify <gadgetid>")
-		return
-	end
-	if not wtxGadgets[gadgetId] then
-		print("Gadget not found. Use '/gadget list' to display all gadgets")
-		return
-	end
-	if WT.Gadget.isSecure then
-		print("Cannot alter gadgets in combat")
-		return
-	end
-	
-	WT.Gadget.ShowModifyUI(gadgetId)
+function WT.Gadget.Locked()
+	return gadgetsLocked
 end
 
-
-function WT.Gadget.Command.reset()
-	WT.Utility.DeAnchor(btnGadget)
-	btnGadget:ClearPoint("LEFT")
-	btnGadget:ClearPoint("TOP")
-	btnGadget:SetPoint("CENTER", UIParent, "CENTER")
-	wtxOptions.btnGadgetX = btnGadget:GetLeft()
-	wtxOptions.btnGadgetY = btnGadget:GetTop()
-end
-
-
-function WT.Gadget.OnSlashCommand(cmd)
-	local words = {}
-	for word in string.gmatch(cmd, "[^%s]+") do table.insert(words, word) end
-	local numWords = table.getn(words)
-	if numWords > 0 then
-		local command = string.lower(words[1])
-		local args = {}
-		for i = 2, numWords do table.insert(args, words[i]) end
-		WT.Log.Debug("Command received: " .. command .. " with " .. table.getn(args) .. " args")
-		if WT.Gadget.Command[command] then
-			WT.Gadget.Command[command](unpack(args))
-		end
-	end
-end
 
 function WT.Gadget.SecureEnter()
 	WT.Gadget.isSecure = true
@@ -600,8 +564,6 @@ end
 WT.RegisterInitializer(Initialize)
 
 
---table.insert(Event.Addon.SavedVariables.Load.End, { WT.Gadget.LoadVariables, AddonId, AddonId .. "_Gadget_LoadVariables" })
-table.insert(Command.Slash.Register("gadget"), { WT.Gadget.OnSlashCommand, AddonId, AddonId .. "_OnSlashCommand" })
 table.insert(Event.System.Secure.Enter, { WT.Gadget.SecureEnter, AddonId, AddonId .. "_Gadget_SecureEnter" })
 table.insert(Event.System.Secure.Leave, { WT.Gadget.SecureLeave, AddonId, AddonId .. "_Gadget_SecureLeave" })
 

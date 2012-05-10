@@ -17,6 +17,7 @@ RunOnStartup =
   "wtGadget.lua",
   "wtGadgetButton.lua",
   "wtGadgetRecommendReload.lua",
+  "wtGadgetSlashCmd.lua",
   "wtGadget_CreateDialog.lua",
   "wtGadget_ModifyDialog.lua",
 }

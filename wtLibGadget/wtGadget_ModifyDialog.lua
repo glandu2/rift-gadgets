@@ -18,7 +18,7 @@ local function OnModifyClick()
 		for k,v in pairs(config) do gadgetConfig[k] = v end
 	
 		-- Delete the existing gadget
-		WT.Gadget.Command.remove(gadgetId)
+		WT.Gadget.Delete(gadgetId)
 						
 		-- Then recreate the gadget with the updated configuration options
 		WT.Gadget.Create(gadgetConfig)

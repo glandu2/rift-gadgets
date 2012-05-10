@@ -28,7 +28,7 @@ local function ufConfigDialog(container)
 				{text="Focus's Target", value="focus.target"},
 				{text="Pet", value="player.pet"},
 			}, false) 
-		:Combobox("template", STR.RaidFrameTemplate, "StandardFrame", templateListItems, true)
+		:Combobox("template", STR.UnitFrameTemplate, "StandardFrame", templateListItems, true)
 		:Checkbox("excludeBuffs", "Hide Buffs on Frame", false)
 		:FieldNote(STR.ExcludeBuffsNote)
 		:Checkbox("clickToTarget", STR.EnableClickToTarget, true)

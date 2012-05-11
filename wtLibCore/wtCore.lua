@@ -12,9 +12,6 @@
 
 	Public Events:
 		Event.wtLibrary.Tick
-<<<<<<< OURS
-		Event.wtLibrary.PreTick
-		Event.wtLibrary.PostTick
 
 	Public Properties:
 		WT.FPS <double>

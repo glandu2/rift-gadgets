@@ -8,7 +8,11 @@ Library.Translate.En(
 {
 	-- Gadget Names and Descriptions
 	gadgetChargeMeter_name = "Charge Meter",
+<<<<<<< HEAD
 	gadgetChargeMeter_desc = "Display Mage's Charge",
+=======
+	gadgetChargeMeter_desc = "The Charge Meter displays the current charge. Only useful for mages, this gadget exists so that a standard Unit Frame doesn't have to handle the extra bar within it's layout.",
+>>>>>>> branch 'master' of git@git.curseforge.net:rift/gadgets/mainline.git
 
 	gadgetComboPoints_name = "Combo Points",
 	gadgetComboPoints_desc = "Combo or Attack Points",

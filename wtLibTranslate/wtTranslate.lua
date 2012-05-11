@@ -32,7 +32,7 @@ local ERROR_ON_MISSING_PHRASE = false
 local translate = Library.Translate
 
 -- "English", "French", "German", "Korean", "Russian"
-local language = Inspect.System.Language()
+local language = "French" or Inspect.System.Language()
 local lang = "en"
 if language == "French" then lang = "fr" end
 if language == "German" then lang = "de" end

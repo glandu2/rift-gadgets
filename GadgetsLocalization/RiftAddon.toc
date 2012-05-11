@@ -1,0 +1,34 @@
+Identifier = "GadgetsLocalization"
+
+Name = "GadgetsLocalization"
+Description = "Localization - Gadgets"
+
+Author = "Wildtide"
+Website = "http://www.wildtide.net"
+Email = "wildtide@wildtide.net"
+
+Version = "0.3.5"
+
+Environment = "1.8"
+
+RunOnStartup = 
+{
+  "Localization_en.lua",
+  "Localization_de.lua",
+  "Localization_fr.lua",
+  "Localization_ko.lua",
+  "Localization_ru.lua",
+}
+
+SavedVariables = 
+{
+}
+
+Embed = 
+{
+}
+
+Dependencies = 
+{
+	wtLibTranslate = {"required", "before"},
+}

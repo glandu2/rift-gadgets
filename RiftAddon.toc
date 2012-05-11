@@ -13,7 +13,6 @@ Environment = "1.8"
 
 RunOnStartup = 
 {
-  "wtLocalization.lua",
   "wtFPSGadget.lua",
   "wtRangeFinderGadget.lua",
   "wtCPUGadget.lua",
@@ -32,6 +31,7 @@ SavedVariables =
 Embed = 
 {
 	wtLibTranslate = true,
+	GadgetsLocalization = true,
 	wtLibCore = true,
 	wtLibControls = true,
 	wtLibUnitDatabase = true,
@@ -41,6 +41,7 @@ Embed =
 
 Dependencies = 
 {
+	GadgetsLocalization = {"required", "before"},
 	wtLibUnitFrame = {"required", "before"},
 }
 -- X-Curse-Packaged-Version: r20120505105758

@@ -45,12 +45,12 @@ function WT.Gadget.ShowCreationUI()
 		frameOptions:SetPoint("BOTTOMRIGHT", content, "BOTTOMRIGHT" ,0, 0)		
 
 		local btnCancel = UI.CreateFrame("RiftButton", "WTGadgetBtnCancel", frameOptions)
-		btnCancel:SetText("Cancel")
+		btnCancel:SetText(TXT.Cancel)
 		btnCancel:SetPoint("BOTTOMRIGHT", frameOptions, "BOTTOMRIGHT", -8, -8)
 		btnCancel.Event.LeftPress = function() window:SetVisible(false); WT.Utility.ClearKeyFocus(window); end
 		
 		local btnOK = UI.CreateFrame("RiftButton", "WTGadgetBtnOK", frameOptions)
-		btnOK:SetText("Create")
+		btnOK:SetText(TXT.Create)
 		btnOK:SetPoint("CENTERRIGHT", btnCancel, "CENTERLEFT", 8, 0)
 		btnOK:SetEnabled(false)
 		btnOK.Event.LeftPress = 

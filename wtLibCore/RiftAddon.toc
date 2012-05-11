@@ -15,11 +15,6 @@ RunOnStartup =
 {
   "wtCore.lua",
   "wtLog.lua",
-  "wtLocalization.lua",
-  "wtLocalization_de.lua",
-  "wtLocalization_fr.lua",
-  "wtLocalization_ko.lua",
-  "wtLocalization_ru.lua",
   "wtUtility.lua",
 }
 

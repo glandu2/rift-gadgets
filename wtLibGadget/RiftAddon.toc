@@ -13,7 +13,6 @@ Environment = "1.8"
 
 RunOnStartup = 
 {
-  "wtLocalization.lua",
   "wtGadget.lua",
   "wtGadgetButton.lua",
   "wtGadgetRecommendReload.lua",

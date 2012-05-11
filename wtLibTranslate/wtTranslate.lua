@@ -75,26 +75,31 @@ end
 -- e.g. Library.Translate.FR("hello", "Bonjour")
 
 function translate.En(tbl)
+	if not tbl then return end
 	for id, text in pairs(tbl) do
 		translate.Set("en", id, text)
 	end
 end
 function translate.De(tbl)
+	if not tbl then return end
 	for id, text in pairs(tbl) do
 		translate.Set("de", id, text)
 	end
 end
 function translate.Fr(tbl)
+	if not tbl then return end
 	for id, text in pairs(tbl) do
 		translate.Set("fr", id, text)
 	end
 end
 function translate.Ko(tbl)
+	if not tbl then return end
 	for id, text in pairs(tbl) do
 		translate.Set("ko", id, text)
 	end
 end
 function translate.Ru(tbl)
+	if not tbl then return end
 	for id, text in pairs(tbl) do
 		translate.Set("ru", id, text)
 	end

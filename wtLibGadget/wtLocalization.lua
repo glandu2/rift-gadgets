@@ -1,18 +1,31 @@
-﻿--[[
+--[[
 	This file is part of Wildtide's WT Addon Framework
 	Wildtide @ Blightweald (EU) / DoomSprout @ forums.riftgame.com
 --]]
  
-local STR = WT.Strings
+Library.Translate.En({
 
--- Setup default (English) localization for this addon
-STR.Load("en", 
-{
-	AddGadget = "Add Gadget",
-	LockGadgets = "Lock Gadgets",
-	UnlockGadgets = "Unlock Gadgets",
-	DeleteGadget = "Delete Gadget",
-	CopyGadget = "Copy Gadget",
-	ModifyGadget = "Modify Gadget",
-	Cancel = "Cancel",
+	Gadget			= "Gadget",
+	Gadgets			= "Gadgets",
+ 
+	AddGadget		= "Add Gadget",
+	LockGadgets 	= "Lock Gadgets",
+	UnlockGadgets 	= "Unlock Gadgets",
+	DeleteGadget 	= "Delete Gadget",
+	CopyGadget 		= "Copy Gadget",
+	CreateGadget 	= "Create Gadget",
+	ModifyGadget 	= "Modify Gadget",
+	Modify 			= "Modify",
+	Cancel 			= "Cancel",
+	
+	CannotAlterGadgetsInCombat = "Cannot alter gadgets in combat",
+	ReloadInterface = "Reload Interface",
+	ReloadUIMessage = "Please reload the User Interface to release allocated resources.",
+	ReloadUI = "Reload UI",
+	
+	SelectGadgetType = "Select Gadget Type",
+	
+	writtenBy = "written by",
+	
+	ModifyMessage = "Alter the configuration options for this gadget below, and click Modify",	
 })

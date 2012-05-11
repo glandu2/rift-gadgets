@@ -5,6 +5,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT=Library.Translate
 
 -- wtCPUGadget creates a really simple "CPU" gadget for displaying Frames Per Second
 
@@ -61,8 +62,8 @@ end
 
 WT.Gadget.RegisterFactory("CPU",
 	{
-		name="CPU Monitor",
-		description="Display Frames Per Second",
+		name=TXT.gadgetCPU_name,
+		description=TXT.gadgetCPU_desc,
 		author="Wildtide",
 		version="1.0.0",
 		iconTexAddon=AddonId,

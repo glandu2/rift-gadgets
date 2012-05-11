@@ -516,6 +516,28 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	return wrapper
 end
 
+function WT.UnitFrame:DumpTemplate()
+	if self.Elements then
+		for id, element in pairs(self.Elements) do
+			if element.Configuration then
+				print(id .. ":")
+				for k,v in pairs(element.Configuration) do
+					print("  " .. k .. " = " .. tostring(v))
+				end
+			end
+		end
+	end
+end
+
+function WT.Gadget.Command.dumptemplate(gadgetId)
+	print("Dumping template for " .. tostring(gadgetId))
+	local gadget = WT.Gadgets[gadgetId]
+	if gadget then
+		gadget:DumpTemplate()
+	end
+end
+
+
 -- Event Handlers --------------------------------------------------------------------------------
 
 local function OnUnitAdded(unitId)

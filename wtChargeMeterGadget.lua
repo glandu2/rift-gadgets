@@ -5,6 +5,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT=Library.Translate
 
 -- wtChargeMeter provides a simple bar for the player's charge
 -- Only useful for mages, and it only exists because I didn't want to add a charge bar to the standard frame
@@ -57,8 +58,8 @@ end
 
 WT.Gadget.RegisterFactory("ChargeMeter",
 	{
-		name="Charge Meter",
-		description="Display Mage's Charge",
+		name=TXT.gadgetChargeMeter_name,
+		description=TXT.gadgetChargeMeter_desc,
 		author="Wildtide",
 		version="1.1.0",
 		iconTexAddon=AddonId,

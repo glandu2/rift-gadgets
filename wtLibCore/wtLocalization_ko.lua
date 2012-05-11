@@ -1,11 +1,9 @@
-local lang = WT.Strings.Language
+-- *** Needs translation 
 
--- Only load Korean strings if client is set to French
-if lang ~= "ko" then return end
+-- Do not process this file if the client language doesn't match
+if Library.Translate.Language ~= "ko" then return end
 
--- *** Needs translation
-
-WT.Strings.Load("ko", 
+Library.Translate.Ko(
 {
 	Mana 		= "Mana",
 	Energy 		= "Energy",
@@ -15,5 +13,5 @@ WT.Strings.Load("ko",
 	Mage		= "Mage",
 	Cleric		= "Cleric",
 	Rogue		= "Rogue",
-	Warrior		= "Warrior",
+	Warrior		= "Warrior",	
 })

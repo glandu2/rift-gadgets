@@ -5,8 +5,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
-
-local STR = WT.Strings
+local TXT=Library.Translate
 
 local controls = {}
 
@@ -19,7 +18,7 @@ local function ufConfigDialog(container)
 	end
 
 	ufDialog = WT.Dialog(container)
-		:Combobox("unitSpec", STR.UnitToTrack, "player",
+		:Combobox("unitSpec", TXT.UnitToTrack, "player",
 			{
 				{text="Player", value="player"},
 				{text="Target", value="player.target"},
@@ -28,12 +27,12 @@ local function ufConfigDialog(container)
 				{text="Focus's Target", value="focus.target"},
 				{text="Pet", value="player.pet"},
 			}, false) 
-		:Combobox("template", STR.UnitFrameTemplate, "StandardFrame", templateListItems, true)
+		:Combobox("template", TXT.UnitFrameTemplate, "StandardFrame", templateListItems, true)
 		:Checkbox("excludeBuffs", "Hide Buffs on Frame", false)
-		:FieldNote(STR.ExcludeBuffsNote)
-		:Checkbox("clickToTarget", STR.EnableClickToTarget, true)
-		:Checkbox("contextMenu", STR.EnableContextMenu, true)
-		:FieldNote(STR.ClickThroughNote)
+		:FieldNote(TXT.ExcludeBuffsNote)
+		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
+		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
+		:FieldNote(TXT.ClickThroughNote)
 end
 
 local function ufGetConfiguration()
@@ -56,11 +55,11 @@ local function rfConfigDialog(container)
 	end
 
 	rfDialog = WT.Dialog(container)
-		:Combobox("template", STR.RaidFrameTemplate, "RaidFrame", templateListItems, true)
+		:Combobox("template", TXT.RaidFrameTemplate, "RaidFrame", templateListItems, true)
 		:Combobox("layout", "Layout", "4 x 5", { "4 x 5", "5 x 4", "2 x 10", "10 x 2", "1 x 20", "20 x 1" }, false)
-		:Checkbox("clickToTarget", STR.EnableClickToTarget, true)
-		:Checkbox("contextMenu", STR.EnableContextMenu, true)
-			:FieldNote(STR.ClickThroughNote)
+		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
+		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
+			:FieldNote(TXT.ClickThroughNote)
 
 end
 
@@ -76,8 +75,8 @@ end
 -- Register as a gadget factory for creating unit frames from templates
 WT.Gadget.RegisterFactory("UnitFrame",
 	{
-		name="Unit Frame",
-		description="Unit Frame gadget",
+		name=TXT.gadgetUnitFrame_name,
+		description=TXT.gadgetUnitFrame_desc,
 		author="Wildtide",
 		version="0.1.3",
 		["Create"] = WT.UnitFrame.CreateFromConfiguration,
@@ -88,8 +87,8 @@ WT.Gadget.RegisterFactory("UnitFrame",
 
 WT.Gadget.RegisterFactory("RaidFrames",
 	{
-		name="Raid Frames",
-		description="Raid frames gadget",
+		name=TXT.gadgetRaidFrames_name,
+		description=TXT.gadgetRaidFrames_desc,
 		author="Wildtide",
 		version="0.1.3",
 		["Create"] = WT.UnitFrame.CreateRaidFramesFromConfiguration,

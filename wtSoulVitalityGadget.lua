@@ -5,6 +5,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT=Library.Translate
 
 local chargeFontSize = 18
 
@@ -53,8 +54,8 @@ end
 
 WT.Gadget.RegisterFactory("SoulVitality",
 	{
-		name="Soul Vitality",
-		description="Displays Soul Vitality",
+		name=TXT.gadgetSoulVitality_name,
+		description=TXT.gadgetSoulVitality_desc,
 		author="Wildtide",
 		version="1.0.0",
 		iconTexAddon=AddonId,

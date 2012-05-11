@@ -5,6 +5,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT=Library.Translate
 
 local chargeFontSize = 32
 
@@ -77,8 +78,8 @@ end
 
 WT.Gadget.RegisterFactory("PlanarCharge",
 	{
-		name="Planar Charge",
-		description="Display Planar Charge",
+		name=TXT.gadgetPlanarCharge_name,
+		description=TXT.gadgetPlanarCharge_desc,
 		author="Wildtide",
 		version="1.0.0",
 		iconTexAddon=AddonId,

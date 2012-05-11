@@ -1,13 +1,42 @@
-﻿--[[
+--[[
 	This file is part of Wildtide's WT Addon Framework
 	Wildtide @ Blightweald (EU) / DoomSprout @ forums.riftgame.com
 --]]
  
-local STR = WT.Strings
-
 -- Setup default (English) localization for this addon
-STR.Load("en", 
+Library.Translate.En( 
 {
+	-- Gadget Names and Descriptions
+	gadgetChargeMeter_name = "Charge Meter",
+	gadgetChargeMeter_desc = "Display Mage's Charge",
+
+	gadgetComboPoints_name = "Combo Points",
+	gadgetComboPoints_desc = "Combo or Attack Points",
+
+	gadgetCPU_name = "CPU Monitor",
+	gadgetCPU_desc = "Displays Addon CPU Usage",
+	
+	gadgetFPS_name = "FPS Monitor",
+	gadgetFPS_desc = "Displays Frames per Second",
+
+	gadgetPlanarCharge_name = "Planar Charge",
+	gadgetPlanarCharge_desc = "Displays Planar Charge",
+
+	gadgetRangeFinder_name = "Range Finder",
+	gadgetRangeFinder_desc = "Displays Range to Target",
+
+	gadgetReloadUI_name = "Reload UI",
+	gadgetReloadUI_desc = "Reload UI Button",
+
+	gadgetSoulVitality_name = "Soul Vitality",
+	gadgetSoulVitality_desc = "Displays Soul Vitality",
+
+	gadgetUnitFrame_name = "Unit Frame",
+	gadgetUnitFrame_desc = "Unit Frame Gadget",
+
+	gadgetRaidFrames_name = "Raid Frames",
+	gadgetRaidFrames_desc = "Raid Frames Gadget",
+
 	UnitToTrack = "Unit to Track",
 	UnitFrameTemplate = "Unit Frame Template",
 	RaidFrameTemplate = "Raid Frame Template",
@@ -17,20 +46,10 @@ STR.Load("en",
 	EnableClickToTarget = "Enable click to target",
 })
 
--- Google Translate, sorry!
-STR.Load("de", 
+Library.Translate.De( 
 {
-	UnitToTrack = "Einheit zu verfolgen",
-	UnitFrameTemplate = "Einheit-Rahmen-Schablone",
-	RaidFrameTemplate = "Raid-Rahmen-Schablone",
 })
 
--- Google Translate, sorry!
-STR.Load("fr", 
+Library.Translate.Fr( 
 {
-	UnitToTrack = "Unité à suivre",
-	UnitFrameTemplate = "Modèle Cadre Unité",
-	RaidFrameTemplate = "Modèle Cadre Raid",
-	EnableContextMenu = "Menu contextuel sur clic droit",
-	EnableClickToTarget = "Activer cliquez pour cibler",
 })

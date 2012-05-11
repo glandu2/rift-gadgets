@@ -7,7 +7,7 @@ Author = "Wildtide"
 Website = "http://www.wildtide.net"
 Email = "wildtide@wildtide.net"
 
-Version = "0.3.4"
+Version = "0.3.5"
 
 Environment = "1.8"
 
@@ -33,6 +33,7 @@ Embed =
 
 Dependencies = 
 {
+	wtLibTranslate = {"required", "before"},	
 	wtLibCore = {"required", "before"},	
 	wtLibControls = {"required", "before"},	
 }

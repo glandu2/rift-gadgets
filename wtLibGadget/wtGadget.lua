@@ -28,7 +28,7 @@
 local toc, data = ...
 local AddonId = toc.identifier
 
-local STR = WT.Strings
+local TXT = Library.Translate
 
 local GRAB_KEYBOARD_ON_UNLOCK = false
 
@@ -186,7 +186,7 @@ end
 local function handleShowMenu()
 	if not menuHandle then
 		menuHandle =  WT.Control.Menu.Create(WT.Context, { 
-			{text=STR.ModifyGadget, value="modify"}, {text=STR.CopyGadget, value="copy"}, {text=STR.DeleteGadget, value="delete"}, {text=STR.Cancel, value="cancel"} }, OnMenuHandleClick)
+			{text=TXT.ModifyGadget, value="modify"}, {text=TXT.CopyGadget, value="copy"}, {text=TXT.DeleteGadget, value="delete"}, {text=TXT.Cancel, value="cancel"} }, OnMenuHandleClick)
 	end
 	menuHandle:Show()
 end

@@ -8,6 +8,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT = Library.Translate
 
 -- This is going to be a biggie!
 -- Need to ask the user to select a gadget type (ie. a factory), and then present configuration options
@@ -22,7 +23,7 @@ function WT.Gadget.ShowCreationUI()
 		window:SetWidth(800)
 		window:SetHeight(600)
 		window:SetLayer(11000)
-		window:SetTitle("Create New Gadget")
+		window:SetTitle(TXT.CreateGadget)
 		WT.Gadget.CreateGadgetWindow = window
 		
 		local content = window:GetContent()
@@ -77,12 +78,12 @@ function WT.Gadget.ShowCreationUI()
 
 		local frameOptionsHeading = UI.CreateFrame("Text", "WTGadgetOptionsHeading", frameOptions)
 		frameOptionsHeading:SetFontSize(18)
-		frameOptionsHeading:SetText("Select Gadget Type")
+		frameOptionsHeading:SetText(TXT.SelectGadgetType)
 		frameOptionsHeading:SetPoint("TOPLEFT", frameOptions, "TOPLEFT", 8, 8)
 
 		local gadgetDetails = UI.CreateFrame("Text", "WTGadgetDetails", frameOptions)
 		gadgetDetails:SetFontSize(10)
-		gadgetDetails:SetText("Gadget Framework version 1.0")
+		gadgetDetails:SetText("Gadgets, " .. TXT.Version .. "0.3.4")
 		gadgetDetails:SetPoint("TOPLEFT", frameOptionsHeading, "BOTTOMLEFT", 0, -4)
 		gadgetDetails:SetFontColor(0.8, 0.8, 0.8, 1.0)
 
@@ -168,7 +169,7 @@ function WT.Gadget.ShowCreationUI()
 					wrapper:SetBackgroundColor(0.2, 0.4, 0.6, 0.8)
 					window.selected = wrapper
 					frameOptionsHeading:SetText(gadget.name)
-					gadgetDetails:SetText("Version " .. gadget.version .. ", written by " .. gadget.author)
+					gadgetDetails:SetText(TXT.Version .. " " .. gadget.version .. ", " .. TXT.writtenBy .. " " .. gadget.author)
 					
 					if window.dialog then
 						window.dialog:SetVisible(false)

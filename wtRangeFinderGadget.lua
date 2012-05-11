@@ -5,6 +5,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT=Library.Translate
 
 -- wtRangeFinder creates a simple Range to Target UnitFrame
 
@@ -103,8 +104,8 @@ end
 
 WT.Gadget.RegisterFactory("RangeFinder",
 	{
-		name="Range Finder",
-		description="Display Range to Target",
+		name=TXT.gadgetRangeFinder_name,
+		description=TXT.gadgetRangeFinder_desc,
 		author="Wildtide",
 		version="1.0.0",
 		iconTexAddon=AddonId,

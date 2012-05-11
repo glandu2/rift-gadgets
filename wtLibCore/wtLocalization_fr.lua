@@ -1,11 +1,9 @@
-local lang = WT.Strings.Language
-
--- Only load French strings if client is set to French
-if lang ~= "fr" then return end
-
 -- *** Needs translation 
 
-WT.Strings.Load("fr", 
+-- Do not process this file if the client language doesn't match
+if Library.Translate.Language ~= "fr" then return end
+
+Library.Translate.Fr(
 {
 	Mana 		= "Mana",
 	Energy 		= "Energy",
@@ -15,5 +13,5 @@ WT.Strings.Load("fr",
 	Mage		= "Mage",
 	Cleric		= "Cleric",
 	Rogue		= "Rogue",
-	Warrior		= "Warrior",
+	Warrior		= "Warrior",	
 })

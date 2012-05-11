@@ -5,6 +5,7 @@
 
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT=Library.Translate
 
 -- wtFPSGadget creates a really simple "FPS" gadget for displaying Frames Per Second
 
@@ -54,8 +55,8 @@ end
 
 WT.Gadget.RegisterFactory("FPS",
 	{
-		name="FPS Monitor",
-		description="Display Frames Per Second",
+		name=TXT.gadgetFPS_name,
+		description=TXT.gadgetFPS_desc,
 		author="Wildtide",
 		version="1.0.0",
 		iconTexAddon=AddonId,

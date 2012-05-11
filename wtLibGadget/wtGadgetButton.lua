@@ -9,7 +9,7 @@
 local toc, data = ...
 local AddonId = toc.identifier
 
-local STR = WT.Strings
+local TXT = Library.Translate
 
 
 local btnGadget = UI.CreateFrame("Texture", AddonId .. "_btnGadget", WT.Context)
@@ -73,8 +73,8 @@ end
 local menuItems = {}
 local menuItemsAdd = 1
 local menuItemsToggleLock = 2
-menuItems[menuItemsAdd] = {text=STR.AddGadget, value=function() WT.Gadget.ShowCreationUI() end } 
-menuItems[menuItemsToggleLock] = {text=STR.UnlockGadgets, value=function() WT.Gadget.Command.toggle() end }
+menuItems[menuItemsAdd] = {text=TXT.AddGadget, value=function() WT.Gadget.ShowCreationUI() end } 
+menuItems[menuItemsToggleLock] = {text=TXT.UnlockGadgets, value=function() WT.Gadget.Command.toggle() end }
 
 local btnMenu = WT.Control.Menu.Create(btnGadget, menuItems)
 btnMenu:SetPoint("TOPRIGHT", btnGadget, "CENTER")
@@ -119,7 +119,7 @@ table.insert(WT.Initializers, Initialize)
 table.insert(WT.Event.GadgetsLocked, 
 {
 	function()
-		menuItems[menuItemsToggleLock].text = STR.UnlockGadgets
+		menuItems[menuItemsToggleLock].text = TXT.UnlockGadgets
 		btnMenu:SetItems(menuItems)
 	end, 
 	AddonId, AddonId .. "_GadgetsLocked"
@@ -128,7 +128,7 @@ table.insert(WT.Event.GadgetsLocked,
 table.insert(WT.Event.GadgetsUnlocked, 
 {
 	function()
-		menuItems[menuItemsToggleLock].text = STR.LockGadgets
+		menuItems[menuItemsToggleLock].text = TXT.LockGadgets
 		btnMenu:SetItems(menuItems)
 	end, 
 	AddonId, AddonId .. "_GadgetsUnlocked"

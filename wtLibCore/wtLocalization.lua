@@ -1,16 +1,16 @@
-local lang = WT.Strings.Language
-
--- English strings (these are the default where no alternative translation is available)
-
-WT.Strings.Load("en", 
+Library.Translate.En(
 {
-	Mana 		= "Mana",
-	Energy 		= "Energy",
-	Power 		= "Power",
-	Charge 		= "Charge",
-	Health 		= "Health",
-	Mage		= "Mage",
-	Cleric		= "Cleric",
-	Rogue		= "Rogue",
-	Warrior		= "Warrior",
+	CPUUsage		= "CPU Usage",
+	TOTAL			= "TOTAL",
+	Version			= "Version",
+
+	Mana 			= "Mana",
+	Energy 			= "Energy",
+	Power 			= "Power",
+	Charge 			= "Charge",
+	Health 			= "Health",
+	Mage			= "Mage",
+	Cleric			= "Cleric",
+	Rogue			= "Rogue",
+	Warrior			= "Warrior",	
 })

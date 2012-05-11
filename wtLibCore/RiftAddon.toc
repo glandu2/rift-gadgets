@@ -7,14 +7,13 @@ Author = "Wildtide"
 Website = "http://www.wildtide.net"
 Email = "wildtide@wildtide.net"
 
-Version = "0.3.4"
+Version = "0.3.5"
 
 Environment = "1.8"
 
 RunOnStartup = 
 {
   "wtCore.lua",
-  "wtStrings.lua",
   "wtLog.lua",
   "wtLocalization.lua",
   "wtLocalization_de.lua",
@@ -36,8 +35,5 @@ Embed =
 
 Dependencies = 
 {
+	wtLibTranslate = {"required", "before"}
 }
--- X-Curse-Packaged-Version: r20120505105758
--- X-Curse-Project-Name: Gadgets
--- X-Curse-Project-ID: gadgets
--- X-Curse-Repository-ID: rift/gadgets/mainline

@@ -8,11 +8,11 @@ local AddonId = toc.identifier
 
 WT.Gadget.Command = {}
 
-local STR = WT.Strings
+local TXT = Library.Translate
 
 function WT.Gadget.Command.add()
 	if WT.Gadget.isSecure then
-		print("Cannot alter gadgets in combat")
+		print(TXT.CannotAlterGadgetsInCombat)
 		return
 	end
 	WT.Gadget.ShowCreationUI()

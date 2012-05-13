@@ -46,7 +46,10 @@ function HealthOrb:Construct(options)
 				attach = 
 				{ 
 					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT" } 
-				}, visibilityBinding="id", binding="healthPercent", growthDirection="up", texAddon=AddonId, texFile="img/orb_green.tga", height=healthOrbHeight, width=healthOrbWidth,		
+				}, visibilityBinding="id", binding="healthPercent", growthDirection="up",
+				media="wtOrbBrightGreen", 
+				-- texAddon=AddonId, texFile="img/orb_green.tga", 
+				height=healthOrbHeight, width=healthOrbWidth,		
 			}, 
 			{
 				id="gloss", type="Image", parent="frame", layer=14,

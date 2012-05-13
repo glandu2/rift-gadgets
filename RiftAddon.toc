@@ -13,6 +13,7 @@ Environment = "1.8"
 
 RunOnStartup = 
 {
+  "wtInitMedia.lua",
   "wtFPSGadget.lua",
   "wtRangeFinderGadget.lua",
   "wtCPUGadget.lua",
@@ -30,6 +31,7 @@ SavedVariables =
 
 Embed = 
 {
+	wtLibMedia = true,
 	wtLibTranslate = true,
 	GadgetsLocalization = true,
 	wtLibCore = true,

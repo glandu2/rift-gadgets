@@ -75,7 +75,13 @@ function wtBar:Construct()
 	--self.MaxHeight = config.height	
 	
 	self.Image = UI.CreateFrame("Texture", WT.UnitFrame.UniqueName(), self.Mask)
-	self.Image:SetTexture(config.texAddon, config.texFile)
+	
+	if config.media then
+		Library.Media.SetTexture(self.Image, config.media)
+	elseif config.texAddon and config.texFile then
+		self.Image:SetTexture(config.texAddon, config.texFile)
+	end
+	
 	self.Image:SetPoint("TOPLEFT", self, "TOPLEFT")
 	self.Image:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
 	--self.Image:SetWidth(config.width)

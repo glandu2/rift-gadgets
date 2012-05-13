@@ -13,6 +13,7 @@ Environment = "1.8"
 
 RunOnStartup = 
 {
+  "wtInitMedia.lua",
   "wtUnitFrame.lua",
   "wtElement.lua",
   "wtTemplate.lua",
@@ -42,6 +43,7 @@ Dependencies =
 {
 	wtLibUnitDatabase = {"required", "before"},	
 	wtLibGadget = {"required", "before"},	
+	wtLibMedia= {"required", "before"},	
 }
 -- X-Curse-Packaged-Version: r20120505105758
 -- X-Curse-Project-Name: Gadgets

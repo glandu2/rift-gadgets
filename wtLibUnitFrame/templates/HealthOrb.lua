@@ -47,7 +47,7 @@ function HealthOrb:Construct(options)
 				{ 
 					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT" } 
 				}, visibilityBinding="id", binding="healthPercent", growthDirection="up",
-				media="wtOrbDarkGreen", 
+				media="wtOrbGreen", 
 				-- texAddon=AddonId, texFile="img/orb_green.tga", 
 				height=healthOrbHeight, width=healthOrbWidth,		
 			}, 

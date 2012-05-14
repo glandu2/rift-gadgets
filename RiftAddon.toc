@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Identifier = "Gadgets"
 
 Name = "Gadgets"
@@ -47,57 +46,3 @@ Dependencies =
 	GadgetsLocalization = {"required", "before"},
 	wtLibUnitFrame = {"required", "before"},
 }
--- X-Curse-Packaged-Version: r20120505105758
--- X-Curse-Project-Name: Gadgets
--- X-Curse-Project-ID: gadgets
--- X-Curse-Repository-ID: rift/gadgets/mainline
-=======
-Identifier = "Gadgets"
-
-Name = "Gadgets"
-Description = "This is a common set of gadgets, packaged into a single addon. Dependent on various embedded WT library components."
-
-Author = "Wildtide"
-Website = "http://www.wildtide.net"
-Email = "wildtide@wildtide.net"
-
-Version = "0.3.5"
-
-Environment = "1.8"
-
-RunOnStartup = 
-{
-  "wtLocalization.lua",
-  "wtFPSGadget.lua",
-  "wtRangeFinderGadget.lua",
-  "wtCPUGadget.lua",
-  "wtReloadGadget.lua",
-  "wtUnitFrameGadget.lua",
-  "wtChargeMeterGadget.lua",
-  "wtComboPointsGadget.lua",
-  "wtPlanarChargeGadget.lua",
-  "wtSoulVitalityGadget.lua",
-}
-
-SavedVariables = 
-{
-}
-
-Embed = 
-{
-	wtLibCore = true,
-	wtLibControls = true,
-	wtLibUnitDatabase = true,
-	wtLibGadget = true,
-	wtLibUnitFrame = true,
-}
-
-Dependencies = 
-{
-	wtLibUnitFrame = {"required", "before"},
-}
--- X-Curse-Packaged-Version: r20120505105758
--- X-Curse-Project-Name: Gadgets
--- X-Curse-Project-ID: gadgets
--- X-Curse-Repository-ID: rift/gadgets/mainline
->>>>>>> refs/remotes/origin/v0.3.4

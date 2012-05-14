@@ -180,7 +180,8 @@ function StandardFrame:Construct(options)
 			acceptLowPriorityDebuffs=false, acceptMediumPriorityDebuffs=false, acceptHighPriorityDebuffs=false, acceptCriticalPriorityDebuffs=false,
 			growthDirection = "right_down", selfCast=true,
 			timerSize=10, timerOffsetX=0, timerOffsetY=19,
-			stackSize=20, stackOffsetX=0, stackOffsetY=0,
+			stackSize=12, stackOffsetX=0, stackOffsetY=0, stackBackgroundColor={r=0,g=0,b=0,a=0.7},
+			borderColor={r=0,g=0,b=0,a=1},
 			sweepOverlay=true,
 		},
 		{
@@ -191,7 +192,8 @@ function StandardFrame:Construct(options)
 			acceptLowPriorityDebuffs=true, acceptMediumPriorityDebuffs=true, acceptHighPriorityDebuffs=true, acceptCriticalPriorityDebuffs=true,
 			growthDirection = "left_down",
 			timerSize=10, timerOffsetX=0, timerOffsetY=17,
-			stackSize=20, stackOffsetX=0, stackOffsetY=0,
+			stackSize=12, stackOffsetX=0, stackOffsetY=0, stackBackgroundColor={r=0,g=0,b=0,a=0.7},
+			borderColor={r=1,g=0,b=0,a=1},
 			sweepOverlay=true,
 		},
 	}

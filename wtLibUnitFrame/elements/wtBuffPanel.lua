@@ -59,6 +59,9 @@ function wtBuffPanel:Construct()
 	
 	self.config.borderThickness = config.borderThickness or 1
 	
+	self.config.borderColor = config.borderColor or nil
+	self.config.stackBackgroundColor = config.stackBackgroundColor or nil
+	
 	self.config.acceptLowPriorityBuffs = config.acceptLowPriorityBuffs or false;
 	self.config.acceptMediumPriorityBuffs = config.acceptMediumPriorityBuffs or false;
 	self.config.acceptHighPriorityBuffs = config.acceptHighPriorityBuffs or false;
@@ -127,7 +130,15 @@ function wtBuffPanel:Construct()
 		border:SetHeight(self.config.iconSize)
 		border:SetLayer(10)
 		border:SetVisible(false)
-		border:SetBackgroundColor(0,0,0,1)
+
+		local bgColor = self.config.borderColor
+		if bgColor then			
+			print("borderSet")
+			border:SetBackgroundColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a or 1.0)
+		else
+			border:SetBackgroundColor(0,0,0,1)
+		end
+
 		border:SetPoint("TOPLEFT", self, "TOPLEFT", (col * (self.config.iconSize + self.config.iconSpacingHorizontal)), (row * (self.config.iconSize + self.config.iconSpacingVertical)))
 	
 		local icon = UI.CreateFrame("Texture", WT.UnitFrame.UniqueName(), border)
@@ -158,7 +169,10 @@ function wtBuffPanel:Construct()
 			icon.txtStack = UI.CreateFrame("Text", WT.UnitFrame.UniqueName(), border)
 			icon.txtStack:SetLayer(25)
 			icon.txtStack:SetFontSize(self.config.stackSize)
-			
+			local bgColor = self.config.stackBackgroundColor
+			if bgColor then			
+				icon.txtStack:SetBackgroundColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a or 1.0)
+			end
 			-- Always place the timer text over the center of the icon, and use offsets to move it to where it needs to be in the template
 			icon.txtStack:SetPoint("CENTER", icon, "CENTER", self.config.stackOffsetX, self.config.stackOffsetY)
 		end
@@ -337,14 +351,16 @@ function wtBuffPanel.OnBuffAdded(unitFrame, buffId, buff, buffPriority)
 			local buffDets = {}
 			for k,v in pairs(buff) do buffDets[k] = v end
 			icon.buff = buffDets
-			if buffDets.stack then
-				if icon.txtStack then 
+
+			if icon.txtStack then 
+				if buffDets.stack then
 					icon.txtStack:SetVisible(true)
 					icon.txtStack:SetText(tostring(buffDets.stack))
 				else
-					-- icon.txtStack:SetVisible(false)
+					icon.txtStack:SetVisible(false)
 				end
 			end
+
 			return
 		end
 	end
@@ -357,12 +373,12 @@ function wtBuffPanel.OnBuffChanged(unitFrame, buffId, buff, buffPriority)
 	local icon = unitFrame.buffIconMap[buffId]
 	if icon then
 		icon.buff = buff
-		if buff.stack then
-			if icon.txtStack then 
+		if icon.txtStack then 
+			if buff.stack then
 				icon.txtStack:SetVisible(true)
 				icon.txtStack:SetText(tostring(buff.stack))
 			else
-				--icon.txtStack:SetVisible(false)
+				icon.txtStack:SetVisible(false)
 			end
 		end
 	end
@@ -391,6 +407,12 @@ function wtBuffPanel.OnBuffRemoved(unitFrame, buffId, buff, buffPriority)
 					panel.Icons[i-1]:SetTexture(panel.Icons[i]:GetTexture())
 					panel.Icons[i-1].buffId = panel.Icons[i].buffId
 					panel.Icons[i-1].buff = panel.Icons[i].buff
+					
+					if panel.Icons[i-1].txtStack then
+						panel.Icons[i-1].txtStack:SetText(panel.Icons[i].txtStack:GetText())
+						panel.Icons[i-1].txtStack:SetVisible(panel.Icons[i].txtStack:GetVisible())
+					end
+					
 					unitFrame.buffIconMap[panel.Icons[i].buffId] = panel.Icons[i-1]
 				end
 			end

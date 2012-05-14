@@ -176,6 +176,7 @@ function WT.Dialog(container, labelWidth)
 	obj.labelWidth = labelWidth or 200
 	obj.container = container
 	obj.fields = {}
+	obj.isWTDialog = true
 	setmetatable(obj, CDialog_mt)
 	return obj
 end

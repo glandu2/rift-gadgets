@@ -550,6 +550,7 @@ end
 
 
 local function Initialize()
+	if not wtxGadgets then wtxGadgets = {} end
 	for id, config in pairs(wtxGadgets) do
 		WT.Log.Info("Loading Gadget: " .. config.id)
 		WT.Gadget.Create(config)

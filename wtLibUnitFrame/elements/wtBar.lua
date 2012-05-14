@@ -22,14 +22,15 @@ wtBar.ConfigDefinition =
 	description = "A bar element. This must be bound to a percentage property (returns a number between 0 and 100).",
 	required = 
 	{
-		width = "The width of the bar",
-		height = "The height of the bar",
 		binding = "The property to bind to. Must be a percentage property (0..100)",
-		texAddon = "The addon ID for the addon containing the bar texture",
-		texFile = "The filename of the texture for the bar",
 	},
 	optional = 
 	{
+		texAddon = "The addon ID for the addon containing the bar texture",
+		texFile = "The filename of the texture for the bar",
+		media = "MediaID for the texture, for use with LibMedia",
+		width = "The width of the bar",
+		height = "The height of the bar",
 		colorBinding = "A binding to allow a colour to be auto assigned to the bar (e.g. roleColor, callingColor)",
 		color = "A table containing {r,g,b,a} members (0..1)",
 		growthDirection = "the direction the bar grows in, up, down, left or right (default is right)",
@@ -123,4 +124,21 @@ end
 
 function wtBar:SetBarColor(r,g,b,a)
 	self.Image:SetBackgroundColor(r, g, b, a or 1)
+end
+
+function wtBar:GetConfiguration()
+	return self.cfDialog:GetValues()
+end
+
+function wtBar:SetConfiguration(config)
+	self.cfDialog:SetValues(config)
+end
+
+function wtBar:ConfigDialog(container)
+	if not self.cfDialog then
+		self.cfDialog = WT.Dialog(container)
+			:Textfield("mediaId", "Media ID", "")
+	end
+	cfDialog:SetValues(self.Configuration)
+	return self.cfDialog
 end

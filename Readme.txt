@@ -2,6 +2,13 @@
                               G A D G E T S
 -----------------------------------------------------------------------------
 
+Recent Changes
+--------------
+0.3.5
+Bug fixes for icon display on frames, and fixed the display for stack counts 
+
+
+
 0.0 Alpha Status
 ----------------
 

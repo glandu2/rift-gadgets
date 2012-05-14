@@ -79,13 +79,17 @@ function wtImageSet:Construct()
 			local newWidth = self:GetWidth()
 			local newHeight = self:GetHeight()
 
-			self.totalWidth = newWidth * self.cols
-			self.image:SetWidth(self.totalWidth)
-			self.tileWidth = newWidth
-	
-			self.totalHeight = newHeight * self.rows
-			self.image:SetHeight(self.totalHeight)
-			self.tileHeight = newHeight		
+			if newWidth >= 1.0 and newHeight >= 1.0 then
+
+				self.totalWidth = newWidth * self.cols
+				self.image:SetWidth(self.totalWidth)
+				self.tileWidth = newWidth
+		
+				self.totalHeight = newHeight * self.rows
+				self.image:SetHeight(self.totalHeight)
+				self.tileHeight = newHeight		
+
+			end
 
 			self:Refresh()
 		end

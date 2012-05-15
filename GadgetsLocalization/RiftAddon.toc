@@ -1,7 +1,7 @@
 Identifier = "GadgetsLocalization"
 
 Name = "GadgetsLocalization"
-Description = "Localization for Gadgets Addon"
+Description = "Localization for Gadgets"
 
 Author = "Wildtide"
 Website = "http://www.wildtide.net"

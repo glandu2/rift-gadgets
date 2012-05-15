@@ -133,7 +133,6 @@ function wtBuffPanel:Construct()
 
 		local bgColor = self.config.borderColor
 		if bgColor then			
-			print("borderSet")
 			border:SetBackgroundColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a or 1.0)
 		else
 			border:SetBackgroundColor(0,0,0,1)

@@ -72,12 +72,14 @@ WT.Event.Trigger.UnitRemoved, WT.Event.UnitRemoved = Utility.Event.Create(AddonI
 WT.Event.Trigger.BuffAdded, WT.Event.BuffAdded = Utility.Event.Create(AddonId, "BuffAdded")
 WT.Event.Trigger.BuffRemoved, WT.Event.BuffRemoved = Utility.Event.Create(AddonId, "BuffRemoved")
 WT.Event.Trigger.BuffChanged, WT.Event.BuffChanged = Utility.Event.Create(AddonId, "BuffChanged")
+WT.Event.Trigger.BuffUpdates, WT.Event.BuffUpdates = Utility.Event.Create(AddonId, "BuffUpdates")
 
 WT.Event.Trigger.CastbarShow, WT.Event.CastbarShow = Utility.Event.Create(AddonId, "CastbarShow")
 WT.Event.Trigger.CastbarHide, WT.Event.CastbarHide = Utility.Event.Create(AddonId, "CastbarHide")
 
 
-local buffChanges = {}
+local buffChanges = nil
+local buffUpdates = nil
 
 -- Sadly, we cannot currently trust the buff events to accurately track buffs on a unit
 -- Until they can be managed without lots of messing around, I'm going to simply capture
@@ -86,16 +88,47 @@ local buffChanges = {}
 -- I am however still updating details and handling change events normally, as I believe
 -- this is all OK. It's the removal of duplicate buffs that I'm trying to catch here.
 local function SignalBuffChange(unitId)
+	if not buffChanges then buffChanges = {} end 
 	buffChanges[unitId] = true
 end
 
 
 local function CalculateBuffChanges()
+	
+	if not buffChanges then return end
+	
 	for unitId in pairs(buffChanges) do
 		local unit = WT.Units[unitId]
 		if unit then
+			local changes = nil
 			local buffs = Inspect.Buff.List(unitId)
 			if buffs then
+
+				-- populate any changed buffs
+				if buffUpdates and buffUpdates[unit.id] then
+					for buffId, buff in pairs(buffUpdates[unit.id]) do
+						if not changes then changes = {} end
+						if not changes.update then changes.update = {} end
+						changes.update[buffId] = buff
+						WT.Units[unitId].Buffs[buffId] = buff
+						WT.Event.Trigger.BuffChanged(unitId, buffId, buff)
+					end
+				end
+
+				-- scan current unit buffs looking for buffs no longer on the unit
+				for buffId, buff in pairs(unit.Buffs) do
+					if not buffs[buffId] then
+						local buff = unit.Buffs[buffId] 
+						unit.Buffs[buffId] = nil
+						WT.Units[unitId].Buffs[buffId] = nil
+						WT.Event.Trigger.BuffRemoved(unitId, buffId, buff)
+						if not changes then changes = {} end
+						if not changes.remove then changes.remove = {} end
+						changes.remove[buffId] = buff
+					end
+				end
+				
+				-- scan current buffs looking for buffs missing from the unit
 				for buffId in pairs(buffs) do
 					if not unit.Buffs[buffId] then
 						local det = Inspect.Buff.Detail(unitId, buffId)	
@@ -103,76 +136,62 @@ local function CalculateBuffChanges()
 						for k,v in pairs(det) do buffCopy[k] = v end
 						WT.Units[unitId].Buffs[buffId] = buffCopy
 						WT.Event.Trigger.BuffAdded(unitId, buffId, buffCopy)
+						if not changes then changes = {} end
+						if not changes.add then changes.add = {} end
+						changes.add[buffId] = buffCopy
 					end
 				end
-				for buffId, buff in pairs(unit.Buffs) do
-					if not buffs[buffId] then
-						local buff = unit.Buffs[buffId] 
-						unit.Buffs[buffId] = nil
-						WT.Units[unitId].Buffs[buffId] = nil
-						WT.Event.Trigger.BuffRemoved(unitId, buffId, buff)
-					end
-				end
+				
 			else
+			
 				for buffId, buff in pairs(unit.Buffs) do
 					local buff = unit.Buffs[buffId] 
 					unit.Buffs[buffId] = nil
 					WT.Units[unitId].Buffs[buffId] = nil
 					WT.Event.Trigger.BuffRemoved(unitId, buffId, buff)
-				end		
+					if not changes then changes = {} end
+					if not changes.remove then changes.remove = {} end
+					changes.remove[buffId] = buff
+				end
+						
 			end
+			
+			if changes then
+				WT.Event.Trigger.BuffUpdates(unitId, changes)
+			end
+			
 		end
 	end
-	buffChanges = {} -- empty the buffChanges list
+	
+	buffChanges = nil -- empty the buffChanges lists
+	buffUpdates = nil
+	
 end
 
 
 local function OnBuffAdd(unitId, buffs)
-
 	SignalBuffChange(unitId)
-
-	--[[
-	if not WT.Units[unitId] then return end
-	if not buffs then return end
-
-	local bdesc = Inspect.Buff.Detail(unitId, buffs)	
-	for buffId, buff in pairs(bdesc) do
-		if not WT.Units[unitId].Buffs[buffId] then -- prevent adding duplicate buffs
-			local buffCopy = {}
-			for k,v in pairs(buff) do buffCopy[k] = v end
-			WT.Units[unitId].Buffs[buffId] = buffCopy
-			WT.Event.Trigger.BuffAdded(unitId, buffId, buffCopy)
-		end
-	end
-	--]]
 end
 
 
 local function OnBuffRemove(unitId, buffs)
-
 	SignalBuffChange(unitId)
---[[
-	if not WT.Units[unitId] then return end
-	for buffId in pairs(buffs) do
-		local buff = WT.Units[unitId].Buffs[buffId]
-		WT.Units[unitId].Buffs[buffId] = nil
-		WT.Event.Trigger.BuffRemoved(unitId, buffId, buff)
-	end
---]]
 end
 
 
 local function OnBuffChange(unitId, buffs)
-	-- SignalBuffChange(unitId)
 
 	if not WT.Units[unitId] then return end
-	local bdesc = Inspect.Buff.Detail(unitId, buffs)	
+	local bdesc = Inspect.Buff.Detail(unitId, buffs)
 	for buffId, buff in pairs(bdesc) do
 		local buffCopy = {}
 		for k,v in pairs(buff) do buffCopy[k] = v end
-		WT.Units[unitId].Buffs[buffId] = buffCopy
-		WT.Event.Trigger.BuffChanged(unitId, buffId, buffCopy)
+		if not buffUpdates then buffUpdates = {} end
+		if not buffUpdates[unitId] then buffUpdates[unitId] = {} end
+		buffUpdates[unitId][buffId] = buffCopy
+		SignalBuffChange(unitId)
 	end
+
 end
 
 
@@ -201,6 +220,25 @@ local function UpdateCastbarDetails(unitId, cb)
 		WT.Units[unitId].castUpdated = nil
 		WT.Units[unitId].castDuration = nil
 		WT.Units[unitId].castRemaining = nil
+	end
+end
+
+
+local function CalculateCastChanges()
+	local currTime = Inspect.Time.Frame()
+	for unitId, castbar in pairs(WT.UnitDatabase.Casting) do
+		local unit = WT.Units[unitId]			
+		if unit then
+			local cb = Inspect.Unit.Castbar(unitId)
+			UpdateCastbarDetails(unitId, cb)
+			local percent = 0
+			pcall(
+				function() 
+					percent = (1 - (cb.remaining / cb.duration)) * 100 
+					if cb.channeled then percent = 100 - percent end
+				end)
+			unit.castPercent = percent
+		end
 	end
 end
 
@@ -527,22 +565,7 @@ end
 
 
 local function OnSystemUpdateBegin()
-	local currTime = Inspect.Time.Frame()
-	for unitId, castbar in pairs(WT.UnitDatabase.Casting) do
-		local unit = WT.Units[unitId]			
-		if unit then
-			local cb = Inspect.Unit.Castbar(unitId)
-			UpdateCastbarDetails(unitId, cb)
-			local percent = 0
-			pcall(
-				function() 
-					percent = (1 - (cb.remaining / cb.duration)) * 100 
-					if cb.channeled then percent = 100 - percent end
-				end)
-			unit.castPercent = percent
-		end
-	end
-	
+	CalculateCastChanges()
 	CalculateBuffChanges()
 end
 

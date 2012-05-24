@@ -235,21 +235,16 @@ function wtBuffPanel:Construct()
 		icon.Event.MouseOut = HideTooltip
 	end
 
-	-- Set up the buff bindings and BuffPanels table if needed
-	-- This means the first BuffPanel will configure the unit frame to handle buffs for all BuffPanels 
-	if not unitFrame.BuffPanels then
-		unitFrame.BuffPanels = {}
-		unitFrame.OnBuffAdded = wtBuffPanel.OnBuffAdded
-		unitFrame.OnBuffChanged = wtBuffPanel.OnBuffChanged
-		unitFrame.OnBuffRemoved = wtBuffPanel.OnBuffRemoved
-	end
+	self.buffs = {}
+
+	-- A BuffPanel provides the BuffSet interface
+	unitFrame:RegisterBuffSet(self)
 	
 	if not unitFrame.buffIconMap then
 		unitFrame.buffIconMap = {}
 	end
 	
-	table.insert(unitFrame.BuffPanels, self)
-	unitFrame:CreateBinding("id", self, self.Refresh, nil) 
+	-- unitFrame:CreateBinding("id", self, self.Refresh, nil) 
 
 end
 
@@ -271,7 +266,7 @@ function wtBuffPanel:HideIcon(idx)
 	end 
 	
 	local buffId = self.Icons[idx].buffId
-	if buffId then self.UnitFrame.buffIconMap[buffId] = nil end
+	--if buffId then self.UnitFrame.buffIconMap[buffId] = nil end
 	
 	self.Icons[idx].Border:SetVisible(false)
 	self.Icons[idx].buffId = nil
@@ -283,6 +278,8 @@ end
 local playerId = false
 function wtBuffPanel:CanAccept(buff)
 
+	if self.currIcons >= self.maxIcons then return false end
+	
 	-- if we have a buff list, we only check against that list
 	if self.config.acceptBuffs then
 		return self.config.acceptBuffs[buff.name] or false
@@ -314,53 +311,32 @@ function wtBuffPanel:CanAccept(buff)
 end
 
 
--- Hides all icons in the panel
-function wtBuffPanel:Clear()
-	for index = 1, self.maxIcons do
-		self:HideIcon(index)
-	end 
-	self.currIcons = 0
-end
-
-function wtBuffPanel:Refresh(id)
-	if (not self.UnitFrame.rebinding) or (not id) or (self.lastId ~= id) then
-		self:Clear()
-	end
-	self.lastId = id
+-- Stub, this will be used to make panels more efficient in future
+function wtBuffPanel:Done()
 end
 
 
--- These need to be a unit frame global handler for all buff panels
--- So UnitId from the standard handlers becomes unitFrame, and it is a static
--- function (.) rather than a method (:).
+function wtBuffPanel:Add(buff)
 
-function wtBuffPanel.OnBuffAdded(unitFrame, buffId, buff, buffPriority)
+	local buffId = buff.id
 
-	-- don't duplicate buffs
-	if unitFrame.buffIconMap[buffId] then return end
+	self.buffs[buffId] = buff
 
-	-- go through trying to find a suitable panel with a free slot
-	for idx, panel in ipairs(unitFrame.BuffPanels) do
-		if (panel.currIcons < panel.maxIcons) and panel:CanAccept(buff) then
-			panel.currIcons = panel.currIcons + 1
-			panel:ShowIcon(panel.currIcons, buff.icon)
-			local icon = panel.Icons[panel.currIcons] 
-			icon.buffId = buffId -- store the buffId for when we come to remove it later
-			unitFrame.buffIconMap[buffId] = icon -- store a link from buffId to it's icon
-			local buffDets = {}
-			for k,v in pairs(buff) do buffDets[k] = v end
-			icon.buff = buffDets
+	self.currIcons = self.currIcons + 1
+	self:ShowIcon(self.currIcons, buff.icon)
+	local icon = self.Icons[self.currIcons] 
+	icon.buffId = buffId -- store the buffId for when we come to remove it later
+	self.UnitFrame.buffIconMap[buffId] = icon -- store a link from buffId to it's icon
+	local buffDets = {}
+	for k,v in pairs(buff) do buffDets[k] = v end
+	icon.buff = buffDets
 
-			if icon.txtStack then 
-				if buffDets.stack then
-					icon.txtStack:SetVisible(true)
-					icon.txtStack:SetText(tostring(buffDets.stack))
-				else
-					icon.txtStack:SetVisible(false)
-				end
-			end
-
-			return
+	if icon.txtStack then 
+		if buffDets.stack then
+			icon.txtStack:SetVisible(true)
+			icon.txtStack:SetText(tostring(buffDets.stack))
+		else
+			icon.txtStack:SetVisible(false)
 		end
 	end
 	
@@ -368,8 +344,13 @@ end
 
 -- Update the stack count text if appropriate. This is probably all that can change?
 -- We also update the buff details, which means the tick handler will pick up any duration changes automatically
-function wtBuffPanel.OnBuffChanged(unitFrame, buffId, buff, buffPriority)
-	local icon = unitFrame.buffIconMap[buffId]
+function wtBuffPanel:Update(buff)
+
+	local buffId = buff.id
+
+	self.buffs[buffId] = buff
+
+	local icon = self.UnitFrame.buffIconMap[buffId]
 	if icon then
 		icon.buff = buff
 		if icon.txtStack then 
@@ -388,41 +369,41 @@ end
 -- However, for performance reasons, this is going to have to be isolated to the panel the buff
 -- is found in, which could have odd repercussions for complex frames, but for most cases this
 -- is preferable to trying to move icons between panels as they shuffle down
-function wtBuffPanel.OnBuffRemoved(unitFrame, buffId, buff, buffPriority)
+function wtBuffPanel:Remove(buff)
+
+	local buffId = buff.id
+
+	self.buffs[buffId] = nil
+
 	local removeIdx = 0
-	unitFrame.buffIconMap[buffId] = nil -- remove the icon mapping if one exists
-	for idx, panel in ipairs(unitFrame.BuffPanels) do
-		for iconIdx, icon in ipairs(panel.Icons) do
-			if icon.buffId == buffId then
-				removeIdx = iconIdx
-				break
-			end
-		end
-		if removeIdx > 0 then
-			for i = removeIdx + 1, panel.currIcons do
-				if not panel.Icons[i]:GetVisible() then
-					panel:HideIcon(i-1)
-				else
-					panel.Icons[i-1]:SetTexture(panel.Icons[i]:GetTexture())
-					panel.Icons[i-1].buffId = panel.Icons[i].buffId
-					panel.Icons[i-1].buff = panel.Icons[i].buff
-					
-					if panel.Icons[i-1].txtStack then
-						panel.Icons[i-1].txtStack:SetText(panel.Icons[i].txtStack:GetText())
-						panel.Icons[i-1].txtStack:SetVisible(panel.Icons[i].txtStack:GetVisible())
-					end
-					
-					unitFrame.buffIconMap[panel.Icons[i].buffId] = panel.Icons[i-1]
-				end
-			end
-			panel:HideIcon(panel.currIcons)
-			panel.currIcons = panel.currIcons - 1
+	self.UnitFrame.buffIconMap[buffId] = nil -- remove the icon mapping if one exists
+	for iconIdx, icon in ipairs(self.Icons) do
+		if icon.buffId == buffId then
+			removeIdx = iconIdx
 			break
 		end
 	end
+	if (removeIdx > 0) then	
+		for i = removeIdx + 1, self.currIcons do
+			self.Icons[i-1]:SetTexture(self.Icons[i]:GetTexture())
+			self.Icons[i-1].buffId = self.Icons[i].buffId
+			self.Icons[i-1].buff = self.Icons[i].buff
+			
+			if self.Icons[i-1].txtStack then
+				self.Icons[i-1].txtStack:SetText(self.Icons[i].txtStack:GetText())
+				self.Icons[i-1].txtStack:SetVisible(self.Icons[i].txtStack:GetVisible())
+			end
+			
+			self.UnitFrame.buffIconMap[self.Icons[i].buffId] = self.Icons[i-1]
+		end
+		self:HideIcon(self.currIcons)
+		self.currIcons = self.currIcons - 1
+	end
+
 end
 
 local function BuffTimerTick()
+
 	local currTime = Inspect.Time.Frame()
 	if WT.BuffTimers then
 		for idx, icon in ipairs(WT.BuffTimers) do

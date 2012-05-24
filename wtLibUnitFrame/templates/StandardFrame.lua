@@ -178,7 +178,7 @@ function StandardFrame:Construct(options)
 			rows=2, cols=4, iconSize=26, iconSpacingHorizontal=0, iconSpacingVertical=13, borderThickness=1,
 			acceptLowPriorityBuffs=true, acceptMediumPriorityBuffs=true, acceptHighPriorityBuffs=true, acceptCriticalPriorityBuffs=true,
 			acceptLowPriorityDebuffs=false, acceptMediumPriorityDebuffs=false, acceptHighPriorityDebuffs=false, acceptCriticalPriorityDebuffs=false,
-			growthDirection = "right_down", selfCast=true,
+			growthDirection = "right_down", selfCast=false,
 			timerSize=10, timerOffsetX=0, timerOffsetY=19,
 			stackSize=12, stackOffsetX=0, stackOffsetY=0, stackBackgroundColor={r=0,g=0,b=0,a=0.7},
 			borderColor={r=0,g=0,b=0,a=1},

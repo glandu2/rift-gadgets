@@ -231,7 +231,7 @@ function WT.UnitFrame:Create(unitSpec, options)
 		
 	-- Store the UnitFrame in the global list of frames
 	table.insert(WT.UnitFrames, frame)	
-	
+
 	if frame.Construct then frame:Construct(options) end
 	
 	frame:ApplyDefaultBindings()
@@ -244,6 +244,9 @@ function WT.UnitFrame:Create(unitSpec, options)
 	
 	local createOptions = {}
 	createOptions.resizable = self.Configuration.Resizable 
+
+	frame.BuffAllocations = {}
+	frame.BuffData = {}
 	
 	return frame, createOptions
 end
@@ -253,6 +256,57 @@ function WT.UnitFrame:OnResize(width, height)
 	self:ApplyBindings()
 end
 
+
+-- This function calculates the difference between the buffs currently on the unitframe
+-- and the buffs actually on the unit, and generates an OnBuffUpdates() event to apply
+-- the differences
+function WT.UnitFrame:ApplyBuffDelta()
+
+-- .BuffData[buffId] = buff
+-- .BuffAllocations[buffId] = buffset
+
+	local changes = nil
+
+	if not self.Unit and self.BuffData then
+		for buffId, buff in pairs(self.BuffData) do
+			if not changes then changes = {} end
+			if not changes.remove then changes.remove = {} end
+			changes.remove[buffId] = buff
+		end 
+	end 
+	
+	if self.Unit then
+		local actualBuffs = self.Unit.Buffs
+		if self.BuffData then
+			for buffId, buff in pairs(self.BuffData) do
+				if not actualBuffs[buffId] then
+					if not changes then changes = {} end
+					if not changes.remove then changes.remove = {} end
+					changes.remove[buffId] = buff
+				end
+				if actualBuffs[buffId] then
+					if not changes then changes = {} end
+					if not changes.update then changes.update = {} end
+					changes.update[buffId] = buff
+				end
+			end
+		end
+		for buffId, buff in pairs(actualBuffs) do
+			if not self.BuffData or not self.BuffData[buffId] then
+				if not changes then changes = {} end
+				if not changes.add then changes.add = {} end
+				changes.add[buffId] = buff			
+			end
+		end
+	end
+	
+	if changes then
+		self:BuffHandler(changes.add, changes.remove, changes.update)
+	end
+
+end
+
+
 function WT.UnitFrame:PopulateUnit(unitId)
 	self.UnitId = unitId
 	if unitId then
@@ -260,26 +314,13 @@ function WT.UnitFrame:PopulateUnit(unitId)
 		if not self.Unit then
 			awaitingDetails[self] = true
 		else
-			if self.OnUnitSet then
-				self:OnUnitSet(unitId)
-			end
 			self:ApplyBindings()
-			if self.OnBuffAdded then
-				for buffId, buff in pairs(self.Unit.Buffs) do
-					local buffPriority = self:GetBuffPriority(buff)
-					if buffPriority > 0 then
-						self:OnBuffAdded(buffId, buff, buffPriority) 
-					end
-				end
-			end
 		end
 	else
 		self.Unit = nil
-		if self.OnUnitCleared then
-			self:OnUnitCleared()
-		end	
 		self:ApplyDefaultBindings()
 	end
+	self:ApplyBuffDelta()
 end
 
 
@@ -392,37 +433,6 @@ function WT.UnitFrame:GetBuffPriority(buff)
 end
 
 
--- Returns an iterator for up to maxBuffs buffs from the associated unit, in priority sequence
-function WT.UnitFrame:GetBuffs(maxBuffs)
-
-	local remaining = {}
-	local returned = 0
-	local currPriority = 4
-	
-	if self.Unit then
-		for buffId, buff in pairs(self.Unit.Buffs) do
-			remaining[buffId] = self:GetBuffPriority(buff)
-		end
-	end
-
-	return function()
-		if not self.Unit then return nil end
-		if returned >= (maxBuffs or 9999) then return nil end
-		while currPriority > 0 do
-			for k,v in pairs(remaining) do
-				if v == currPriority then
-					remaining[k] = nil
-					returned = returned + 1
-					return k, self.Unit.Buffs[k]
-				end
-			end
-			currPriority = currPriority - 1
-		end
-	end
-
-end
-
-
 -- Gadget Factory Function for single UnitFrame
 function WT.UnitFrame.CreateFromConfiguration(configuration)
 	local template = configuration.template
@@ -516,25 +526,99 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	return wrapper
 end
 
-function WT.UnitFrame:DumpTemplate()
-	if self.Elements then
-		for id, element in pairs(self.Elements) do
-			if element.Configuration then
-				print(id .. ":")
-				for k,v in pairs(element.Configuration) do
-					print("  " .. k .. " = " .. tostring(v))
+--[[
+	A BuffSet is a table that must contain the following methods:
+	:CanAccept(buff) - return true if there is a valid slot available for the buff
+	:Add(buff) - add a new buff to the set
+	:Remove(buff) - remove a buff from the set
+	:Update(buff) - update a buff within the set
+	:Done() - all changes applied, the set can now compress itself/sort itself, or whatever
+--]]
+function WT.UnitFrame:RegisterBuffSet(buffSet)
+
+	if not self.BuffSets then self.BuffSets = {} end
+	if not buffSet.CanAccept then error("Invalid BuffSet - missing CanAccept method") end
+	if not buffSet.Add then error("Invalid BuffSet - missing Add method") end
+	if not buffSet.Remove then error("Invalid BuffSet - missing Remove method") end
+	if not buffSet.Update then error("Invalid BuffSet - missing Update method") end
+	if not buffSet.Done then error("Invalid BuffSet - missing Done method") end
+	table.insert(self.BuffSets, buffSet)
+end
+
+
+function WT.UnitFrame:BuffHandler(added, removed, updated)
+
+	local altered = {}
+
+	-- Removals first, to free up slots
+	if removed then
+		for buffId, buff in pairs(removed) do
+			local allocation = self.BuffAllocations[buffId]
+			if allocation then
+				allocation:Remove(buff)
+				altered[allocation] = true
+			end 
+			self.BuffAllocations[buffId] = nil
+			self.BuffData[buffId] = nil
+		end
+	end
+	
+	-- Then add in any new buffs
+	if added then
+		for buffId, buff in pairs(added) do
+			buff.priority = self:GetBuffPriority(buff)		
+			self.BuffData[buffId] = buff
+			self.BuffAllocations[buffId] = false -- default to unallocated
+			if self.BuffSets then
+				for idx, buffSet in ipairs(self.BuffSets) do
+					if buffSet:CanAccept(buff) then
+						buffSet:Add(buff)
+						self.BuffAllocations[buffId] = buffSet
+						altered[buffSet] = true
+						break
+					end
 				end
 			end
 		end
 	end
-end
 
-function WT.Gadget.Command.dumptemplate(gadgetId)
-	print("Dumping template for " .. tostring(gadgetId))
-	local gadget = WT.Gadgets[gadgetId]
-	if gadget then
-		gadget:DumpTemplate()
+	-- Update any changed buffs
+	if updated then
+		for buffId, buff in pairs(updated) do
+			self.BuffData[buffId] = buff
+			local allocation = self.BuffAllocations[buffId]
+			if allocation then
+				allocation:Update(buff)
+				altered[allocation] = true
+			end
+		end
 	end
+
+	-- See if we can find a home for any unallocated buffs if anything has been removed
+	if removed then
+		for buffId, buffSet in pairs(self.BuffAllocations) do
+			if not buffSet then
+				local buff = self.BuffData[buffId]
+				-- COPIED FROM 'ADDED' LOOP
+				if self.BuffSets then
+					for idx, buffSet in ipairs(self.BuffSets) do
+						if buffSet:CanAccept(buff) then
+							buffSet:Add(buff)
+							self.BuffAllocations[buffId] = buffSet
+							altered[buffSet] = true
+							break
+						end
+					end
+				end
+			end
+		end
+	end
+
+	-- Trigger the 'done' handler, which is where heavyweight sorting, texture loading, etc should be done
+	for buffSet in pairs(altered) do
+		buffSet:Done()
+	end
+	
 end
 
 
@@ -570,53 +654,10 @@ local function OnUnitPropertySet(unit, property, newValue, oldValue)
 	end
 end
 
-local function OnBuffAdded(unitId, buffId, buff)
+local function OnBuffUpdates(unitId, changes)
 	for idx, unitFrame in ipairs(WT.UnitFrames) do
-		local buffPriority = unitFrame:GetBuffPriority(buff)
-		if buffPriority > 0 and unitFrame.Unit and unitFrame.UnitId == unitId and unitFrame.OnBuffAdded then
-			unitFrame:OnBuffAdded(buffId, buff, buffPriority) 
-		end
-		-- Trigger any 'Buffs' bindings
-		if buffPriority > 0 and unitFrame.Unit and unitFrame.Unit.id == unitId and unitFrame.Bindings["Buffs"] then
-			for idx, binding in ipairs(unitFrame.Bindings["Buffs"]) do
-				local value = unitFrame.Unit.Buffs
-				if binding.converter then value = binding.converter(value) end
-				binding.method(binding.object, value or binding.default)
-			end
-		end
-	end
-end
-
-local function OnBuffChanged(unitId, buffId, buff)
-	for idx, unitFrame in ipairs(WT.UnitFrames) do
-		local buffPriority = unitFrame:GetBuffPriority(buff)
-		if buffPriority > 0 and unitFrame.Unit and unitFrame.UnitId == unitId and unitFrame.OnBuffChanged then
-			unitFrame:OnBuffChanged(buffId, buff, buffPriority)
-		end
-		-- Trigger any 'Buffs' bindings
-		if buffPriority > 0 and unitFrame.Unit and unitFrame.Unit.id == unitId and unitFrame.Bindings["Buffs"] then
-			for idx, binding in ipairs(unitFrame.Bindings["Buffs"]) do
-				local value = unitFrame.Unit.Buffs
-				if binding.converter then value = binding.converter(value) end
-				binding.method(binding.object, value or binding.default)
-			end
-		end
-	end
-end
-
-local function OnBuffRemoved(unitId, buffId, buff)
-	for idx, unitFrame in ipairs(WT.UnitFrames) do
-		local buffPriority = unitFrame:GetBuffPriority(buff)
-		if buffPriority > 0 and unitFrame.Unit and unitFrame.UnitId == unitId and unitFrame.OnBuffRemoved then
-			unitFrame:OnBuffRemoved(buffId, buff, buffPriority)
-		end
-		-- Trigger any 'Buffs' bindings
-		if buffPriority > 0 and unitFrame.Unit and unitFrame.Unit.id == unitId and unitFrame.Bindings["Buffs"] then
-			for idx, binding in ipairs(unitFrame.Bindings["Buffs"]) do
-				local value = unitFrame.Unit.Buffs
-				if binding.converter then value = binding.converter(value) end
-				binding.method(binding.object, value or binding.default)
-			end
+		if unitFrame.Unit and unitFrame.Unit.id == unitId then
+			unitFrame:BuffHandler(changes.add, changes.remove, changes.update)
 		end
 	end
 end
@@ -641,9 +682,7 @@ end
 -- Register for change events from the UnitDatabase
 table.insert(WT.Event.UnitAdded, { OnUnitAdded, AddonId, AddonId .. "_UnitFrame_UnitAdded" })
 table.insert(WT.Event.UnitPropertySet, { OnUnitPropertySet, AddonId, AddonId .. "_UnitFrame_UnitPropertySet" })
-table.insert(WT.Event.BuffAdded, { OnBuffAdded, AddonId, AddonId .. "_UnitFrame_BuffAdded" })
-table.insert(WT.Event.BuffChanged, { OnBuffChanged, AddonId, AddonId .. "_UnitFrame_BuffChanged" })
-table.insert(WT.Event.BuffRemoved, { OnBuffRemoved, AddonId, AddonId .. "_UnitFrame_BuffRemoved" })
+table.insert(WT.Event.BuffUpdates, { OnBuffUpdates, AddonId, AddonId .. "_UnitFrame_BuffUpdates" })
 table.insert(WT.Event.CastbarShow, { OnCastbarShow, AddonId, AddonId .. "_UnitFrame_CastbarShow" })
 table.insert(WT.Event.CastbarHide, { OnCastbarHide, AddonId, AddonId .. "_UnitFrame_CastbarHide" })
 
@@ -694,20 +733,6 @@ WT.Unit.CreateVirtualProperty("resourcePercent", { "mana", "power", "energy", "m
 		end 
 	end)
 	
---[[
-WT.Unit.CreateVirtualProperty("resourcePercentText", { "mana", "power", "energy", "manaMax", "energyMax" }, 
-	function(unit)
-		if unit.mana and unit.manaMax and unit.manaMax > 0 then
-			return math.ceil((unit.mana / unit.manaMax) * 100) .. "%" 
-		elseif unit.energy and unit.energyMax and unit.energyMax > 0 then
-			return math.ceil((unit.energy / unit.energyMax) * 100) .. "%"
-		elseif unit.power then
-			return unit.power .. "%" 
-		else 
-			return nil
-		end 
-	end)
---]]
 WT.Unit.CreateVirtualProperty("readyStatus", { "ready" }, 
 	function(unit)
 		if unit.ready == true then 

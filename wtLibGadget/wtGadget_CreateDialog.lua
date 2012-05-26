@@ -17,9 +17,10 @@ local TXT = Library.Translate
 -- options also need to be displayed. Gets complicated!
 function WT.Gadget.ShowCreationUI()
 	if not WT.Gadget.CreateGadgetWindow then
-		local window  = UI.CreateFrame("RiftWindow", "WTGadgetCreate", WT.Context)
+		local window  = UI.CreateFrame("SimpleWindow", "WTGadgetCreate", WT.Context)
+		window:SetCloseButtonVisible(true)
 		window:SetPoint("CENTER", UIParent, "CENTER")
-		window:SetController("content")
+		-- window:SetController("content")
 		window:SetWidth(800)
 		window:SetHeight(600)
 		window:SetLayer(11000)

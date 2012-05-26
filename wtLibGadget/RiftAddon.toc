@@ -14,9 +14,11 @@ Environment = "1.8"
 RunOnStartup = 
 {
   "wtGadget.lua",
+  "wtGadgetMessage.lua",
   "wtGadgetButton.lua",
   "wtGadgetRecommendReload.lua",
   "wtGadgetSlashCmd.lua",
+  "wtGadgetSettings.lua",
   "wtGadget_CreateDialog.lua",
   "wtGadget_ModifyDialog.lua",
 }
@@ -28,10 +30,12 @@ SavedVariables =
 
 Embed = 
 {
+	LibSimpleWidgets = true,
 }
 
 Dependencies = 
 {
+	LibSimpleWidgets = {"required", "before"},
 	wtLibTranslate = {"required", "before"},	
 	wtLibCore = {"required", "before"},	
 	wtLibControls = {"required", "before"},	

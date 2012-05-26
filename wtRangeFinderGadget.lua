@@ -18,9 +18,13 @@ local function OnNameChange(rangeFinder, name)
 	if not name then
 		rangeFinder.txtRange:SetVisible(false)
 		rangeFinder.txtName:SetVisible(false)
+		if rangeFinder.hideWhenNoTarget then
+			rangeFinder.background:SetVisible(false)
+		end
 	else
 		rangeFinder.txtRange:SetVisible(true)
 		rangeFinder.txtName:SetVisible(true)
+		rangeFinder.background:SetVisible(true)
 		local nm = name:upper()
 		if nm:len() > 25 then nm = nm:sub(1, 25) end
 		rangeFinder.txtName:SetText(nm)
@@ -50,30 +54,50 @@ end
 
 local function Create(configuration)
 
+	local rfHeight = 70
+
 	local rangeFinder = WT.UnitFrame:Create("player.target")
 	rangeFinder:SetWidth(150)
-	rangeFinder:SetHeight(70)
-	rangeFinder:SetBackgroundColor(0,0,0,0.4)
 
-	local txtHeading = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rangeFinder)
+	local rfBackground = UI.CreateFrame("Frame", "rfBackground", rangeFinder)
+	rfBackground:SetAllPoints(rangeFinder)
+	if configuration.showBackground then
+		rfBackground:SetBackgroundColor(0,0,0,0.4)
+	end
+
+	rangeFinder.background = rfBackground
+
+	local txtHeading = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rfBackground)
 	txtHeading:SetText("RANGE TO TARGET")
 	txtHeading:SetPoint("TOPCENTER", rangeFinder, "TOPCENTER", 0, 6)
 	txtHeading:SetFontSize(10)
 	txtHeading:SetFontColor(0.6, 1.0, 0.6, 1.0)
-	
-	local txtRange = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rangeFinder)
+		
+	local txtRange = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rfBackground)
 	txtRange:SetText("--")
 	txtRange:SetPoint("TOPCENTER", txtHeading, "BOTTOMCENTER", 0, -5)
 	txtRange:SetFontSize(24)
 	txtRange:SetFontColor(0.6, 1.0, 0.6, 1.0)
 
-	local txtName = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rangeFinder)
+	local txtName = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rfBackground)
 	txtName:SetText("")
 	txtName:SetPoint("TOPCENTER", txtRange, "BOTTOMCENTER", 0, -5)
 	txtName:SetFontSize(10)
 	txtName:SetFontColor(0.6, 1.0, 0.6, 1.0)
 	rangeFinder.txtName = txtName
 
+	if not configuration.showTargetName then
+		txtName:SetHeight(0) 
+		rfHeight = rfHeight - 17
+	end
+
+	if not configuration.showTitle then
+		txtHeading:SetHeight(0) 
+		rfHeight = rfHeight - 17
+	end
+
+	rangeFinder.hideWhenNoTarget = configuration.hideWhenNoTarget 
+	rangeFinder:SetHeight(rfHeight)
 	rangeFinder.txtRange = txtRange
 	
 	rangeFinder:CreateBinding("name", rangeFinder, OnNameChange, nil)
@@ -91,6 +115,10 @@ local dialog = false
 local function ConfigDialog(container)	
 	dialog = WT.Dialog(container)
 		:Label("The Range Finder dispays the distance, in meters, between you and your target. It reports the distance from the center of your character to the center of the target. An option will be added in future to take the radius of the characters into account.")
+		:Checkbox("showTitle", TXT.ShowTitle, true)
+		:Checkbox("showTargetName", TXT.ShowTargetName, true)
+		:Checkbox("hideWhenNoTarget", TXT.HideWhenNoTarget, false)
+		:Checkbox("showBackground", TXT.ShowBackground, true)
 end
 
 local function GetConfiguration()

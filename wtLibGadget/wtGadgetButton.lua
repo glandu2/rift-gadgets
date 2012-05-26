@@ -73,8 +73,10 @@ end
 local menuItems = {}
 local menuItemsAdd = 1
 local menuItemsToggleLock = 2
+local menuItemsSettings = 3
 menuItems[menuItemsAdd] = {text=TXT.AddGadget, value=function() WT.Gadget.ShowCreationUI() end } 
-menuItems[menuItemsToggleLock] = {text=TXT.UnlockGadgets, value=function() WT.Gadget.Command.toggle() end }
+menuItems[menuItemsToggleLock] = {text=TXT.UnlockGadgets, value=function() WT.Gadget.ToggleAll() end }
+menuItems[menuItemsSettings] = {text=TXT.Settings, value=function() WT.Gadget.ShowSettings() end }
 
 local btnMenu = WT.Control.Menu.Create(btnGadget, menuItems)
 btnMenu:SetPoint("TOPRIGHT", btnGadget, "CENTER")

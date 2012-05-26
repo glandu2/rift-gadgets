@@ -92,6 +92,13 @@ local function SignalBuffChange(unitId)
 	buffChanges[unitId] = true
 end
 
+local function IsBlackListed(buff)
+	if wtxOptions.buffsBlacklist and wtxOptions.buffsBlacklist[buff.name] then
+		return true
+	else
+		return false
+	end 
+end
 
 local function CalculateBuffChanges()
 	
@@ -131,14 +138,16 @@ local function CalculateBuffChanges()
 				-- scan current buffs looking for buffs missing from the unit
 				for buffId in pairs(buffs) do
 					if not unit.Buffs[buffId] then
-						local det = Inspect.Buff.Detail(unitId, buffId)	
-						local buffCopy = {}
-						for k,v in pairs(det) do buffCopy[k] = v end
-						WT.Units[unitId].Buffs[buffId] = buffCopy
-						WT.Event.Trigger.BuffAdded(unitId, buffId, buffCopy)
-						if not changes then changes = {} end
-						if not changes.add then changes.add = {} end
-						changes.add[buffId] = buffCopy
+						local det = Inspect.Buff.Detail(unitId, buffId)
+						if not IsBlackListed(det) then	
+							local buffCopy = {}
+							for k,v in pairs(det) do buffCopy[k] = v end
+							WT.Units[unitId].Buffs[buffId] = buffCopy
+							WT.Event.Trigger.BuffAdded(unitId, buffId, buffCopy)
+							if not changes then changes = {} end
+							if not changes.add then changes.add = {} end
+							changes.add[buffId] = buffCopy
+						end
 					end
 				end
 				
@@ -184,12 +193,14 @@ local function OnBuffChange(unitId, buffs)
 	if not WT.Units[unitId] then return end
 	local bdesc = Inspect.Buff.Detail(unitId, buffs)
 	for buffId, buff in pairs(bdesc) do
-		local buffCopy = {}
-		for k,v in pairs(buff) do buffCopy[k] = v end
-		if not buffUpdates then buffUpdates = {} end
-		if not buffUpdates[unitId] then buffUpdates[unitId] = {} end
-		buffUpdates[unitId][buffId] = buffCopy
-		SignalBuffChange(unitId)
+		if not IsBlackListed(buff) then 
+			local buffCopy = {}
+			for k,v in pairs(buff) do buffCopy[k] = v end
+			if not buffUpdates then buffUpdates = {} end
+			if not buffUpdates[unitId] then buffUpdates[unitId] = {} end
+			buffUpdates[unitId][buffId] = buffCopy
+			SignalBuffChange(unitId)
+		end
 	end
 
 end

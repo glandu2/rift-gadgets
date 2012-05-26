@@ -16,7 +16,7 @@ StandardFrame.Configuration.RaidSuitable = false
 StandardFrame.Configuration.FrameType = "Frame"
 StandardFrame.Configuration.Width = standardFrameWidth + 2
 StandardFrame.Configuration.Height = standardFrameHeight
-StandardFrame.Configuration.Resizable = { standardFrameWidth + 2, standardFrameHeight, 300, 70 }
+StandardFrame.Configuration.Resizable = { 140, 40, 300, 70 }
 ---------------------------------------------------------------------------------
 
 -- Override the buff filter to hide some buffs ----------------------------------

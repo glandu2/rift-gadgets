@@ -226,6 +226,8 @@ function WT.UnitFrame:Create(unitSpec, options)
 	frame.Bindings = {}
 	frame.Elements = {}	
 	frame.Options = options or {}
+	frame.BuffAllocations = {}
+	frame.BuffData = {}
 		
 	frame.Elements["frame"] = frame
 		
@@ -245,9 +247,6 @@ function WT.UnitFrame:Create(unitSpec, options)
 	local createOptions = {}
 	createOptions.resizable = self.Configuration.Resizable 
 
-	frame.BuffAllocations = {}
-	frame.BuffData = {}
-	
 	return frame, createOptions
 end
 

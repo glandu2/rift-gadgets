@@ -80,3 +80,33 @@ function WT.Utility.ClearKeyFocus(frame)
 	for child in pairs(frame:GetChildren()) do WT.Utility.ClearKeyFocus(child) end
 
 end
+
+
+function string.wtSplit(str, delim, maxNb)
+    -- Eliminate bad cases...
+    if string.find(str, delim) == nil then
+        return { str }
+    end
+    if maxNb == nil or maxNb < 1 then
+        maxNb = 0    -- No limit
+    end
+    local result = {}
+    local pat = "(.-)" .. delim .. "()"
+    local nb = 0
+    local lastPos
+    for part, pos in string.gfind(str, pat) do
+        nb = nb + 1
+        result[nb] = part
+        lastPos = pos
+        if nb == maxNb then break end
+    end
+    -- Handle the last field
+    if nb ~= maxNb then
+        result[nb + 1] = string.sub(str, lastPos)
+    end
+    return result
+end
+
+function string.wtTrim(s)
+  return (s:gsub("^%s*(.-)%s*$", "%1"))
+end

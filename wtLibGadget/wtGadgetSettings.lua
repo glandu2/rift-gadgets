@@ -46,7 +46,7 @@ function WT.Gadget.ShowSettings()
 	
 		window = UI.CreateFrame("SimpleWindow", "winGadgetSettings", WT.Context)
 		window:SetCloseButtonVisible(true)		
-		window:SetTitle(TXT.BuffSettings)
+		window:SetTitle(TXT.Settings)
 		window:SetPoint("CENTER", UIParent, "CENTER")
 		window:SetLayer(10010)
 		window:SetWidth(800)

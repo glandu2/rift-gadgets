@@ -7,7 +7,7 @@ Author = "Wildtide"
 Website = "http://www.wildtide.net"
 Email = "wildtide@wildtide.net"
 
-Version = "0.3.61"
+Version = "0.3.62"
 
 Environment = "1.8"
 

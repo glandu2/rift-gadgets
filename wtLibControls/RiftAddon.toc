@@ -7,7 +7,7 @@ Author = "Wildtide"
 Website = "http://www.wildtide.net"
 Email = "wildtide@wildtide.net"
 
-Version = "0.3.5"
+Version = "0.3.6"
 
 Environment = "1.8"
 
@@ -16,6 +16,8 @@ RunOnStartup =
   "wtControl.lua",
   "wtMenu.lua",
   "wtComboBox.lua",
+  "wtSelect.lua",
+  "wtTexSelect.lua",
   "wtDialog.lua",
 }
 

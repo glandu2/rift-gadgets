@@ -6,10 +6,11 @@
 local toc, data = ...
 local AddonId = toc.identifier
 
-Library.Media.AddTexture("wtChargeBar", AddonId, "img/wtCharge.png", {"bar"})
+Library.Media.AddTexture("wtCastInterruptable", AddonId, "img/wtCastInterruptable.png", {"bar"})
+Library.Media.AddTexture("wtCastUninterruptable", AddonId, "img/wtCastUninterruptable.png", {"bar"})
 Library.Media.AddTexture("wtComboBlue", AddonId, "img/wtComboBlue.png", {"combo"})
 Library.Media.AddTexture("wtComboBlueSmall", AddonId, "img/wtComboBlueSmall.png", {"combo"})
-Library.Media.AddTexture("wtComboRed", AddonId, "img/wtComboRed.png", {"bar"})
+Library.Media.AddTexture("wtComboRed", AddonId, "img/wtComboRed.png", {"combo"})
 Library.Media.AddTexture("wtVitality", AddonId, "img/wtVitality.png", {"vitality"})
 Library.Media.AddTexture("wtPlanarCharge", AddonId, "img/wtPlanarCharge.png", {"planar"})
 Library.Media.AddTexture("wtOrbBrightRed", AddonId, "img/wtOrbBrightRed.png", {"orb"})

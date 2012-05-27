@@ -18,7 +18,7 @@ WT.Control.ComboBox_mt =
 	end 
 }
 
-function WT.Control.ComboBox.Create(parent, label, default, listItems, sort)
+function WT.Control.ComboBox.Create(parent, label, default, listItems, sort, onchange)
 
 	local control = UI.CreateFrame("Frame", WT.UniqueName("Control"), parent)
 	control.frameIndex = getmetatable(control).__index
@@ -49,7 +49,11 @@ function WT.Control.ComboBox.Create(parent, label, default, listItems, sort)
 	dropDownIcon.Event.LeftClick = function() menu:Toggle() end
 
 	control.GetText = function() return tfValue:GetText() end
-	control.SetText = function(ctrl, value) tfValue:SetText(tostring(value)) end
+	control.SetText = 
+		function(ctrl, value) 
+			tfValue:SetText(tostring(value))
+			if onchange then onchange(tostring(value)) end 
+		end
 		
 	control:SetHeight(20)
 		

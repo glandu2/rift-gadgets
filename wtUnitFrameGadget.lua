@@ -27,7 +27,7 @@ local function ufConfigDialog(container)
 				{text="Focus's Target", value="focus.target"},
 				{text="Pet", value="player.pet"},
 			}, false) 
-		:Combobox("template", TXT.UnitFrameTemplate, "StandardFrame", templateListItems, true)
+		:Select("template", TXT.UnitFrameTemplate, "StandardFrame", templateListItems, true)
 		:Checkbox("excludeBuffs", "Hide Buffs on Frame", false)
 		:FieldNote(TXT.ExcludeBuffsNote)
 		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
@@ -55,8 +55,8 @@ local function rfConfigDialog(container)
 	end
 
 	rfDialog = WT.Dialog(container)
-		:Combobox("template", TXT.RaidFrameTemplate, "RaidFrame", templateListItems, true)
-		:Combobox("layout", "Layout", "4 x 5", { "4 x 5", "5 x 4", "2 x 10", "10 x 2", "1 x 20", "20 x 1" }, false)
+		:Select("template", TXT.RaidFrameTemplate, "RaidFrame", templateListItems, true)
+		:Select("layout", "Layout", "4 x 5", { "4 x 5", "5 x 4", "2 x 10", "10 x 2", "1 x 20", "20 x 1" }, false)
 		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
 		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
 			:FieldNote(TXT.ClickThroughNote)

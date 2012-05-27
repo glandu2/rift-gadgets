@@ -71,6 +71,13 @@ function CDialog:add(id, label, control, labelFontSize, stretch, iconFile)
 	return frm
 end
 
+function CDialog:GetControl(id)
+	for idx, control in ipairs(self.fields) do
+		if control.id == id then return control end
+	end
+	return nil
+end
+
 function CDialog:Label(label)
 	self:add(nil, label, nil, 12)
 	return self
@@ -106,8 +113,26 @@ function CDialog:Checkbox(id, label, checked)
 	return self
 end
 
-function CDialog:Combobox(id, label, default, listItems)
-	local control = WT.Control.ComboBox.Create(self.container, nil, default, listItems)
+function CDialog:Combobox(id, label, default, listItems, sort, onchange)
+	local control = WT.Control.ComboBox.Create(self.container, nil, default, listItems, sort, onchange)
+	control:SetText(default)
+	local frm = self:add(id, label, control)
+	frm.getValue = control.GetText
+	frm.setValue = control.SetText
+	return self
+end
+
+function CDialog:Select(id, label, default, listItems, sort, onchange)
+	local control = WT.Control.Select.Create(self.container, nil, default, listItems, sort, onchange)
+	control:SetText(default)
+	local frm = self:add(id, label, control)
+	frm.getValue = control.GetText
+	frm.setValue = control.SetText
+	return self
+end
+
+function CDialog:TexSelect(id, label, default, mediaTag, onchange)
+	local control = WT.Control.TexSelect.Create(self.container, nil, default, mediaTag, onchange)
 	control:SetText(default)
 	local frm = self:add(id, label, control)
 	frm.getValue = control.GetText

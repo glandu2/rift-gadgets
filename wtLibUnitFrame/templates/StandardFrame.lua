@@ -151,7 +151,7 @@ function StandardFrame:Construct(options)
 			visibilityBinding="castName",
 			binding="castPercent",
 			texAddon=AddonId, texFile="img/BantoBar.png", colorBinding="castColor",
-			backgroundColor={r=0, g=0, b=0, a=1}
+			backgroundColor={r=0, g=0, b=0, a=0.7}
 		},
 		{
 			id="labelCast", type="Label", parent="frameBackdrop", layer=26,

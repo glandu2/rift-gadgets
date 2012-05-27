@@ -140,6 +140,14 @@ function CDialog:TexSelect(id, label, default, mediaTag, onchange)
 	return self
 end
 
+function CDialog:ElementEditor(id)
+	local control = WT.Control.ElementEditor.Create(self.container)
+	local frm = self:add(id, nil, control)
+	frm.getValue = control.GetConfig
+	frm.setValue = control.SetConfig
+	return self
+end
+
 function CDialog:FontSize(value)
 	local item = self.fields[#self.fields].control
 	item:SetFontSize(value)

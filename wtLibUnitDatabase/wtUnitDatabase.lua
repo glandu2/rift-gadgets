@@ -212,7 +212,6 @@ local castColorInterruptable = { r=0, g=0.7, b=0.7, a=1 }
 local function UpdateCastbarDetails(unitId, cb)
 	if cb then
 		local unit = WT.Units[unitId] 
-		unit.castName = cb.abilityName or ""
 		unit.castUninterruptible = cb.uninterruptible or false
 		if cb.uninterruptible then
 			unit.castColor = castColorUninterruptable
@@ -223,14 +222,15 @@ local function UpdateCastbarDetails(unitId, cb)
 		WT.Units[unitId].castUpdated = Inspect.Time.Frame()
 		WT.Units[unitId].castRemaining = cb.remaining
 		WT.Units[unitId].castDuration = cb.duration
+		unit.castName = cb.abilityName or ""
 	else
 		WT.Units[unitId].castPercent = nil
-		WT.Units[unitId].castName = nil
 		WT.Units[unitId].castColor = nil
 		WT.Units[unitId].castUninterruptible = nil
 		WT.Units[unitId].castUpdated = nil
 		WT.Units[unitId].castDuration = nil
 		WT.Units[unitId].castRemaining = nil
+		WT.Units[unitId].castName = nil
 	end
 end
 

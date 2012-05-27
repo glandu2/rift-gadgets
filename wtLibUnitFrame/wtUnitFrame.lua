@@ -565,16 +565,23 @@ function WT.UnitFrame:BuffHandler(added, removed, updated)
 	-- Then add in any new buffs
 	if added then
 		for buffId, buff in pairs(added) do
-			buff.priority = self:GetBuffPriority(buff)		
-			self.BuffData[buffId] = buff
-			self.BuffAllocations[buffId] = false -- default to unallocated
-			if self.BuffSets then
-				for idx, buffSet in ipairs(self.BuffSets) do
-					if buffSet:CanAccept(buff) then
-						buffSet:Add(buff)
-						self.BuffAllocations[buffId] = buffSet
-						altered[buffSet] = true
-						break
+		
+			if ((self.Options.ownBuffs) and (not buff.debuff) and (buff.caster ~= WT.Player.id)) 
+			or ((self.Options.ownDebuffs) and (buff.debuff) and (buff.caster ~= WT.Player.id))
+			then
+				-- exclude
+			else		
+				buff.priority = self:GetBuffPriority(buff)		
+				self.BuffData[buffId] = buff
+				self.BuffAllocations[buffId] = false -- default to unallocated
+				if self.BuffSets then
+					for idx, buffSet in ipairs(self.BuffSets) do
+						if buffSet:CanAccept(buff) then
+							buffSet:Add(buff)
+							self.BuffAllocations[buffId] = buffSet
+							altered[buffSet] = true
+							break
+						end
 					end
 				end
 			end

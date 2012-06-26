@@ -165,6 +165,11 @@ function SimpleFrame:Construct(options)
 		end 
 	end
 	
+	if options.showBackground then
+		self:SetBackgroundColor(0,0,0,0.2)
+	end
+	
+	
 	self:SetSecureMode("restricted")
 	self:SetMouseoverUnit(self.UnitSpec)
 	self.Event.LeftClick = "target @" .. self.UnitSpec

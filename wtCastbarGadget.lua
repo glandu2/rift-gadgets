@@ -72,6 +72,8 @@ local function Create(configuration)
 
 	castBar:CreateBinding("castName", castBar, OnCastName, nil)
 
+	castBar.barCast:SetVisible(false)
+
 	return castBar, { resizable = { 140, 15, 300, 50 } }
 end
 

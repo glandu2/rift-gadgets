@@ -206,7 +206,9 @@ function StandardFrame:Construct(options)
 		end 
 	end
 	
-	self:SetBackgroundColor(0,0,0,0.4)
+	if options.showBackground then
+		self:SetBackgroundColor(0,0,0,0.2)
+	end
 	self:SetSecureMode("restricted")
 	self:SetMouseoverUnit(self.UnitSpec)
 	self.Event.LeftClick = "target @" .. self.UnitSpec

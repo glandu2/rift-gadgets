@@ -69,15 +69,15 @@ WT.Unit.CreateVirtualProperty("vitalityIndex", {"vitality", "vitalityMax"},
 		if not vitality then return nil end 
 		if vitality > 90 then 
 			return nil
-			elseif vitality > 80 then return 1
-			elseif vitality > 70 then return 2
-			elseif vitality > 60 then return 3
-			elseif vitality > 50 then return 4
-			elseif vitality > 40 then return 5
-			elseif vitality > 30 then return 6
-			elseif vitality > 20 then return 7
-			elseif vitality > 10 then return 8
-			elseif vitality > 0 then return 9
-			else return 10
+			elseif vitality > 80 then return 0
+			elseif vitality > 70 then return 1
+			elseif vitality > 60 then return 2
+			elseif vitality > 50 then return 3
+			elseif vitality > 40 then return 4
+			elseif vitality > 30 then return 5
+			elseif vitality > 20 then return 6
+			elseif vitality > 10 then return 7
+			elseif vitality > 0 then return 8
+			else return 9
 		end
 	end)

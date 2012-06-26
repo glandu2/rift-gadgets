@@ -452,11 +452,11 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	
 	local wrapper = UI.CreateFrame("Frame", WT.UniqueName("RaidFrames"), WT.Context)
 	
-	-- Unfortunately, if we want click targeting, we have to restrict things
-	-- Will show a faded rectangle beneath the frames to give a hint as to why you can't click through invisible frames
-	if configuration.clickToTarget then
+	if configuration.showBackground then
 		wrapper:SetBackgroundColor(0,0,0,0.2)
 	end
+	
+	
 	wrapper:SetSecureMode("restricted")
 	-- Pass through our clickToTarget preference to the template to allow it to set itself up appropriately
 	--if not configuration.templateOptions then configuration.templateOptions = {} end

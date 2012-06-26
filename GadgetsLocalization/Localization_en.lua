@@ -63,6 +63,7 @@ Library.Translate.En(
 	SelectGadgetType = "Select Gadget Type",
 	Settings = "Settings",
 	ShowBackground = "Show Background",
+	ShowBackgroundNote = "Show a transparent background when no unit is available",
 	ShowCastTime = "Show Cast Time",
 	ShowTargetName = "Show Target Name",
 	ShowTitle = "Show Title",

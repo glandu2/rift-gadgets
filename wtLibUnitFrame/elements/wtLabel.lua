@@ -33,12 +33,28 @@ function wtLabel:Construct()
 	
 	unitFrame:CreateTokenBinding(config.text, self, self.SetText, config.default or "")
 	
-		if config.fontSize then
+	if config.fontSize then
 		self:SetFontSize(config.fontSize)
 	end
 	
 	if config.color then
 		self:SetFontColor(config.color.r or 0, config.color.g or 0, config.color.b or 0, config.color.a or 1) 
+	end
+	
+	if config.linkedHeightElement then
+		self.linkedHeightElement = unitFrame.Elements[config.linkedHeightElement]
+		self.linkedHeightScale = config.linkedHeightScale or 0.6
+	end
+
+	if self.linkedHeightElement then
+		self.linkedHeightElement.Event.Size = 
+			function()
+				local newHeight = self.linkedHeightElement:GetHeight()
+				if newHeight ~= self.oldLinkedHeight then
+					self:SetFontSize(newHeight * self.linkedHeightScale)
+					self.oldLinkedHeight = newHeight
+				end
+			end
 	end
 	
 end

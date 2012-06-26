@@ -463,17 +463,33 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	--configuration.templateOptions.clickToTarget = configuration.clickToTarget 
 	
 	local frames = {}
-	frames[1] = WT.UnitFrame.CreateFromTemplate(template, "group01", configuration)
+	
+	local _debug = false
+	
+	if not _debug then
+		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "group01", configuration)
+	else
+		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
+	end
 	frames[1]:SetPoint("TOPLEFT", wrapper, "TOPLEFT")
 	frames[1]:SetParent(wrapper)
 	
 	for i = 2,20 do
-		frames[i] = WT.UnitFrame.CreateFromTemplate(template, string.format("group%02d", i), configuration)
+		if not _debug then
+			frames[i] = WT.UnitFrame.CreateFromTemplate(template, string.format("group%02d", i), configuration)
+		else
+			frames[i] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
+		end
 		frames[i]:SetParent(wrapper)
 	end
 	
+	local xCols = 4
+	local xRows = 5
+	
 	-- Layout the frames appropriately
 	if layout == "5 x 4" then
+		xCols = 5
+		xRows = 4
 		for i = 2,20 do
 			if ((i-1) % 5) ~= 0 then 
 				frames[i]:SetPoint("TOPLEFT", frames[i-1], "TOPRIGHT")
@@ -482,6 +498,8 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 			end
 		end
 	elseif layout == "2 x 10" then
+		xCols = 2
+		xRows = 10
 		for i = 2,20 do
 			if ((i-1) % 10) ~= 0 then 
 				frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT")
@@ -490,6 +508,8 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 			end
 		end
 	elseif layout == "10 x 2" then
+		xCols = 10
+		xRows = 2
 		for i = 2,20 do
 			if ((i-1) % 10) ~= 0 then 
 				frames[i]:SetPoint("TOPLEFT", frames[i-1], "TOPRIGHT")
@@ -498,14 +518,20 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 			end
 		end
 	elseif layout == "1 x 20" then
+		xCols = 1
+		xRows = 20
 		for i = 2,20 do
 			frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT")
 		end
 	elseif layout == "20 x 1" then
+		xCols = 20
+		xRows = 1
 		for i = 2,20 do
 			frames[i]:SetPoint("TOPLEFT", frames[i-1], "TOPRIGHT")
 		end
 	else -- "4 x 5"
+		xCols = 4
+		xRows = 5
 		for i = 2,20 do
 			if ((i-1) % 5) ~= 0 then 
 				frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT")
@@ -522,7 +548,21 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		
 	wrapper:SetWidth(right - left + 1)	
 	wrapper:SetHeight(bottom - top + 1)	
-	return wrapper
+	
+	wrapper.OnResize = 
+		function(frame, width,height)
+			local frmWidth = math.ceil(width / xCols)
+			local frmHeight = math.ceil(height / xRows)
+			wrapper:SetWidth(frmWidth * xCols)
+			wrapper:SetHeight(frmHeight * xRows)
+			for i=1,20 do
+				frames[i]:SetWidth(frmWidth)
+				frames[i]:SetHeight(frmHeight)
+				frames[i]:OnResize(frmWidth, frmHeight)
+			end
+		end
+	
+	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 2, (bottom - top + 1) * 2,  } }
 end
 
 --[[

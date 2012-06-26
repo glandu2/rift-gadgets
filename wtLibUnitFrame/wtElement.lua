@@ -30,6 +30,27 @@ function WT.Element:Subclass(elementTypeName, baseFrameType)
 	return obj
 end
 
+
+local function stringToPoints(str)
+	if str == "TOPLEFT" then return 0,0 end 
+	if str == "TOP" then return nil,0 end 
+	if str == "TOPRIGHT" then return 1,0 end 
+	if str == "BOTTOMLEFT" then return 0,1 end 
+	if str == "BOTTOM" then return nil,1 end 
+	if str == "BOTTOMRIGHT" then return 1,1 end 
+	if str == "CENTERLEFT" then return 0,0.5 end 
+	if str == "CENTER" then return 0.5,0.5 end 
+	if str == "CENTERRIGHT" then return 1,0.5 end 
+	if str == "CENTERX" then return 0.5,nil end 
+	if str == "CENTERY" then return nil,0.5 end
+	if str == "LEFT" then return 0,nil end 
+	if str == "RIGHT" then return 1,nil end
+	if str == "TOPCENTER" then return 0.5,0 end 
+	if str == "BOTTOMCENTER" then return 0.5,1 end 
+	return "ERROR:" .. str
+end
+
+
 function WT.Element:Create(unitFrame, configuration, overrideParent)
 
 	local element = UI.CreateFrame(self.BaseFrameType, WT.UniqueName("WT_ELEM", configuration.id), overrideParent or unitFrame)
@@ -88,14 +109,29 @@ function WT.Element:Create(unitFrame, configuration, overrideParent)
 						local attachTargetPoint = attachTo.targetPoint or "TOPLEFT"
 						local attachOffsetX = attachTo.offsetX
 						local attachOffsetY = attachTo.offsetY
-						if attachOffsetX and attachOffsetY then
-							element:SetPoint(attachPoint, attachToElement, attachTargetPoint, attachOffsetX, attachOffsetY)
-						elseif attachOffsetX and not attachOffsetY then
-							element:SetPoint(attachPoint, attachToElement, attachTargetPoint, attachOffsetX, nil)
-						elseif not attachOffsetX and attachOffsetY then
-							element:SetPoint(attachPoint, attachToElement, attachTargetPoint, nil, attachOffsetY)
+						
+						local apX, apY, tpX, tpY = 0, 0, 0, 0
+						
+						if type(attachPoint) == "string" then 
+							apX, apY = stringToPoints(attachPoint)
 						else
-							element:SetPoint(attachPoint, attachToElement, attachTargetPoint)
+							apX, apY = attachPoint[1], attachPoint[2]   
+						end
+						
+						if type(attachTargetPoint) == "string" then 
+							tpX, tpY = stringToPoints(attachTargetPoint) 
+						else
+							tpX, tpY = attachTargetPoint[1], attachTargetPoint[2]   
+						end
+						
+						if attachOffsetX and attachOffsetY then
+							element:SetPoint(apX, apY, attachToElement, tpX, tpY, attachOffsetX, attachOffsetY)
+						elseif attachOffsetX and not attachOffsetY then
+							element:SetPoint(apX, apY, attachToElement, tpX, tpY, attachOffsetX, nil)
+						elseif not attachOffsetX and attachOffsetY then
+							element:SetPoint(apX, apY, attachToElement, tpX, tpY, nil, attachOffsetY)
+						else
+							element:SetPoint(apX, apY, attachToElement, tpX, tpY)
 						end
 					else
 						WT.Log.Error("Could not find attachTo element: " .. tostring(attachTo.element))

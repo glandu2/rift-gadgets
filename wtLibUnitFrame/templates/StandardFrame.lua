@@ -93,7 +93,10 @@ function StandardFrame:Construct(options)
 			id="labelHealth", type="Label", parent="barHealth", layer=20,
 			attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT" }},
 			visibilityBinding="health",
-			text=" {health}/{healthMax}", default="", fontSize=12
+			text=" {health}/{healthMax}", default="",
+			--linkedHeightElement = "barHealth",
+			--linkedHeightScale = 0.5, 
+			fontSize=12
 		},
 		{
 			id="labelHealthR", type="Label", parent="barHealth", layer=20,

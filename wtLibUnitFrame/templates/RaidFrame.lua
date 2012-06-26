@@ -63,19 +63,35 @@ function RaidFrame:Construct(options)
 			}, 
 			{
 				-- Generic Element Configuration
+				id="barResource", type="Bar", parent="frameBackdrop", layer=10,
+				attach = {
+					{ point="BOTTOMLEFT", element="frame", targetPoint="BOTTOMLEFT", offsetX=1, offsetY=-1 },
+					{ point="RIGHT", element="frame", targetPoint="RIGHT", offsetX=-1 },
+				},
+				-- visibilityBinding="id",
+				-- Type Specific Element Configuration
+				binding="resourcePercent", height=raidFrameBottomBarHeight, colorBinding="callingColor",
+				texAddon=AddonId, texFile="img/BantoBar.png",
+				backgroundColor={r=0, g=0, b=0, a=1}
+			},
+			{
+				-- Generic Element Configuration
 				id="barHealth", type="Bar", parent="frameBackdrop", layer=10,
-				attach = {{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=1, offsetY=1 }},
+				attach = {
+					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=1, offsetY=1 },
+					{ point="BOTTOMRIGHT", element="barResource", targetPoint="TOPRIGHT" },
+				},
 				-- visibilityBinding="id",
 				growthDirection="right",
 				-- Type Specific Element Configuration
-				binding="healthPercent", width=raidFrameWidth, height=raidFrameTopBarHeight, colorBinding="callingColor",
+				binding="healthPercent", colorBinding="callingColor",
 				texAddon=AddonId, texFile="img/Diagonal.png",
 				backgroundColor={r=0, g=0, b=0, a=1}
 			},
 			{
 				-- Generic Element Configuration
 				id="imgRole", type="ImageSet", parent="frameBackdrop", layer=20,
-				attach = {{ point="TOPLEFT", element="barHealth", targetPoint="TOPLEFT", offsetX=3, offsetY=4 }}, visibilityBinding="role",
+				attach = {{ point={0,0}, element="barHealth", targetPoint={0,0.1}, offsetX=3, offsetY=0 }}, visibilityBinding="role",
 				-- Type Specific Element Configuration
 				texAddon=AddonId, texFile="img/Roles12.png", nameBinding="role", cols=1, rows=5, 
 				names = { ["tank"] = 0, ["heal"] = 1, ["dps"] = 2, ["support"] = 3 }, defaultIndex = "hide"
@@ -86,7 +102,7 @@ function RaidFrame:Construct(options)
 				attach = {{ point="CENTERLEFT", element="imgRole", targetPoint="CENTERRIGHT" }},
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				text="{nameShort}", default="", fontSize=11
+				text="{nameShort}", default="", linkedHeightElement="barHealth", linkedHeightScale=0.4,
 			},
 			{
 				-- Generic Element Configuration
@@ -95,16 +111,6 @@ function RaidFrame:Construct(options)
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
 				text=" {raidStatus}", default="", fontSize=12
-			},
-			{
-				-- Generic Element Configuration
-				id="barResource", type="Bar", parent="frameBackdrop", layer=10,
-				attach = {{ point="TOPLEFT", element="barHealth", targetPoint="BOTTOMLEFT" }},
-				-- visibilityBinding="id",
-				-- Type Specific Element Configuration
-				binding="resourcePercent", width=raidFrameWidth, height=raidFrameBottomBarHeight, colorBinding="callingColor",
-				texAddon=AddonId, texFile="img/BantoBar.png",
-				backgroundColor={r=0, g=0, b=0, a=1}
 			},
 			{
 				-- Generic Element Configuration

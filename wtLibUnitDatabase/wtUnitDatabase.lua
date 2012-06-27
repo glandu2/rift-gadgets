@@ -583,8 +583,9 @@ end
 
 
 -- Setup Event Handlers
-table.insert(Event.Unit.Available,				{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })
-table.insert(Event.Unit.Unavailable,			{ OnUnitUnavailable, AddonId, AddonId .. "_OnUnitUnavailable" })
+table.insert(Event.Unit.Availability.Full,				{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })
+table.insert(Event.Unit.Availability.Partial,				{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailablePartial" })
+table.insert(Event.Unit.Availability.None,			{ OnUnitUnavailable, AddonId, AddonId .. "_OnUnitUnavailable" })
 
 -- Register the event handlers for every changeable property
 table.insert(Event.Unit.Detail.Afk,				{ OnUnitDetailAfk, AddonId, AddonId .. "_OnUnitDetailAfk" })

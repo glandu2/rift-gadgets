@@ -7,9 +7,9 @@ Author = "Wildtide"
 Website = "http://www.wildtide.net"
 Email = "wildtide@wildtide.net"
 
-Version = "1.0.0"
+Version = "1.0.1"
 
-Environment = "1.8"
+Environment = "1.9"
 
 RunOnStartup = 
 {

@@ -223,6 +223,7 @@ local function OnUnitAvailable(units)
 	for unitId, spec in pairs(units) do
 		if unitId == Inspect.Unit.Lookup("player") then
 			-- Run any initializers
+			Command.System.Watchdog.Quiet()
 			for idx,init in ipairs(WT.Initializers) do
 				WT.Log.Info("Running initializer...") 
 				init()
@@ -248,4 +249,4 @@ table.insert(Event.Addon.Startup.End, { WT.OnAddonStartupEnd, AddonId, AddonId .
 table.insert(Event.Addon.SavedVariables.Load.End, { WT.OnSavedVariablesLoaded, AddonId, AddonId .. "_OnAddonVariablesLoaded" })
 table.insert(Command.Slash.Register("wt"), { WT.OnSlashCommand, AddonId, AddonId .. "_OnSlashCommand" })
 
-table.insert(Event.Unit.Available,	{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })
+table.insert(Event.Unit.Availability.Full,	{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })

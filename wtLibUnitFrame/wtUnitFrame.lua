@@ -446,6 +446,49 @@ end
 
 -- Gadget Factory Function for grid of 20 UnitFrames
 function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
+
+	local sequenceDefault = 
+	{
+		"group01","group02","group03","group04","group05",
+		"group06","group07","group08","group09","group10",
+		"group11","group12","group13","group14","group15",
+		"group16","group17","group18","group19","group20",
+	}
+
+	local sequenceReverse = 
+	{
+		"group20","group19","group18","group17","group16",
+		"group15","group14","group13","group12","group11",
+		"group10","group09","group08","group07","group06",
+		"group05","group04","group03","group02","group01",
+	}
+
+	local sequenceInnerGroupReverse = 
+	{
+		"group05","group04","group03","group02","group01",
+		"group10","group09","group08","group07","group06",
+		"group15","group14","group13","group12","group11",
+		"group20","group19","group18","group17","group16",
+	}
+
+	local sequenceGroupReverse = 
+	{
+		"group16","group17","group18","group19","group20",
+		"group11","group12","group13","group14","group15",
+		"group06","group07","group08","group09","group10",
+		"group01","group02","group03","group04","group05",
+	}
+
+	local sequence = sequenceDefault
+	
+	if configuration.reverseGroups and configuration.reverseUnits then
+		sequence = sequenceReverse
+	elseif configuration.reverseGroups then
+		sequence = sequenceGroupReverse
+	elseif configuration.reverseUnits then
+		sequence = sequenceInnerGroupReverse
+	end
+
 	local template = configuration.template
 	local layout = configuration.layout or "4 x 5"
 	WT.Log.Debug("Creating RaidFrames from configuration: template=" .. template)
@@ -467,18 +510,26 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	local _debug = false
 	
 	if not _debug then
-		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "group01", configuration)
+		frames[1] = WT.UnitFrame.CreateFromTemplate(template, sequence[1], configuration)
 	else
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
+		local debugDesc = UI.CreateFrame("Text", "TXT", WT.Context)
+		debugDesc:SetText(sequence[1])
+		debugDesc:SetLayer(500)
+		debugDesc:SetPoint("BOTTOMLEFT", frames[1], "BOTTOMLEFT")
 	end
 	frames[1]:SetPoint("TOPLEFT", wrapper, "TOPLEFT")
 	frames[1]:SetParent(wrapper)
 	
 	for i = 2,20 do
 		if not _debug then
-			frames[i] = WT.UnitFrame.CreateFromTemplate(template, string.format("group%02d", i), configuration)
+			frames[i] = WT.UnitFrame.CreateFromTemplate(template, sequence[i], configuration)
 		else
 			frames[i] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
+			local debugDesc = UI.CreateFrame("Text", "TXT", WT.Context)
+			debugDesc:SetText(sequence[i])
+			debugDesc:SetLayer(500)
+			debugDesc:SetPoint("BOTTOMLEFT", frames[i], "BOTTOMLEFT")
 		end
 		frames[i]:SetParent(wrapper)
 	end

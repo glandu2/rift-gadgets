@@ -64,6 +64,8 @@ local function rfConfigDialog(container)
 		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
 		:Checkbox("showBackground", TXT.ShowBackground, true)
 		:FieldNote(TXT.ShowBackgroundNote)
+		:Checkbox("reverseGroups", TXT.ReverseGroups, false)
+		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
 
 end
 

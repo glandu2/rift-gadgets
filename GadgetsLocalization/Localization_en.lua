@@ -59,6 +59,8 @@ Library.Translate.En(
 	ReloadUI = "Reload UI",
 	ReloadUIMessage = "Please reload the User Interface to release allocated resources.",
 	ReloadWillBeRequired = "You will need to reload the User Interface to apply these changes.",
+	ReverseGroups = "Reverse Group Sequence",
+	ReverseUnits = "Reverse Unit Sequence within Groups",
 	Rogue = "Rogue",
 	SelectGadgetType = "Select Gadget Type",
 	Settings = "Settings",

@@ -25,6 +25,7 @@ RunOnStartup =
   "elements/wtImageSet.lua",
   "elements/wtBuffPanel.lua",
   "templates/StandardFrame.lua",
+  "templates/StandardFrameUpsideDown.lua",
   "templates/RaidFrame.lua",
   "templates/SimpleFrame.lua",
   "templates/HealthOrb.lua",

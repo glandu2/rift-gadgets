@@ -69,28 +69,11 @@ WT.Event.Trigger.PlayerUnavailable, WT.Event.PlayerUnavailable = Utility.Event.C
 WT.Event.Trigger.UnitAdded, WT.Event.UnitAdded = Utility.Event.Create(AddonId, "UnitAdded")
 WT.Event.Trigger.UnitRemoved, WT.Event.UnitRemoved = Utility.Event.Create(AddonId, "UnitRemoved")
 
-WT.Event.Trigger.BuffAdded, WT.Event.BuffAdded = Utility.Event.Create(AddonId, "BuffAdded")
-WT.Event.Trigger.BuffRemoved, WT.Event.BuffRemoved = Utility.Event.Create(AddonId, "BuffRemoved")
-WT.Event.Trigger.BuffChanged, WT.Event.BuffChanged = Utility.Event.Create(AddonId, "BuffChanged")
 WT.Event.Trigger.BuffUpdates, WT.Event.BuffUpdates = Utility.Event.Create(AddonId, "BuffUpdates")
 
 WT.Event.Trigger.CastbarShow, WT.Event.CastbarShow = Utility.Event.Create(AddonId, "CastbarShow")
 WT.Event.Trigger.CastbarHide, WT.Event.CastbarHide = Utility.Event.Create(AddonId, "CastbarHide")
 
-
-local buffChanges = nil
-local buffUpdates = nil
-
--- Sadly, we cannot currently trust the buff events to accurately track buffs on a unit
--- Until they can be managed without lots of messing around, I'm going to simply capture
--- the fact that *something* has changed on a unit, and then do a full rescan of the
--- buffs on these units every frame and fire the events at this point.
--- I am however still updating details and handling change events normally, as I believe
--- this is all OK. It's the removal of duplicate buffs that I'm trying to catch here.
-local function SignalBuffChange(unitId)
-	if not buffChanges then buffChanges = {} end 
-	buffChanges[unitId] = true
-end
 
 local function IsBlackListed(buff)
 	if wtxOptions.buffsBlacklist and wtxOptions.buffsBlacklist[buff.name] then
@@ -100,108 +83,65 @@ local function IsBlackListed(buff)
 	end 
 end
 
-local function CalculateBuffChanges()
-	
-	if not buffChanges then return end
-	
-	for unitId in pairs(buffChanges) do
-		local unit = WT.Units[unitId]
-		if unit then
-			local changes = nil
-			local buffs = Inspect.Buff.List(unitId)
-			if buffs then
+local function OnBuffAdd(unitId, buffs)
 
-				-- populate any changed buffs
-				if buffUpdates and buffUpdates[unit.id] then
-					for buffId, buff in pairs(buffUpdates[unit.id]) do
-						if not changes then changes = {} end
-						if not changes.update then changes.update = {} end
-						changes.update[buffId] = buff
-						WT.Units[unitId].Buffs[buffId] = buff
-						WT.Event.Trigger.BuffChanged(unitId, buffId, buff)
-					end
-				end
+	if not WT.Units[unitId] then return end
 
-				-- scan current unit buffs looking for buffs no longer on the unit
-				for buffId, buff in pairs(unit.Buffs) do
-					if not buffs[buffId] then
-						local buff = unit.Buffs[buffId] 
-						unit.Buffs[buffId] = nil
-						WT.Units[unitId].Buffs[buffId] = nil
-						WT.Event.Trigger.BuffRemoved(unitId, buffId, buff)
-						if not changes then changes = {} end
-						if not changes.remove then changes.remove = {} end
-						changes.remove[buffId] = buff
-					end
-				end
-				
-				-- scan current buffs looking for buffs missing from the unit
-				for buffId in pairs(buffs) do
-					if not unit.Buffs[buffId] then
-						local det = Inspect.Buff.Detail(unitId, buffId)
-						if not IsBlackListed(det) then	
-							local buffCopy = {}
-							for k,v in pairs(det) do buffCopy[k] = v end
-							WT.Units[unitId].Buffs[buffId] = buffCopy
-							WT.Event.Trigger.BuffAdded(unitId, buffId, buffCopy)
-							if not changes then changes = {} end
-							if not changes.add then changes.add = {} end
-							changes.add[buffId] = buffCopy
-						end
-					end
-				end
-				
-			else
-			
-				for buffId, buff in pairs(unit.Buffs) do
-					local buff = unit.Buffs[buffId] 
-					unit.Buffs[buffId] = nil
-					WT.Units[unitId].Buffs[buffId] = nil
-					WT.Event.Trigger.BuffRemoved(unitId, buffId, buff)
-					if not changes then changes = {} end
-					if not changes.remove then changes.remove = {} end
-					changes.remove[buffId] = buff
-				end
-						
+	local bdesc = Inspect.Buff.Detail(unitId, buffs)
+	local changes = { add = {} }
+	
+	for buffId, buff in pairs(bdesc) do
+		if not IsBlackListed(buff) then 
+			if not WT.Units[unitId].Buffs[buffId] then
+				local buffCopy = {}
+				for k,v in pairs(buff) do buffCopy[k] = v end
+				changes.add[buffId] = buffCopy
+				WT.Units[unitId].Buffs[buffId] = buffCopy
 			end
-			
-			if changes then
-				WT.Event.Trigger.BuffUpdates(unitId, changes)
-			end
-			
 		end
 	end
-	
-	buffChanges = nil -- empty the buffChanges lists
-	buffUpdates = nil
-	
-end
 
+	WT.Event.Trigger.BuffUpdates(unitId, changes)
 
-local function OnBuffAdd(unitId, buffs)
-	SignalBuffChange(unitId)
 end
 
 
 local function OnBuffRemove(unitId, buffs)
-	SignalBuffChange(unitId)
+
+	if not WT.Units[unitId] then return end
+
+	local changes = { remove = {} }
+	
+	for buffId in pairs(buffs) do
+		if WT.Units[unitId].Buffs[buffId] then
+			changes.remove[buffId] = WT.Units[unitId].Buffs[buffId]
+			WT.Units[unitId].Buffs[buffId] = nil
+		end
+	end
+
+	WT.Event.Trigger.BuffUpdates(unitId, changes)
+
 end
 
 
 local function OnBuffChange(unitId, buffs)
 
 	if not WT.Units[unitId] then return end
+
+	local changes = { update = {} }
+
 	local bdesc = Inspect.Buff.Detail(unitId, buffs)
+	
 	for buffId, buff in pairs(bdesc) do
 		if not IsBlackListed(buff) then 
 			local buffCopy = {}
 			for k,v in pairs(buff) do buffCopy[k] = v end
-			if not buffUpdates then buffUpdates = {} end
-			if not buffUpdates[unitId] then buffUpdates[unitId] = {} end
-			buffUpdates[unitId][buffId] = buffCopy
-			SignalBuffChange(unitId)
+			changes.update[buffId] = buffCopy
+			WT.Units[unitId].Buffs[buffId] = buffCopy
 		end
 	end
+
+	WT.Event.Trigger.BuffUpdates(unitId, changes)
 
 end
 
@@ -282,11 +222,13 @@ end
 
 
 -- This is where the Unit instance is created if unitObject == nil
-local function PopulateUnit(unitId, unitObject)
+local function PopulateUnit(unitId, unitObject, omitBuffScan)
 
 	local detail = Inspect.Unit.Detail(unitId)
 	if detail then
-		local unit = unitObject or WT.Unit:Create(unitId)
+
+		local unit = unitObject or WT.Units[unitId] or WT.Unit:Create(unitId) 
+		
 		for k,v in pairs(detail) do
 			unit[k] = v
 		end 
@@ -341,14 +283,14 @@ local function PopulateUnit(unitId, unitObject)
 		unit.coord = { detail.coordX or 0, detail.coordY or 0, detail.coordZ or 0 }
 		WT.Units[unitId] = unit
 		
-		-- Add all buffs currently on the unit
-		if not unit.Buffs then 
-			unit.Buffs = {}
-		else
-			for k in pairs(unit.Buffs) do unit.Buffs[k] = nil end 
-		end
-		OnBuffAdd(unitId, Inspect.Buff.List(unitId))
+		if not unit.Buffs then unit.Buffs = {} end
 		
+		-- Add all buffs currently on the unit
+		if not omitBuffScan then
+			OnBuffRemove(unitId, unit.Buffs)
+			OnBuffAdd(unitId, Inspect.Buff.List(unitId))
+		end
+				
 		return unit
 	else
 		return nil
@@ -366,6 +308,23 @@ function WT.UnitDatabase.GetUnit(unitId)
 	
 end
 
+local function OnUnitAvailablePartial(units)
+	for unitId, spec in pairs(units) do
+		if not WT.Units[unitId] then
+			local unit = PopulateUnit(unitId, nil, true)
+			if unit then
+				WT.Units[unitId] = unit
+				WT.Event.Trigger.UnitAdded(unitId)			
+				if spec == "player" then 
+					WT.Player = unit
+					WT.Event.Trigger.PlayerAvailable() 
+				end
+			end
+		else
+			WT.Units[unitId].partial = true
+		end
+	end		
+end
 
 local function OnUnitAvailable(units)
 	for unitId, spec in pairs(units) do		
@@ -578,13 +537,12 @@ end
 
 local function OnSystemUpdateBegin()
 	CalculateCastChanges()
-	CalculateBuffChanges()
 end
 
 
 -- Setup Event Handlers
 table.insert(Event.Unit.Availability.Full,				{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })
-table.insert(Event.Unit.Availability.Partial,				{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailablePartial" })
+table.insert(Event.Unit.Availability.Partial,				{ OnUnitAvailablePartial, AddonId, AddonId .. "_OnUnitAvailablePartial" })
 table.insert(Event.Unit.Availability.None,			{ OnUnitUnavailable, AddonId, AddonId .. "_OnUnitUnavailable" })
 
 -- Register the event handlers for every changeable property

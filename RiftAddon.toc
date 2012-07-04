@@ -37,7 +37,6 @@ Embed =
 	wtLibTranslate = true,
 	GadgetsLocalization = true,
 	wtLibCore = true,
-	wtLibControls = true,
 	wtLibUnitDatabase = true,
 	wtLibGadget = true,
 	wtLibUnitFrame = true,

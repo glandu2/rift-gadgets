@@ -29,6 +29,5 @@ Embed =
 Dependencies = 
 {
 	LibUnitChange = {"required", "before"},
-	wtLibTranslate = {"required", "before"},
 	wtLibCore = {"required", "before"},	
 }

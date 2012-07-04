@@ -29,7 +29,6 @@ RunOnStartup =
   "dialogs/wtGadgetSettings.lua",
   "dialogs/wtGadget_CreateDialog.lua",
   "dialogs/wtGadget_ModifyDialog.lua",
-
 }
 
 SavedVariables = 
@@ -45,6 +44,5 @@ Embed =
 Dependencies = 
 {
 	LibSimpleWidgets = {"required", "before"},
-	wtLibTranslate = {"required", "before"},	
 	wtLibCore = {"required", "before"},	
 }

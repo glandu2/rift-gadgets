@@ -33,9 +33,6 @@ SavedVariables =
 
 Embed = 
 {
-	wtLibMedia = true,
-	wtLibTranslate = true,
-	GadgetsLocalization = true,
 	wtLibCore = true,
 	wtLibUnitDatabase = true,
 	wtLibGadget = true,
@@ -44,6 +41,6 @@ Embed =
 
 Dependencies = 
 {
-	GadgetsLocalization = {"required", "before"},
+	wtLibCore = {"required", "before"},
 	wtLibUnitFrame = {"required", "before"},
 }

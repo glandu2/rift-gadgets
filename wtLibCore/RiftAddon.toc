@@ -13,6 +13,15 @@ Environment = "1.9"
 
 RunOnStartup = 
 {
+  "wtTranslate.lua", 
+  
+  "localization/Localization_en.lua",
+  "localization/Localization_de.lua",
+  "localization/Localization_fr.lua",
+  "localization/Localization_ko.lua",
+  "localization/Localization_ru.lua",
+  
+  "wtMedia.lua",
   "wtCore.lua",
   "wtLog.lua",
   "wtUtility.lua",
@@ -30,5 +39,4 @@ Embed =
 
 Dependencies = 
 {
-	wtLibTranslate = {"required", "before"}
 }

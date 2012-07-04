@@ -178,7 +178,7 @@ function StandardFrame:Construct(options)
 		{
 			id="buffPanelBuffs", type="BuffPanel", parent="HorizontalBar", layer=30,
 			attach = {{ point="TOPLEFT", element="frameBackdrop", targetPoint="BOTTOMLEFT", offsetX=0, offsetY=0 }},
-			rows=2, cols=4, iconSize=26, iconSpacingHorizontal=0, iconSpacingVertical=13, borderThickness=1,
+			rows=3, cols=4, iconSize=26, iconSpacingHorizontal=0, iconSpacingVertical=13, borderThickness=1,
 			acceptLowPriorityBuffs=true, acceptMediumPriorityBuffs=true, acceptHighPriorityBuffs=true, acceptCriticalPriorityBuffs=true,
 			acceptLowPriorityDebuffs=false, acceptMediumPriorityDebuffs=false, acceptHighPriorityDebuffs=false, acceptCriticalPriorityDebuffs=false,
 			growthDirection = "right_down", selfCast=false,
@@ -190,7 +190,7 @@ function StandardFrame:Construct(options)
 		{
 			id="buffPanelDebuffs", type="BuffPanel", parent="HorizontalBar", layer=30,
 			attach = {{ point="TOPRIGHT", element="frameBackdrop", targetPoint="BOTTOMRIGHT", offsetX=0, offsetY=0 }},
-			rows=2, cols=2, iconSize=26, iconSpacingHorizontal=0, iconSpacingVertical=13, borderThickness=1, 
+			rows=3, cols=2, iconSize=26, iconSpacingHorizontal=0, iconSpacingVertical=13, borderThickness=1, 
 			acceptLowPriorityBuffs=false, acceptMediumPriorityBuffs=false, acceptHighPriorityBuffs=false, acceptCriticalPriorityBuffs=false,
 			acceptLowPriorityDebuffs=true, acceptMediumPriorityDebuffs=true, acceptHighPriorityDebuffs=true, acceptCriticalPriorityDebuffs=true,
 			growthDirection = "left_down",

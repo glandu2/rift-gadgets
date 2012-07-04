@@ -24,6 +24,7 @@ RunOnStartup =
   "wtPlanarChargeGadget.lua",
   "wtSoulVitalityGadget.lua",
   "wtCastbarGadget.lua",
+  "wtBuffsGadget.lua",
 }
 
 SavedVariables = 

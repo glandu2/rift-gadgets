@@ -306,6 +306,28 @@ function WT.UnitFrame:ApplyBuffDelta()
 end
 
 
+-- Clears all buffs from the frame, and then applies them again
+function WT.UnitFrame:ReapplyBuffDelta()
+
+	local changes = nil
+
+	if self.BuffData then
+		for buffId, buff in pairs(self.BuffData) do
+			if not changes then changes = {} end
+			if not changes.remove then changes.remove = {} end
+			changes.remove[buffId] = buff
+		end 
+	end 
+
+	if changes then
+		self:BuffHandler(changes.add, changes.remove, changes.update)
+	end
+
+	self:ApplyBuffDelta()
+
+end
+
+
 function WT.UnitFrame:PopulateUnit(unitId)
 	self.UnitId = unitId
 	if unitId then

@@ -17,6 +17,7 @@ local function Create(configuration)
 
 	local showBuffs = WT.Utility.ToBoolean(configuration.showBuffs)
 	local showDebuffs = WT.Utility.ToBoolean(configuration.showDebuffs)
+	local myCasts = WT.Utility.ToBoolean(configuration.selfCast)
 
 	buffsPanel.panel = buffsPanel:CreateElement(
 	{
@@ -25,12 +26,14 @@ local function Create(configuration)
 		rows=4, cols=4, iconSize=32, iconSpacingHorizontal=0, iconSpacingVertical=13, borderThickness=1,
 		acceptLowPriorityBuffs=showBuffs, acceptMediumPriorityBuffs=showBuffs, acceptHighPriorityBuffs=showBuffs, acceptCriticalPriorityBuffs=showBuffs,
 		acceptLowPriorityDebuffs=showDebuffs, acceptMediumPriorityDebuffs=showDebuffs, acceptHighPriorityDebuffs=showDebuffs, acceptCriticalPriorityDebuffs=showDebuffs,
-		growthDirection = "right_down", selfCast=false,
+		growthDirection = "right_down", selfCast=myCasts,
 		timerSize=10, timerOffsetX=0, timerOffsetY=19,
 		stackSize=12, stackOffsetX=0, stackOffsetY=0, stackBackgroundColor={r=0,g=0,b=0,a=0.7},
 		borderColor={r=0,g=0,b=0,a=1},
 		sweepOverlay=true,
 	})
+
+	buffsPanel:ReapplyBuffDelta()
 
 	return buffsPanel
 end
@@ -52,6 +55,7 @@ local function ConfigDialog(container)
 			}, false) 
 		:Checkbox("showBuffs", "Show Buffs", true)
 		:Checkbox("showDebuffs", "Show Debuffs", false)
+		:Checkbox("selfCast", "Only show my buffs/debuffs", true)
 	
 end
 

@@ -315,10 +315,10 @@ local function OnUnitAvailablePartial(units)
 			if unit then
 				WT.Units[unitId] = unit
 				WT.Event.Trigger.UnitAdded(unitId)			
-				if spec == "player" then 
-					WT.Player = unit
-					WT.Event.Trigger.PlayerAvailable() 
-				end
+				--if spec == "player" then 
+				--	WT.Player = unit
+				--	WT.Event.Trigger.PlayerAvailable() 
+				--end
 			end
 		else
 			WT.Units[unitId].partial = true
@@ -539,6 +539,9 @@ local function OnSystemUpdateBegin()
 	CalculateCastChanges()
 end
 
+
+-- Load the player
+WT.Player = PopulateUnit(Inspect.Unit.Lookup("player"), nil, true)
 
 -- Setup Event Handlers
 table.insert(Event.Unit.Availability.Full,				{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })

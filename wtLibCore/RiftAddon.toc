@@ -7,7 +7,7 @@ Author = "Wildtide"
 Website = "http://www.wildtide.net"
 Email = "wildtide@wildtide.net"
 
-Version = "0.3.66"
+Version = "0.3.67"
 
 Environment = "1.9"
 
@@ -21,7 +21,6 @@ RunOnStartup =
   "localization/Localization_ko.lua",
   "localization/Localization_ru.lua",
   
-  "wtMedia.lua",
   "wtCore.lua",
   "wtLog.lua",
   "wtUtility.lua",
@@ -39,4 +38,5 @@ Embed =
 
 Dependencies = 
 {
+	wtLibMedia = {"required", "before"},
 }

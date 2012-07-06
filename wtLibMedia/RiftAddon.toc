@@ -1,0 +1,29 @@
+Identifier = "wtLibMedia"
+
+Name = "wtLibMedia"
+Description = "WT Media Library"
+
+Author = "Wildtide"
+Website = "http://www.wildtide.net"
+Email = "wildtide@wildtide.net"
+
+Version = "0.3.67"
+
+Environment = "1.9"
+
+RunOnStartup = 
+{
+  "wtMedia.lua",
+}
+
+SavedVariables = 
+{
+}
+
+Embed = 
+{
+}
+
+Dependencies = 
+{
+}

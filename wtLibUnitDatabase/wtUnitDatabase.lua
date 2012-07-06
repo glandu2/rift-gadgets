@@ -67,6 +67,8 @@ WT.UnitDatabase.Casting = {}
 WT.Event.Trigger.UnitAdded, WT.Event.UnitAdded = Utility.Event.Create(AddonId, "UnitAdded")
 WT.Event.Trigger.UnitRemoved, WT.Event.UnitRemoved = Utility.Event.Create(AddonId, "UnitRemoved")
 
+WT.Event.Trigger.PlayerAvailable, WT.Event.PlayerAvailable = Utility.Event.Create(AddonId, "PlayerAvailable")
+
 WT.Event.Trigger.BuffUpdates, WT.Event.BuffUpdates = Utility.Event.Create(AddonId, "BuffUpdates")
 
 WT.Event.Trigger.CastbarShow, WT.Event.CastbarShow = Utility.Event.Create(AddonId, "CastbarShow")
@@ -218,6 +220,8 @@ local function OnUnitCastbar(units)
 end
 
 
+local playerAvailableFired = false
+
 -- This is where the Unit instance is created if unitObject == nil
 local function PopulateUnit(unitId, unitObject, omitBuffScan)
 
@@ -226,7 +230,13 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 
 		local unit = ((unitObject or WT.Units[unitId]) or WT.Unit:Create(unitId)) 
 		
-		if unitId == Inspect.Unit.Lookup("player") then WT.Player = unit end
+		if unitId == Inspect.Unit.Lookup("player") then 
+			WT.Player = unit
+			if not playerAvailableFired then
+				WT.Event.Trigger.PlayerAvailable()
+				playerAvailableFired = true
+			end 
+		end
 		
 		for k,v in pairs(detail) do
 			unit[k] = v
@@ -526,7 +536,7 @@ end
 
 
 -- Load the player with partial details
-WT.Player = PopulateUnit(playerId, nil, true)
+--WT.Player = PopulateUnit(playerId, nil, true)
 
 -- Setup Event Handlers
 table.insert(Event.Unit.Availability.Full,				{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })

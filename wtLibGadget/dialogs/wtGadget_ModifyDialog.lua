@@ -14,6 +14,10 @@ local gadgetConfig = false
 local gadgetId = false
 
 local function OnModifyClick()
+
+	-- Give the creation enough time to run
+	Command.System.Watchdog.Quiet()
+
 	if gadgetFactory.GetConfiguration then
 	 	local config = gadgetFactory.GetConfiguration()
 		for k,v in pairs(config) do gadgetConfig[k] = v end

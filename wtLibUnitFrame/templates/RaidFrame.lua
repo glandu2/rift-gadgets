@@ -102,7 +102,7 @@ function RaidFrame:Construct(options)
 				attach = {{ point="CENTERLEFT", element="imgRole", targetPoint="CENTERRIGHT" }},
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				text="{nameShort}", default="", linkedHeightElement="barHealth", linkedHeightScale=0.4,
+				text="{nameShort}", default="", linkedHeightElement="barHealth", linkedHeightScale=0.35,
 			},
 			{
 				-- Generic Element Configuration

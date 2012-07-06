@@ -126,6 +126,21 @@ end
 -- Runs any functions in the WT.Initializers table. Allows dependent WT addons to defer initialization until everything has loaded 
 function WT.OnAddonStartupEnd()
 	WT.Log.Info("All addons have started up")
+
+	-- Run any initializers
+	Command.System.Watchdog.Quiet()
+	for idx,init in ipairs(WT.Initializers) do
+		WT.Log.Info("Running initializer...") 
+		init()
+	end		
+	if WT.DEBUG then
+		if WT.Sandpit then
+			WT.Log.Info("Sandpit found") 
+			WT.Sandpit() 
+		end
+	end
+	initializersRun = true
+
 end
 
 
@@ -196,7 +211,6 @@ function WT.OnSavedVariablesLoaded(addonId)
 end
 
 
-
 function WT.FadeIn(frame, duration)
 	WT.Faders[frame] = { ["duration"] = duration, direction="in", elapsed=0.0 }
 	frame:SetAlpha(0.0)
@@ -215,32 +229,6 @@ function WT.RegisterInitializer(init)
 end
 
 
-local initializersRun = false
-local function OnUnitAvailable(units)
-
-	if initializersRun then return end
-	
-	for unitId, spec in pairs(units) do
-		if unitId == Inspect.Unit.Lookup("player") then
-			-- Run any initializers
-			Command.System.Watchdog.Quiet()
-			for idx,init in ipairs(WT.Initializers) do
-				WT.Log.Info("Running initializer...") 
-				init()
-			end		
-			if WT.DEBUG then
-				if WT.Sandpit then
-					WT.Log.Info("Sandpit found") 
-					WT.Sandpit() 
-				end
-			end
-			initializersRun = true
-			return
-		end
-	end
-end
-
-
 -- ADDON INITIALISATION
 -------------------------------------------------------------------------------
 table.insert(Event.System.Update.Begin, { WT.OnSystemUpdateBegin, AddonId, AddonId .. "_OnSystemUpdateBegin" })
@@ -249,4 +237,4 @@ table.insert(Event.Addon.Startup.End, { WT.OnAddonStartupEnd, AddonId, AddonId .
 table.insert(Event.Addon.SavedVariables.Load.End, { WT.OnSavedVariablesLoaded, AddonId, AddonId .. "_OnAddonVariablesLoaded" })
 table.insert(Command.Slash.Register("wt"), { WT.OnSlashCommand, AddonId, AddonId .. "_OnSlashCommand" })
 
-table.insert(Event.Unit.Availability.Full,	{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })
+--table.insert(Event.Unit.Availability.Full,	{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })

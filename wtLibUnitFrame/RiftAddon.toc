@@ -23,6 +23,7 @@ RunOnStartup =
   "elements/wtBar.lua",
   "elements/wtImage.lua",
   "elements/wtImageSet.lua",
+  "elements/wtMediaSet.lua",
   "elements/wtBuffPanel.lua",
   "templates/StandardFrame.lua",
   "templates/StandardFrameUpsideDown.lua",
@@ -30,6 +31,7 @@ RunOnStartup =
   "templates/SimpleFrame.lua",
   "templates/HealthOrb.lua",
   "templates/ManaOrb.lua",
+  "templates/OctanusRaidFrame.lua",
 }
 
 SavedVariables = 

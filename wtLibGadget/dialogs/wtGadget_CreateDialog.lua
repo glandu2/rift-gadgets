@@ -56,6 +56,10 @@ function WT.Gadget.ShowCreationUI()
 		btnOK:SetEnabled(false)
 		btnOK.Event.LeftPress = 
 			function()
+			
+				-- Give the creation enough time to run
+				Command.System.Watchdog.Quiet()			
+			
 				local gadget = window.selected.gadgetConfig
 				local config = {}
 				if gadget.GetConfiguration then

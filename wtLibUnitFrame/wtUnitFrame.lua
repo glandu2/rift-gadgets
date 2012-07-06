@@ -362,7 +362,7 @@ end
 
 
 -- Creates a binding from a token string
-function WT.UnitFrame:CreateTokenBinding(tokenString, bindToObject, bindToMethod, default)
+function WT.UnitFrame:CreateTokenBinding(tokenString, bindToObject, bindToMethod, default, maxLength)
 
 	local tokens = {}
 	local tokenCount = 0
@@ -398,6 +398,9 @@ function WT.UnitFrame:CreateTokenBinding(tokenString, bindToObject, bindToMethod
 				end 
 			end
 			text = text:gsub("{" .. token .. "}", tokenValue)
+		end
+		if maxLength and (text:len() > maxLength) then
+			text = text:sub(1, maxLength)
 		end
 		bindToMethod(bindToObject, text)
 	end
@@ -529,16 +532,16 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	
 	local frames = {}
 	
-	local _debug = false
+	local _debug = true
 	
 	if not _debug then
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, sequence[1], configuration)
 	else
-		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
-		local debugDesc = UI.CreateFrame("Text", "TXT", WT.Context)
-		debugDesc:SetText(sequence[1])
-		debugDesc:SetLayer(500)
-		debugDesc:SetPoint("BOTTOMLEFT", frames[1], "BOTTOMLEFT")
+		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player.target", configuration)
+		--local debugDesc = UI.CreateFrame("Text", "TXT", WT.Context)
+		--debugDesc:SetText(sequence[1])
+		--debugDesc:SetLayer(500)
+		--debugDesc:SetPoint("BOTTOMLEFT", frames[1], "BOTTOMLEFT")
 	end
 	frames[1]:SetPoint("TOPLEFT", wrapper, "TOPLEFT")
 	frames[1]:SetParent(wrapper)
@@ -547,11 +550,11 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		if not _debug then
 			frames[i] = WT.UnitFrame.CreateFromTemplate(template, sequence[i], configuration)
 		else
-			frames[i] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
-			local debugDesc = UI.CreateFrame("Text", "TXT", WT.Context)
-			debugDesc:SetText(sequence[i])
-			debugDesc:SetLayer(500)
-			debugDesc:SetPoint("BOTTOMLEFT", frames[i], "BOTTOMLEFT")
+			frames[i] = WT.UnitFrame.CreateFromTemplate(template, "player.target", configuration)
+			--local debugDesc = UI.CreateFrame("Text", "TXT", WT.Context)
+			--debugDesc:SetText(sequence[i])
+			--debugDesc:SetLayer(500)
+			--debugDesc:SetPoint("BOTTOMLEFT", frames[i], "BOTTOMLEFT")
 		end
 		frames[i]:SetParent(wrapper)
 	end
@@ -659,6 +662,12 @@ end
 
 
 function WT.UnitFrame:BuffHandler(added, removed, updated)
+
+	-- bail out if we are called on initialisation
+	--if not WT.Player then
+	--	WT.Player = {}
+	--	WT.Player.id = Inspect.Unit.Lookup("player") 
+	--end
 
 	local altered = {}
 

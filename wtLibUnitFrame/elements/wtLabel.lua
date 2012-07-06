@@ -31,8 +31,6 @@ function wtLabel:Construct()
 	-- Validate configuration
 	if not config.text then error("Label missing required configuration item: text") end
 	
-	unitFrame:CreateTokenBinding(config.text, self, self.SetText, config.default or "")
-	
 	if config.fontSize then
 		self:SetFontSize(config.fontSize)
 	end
@@ -40,6 +38,18 @@ function wtLabel:Construct()
 	if config.color then
 		self:SetFontColor(config.color.r or 0, config.color.g or 0, config.color.b or 0, config.color.a or 1) 
 	end
+	
+	if config.colorBinding then
+		unitFrame:CreateBinding(config.colorBinding, self, self.BindColor, nil)
+	end
+	
+	if config.maxLength then
+		self.maxLength = config.maxLength
+	else
+		self.maxLength = nil
+	end 
+	
+	unitFrame:CreateTokenBinding(config.text, self, self.SetText, config.default or "", self.maxLength)
 	
 	if config.linkedHeightElement then
 		self.linkedHeightElement = unitFrame.Elements[config.linkedHeightElement]
@@ -59,6 +69,13 @@ function wtLabel:Construct()
 	
 end
 
+function wtLabel:BindColor(color)
+	if color then
+		self:SetFontColor(color.r or 0, color.g or 0, color.b or 0, color.a or 1)
+	else
+		self:SetFontColor(1, 1, 1, 1)
+	end
+end
 
 -- Fluent Configuration Methods
 

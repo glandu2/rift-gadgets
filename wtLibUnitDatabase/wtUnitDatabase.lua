@@ -56,16 +56,14 @@ local TXT = Library.Translate
 WT.Units = {}
 
 -- Hold a reference to the player
-WT.Player = nil
+local playerId = Inspect.Unit.Lookup("player")
+WT.Player = { id = playerId }
 
 -- Container for database methods
 WT.UnitDatabase = {}
 WT.UnitDatabase.Casting = {}
 
 -- Events --------------------------------------------------------------------
-WT.Event.Trigger.PlayerAvailable, WT.Event.PlayerAvailable = Utility.Event.Create(AddonId, "PlayerAvailable")
-WT.Event.Trigger.PlayerUnavailable, WT.Event.PlayerUnavailable = Utility.Event.Create(AddonId, "PlayerUnavailable")
-
 WT.Event.Trigger.UnitAdded, WT.Event.UnitAdded = Utility.Event.Create(AddonId, "UnitAdded")
 WT.Event.Trigger.UnitRemoved, WT.Event.UnitRemoved = Utility.Event.Create(AddonId, "UnitRemoved")
 
@@ -85,6 +83,7 @@ end
 
 local function OnBuffAdd(unitId, buffs)
 
+	if not buffs then return end
 	if not WT.Units[unitId] then return end
 
 	local bdesc = Inspect.Buff.Detail(unitId, buffs)
@@ -93,10 +92,8 @@ local function OnBuffAdd(unitId, buffs)
 	for buffId, buff in pairs(bdesc) do
 		if not IsBlackListed(buff) then 
 			if not WT.Units[unitId].Buffs[buffId] then
-				local buffCopy = {}
-				for k,v in pairs(buff) do buffCopy[k] = v end
-				changes.add[buffId] = buffCopy
-				WT.Units[unitId].Buffs[buffId] = buffCopy
+				changes.add[buffId] = buff
+				WT.Units[unitId].Buffs[buffId] = buff
 			end
 		end
 	end
@@ -108,6 +105,7 @@ end
 
 local function OnBuffRemove(unitId, buffs)
 
+	if not buffs then return end
 	if not WT.Units[unitId] then return end
 
 	local changes = { remove = {} }
@@ -126,6 +124,7 @@ end
 
 local function OnBuffChange(unitId, buffs)
 
+	if not buffs then return end
 	if not WT.Units[unitId] then return end
 
 	local changes = { update = {} }
@@ -134,10 +133,8 @@ local function OnBuffChange(unitId, buffs)
 	
 	for buffId, buff in pairs(bdesc) do
 		if not IsBlackListed(buff) then 
-			local buffCopy = {}
-			for k,v in pairs(buff) do buffCopy[k] = v end
-			changes.update[buffId] = buffCopy
-			WT.Units[unitId].Buffs[buffId] = buffCopy
+			changes.update[buffId] = buff
+			WT.Units[unitId].Buffs[buffId] = buff
 		end
 	end
 
@@ -227,7 +224,9 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 	local detail = Inspect.Unit.Detail(unitId)
 	if detail then
 
-		local unit = unitObject or WT.Units[unitId] or WT.Unit:Create(unitId) 
+		local unit = ((unitObject or WT.Units[unitId]) or WT.Unit:Create(unitId)) 
+		
+		if unitId == Inspect.Unit.Lookup("player") then WT.Player = unit end
 		
 		for k,v in pairs(detail) do
 			unit[k] = v
@@ -286,7 +285,7 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 		if not unit.Buffs then unit.Buffs = {} end
 		
 		-- Add all buffs currently on the unit
-		if not omitBuffScan then
+		if WT.Player and (not omitBuffScan) then
 			OnBuffRemove(unitId, unit.Buffs)
 			OnBuffAdd(unitId, Inspect.Buff.List(unitId))
 		end
@@ -312,13 +311,8 @@ local function OnUnitAvailablePartial(units)
 	for unitId, spec in pairs(units) do
 		if not WT.Units[unitId] then
 			local unit = PopulateUnit(unitId, nil, true)
-			if unit then
-				WT.Units[unitId] = unit
-				WT.Event.Trigger.UnitAdded(unitId)			
-				--if spec == "player" then 
-				--	WT.Player = unit
-				--	WT.Event.Trigger.PlayerAvailable() 
-				--end
+			if unit then 
+				WT.Event.Trigger.UnitAdded(unitId) 	
 			end
 		else
 			WT.Units[unitId].partial = true
@@ -330,12 +324,7 @@ local function OnUnitAvailable(units)
 	for unitId, spec in pairs(units) do		
 		local unit = PopulateUnit(unitId)
 		if unit then
-			WT.Units[unitId] = unit
 			WT.Event.Trigger.UnitAdded(unitId)			
-			if spec == "player" then 
-				WT.Player = unit
-				WT.Event.Trigger.PlayerAvailable() 
-			end
 		end
 	end
 end
@@ -344,10 +333,6 @@ local function OnUnitUnavailable(units)
 	for unitId in pairs(units) do
 		WT.Units[unitId] = nil
 		WT.Event.Trigger.UnitRemoved(unitId)
-		if WT.Player and WT.Player.id == unitId then
-			WT.Event.Trigger.PlayerUnavailable() 
-			WT.Player = nil 
-		end
 	end
 end
 
@@ -540,8 +525,8 @@ local function OnSystemUpdateBegin()
 end
 
 
--- Load the player
-WT.Player = PopulateUnit(Inspect.Unit.Lookup("player"), nil, true)
+-- Load the player with partial details
+WT.Player = PopulateUnit(playerId, nil, true)
 
 -- Setup Event Handlers
 table.insert(Event.Unit.Availability.Full,				{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })

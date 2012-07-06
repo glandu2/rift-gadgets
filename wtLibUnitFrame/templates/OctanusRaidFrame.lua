@@ -70,7 +70,7 @@ function RaidFrame:Construct(options)
 				},
 				-- visibilityBinding="id",
 				-- Type Specific Element Configuration
-				binding="resourcePercent", height=raidFrameBottomBarHeight, colorBinding="callingColor",
+				binding="resourcePercent", height=raidFrameBottomBarHeight, colorBinding="resourceColor",
 				media="wtBantoBar",
 				backgroundColor={r=0, g=0, b=0, a=1}
 			},
@@ -91,7 +91,7 @@ function RaidFrame:Construct(options)
 			{
 				-- Generic Element Configuration
 				id="imgRole", type="MediaSet", parent="frameBackdrop", layer=20,
-				attach = {{ point={0,0}, element="barHealth", targetPoint={0,0}, offsetX=-3, offsetY=-3 }}, visibilityBinding="role",
+				attach = {{ point={0,0}, element="barHealth", targetPoint={0,0}, offsetX=-6, offsetY=-6 }}, visibilityBinding="role",
 				-- Type Specific Element Configuration
 				nameBinding="role", 
 				names = { ["tank"] = "octanusTank", ["heal"] = "octanusHeal", ["dps"] = "octanusDPS", ["support"] = "octanusSupport" },
@@ -102,17 +102,44 @@ function RaidFrame:Construct(options)
 				attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT", offsetX=11, offsetY=0 }},
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				colorBinding="callingColor",
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=12, maxLength=12,
+				colorBinding="callingColor", -- fontAddon="Rift", fontname="$Flareserif_bold",
+				text="{name}", default="", linkedHeightElement="barHealth", fontSize=13, maxLength=11,
 			},
 			{
 				-- Generic Element Configuration
-				id="labelNameShadow", type="Label", parent="frameBackdrop", layer=19,
+				id="labelNameShadow1", type="Label", parent="frameBackdrop", layer=19,
 				attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT", offsetX=12, offsetY=0 }},
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				color={r=0,g=0,b=0,a=1}, alpha=0.8,
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=12, maxLength=12,
+				color={r=0,g=0,b=0,a=1}, alpha=0.6, -- fontAddon="Rift", fontname="$Flareserif_bold",
+				text="{name}", default="", linkedHeightElement="barHealth", fontSize=13, maxLength=11,
+			},
+			{
+				-- Generic Element Configuration
+				id="labelNameShadow2", type="Label", parent="frameBackdrop", layer=19,
+				attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT", offsetX=10, offsetY=0 }},
+				visibilityBinding="name",
+				-- Type Specific Element Configuration
+				color={r=0,g=0,b=0,a=1}, alpha=0.6, -- fontAddon="Rift", fontname="$Flareserif_bold",
+				text="{name}", default="", linkedHeightElement="barHealth", fontSize=13, maxLength=11,
+			},
+			{
+				-- Generic Element Configuration
+				id="labelNameShadow3", type="Label", parent="frameBackdrop", layer=19,
+				attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT", offsetX=11, offsetY=-1 }},
+				visibilityBinding="name",
+				-- Type Specific Element Configuration
+				color={r=0,g=0,b=0,a=1}, alpha=0.6, -- fontAddon="Rift", fontname="$Flareserif_bold",
+				text="{name}", default="", linkedHeightElement="barHealth", fontSize=13, maxLength=11,
+			},
+			{
+				-- Generic Element Configuration
+				id="labelNameShadow4", type="Label", parent="frameBackdrop", layer=19,
+				attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT", offsetX=11, offsetY=1 }},
+				visibilityBinding="name",
+				-- Type Specific Element Configuration
+				color={r=0,g=0,b=0,a=1}, alpha=0.6, -- fontAddon="Rift", fontname="$Flareserif_bold",
+				text="{name}", default="", linkedHeightElement="barHealth", fontSize=13, maxLength=11,
 			},
 			{
 				-- Generic Element Configuration

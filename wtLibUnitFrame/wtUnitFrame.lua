@@ -534,6 +534,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	
 	local _debug = false
 	
+	
 	if not _debug then
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, sequence[1], configuration)
 	else
@@ -543,8 +544,10 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		--debugDesc:SetLayer(500)
 		--debugDesc:SetPoint("BOTTOMLEFT", frames[1], "BOTTOMLEFT")
 	end
+	
 	frames[1]:SetPoint("TOPLEFT", wrapper, "TOPLEFT")
 	frames[1]:SetParent(wrapper)
+	frames[1]:SetLayer(1)
 	
 	for i = 2,20 do
 		if not _debug then
@@ -557,6 +560,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 			--debugDesc:SetPoint("BOTTOMLEFT", frames[i], "BOTTOMLEFT")
 		end
 		frames[i]:SetParent(wrapper)
+		frames[i]:SetLayer(i)
 	end
 	
 	local xCols = 4

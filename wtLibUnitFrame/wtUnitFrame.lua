@@ -532,7 +532,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	
 	local frames = {}
 	
-	local _debug = true
+	local _debug = false
 	
 	if not _debug then
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, sequence[1], configuration)

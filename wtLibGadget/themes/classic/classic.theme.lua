@@ -1,27 +1,24 @@
+local toc, data = ...
+local AddonId = toc.identifier
+
 local theme = {} 
 WT.Themes["classic"] = theme
 
-theme.gadgetOverlay = 
-{
-	overlayColor = {1,1,1,0.2},
+function theme.ApplyOverlayTheme(frame)
+	local handle = frame.gadgetOverlay.handle
+	local resizer = frame.gadgetOverlay.resizer
+	local box = frame.gadgetOverlay.box
+
+	box:SetBackgroundColor(1,1,1,0.2)
+
+	handle:SetTexture(AddonId, "themes/classic/GadgetHandle.png")
+	handle.NormalMode = function(handle) handle:SetTexture(AddonId, "themes/classic/GadgetHandle.png") end
+	handle.AlignMode = function(handle) handle:SetTexture(AddonId, "themes/classic/GadgetHandle_Lit.png") end
+	handle:SetPoint("TOPLEFT", frame, "TOPLEFT", -12, -12)
 	
-	topLeft = 
-	{
-		addonId = "wtLibGadget",
-		image = "themes/classic/GadgetHandle.png",
-		alignmentModeImage = "themes/classic/GadgetHandle_Lit.png",
-		offset = {-12, -12},
-	},
-	
-	topRight = nil,
-	
-	bottomLeft = nil,
-	
-	bottomRight = 
-	{
-		addonId = "wtLibGadget",
-		image = nil,
-		resizableImage = "themes/classic/GadgetResizeHandle.png",
-		offset = {2, 2},
-	},
-}
+	if resizer then
+		resizer:SetTexture(AddonId, "themes/classic/GadgetResizeHandle.png")
+		resizer:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 2, 2)
+	end
+			
+end

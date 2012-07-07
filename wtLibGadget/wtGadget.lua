@@ -195,31 +195,22 @@ end
 -- Initialises a gadget, configuring the frame to include the movement handle
 function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 
-	local theme = WT.Themes["subtle"];
+	-- Create the default (unthemed) movement handle
+	local mvHandle = UI.CreateFrame("Texture", frame:GetName() .. "_mvHandle", WT.Context)
+	mvHandle:SetLayer(9999)
 
+	-- Create the overlay frame to highlight the gadget when unlocked
+	local mvBox = UI.CreateFrame("Frame", frame:GetName() .. "_mvBox", mvHandle)
+	mvBox:SetLayer(9998)
+	mvBox:SetPoint("TOPLEFT", frame, "TOPLEFT")
+	mvBox:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT")
+	mvBox:SetBackgroundColor(1,1,1,0.2)
+
+	-- Get the current frame position
 	local currX = frame:GetLeft()
 	local currY = frame:GetTop()
 
-	local mvHandle = UI.CreateFrame("Texture", frame:GetName() .. "_mvHandle", WT.Context)
-	mvHandle:SetLayer(9999)
-	
-	mvHandle.offsetX = 0
-	mvHandle.offsetY = 0
-	
-	if theme.gadgetOverlay.topLeft then
-		mvHandle:SetTexture(theme.gadgetOverlay.topLeft.addonId, theme.gadgetOverlay.topLeft.image)
-		if theme.gadgetOverlay.topLeft.offset then
-			mvHandle.offsetX = theme.gadgetOverlay.topLeft.offset[1]
-			mvHandle.offsetY = theme.gadgetOverlay.topLeft.offset[2]
-		end
-	else
-		mvHandle:SetTexture(AddonId, "img/wtGadgetHandle.png")
-		mvHandle:SetWidth(24)
-		mvHandle:SetHeight(24)
-		mvHandle.offsetX = -12
-		mvHandle.offsetY = -12
-	end
-	
+	-- Configure the default (unthemed) movement handle
 	mvHandle:SetVisible(false)
 	mvHandle.Event.MouseMove = function() WT.Gadget.DragMove(mvHandle) end
 	mvHandle.Event.LeftDown = function() WT.Gadget.DragStart(mvHandle) end
@@ -228,12 +219,21 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 	mvHandle.Event.RightClick = function() handleShowMenu(); menuHandle:SetPoint("TOPLEFT", mvHandle, "BOTTOMLEFT"); menuHandleForGadget=gadgetId; end
 	mvHandle.frame = frame
 	mvHandle.gadgetId = gadgetId
+	mvHandle:SetPoint("TOPLEFT", frame, "TOPLEFT")
 
+	-- Setup the default mode assignment methods (these are replaced by the theme)
+	mvHandle.NormalMode = function(handle) end
+	mvHandle.AlignMode = function(handle) end
+
+	frame.gadgetOverlay = {}
+	frame.gadgetOverlay.box = mvBox
+	frame.gadgetOverlay.handle = mvHandle
+
+	-- Setup the resizing handle if required
 	if createOptions.resizable then
 		local szHandle = UI.CreateFrame("Texture", frame:GetName() .. "_szHandle", mvHandle) -- child of mvHandle, so will show/hide automatically 
 		szHandle:SetLayer(9999)
-		szHandle:SetTexture(AddonId, "img/wtResizeHandle.png")
-		szHandle:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 2, 2)
+		szHandle:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT")
 		szHandle.Event.MouseMove = function() WT.Gadget.SizeMove(szHandle) end
 		szHandle.Event.LeftDown = function() WT.Gadget.SizeStart(szHandle) end
 		szHandle.Event.LeftUp = function() WT.Gadget.SizeStop(szHandle) end
@@ -241,39 +241,16 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 		szHandle.frame = frame
 		szHandle.gadgetId = gadgetId
 		szHandle.minX, szHandle.minY, szHandle.maxX, szHandle.maxY = unpack(createOptions.resizable)  
+		frame.gadgetOverlay.resizer = szHandle
 	end
 	
 	--table.insert(WT.Gadgets, mvHandle)
 	WT.Gadgets[gadgetId].mvHandle = mvHandle
-	
-	mvHandle:SetPoint("TOPLEFT", frame, "TOPLEFT", mvHandle.offsetX, mvHandle.offsetY)
 
-	local mvBox = UI.CreateFrame("Frame", frame:GetName() .. "_mvBox", mvHandle)
-	mvBox:SetLayer(9998)
-	mvBox:SetPoint("TOPLEFT", frame, "TOPLEFT")
-	mvBox:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT")
-	mvBox:SetBackgroundColor(unpack(theme.gadgetOverlay.overlayColor))
-
-	if theme.gadgetOverlay.topRight then
-		local cornerTR = UI.CreateFrame("Texture", "gdtCornerTR", mvBox)
-		cornerTR:SetTexture(theme.gadgetOverlay.topRight.addonId, theme.gadgetOverlay.topRight.image)
-		if theme.gadgetOverlay.topRight.offset then
-			cornerTR:SetPoint("TOPRIGHT", mvBox, "TOPRIGHT", theme.gadgetOverlay.topRight.offset[1], theme.gadgetOverlay.topRight.offset[2])
-		else
-			cornerTR:SetPoint("TOPRIGHT", mvBox, "TOPRIGHT")
-		end
-	end
-
-	if theme.gadgetOverlay.bottomLeft then
-		local cornerBL = UI.CreateFrame("Texture", "gdtCornerBL", mvBox)
-		cornerBL:SetTexture(theme.gadgetOverlay.bottomLeft.addonId, theme.gadgetOverlay.bottomLeft.image)
-		if theme.gadgetOverlay.bottomLeft.offset then
-			cornerBL:SetPoint("BOTTOMLEFT", mvBox, "BOTTOMLEFT", theme.gadgetOverlay.bottomLeft.offset[1], theme.gadgetOverlay.bottomLeft.offset[2])
-		else
-			cornerBL:SetPoint("BOTTOMLEFT", mvBox, "BOTTOMLEFT")
-		end
-	end
-
+	-- Apply the selected theme to the overlay here
+	local selectedTheme = wtxOptions.overlayTheme or "classic"
+	local theme = WT.Themes[selectedTheme] or WT.Themes["classic"]
+	theme.ApplyOverlayTheme(frame) 
 
 	-- If a saved position exists for this gadget, apply it on creation.
 	-- This allows the 'gadgetization' of a frame that isn't actually a WT Gadget
@@ -314,7 +291,7 @@ function WT.Gadget:DragStop()
 		wtxGadgets[self.gadgetId].ypos = self.frame:GetTop()
 
 		if WT.Gadget.alignTo then
-			WT.Gadget.alignTo:SetTexture(AddonId, "img/wtGadgetHandle.png")			
+			WT.Gadget.alignTo:NormalMode()
 			WT.Gadget.alignTo = nil
 			WT.Log.Debug("Alignment Mode Disengaged")
 		end
@@ -342,7 +319,7 @@ function WT.Gadget:DragMove()
 			elseif lockAxis == "y" then 
 				y = alignTop
 			else
-				WT.Gadget.alignTo:SetTexture(AddonId, "img/wtGadgetHandle.png")			
+				WT.Gadget.alignTo:NormalMode()
 				WT.Gadget.alignTo = nil
 				WT.Log.Debug("Alignment Mode Disengaged")
 			end
@@ -372,7 +349,7 @@ function WT.Gadget:MouseIn()
 		if WT.Gadget.Dragging ~= self then
 			-- Go into alignment mode
 			WT.Gadget.alignTo = self
-			self:SetTexture(AddonId, "img/wtGadgetHandle_Lit.png")
+			self:AlignMode()
 			WT.Log.Debug("Alignment Mode Engaged")
 		end
 	end

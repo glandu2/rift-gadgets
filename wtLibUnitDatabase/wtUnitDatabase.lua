@@ -66,11 +66,8 @@ WT.UnitDatabase.Casting = {}
 -- Events --------------------------------------------------------------------
 WT.Event.Trigger.UnitAdded, WT.Event.UnitAdded = Utility.Event.Create(AddonId, "UnitAdded")
 WT.Event.Trigger.UnitRemoved, WT.Event.UnitRemoved = Utility.Event.Create(AddonId, "UnitRemoved")
-
 WT.Event.Trigger.PlayerAvailable, WT.Event.PlayerAvailable = Utility.Event.Create(AddonId, "PlayerAvailable")
-
 WT.Event.Trigger.BuffUpdates, WT.Event.BuffUpdates = Utility.Event.Create(AddonId, "BuffUpdates")
-
 WT.Event.Trigger.CastbarShow, WT.Event.CastbarShow = Utility.Event.Create(AddonId, "CastbarShow")
 WT.Event.Trigger.CastbarHide, WT.Event.CastbarHide = Utility.Event.Create(AddonId, "CastbarHide")
 
@@ -229,15 +226,7 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 	if detail then
 
 		local unit = ((unitObject or WT.Units[unitId]) or WT.Unit:Create(unitId)) 
-		
-		if unitId == Inspect.Unit.Lookup("player") then 
-			WT.Player = unit
-			if not playerAvailableFired then
-				WT.Event.Trigger.PlayerAvailable()
-				playerAvailableFired = true
-			end 
-		end
-		
+			
 		for k,v in pairs(detail) do
 			unit[k] = v
 		end 
@@ -294,8 +283,18 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 		
 		if not unit.Buffs then unit.Buffs = {} end
 		
+		-- Fire player available if required
+		if unitId == Inspect.Unit.Lookup("player") then 
+			WT.Player = unit
+			if not playerAvailableFired then
+				WT.Event.Trigger.PlayerAvailable()
+				playerAvailableFired = true
+			end 
+		end
+		
+		
 		-- Add all buffs currently on the unit
-		if WT.Player and (not omitBuffScan) then
+		if not omitBuffScan then
 			OnBuffRemove(unitId, unit.Buffs)
 			OnBuffAdd(unitId, Inspect.Buff.List(unitId))
 		end
@@ -529,19 +528,14 @@ local function OnUnitDetailCoord(xValues, yValues, zValues)
 	end
 end
 
-
 local function OnSystemUpdateBegin()
 	CalculateCastChanges()
 end
 
-
--- Load the player with partial details
---WT.Player = PopulateUnit(playerId, nil, true)
-
 -- Setup Event Handlers
-table.insert(Event.Unit.Availability.Full,				{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })
-table.insert(Event.Unit.Availability.Partial,				{ OnUnitAvailablePartial, AddonId, AddonId .. "_OnUnitAvailablePartial" })
-table.insert(Event.Unit.Availability.None,			{ OnUnitUnavailable, AddonId, AddonId .. "_OnUnitUnavailable" })
+table.insert(Event.Unit.Availability.Full,		{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })
+table.insert(Event.Unit.Availability.Partial,	{ OnUnitAvailablePartial, AddonId, AddonId .. "_OnUnitAvailablePartial" })
+table.insert(Event.Unit.Availability.None,		{ OnUnitUnavailable, AddonId, AddonId .. "_OnUnitUnavailable" })
 
 -- Register the event handlers for every changeable property
 table.insert(Event.Unit.Detail.Afk,				{ OnUnitDetailAfk, AddonId, AddonId .. "_OnUnitDetailAfk" })

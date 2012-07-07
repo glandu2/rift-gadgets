@@ -26,6 +26,9 @@ RunOnStartup =
   "wtGadgetRecommendReload.lua",
   "wtGadgetSlashCmd.lua",
 
+  "themes/classic/classic.theme.lua",
+  "themes/subtle/subtle.theme.lua",
+
   "dialogs/wtGadgetSettings.lua",
   "dialogs/wtGadget_CreateDialog.lua",
   "dialogs/wtGadget_ModifyDialog.lua",

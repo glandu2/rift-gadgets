@@ -36,6 +36,10 @@ end
 
 function RaidFrame:Construct(options)
 
+	--local xfontname = "Enigma"
+	--local xfontname = "BlackChancery"
+	local xfontsize = 12
+
 	local template =
 	{
 		elements = 
@@ -70,7 +74,7 @@ function RaidFrame:Construct(options)
 				},
 				-- visibilityBinding="id",
 				-- Type Specific Element Configuration
-				binding="resourcePercent", height=raidFrameBottomBarHeight, colorBinding="resourceColor",
+				binding="resourcePercent", height=raidFrameBottomBarHeight, colorBinding="callingColor",
 				media="wtBantoBar",
 				backgroundColor={r=0, g=0, b=0, a=1}
 			},
@@ -99,55 +103,55 @@ function RaidFrame:Construct(options)
 			{
 				-- Generic Element Configuration
 				id="labelName", type="Label", parent="frameBackdrop", layer=20,
-				attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT", offsetX=11, offsetY=0 }},
+				attach = {{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=0, offsetY=0 }},
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				colorBinding="callingColor", -- fontAddon="Rift", fontname="$Flareserif_bold",
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=13, maxLength=11,
+				color={r=1,g=1,b=1,a=1}, font=xfontname,
+				text="{name}", default="", linkedHeightElement="barHealth", fontSize=xfontsize, maxLength=9,
 			},
 			{
 				-- Generic Element Configuration
 				id="labelNameShadow1", type="Label", parent="frameBackdrop", layer=19,
-				attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT", offsetX=12, offsetY=0 }},
+				attach = {{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=-1, offsetY=0 }},
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				color={r=0,g=0,b=0,a=1}, alpha=0.6, -- fontAddon="Rift", fontname="$Flareserif_bold",
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=13, maxLength=11,
+				color={r=0,g=0,b=0,a=1}, alpha=0.6, font=xfontname,
+				text="{name}", default="", linkedHeightElement="barHealth", fontSize=xfontsize, maxLength=9,
 			},
 			{
 				-- Generic Element Configuration
 				id="labelNameShadow2", type="Label", parent="frameBackdrop", layer=19,
-				attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT", offsetX=10, offsetY=0 }},
+				attach = {{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=1, offsetY=0 }},
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				color={r=0,g=0,b=0,a=1}, alpha=0.6, -- fontAddon="Rift", fontname="$Flareserif_bold",
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=13, maxLength=11,
+				color={r=0,g=0,b=0,a=1}, alpha=0.6, font=xfontname,
+				text="{name}", default="", linkedHeightElement="barHealth", fontSize=xfontsize, maxLength=9,
 			},
 			{
 				-- Generic Element Configuration
 				id="labelNameShadow3", type="Label", parent="frameBackdrop", layer=19,
-				attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT", offsetX=11, offsetY=-1 }},
+				attach = {{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=0, offsetY=-1 }},
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				color={r=0,g=0,b=0,a=1}, alpha=0.6, -- fontAddon="Rift", fontname="$Flareserif_bold",
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=13, maxLength=11,
+				color={r=0,g=0,b=0,a=1}, alpha=0.6, font=xfontname,
+				text="{name}", default="", linkedHeightElement="barHealth", fontSize=xfontsize, maxLength=9,
 			},
 			{
 				-- Generic Element Configuration
 				id="labelNameShadow4", type="Label", parent="frameBackdrop", layer=19,
-				attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT", offsetX=11, offsetY=1 }},
+				attach = {{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=0, offsetY=1 }},
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				color={r=0,g=0,b=0,a=1}, alpha=0.6, -- fontAddon="Rift", fontname="$Flareserif_bold",
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=13, maxLength=11,
+				color={r=0,g=0,b=0,a=1}, alpha=0.6, font=xfontname,
+				text="{name}", default="", linkedHeightElement="barHealth", fontSize=xfontsize, maxLength=9,
 			},
 			{
 				-- Generic Element Configuration
 				id="labelStatus", type="Label", parent="frameBackdrop", layer=20,
-				attach = {{ point="BOTTOMCENTER", element="frameBackdrop", targetPoint="BOTTOMCENTER", offsetX=0, offsetY=-4 }},
+				attach = {{ point="BOTTOMCENTER", element="frame", targetPoint="BOTTOMCENTER", offsetX=0, offsetY=2 }},
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
-				text=" {raidStatus}", default="", fontSize=12
+				text=" {raidStatus}", default="", fontSize=10
 			},
 			{
 				-- Generic Element Configuration

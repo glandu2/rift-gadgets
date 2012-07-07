@@ -27,6 +27,7 @@ Library.Media = {}
 -----------------------------------------------------------------------------
 
 local textures = {}
+local fonts = {}
 
 -- Add a texture to the library.
 -- Tags are simple strings, which are used to specify characteristics of the texture.
@@ -65,4 +66,19 @@ function Library.Media.SetTexture(textureFrame, mediaId)
 	else
 		error("LibMedia(SetMedia) - Unknown media id: " .. mediaId)
 	end
+end
+
+
+-- Add a texture to the library.
+-- Tags are simple strings, which are used to specify characteristics of the texture.
+function Library.Media.AddFont(mediaId, addonId, filename)
+	local fontEntry = {}
+	fontEntry.mediaId = mediaId
+	fontEntry.addonId = addonId
+	fontEntry.filename = filename
+	fonts[mediaId] = fontEntry
+end
+
+function Library.Media.GetFont(mediaId) --> fontEntry
+	return fonts[mediaId]
 end

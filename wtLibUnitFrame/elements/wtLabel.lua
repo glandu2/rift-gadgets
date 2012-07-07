@@ -49,8 +49,11 @@ function wtLabel:Construct()
 		self.maxLength = nil
 	end 
 	
-	if config.fontAddon and config.fontname then
-		self:SetFont(config.fontAddon, config.fontname)
+	if config.font then
+		local fontEntry = Library.Media.GetFont(config.font)
+		if fontEntry then
+			self:SetFont(fontEntry.addonId, fontEntry.filename)
+		end
 	end
 	
 	unitFrame:CreateTokenBinding(config.text, self, self.SetText, config.default or "", self.maxLength)

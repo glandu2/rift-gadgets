@@ -28,4 +28,14 @@ Library.Media.AddTexture("octanusHP", AddonId, "img/octanusHP.png", {"bar", "hea
 Library.Media.AddTexture("octanusMana", AddonId, "img/octanusMana.png", {"bar", "manaBar"})
 Library.Media.AddTexture("octanusEnergy", AddonId, "img/octanusEnergy.png", {"bar", "energyBar"})
 
+Library.Media.AddFont("ArmWrestler", AddonId, "font/ArmWrestler.ttf")
+Library.Media.AddFont("Bazooka", AddonId, "font/Bazooka.ttf")
+Library.Media.AddFont("BlackChancery", AddonId, "font/BlackChancery.ttf")
+Library.Media.AddFont("Collegia", AddonId, "font/Collegia.ttf")
+Library.Media.AddFont("Disko", AddonId, "font/Disko.ttf")
+Library.Media.AddFont("DorisPP", AddonId, "font/DorisPP.ttf")
+Library.Media.AddFont("Enigma", AddonId, "font/Enigma.ttf")
+Library.Media.AddFont("LiberationSans", AddonId, "font/LiberationSans.ttf")
+Library.Media.AddFont("SFAtarianSystem", AddonId, "font/SFAtarianSystem.ttf")
+
 ---------------------------------------------------------------------------------------------------

@@ -10,7 +10,30 @@ local TXT=Library.Translate
 -- wtComboPoints provides a simple bar for the player's charge
 -- Only useful for mages, and it only exists because I didn't want to add a charge bar to the standard frame
 
-local calling = ""
+local deferSetup = {}
+local calling = nil
+
+local function Setup(unitFrame, configuration)
+
+	local img = nil
+	 
+	if calling == "rogue" then 
+		img = "img/wtComboBlue.png"
+	else
+		img = "img/wtComboRed.png"
+	end
+	
+	unitFrame:CreateElement(
+	{
+		id="imgCombo", type="ImageSet", parent="frame", layer=10,
+		attach = {{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" }},	
+		indexBinding="comboIndex", rows=5, cols=1,
+		visibilityBinding="comboIndex",		
+		texAddon=AddonId, texFile=img,
+	});
+
+end
+
 
 local function Create(configuration)
 
@@ -20,19 +43,11 @@ local function Create(configuration)
 	comboPoints:SetWidth(193)
 	comboPoints:SetHeight(36)
 
-	local img = "img/wtComboRed.png"
-
-	if calling == "rogue" then img = "img/wtComboBlue.png" end
-	
-	comboPoints:CreateElement(
-	{
-		id="imgCombo", type="ImageSet", parent="frame", layer=10,
-		attach = {{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" }},	
-		indexBinding="comboIndex", rows=5, cols=1,
-		visibilityBinding="comboIndex",		
-		texAddon=AddonId, texFile=img,
-	});
-	
+	if calling then
+		Setup(comboPoints, configuration)
+	else
+		table.insert(deferSetup, { unitFrame = comboPoints, configuration = configuration })
+	end
 
 	return comboPoints
 end
@@ -89,4 +104,11 @@ table.insert(Library.LibUnitChange.Register("player.target"),
 	end,  AddonId, AddonId .. "_ComboUnitChange" 
 })
 
-	
+local function OnPlayerAvailable()
+	calling = Inspect.Unit.Detail("player").calling
+	for idx, entry in ipairs(deferSetup) do
+		Setup(entry.unitFrame, entry.configuration)
+	end
+end
+
+table.insert(WT.Event.PlayerAvailable, {OnPlayerAvailable, AddonId, "ComboPointsGadget_OnPlayerAvailable"})	

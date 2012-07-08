@@ -80,6 +80,7 @@ local function IsBlackListed(buff)
 	end 
 end
 
+
 local function OnBuffAdd(unitId, buffs)
 
 	if not buffs then return end
@@ -89,6 +90,7 @@ local function OnBuffAdd(unitId, buffs)
 	local changes = { add = {} }
 	
 	for buffId, buff in pairs(bdesc) do
+	
 		if not IsBlackListed(buff) then 
 			if not WT.Units[unitId].Buffs[buffId] then
 				changes.add[buffId] = buff

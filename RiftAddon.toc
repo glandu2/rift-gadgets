@@ -37,6 +37,8 @@ Embed =
 	wtLibUnitDatabase = true,
 	wtLibGadget = true,
 	wtLibUnitFrame = true,
+	["Lib/LibSimpleWidgets"] = true,
+	["Lib/LibUnitChange"] = true,
 }
 
 Dependencies = 

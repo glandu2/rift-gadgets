@@ -42,7 +42,6 @@ SavedVariables =
 
 Embed = 
 {
-	LibSimpleWidgets = true,
 }
 
 Dependencies = 

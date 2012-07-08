@@ -23,7 +23,6 @@ SavedVariables =
 
 Embed = 
 {
-	LibUnitChange = true,
 }
 
 Dependencies = 

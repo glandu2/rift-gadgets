@@ -64,11 +64,15 @@ function wtLabel:Construct()
 	end
 
 	if self.linkedHeightElement then
+		if not self.linkedHeightElement.linkedElements then self.linkedHeightElement.linkedElements = {} end
+		table.insert(self.linkedHeightElement.linkedElements, self)
 		self.linkedHeightElement.Event.Size = 
 			function()
 				local newHeight = self.linkedHeightElement:GetHeight()
 				if newHeight ~= self.oldLinkedHeight then
-					self:SetFontSize(newHeight * self.linkedHeightScale)
+					for idx, el in ipairs(self.linkedHeightElement.linkedElements) do
+						el:SetFontSize(newHeight * self.linkedHeightScale)
+					end					
 					self.oldLinkedHeight = newHeight
 				end
 			end

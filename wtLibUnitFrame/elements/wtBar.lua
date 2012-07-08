@@ -125,20 +125,3 @@ end
 function wtBar:SetBarColor(r,g,b,a)
 	self.Image:SetBackgroundColor(r, g, b, a or 1)
 end
-
-function wtBar:GetConfiguration()
-	return self.cfDialog:GetValues()
-end
-
-function wtBar:SetConfiguration(config)
-	self.cfDialog:SetValues(config)
-end
-
-function wtBar:ConfigDialog(container)
-	if not self.cfDialog then
-		self.cfDialog = WT.Dialog(container)
-			:Textfield("mediaId", "Media ID", "")
-	end
-	cfDialog:SetValues(self.Configuration)
-	return self.cfDialog
-end

@@ -107,7 +107,7 @@ function RaidFrame:Construct(options)
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
 				color={r=1,g=1,b=1,a=1}, font=xfontname,
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=xfontsize, maxLength=9,
+				text="{name}", default="", linkedHeightElement="barHealth", linkedHeightScale=0.45, maxLength=9,
 			},
 			{
 				-- Generic Element Configuration
@@ -116,7 +116,7 @@ function RaidFrame:Construct(options)
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
 				color={r=0,g=0,b=0,a=1}, alpha=0.6, font=xfontname,
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=xfontsize, maxLength=9,
+				text="{name}", default="", linkedHeightElement="barHealth", linkedHeightScale=0.45, maxLength=9,
 			},
 			{
 				-- Generic Element Configuration
@@ -125,7 +125,7 @@ function RaidFrame:Construct(options)
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
 				color={r=0,g=0,b=0,a=1}, alpha=0.6, font=xfontname,
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=xfontsize, maxLength=9,
+				text="{name}", default="", linkedHeightElement="barHealth", linkedHeightScale=0.45, maxLength=9,
 			},
 			{
 				-- Generic Element Configuration
@@ -134,7 +134,7 @@ function RaidFrame:Construct(options)
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
 				color={r=0,g=0,b=0,a=1}, alpha=0.6, font=xfontname,
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=xfontsize, maxLength=9,
+				text="{name}", default="", linkedHeightElement="barHealth", linkedHeightScale=0.45, maxLength=9,
 			},
 			{
 				-- Generic Element Configuration
@@ -143,7 +143,7 @@ function RaidFrame:Construct(options)
 				visibilityBinding="name",
 				-- Type Specific Element Configuration
 				color={r=0,g=0,b=0,a=1}, alpha=0.6, font=xfontname,
-				text="{name}", default="", linkedHeightElement="barHealth", fontSize=xfontsize, maxLength=9,
+				text="{name}", default="", linkedHeightElement="barHealth", linkedHeightScale=0.45, maxLength=9,
 			},
 			{
 				-- Generic Element Configuration

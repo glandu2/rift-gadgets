@@ -15,6 +15,10 @@ RunOnStartup =
 {
   "wtInitMedia.lua",
   "wtUnitFrame.lua",
+  "wtUnitFrame_Bindings.lua",
+  "wtUnitFrame_Buffs.lua",
+  "wtUnitFrame_Creation.lua",
+  "wtUnitFrame_VirtualProperties.lua",
   "wtElement.lua",
   "wtTemplate.lua",
   "elements/wtFrame.lua",

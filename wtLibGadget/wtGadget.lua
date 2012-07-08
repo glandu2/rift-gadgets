@@ -577,6 +577,15 @@ local function Initialize()
 	Command.Console.Display("general", true, "<font color='#cccccc'>" .. gadgetList .. "</font> ", true)
 end
 
+
+local function OnSaveVariables(saveAddonId)
+	if saveAddonId == AddonId then
+		if not wtxLayouts then wtxLayouts = {} end
+		local layoutId = WT.Player.name .. "@" .. Inspect.Shard().name 
+		wtxLayouts[layoutId] = wtxGadgets 
+	end
+end
+
 -- Register an initializer to handle loading of gadgets
 WT.RegisterInitializer(Initialize)
 
@@ -584,3 +593,4 @@ WT.RegisterInitializer(Initialize)
 table.insert(Event.System.Secure.Enter, { WT.Gadget.SecureEnter, AddonId, AddonId .. "_Gadget_SecureEnter" })
 table.insert(Event.System.Secure.Leave, { WT.Gadget.SecureLeave, AddonId, AddonId .. "_Gadget_SecureLeave" })
 
+table.insert(Event.Addon.SavedVariables.Save.Begin, { OnSaveVariables, AddonId, AddonId .. "_Gadget_OnSaveVariables" })

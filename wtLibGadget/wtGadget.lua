@@ -137,6 +137,16 @@ function WT.Gadget.Create(configuration)
 				return
 			end
 			
+			if createOptions.resizable and configuration.width then
+				if (configuration.width < createOptions.resizable[1]) then configuration.width = createOptions.resizable[1] end  
+				if (configuration.width > createOptions.resizable[3]) then configuration.width = createOptions.resizable[3] end  
+			end 
+
+			if createOptions.resizable and configuration.height then
+				if (configuration.height < createOptions.resizable[2]) then configuration.height = createOptions.resizable[2] end  
+				if (configuration.height > createOptions.resizable[4]) then configuration.height = createOptions.resizable[4] end  
+			end 
+			
 			if configuration.width then gadget:SetWidth(configuration.width) end
 			if configuration.height then gadget:SetHeight(configuration.height) end
 			

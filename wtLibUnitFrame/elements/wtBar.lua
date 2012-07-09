@@ -37,12 +37,8 @@ wtBar.ConfigDefinition =
 	},
 }
 
--- The Construct method builds the element up. The element (self) is an instance of the relevant
--- UI.Frame as specified in the Subclass() call above
-function wtBar:Construct()
 
-	-- Because we have provided a ConfigDefinition above, we already know that all of the required configuration items are
-	-- available within self.Configuration, so there is no need to check them again here.
+function wtBar:ConstructMaskBased()
 
 	local config = self.Configuration
 	local unitFrame = self.UnitFrame
@@ -101,6 +97,83 @@ function wtBar:Construct()
 	if config.backgroundColor then
 		self:SetBackgroundColor(config.backgroundColor.r or 0, config.backgroundColor.g or 0, config.backgroundColor.b or 0, config.backgroundColor.a or 1)
 	end
+
+end
+
+
+function wtBar:ConstructNonMaskBased()
+
+	local config = self.Configuration
+	local unitFrame = self.UnitFrame
+
+	self.Image = UI.CreateFrame("Texture", WT.UnitFrame.UniqueName(), self)
+
+	self.Mask = UI.CreateFrame("Frame", WT.UnitFrame.UniqueName(), self.Image)
+	self.Mask:SetBackgroundColor(config.backgroundColor.r or 0, config.backgroundColor.g or 0, config.backgroundColor.b or 0, config.backgroundColor.a or 1)
+
+	if (config.width) then self:SetWidth(config.width) end
+	if (config.height) then self:SetHeight(config.height) end
+
+	self.growthDirection = config.growthDirection or "right"
+
+	if self.growthDirection == "left" then
+		self.Mask:SetPoint("TOPLEFT", self, "TOPLEFT")
+		self.Mask:SetPoint("BOTTOM", self, "BOTTOM")
+		self.Mask:SetWidth(self:GetWidth())
+	elseif self.growthDirection == "up" then
+		self.Mask:SetPoint("TOPLEFT", self, "TOPLEFT")
+		self.Mask:SetPoint("RIGHT", self, "RIGHT")
+		self.Mask:SetHeight(self:GetHeight())
+	elseif self.growthDirection == "down" then
+		self.Mask:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT")
+		self.Mask:SetPoint("RIGHT", self, "RIGHT")
+		self.Mask:SetHeight(self:GetHeight())
+	else
+		self.Mask:SetPoint("TOPRIGHT", self, "TOPRIGHT")
+		self.Mask:SetPoint("BOTTOM", self, "BOTTOM")
+		self.Mask:SetWidth(self:GetWidth())
+	end
+	
+	--self.MaxWidth = config.width	
+	--self.MaxHeight = config.height	
+	
+	if config.media then
+		Library.Media.SetTexture(self.Image, config.media)
+	elseif config.texAddon and config.texFile then
+		self.Image:SetTexture(config.texAddon, config.texFile)
+	end
+	
+	self.Image:SetPoint("TOPLEFT", self, "TOPLEFT")
+	self.Image:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
+	--self.Image:SetWidth(config.width)
+	--self.Image:SetHeight(config.height)
+		
+	unitFrame:CreateBinding(config.binding, self, self.BindReversePercent, 0)
+	
+	if config.colorBinding then
+		unitFrame:CreateBinding(config.colorBinding, self, self.BindColor, nil)
+	end
+
+	if config.color then
+		self:SetBarColor(config.color.r or 0, config.color.g or 0, config.color.b or 0, config.color.a or 1)
+	end
+
+end
+
+
+-- The Construct method builds the element up. The element (self) is an instance of the relevant
+-- UI.Frame as specified in the Subclass() call above
+function wtBar:Construct()
+
+	-- Because we have provided a ConfigDefinition above, we already know that all of the required configuration items are
+	-- available within self.Configuration, so there is no need to check them again here.
+
+	-- Not quite ready to use this yet due to alpha issues
+	--if self.Configuration.backgroundColor then
+	--	self:ConstructNonMaskBased()
+	--else
+		self:ConstructMaskBased()
+	--end
 		
 end
 
@@ -110,6 +183,15 @@ function wtBar:BindPercent(percentage)
 		self.Mask:SetHeight((percentage / 100) * self:GetHeight())
 	else
 		self.Mask:SetWidth((percentage / 100) * self:GetWidth())
+	end
+end
+
+function wtBar:BindReversePercent(percentage)
+	WT.Log.Verbose("Bar percent binding triggered")
+	if (self.growthDirection == "up") or (self.growthDirection == "down") then 
+		self.Mask:SetHeight(((100-percentage) / 100) * self:GetHeight())
+	else
+		self.Mask:SetWidth(((100-percentage) / 100) * self:GetWidth())
 	end
 end
 

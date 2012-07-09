@@ -113,6 +113,57 @@ local function SetConfiguration(config)
 	dialog:SetValues(config)
 end
 
+local function Reconfigure(config)
+
+	assert(config.id, "No id provided in reconfiguration details")
+	
+	local gadgetConfig = wtxGadgets[config.id]
+	local gadget = WT.Gadgets[config.id]
+	
+	assert(gadget, "Gadget id does not exist in WT.Gadgets")
+	assert(gadgetConfig, "Gadget id does not exist in wtxGadgets")
+	assert(gadgetConfig.type == "CastBar", "Reconfigure Gadget is not a castbar")
+	
+	-- Detect changes to config and apply them to the gadget
+	
+	local requireRecreate = false
+	
+	if gadgetConfig.unitSpec ~= config.unitSpec then
+		gadgetConfig.unitSpec = config.unitSpec
+		requireRecreate = true
+	end
+
+	if gadgetConfig.texture ~= config.texture then
+		gadgetConfig.texture = config.texture
+		gadget.mediaInterrupt = Library.Media.GetTexture(config.texture)
+	end
+
+	if gadgetConfig.textureNoInterrupt ~= config.textureNoInterrupt then
+		gadgetConfig.textureNoInterrupt = config.textureNoInterrupt
+		gadget.mediaNoInterrupt = Library.Media.GetTexture(config.textureNoInterrupt)
+	end
+	
+	if gadgetConfig.hideNotCasting ~= config.hideNotCasting then
+		gadgetConfig.hideNotCasting = config.hideNotCasting
+		if not config.hideNotCasting then
+			gadget:SetBackgroundColor(0,0,0,0.4)
+		else
+			gadget:SetBackgroundColor(0,0,0,0)
+		end
+	end
+
+	if gadgetConfig.showCastTime ~= config.showCastTime then
+		gadgetConfig.showCastTime = config.showCastTime
+		requireRecreate = true
+	end
+
+	if requireRecreate then
+		WT.Gadget.Delete(gadgetConfig.id)
+		WT.Gadget.Create(gadgetConfig)
+	end		
+	
+end
+
 WT.Gadget.RegisterFactory("CastBar",
 	{
 		name=TXT.gadgetCastBar_name,
@@ -123,5 +174,6 @@ WT.Gadget.RegisterFactory("CastBar",
 		["ConfigDialog"] = ConfigDialog,
 		["GetConfiguration"] = GetConfiguration, 
 		["SetConfiguration"] = SetConfiguration, 
+		["Reconfigure"] = Reconfigure,
 	})
 

@@ -2,6 +2,7 @@
 Library.Translate.En(
 {
 	AddGadget = "Add Gadget",
+	Apply = "Apply",
 	BuffBlackList = "Blacklisted Buffs",
 	BuffSettings = "Buff Settings",
 	Cancel = "Cancel",

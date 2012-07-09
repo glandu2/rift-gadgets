@@ -13,26 +13,46 @@ local gadgetFactory = false
 local gadgetConfig = false
 local gadgetId = false
 
-local function OnModifyClick()
+local ENABLE_RECONFIGURE = false
+
+local function ApplyModification()
 
 	-- Give the creation enough time to run
 	Command.System.Watchdog.Quiet()
 
 	if gadgetFactory.GetConfiguration then
 	 	local config = gadgetFactory.GetConfiguration()
-		for k,v in pairs(config) do gadgetConfig[k] = v end
 	
-		-- Delete the existing gadget
-		WT.Gadget.Delete(gadgetId)
-						
-		-- Then recreate the gadget with the updated configuration options
-		WT.Gadget.Create(gadgetConfig)
+		if ENABLE_RECONFIGURE and gadgetFactory.Reconfigure then
+			for k,v in pairs(gadgetConfig) do
+				if config[k] == nil then config[k] = v end
+			end
+			gadgetFactory.Reconfigure(config)
+		else
+			for k,v in pairs(config) do gadgetConfig[k] = v end
+			WT.Gadget.Delete(gadgetId)					
+			WT.Gadget.Create(gadgetConfig)
+		end
 	end
+
+end
+
+
+local function OnModifyClick()
+
+	ApplyModification()
 
 	WT.Utility.ClearKeyFocus(WT.Gadget.ModifyGadgetWindow)
 	WT.Gadget.ModifyGadgetWindow:SetVisible(false) 
-	return
+
 end
+
+local function OnApplyClick()
+
+	ApplyModification()
+
+end
+
 
 function WT.Gadget.ShowModifyUI(id)
 
@@ -67,6 +87,13 @@ function WT.Gadget.ShowModifyUI(id)
 		btnOK:SetPoint("CENTERRIGHT", btnCancel, "CENTERLEFT", 8, 0)
 		btnOK:SetEnabled(true)
 		btnOK.Event.LeftPress = OnModifyClick 
+
+		local btnApply = UI.CreateFrame("RiftButton", "WTGadgetBtnApply", frameOptions)
+		btnApply:SetText(TXT.Apply)
+		btnApply:SetPoint("CENTERRIGHT", btnOK, "CENTERLEFT", 8, 0)
+		btnApply:SetEnabled(true)
+		btnApply:SetVisible(false)
+		btnApply.Event.LeftPress = OnApplyClick 
 		
 		-- frameOptions will host the dialog provided by the gadget factory assuming one is available
 

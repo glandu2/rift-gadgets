@@ -78,6 +78,39 @@ local function rfSetConfiguration(config)
 	rfDialog:SetValues(config)
 end
 
+
+local gfDialog = false
+local function gfConfigDialog(container)
+
+	local templateListItems = {}
+	for templateId, template in pairs(WT.UnitFrame.Templates) do
+		if template.Configuration.RaidSuitable then
+			table.insert(templateListItems, { text=templateId .. " (" .. template.Configuration.Name .. ")", value=templateId } )
+		end
+	end
+
+	gfDialog = WT.Dialog(container)
+		:Select("group", "Select Group", "Group 1", { "Group 1", "Group 2", "Group 3", "Group 4" }, false)
+		:Select("template", TXT.RaidFrameTemplate, "OctanusRaidFrame", templateListItems, true)
+		:Select("layout", "Layout", "Vertical", { "Vertical", "Horizontal" }, false)
+		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
+		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
+		:Checkbox("showBackground", TXT.ShowBackground, true)
+		:FieldNote(TXT.ShowBackgroundNote)
+		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
+
+end
+
+
+local function gfGetConfiguration()
+	return gfDialog:GetValues()
+end
+
+local function gfSetConfiguration(config)
+	gfDialog:SetValues(config)
+end
+
+
 -- Register as a gadget factory for creating unit frames from templates
 WT.Gadget.RegisterFactory("UnitFrame",
 	{
@@ -101,5 +134,17 @@ WT.Gadget.RegisterFactory("RaidFrames",
 		["ConfigDialog"] = rfConfigDialog,
 		["GetConfiguration"] = rfGetConfiguration,
 		["SetConfiguration"] = rfSetConfiguration,
+	})
+
+WT.Gadget.RegisterFactory("GroupFrames",
+	{
+		name=TXT.gadgetGroupFrames_name,
+		description=TXT.gadgetGroupFrames_desc,
+		author="Wildtide",
+		version="1.0.0",
+		["Create"] = WT.UnitFrame.CreateGroupFramesFromConfiguration,
+		["ConfigDialog"] = gfConfigDialog,
+		["GetConfiguration"] = gfGetConfiguration,
+		["SetConfiguration"] = gfSetConfiguration,
 	})
 

@@ -190,6 +190,118 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 end
 
 
+-- Gadget Factory Function for grid of 20 UnitFrames
+function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
+
+	local group = 1
+	if configuration.group == "Group 2" then
+		group = 2
+	elseif configuration.group == "Group 3" then
+		group = 3
+	elseif configuration.group == "Group 4" then
+		group = 4
+	end	
+	
+	local firstId = ((group - 1) * 5) + 1
+	local sequence = {}
+	
+	if configuration.reverseUnits then
+		sequence[1] = "group" .. string.format("%02d", firstId+4)
+		sequence[2] = "group" .. string.format("%02d", firstId+3)
+		sequence[3] = "group" .. string.format("%02d", firstId+2)
+		sequence[4] = "group" .. string.format("%02d", firstId+1)
+		sequence[5] = "group" .. string.format("%02d", firstId+0)
+	else
+		sequence[1] = "group" .. string.format("%02d", firstId+0)
+		sequence[2] = "group" .. string.format("%02d", firstId+1)
+		sequence[3] = "group" .. string.format("%02d", firstId+2)
+		sequence[4] = "group" .. string.format("%02d", firstId+3)
+		sequence[5] = "group" .. string.format("%02d", firstId+4)
+	end
+	
+	local xCols = 1
+	local xRows = 5
+	
+	local template = configuration.template
+	local layout = configuration.layout or "Vertical"
+	WT.Log.Debug("Creating GroupFrames from configuration: template=" .. template)
+	
+	local wrapper = UI.CreateFrame("Frame", WT.UniqueName("GroupFrames"), WT.Context)
+	
+	if configuration.showBackground then
+		wrapper:SetBackgroundColor(0,0,0,0.2)
+	end
+	
+	
+	wrapper:SetSecureMode("restricted")
+	-- Pass through our clickToTarget preference to the template to allow it to set itself up appropriately
+	--if not configuration.templateOptions then configuration.templateOptions = {} end
+	--configuration.templateOptions.clickToTarget = configuration.clickToTarget 
+	
+	local frames = {}
+	
+	local _debug = true
+	
+	if not _debug then
+		frames[1] = WT.UnitFrame.CreateFromTemplate(template, sequence[1], configuration)
+	else
+		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player.target", configuration)
+	end
+	
+	frames[1]:SetPoint("TOPLEFT", wrapper, "TOPLEFT")
+	frames[1]:SetParent(wrapper)
+	frames[1]:SetLayer(1)
+	
+	for i = 2,5 do
+		if not _debug then
+			frames[i] = WT.UnitFrame.CreateFromTemplate(template, sequence[i], configuration)
+		else
+			frames[i] = WT.UnitFrame.CreateFromTemplate(template, "player.target", configuration)
+		end
+		frames[i]:SetParent(wrapper)
+		frames[i]:SetLayer(i)
+	end
+	
+	-- Layout the frames appropriately
+	if layout == "Horizontal" then
+		xCols = 5
+		xRows = 1
+		for i = 2,5 do
+			frames[i]:SetPoint("TOPLEFT", frames[i-1], "TOPRIGHT") 
+		end
+	else
+		xCols = 1
+		xRows = 5
+		for i = 2,5 do
+			frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT") 
+		end
+	end
+	
+	local left = frames[1]:GetLeft()
+	local top = frames[1]:GetTop()
+	local right = frames[5]:GetRight()
+	local bottom = frames[5]:GetBottom()
+		
+	wrapper:SetWidth(right - left + 1)	
+	wrapper:SetHeight(bottom - top + 1)	
+	
+	wrapper.OnResize = 
+		function(frame, width,height)
+			local frmWidth = math.ceil(width / xCols)
+			local frmHeight = math.ceil(height / xRows)
+			wrapper:SetWidth(frmWidth * xCols)
+			wrapper:SetHeight(frmHeight * xRows)
+			for i=1,5 do
+				frames[i]:SetWidth(frmWidth)
+				frames[i]:SetHeight(frmHeight)
+				frames[i]:OnResize(frmWidth, frmHeight)
+			end
+		end
+	
+	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 2, (bottom - top + 1) * 2,  } }
+end
+
+
 
 function WT.UnitFrame.CreateFromTemplate(templateName, unitSpec, options)
 	WT.Log.Info("Creating unit frame from template " .. tostring(templateName) .. " for unit " .. tostring(unitSpec))

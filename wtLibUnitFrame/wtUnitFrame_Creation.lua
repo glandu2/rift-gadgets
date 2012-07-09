@@ -240,7 +240,7 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 	
 	local frames = {}
 	
-	local _debug = true
+	local _debug = false
 	
 	if not _debug then
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, sequence[1], configuration)
@@ -298,7 +298,7 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 			end
 		end
 	
-	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 2, (bottom - top + 1) * 2,  } }
+	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 2, (bottom - top + 1) * 2,  }, caption=configuration.group }
 end
 
 

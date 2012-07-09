@@ -254,6 +254,13 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 		frame.gadgetOverlay.resizer = szHandle
 	end
 	
+	if createOptions.caption then
+		local uiCaption = UI.CreateFrame("Text", "wtCaption", mvHandle)
+		uiCaption:SetText(createOptions.caption)
+		uiCaption:SetPoint("CENTERLEFT", mvHandle, "CENTERRIGHT")
+		uiCaption:SetFontSize(10)
+	end
+	
 	--table.insert(WT.Gadgets, mvHandle)
 	WT.Gadgets[gadgetId].mvHandle = mvHandle
 

@@ -254,20 +254,22 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 		frame.gadgetOverlay.resizer = szHandle
 	end
 	
+	--[[
 	if createOptions.caption then
 		local uiCaption = UI.CreateFrame("Text", "wtCaption", mvHandle)
 		uiCaption:SetText(createOptions.caption)
 		uiCaption:SetPoint("CENTERLEFT", mvHandle, "CENTERRIGHT")
 		uiCaption:SetFontSize(10)
 	end
+	--]]
 	
 	--table.insert(WT.Gadgets, mvHandle)
 	WT.Gadgets[gadgetId].mvHandle = mvHandle
 
 	-- Apply the selected theme to the overlay here
-	local selectedTheme = wtxOptions.overlayTheme or "classic"
+	local selectedTheme = "subtle" or wtxOptions.overlayTheme or "classic"
 	local theme = WT.Themes[selectedTheme] or WT.Themes["classic"]
-	theme.ApplyOverlayTheme(frame) 
+	theme.ApplyOverlayTheme(frame, createOptions) 
 
 	-- If a saved position exists for this gadget, apply it on creation.
 	-- This allows the 'gadgetization' of a frame that isn't actually a WT Gadget

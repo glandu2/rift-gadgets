@@ -120,6 +120,10 @@ WT.UnitFrame_mt =
 local unitFrameCount = 0
 local awaitingDetails = {}
 
+-- table to hold unit change functions
+-- this is a change to allow unit frames to switch their tracked unit dynamically
+local unitChangeTrackers = {}
+
 -- Return a unique name for a frame. Used to ensure all frames are given unique names
 function WT.UnitFrame.UniqueName()
 	return WT.UniqueName("WT_FRAME")
@@ -185,6 +189,25 @@ local el = frame:CreateElement
 }
 --]]
 
+function WT.UnitFrame:TrackUnit(unitSpec)
+
+	if not unitChangeTrackers[unitSpec] then
+		unitChangeTrackers[unitSpec] = 
+			function(unitId)
+				for idx,frame in ipairs(WT.UnitFrames) do
+					if frame.UnitSpec == unitSpec then
+						frame:PopulateUnit(unitId)
+					end
+				end
+			end
+		table.insert(Library.LibUnitChange.Register(unitSpec), { unitChangeTrackers[unitSpec],  AddonId, AddonId .. "_UnitFrame_OnUnitChange_" .. unitSpec })
+	end
+
+	local unitId = Inspect.Unit.Lookup(unitSpec)
+	self:PopulateUnit(unitId)
+
+end
+
 -- Creates a new instance of a UnitFrame, which inherits from UI.Frame
 -- This uses a prototype based approach to inheritance. It inherits from a Frame instance so that
 -- a UnitFrame has all of the Layout functionality of a Frame, but it also adds in all of the methods
@@ -231,11 +254,9 @@ function WT.UnitFrame:Create(unitSpec, options)
 	
 	frame:ApplyDefaultBindings()
 	
-	-- Track changes to the linked UnitId, and call into PopulateUnit
-	table.insert(Library.LibUnitChange.Register(unitSpec), { function(unitId) frame:PopulateUnit(unitId) end,  AddonId, AddonId .. "_UnitFrame_OnUnitChange_" .. frameName })
-	
-	local unitId = Inspect.Unit.Lookup(unitSpec)
-	if unitId then frame:PopulateUnit(unitId) end
+	-- Track changes to the linked UnitId, and call into PopulateUnit	
+	frame:TrackUnit(unitSpec)	
+	-- table.insert(Library.LibUnitChange.Register(unitSpec), { function(unitId) frame:PopulateUnit(unitId) end,  AddonId, AddonId .. "_UnitFrame_OnUnitChange_" .. frameName })
 	
 	local createOptions = {}
 	createOptions.resizable = self.Configuration.Resizable 

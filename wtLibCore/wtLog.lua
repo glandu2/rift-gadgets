@@ -13,6 +13,26 @@ local AddonId = toc.identifier
 WT.Log = {}
 WT.Log.Level = 0
 
+local wtLogConsoleId = nil
+
+local needScan = true
+
+local function ScanForConsole()
+	if not needScan then return end
+	local list = Inspect.Console.List()
+	if list then
+		local consoles = Inspect.Console.Detail(list)
+		for id, console in pairs(consoles) do
+			if console.name == "wtLog" then
+				wtLogConsoleId = console.id
+			end
+		end
+		needScan = false
+	end		
+end
+
+table.insert(Event.Unit.Availability.Full, { ScanForConsole, AddonId, AddonId .. "_OnAddonStartupEnd" })
+
 table.insert(Event.Addon.SavedVariables.Load.End, {
 	function(addonId)
 		if addonId == AddonId then
@@ -31,11 +51,30 @@ table.insert(Event.Addon.SavedVariables.Save.Begin, {
 	AddonId, "LoadSavedVariables"
 })
 
+local logColours = {
+	VRB = "#888888",
+	DBG = "#cccccc",
+	INF = "#aaccee",
+	WRN = "#ffff00",
+	ERR = "#ff0000",
+}
+
 -- Write a log entry
 -- This just prints the message to the chat console if the relevant severity has been enabled
 -- Custom severities can be added by defining WT.Log.<Severity>
 local function LogWrite(severity, message)
-	print(severity .. ": " .. tostring(message))
+
+	if needScan then
+		ScanForConsole()
+	end
+
+	local colour = logColours[severity] or "#ffffff"
+	Command.Console.Display(
+		wtLogConsoleId or "general", 
+		true,
+		string.format("<font color='%s'><b>%s</b>: %s</font>", colour, severity, message),
+		true
+	)
 end
 
 -- Provide explicit calls for the built in severities (for cleaner code)

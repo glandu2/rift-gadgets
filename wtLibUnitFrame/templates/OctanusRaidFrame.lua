@@ -43,7 +43,7 @@ function RaidFrame:Construct(options)
 	local template =
 	{
 		elements = 
-		{
+		{		
 			{
 				-- Generic Element Configuration
 				id="frameBackdrop", type="Frame", parent="frame", layer=0, alpha=1.0,
@@ -54,7 +54,7 @@ function RaidFrame:Construct(options)
 				}, 				
 				visibilityBinding="id",
 				color={r=0,g=0,b=0,a=1}, colorBinding="aggroColor",
-			}, 
+			},
 			{
 				-- Generic Element Configuration
 				id="frameBlocked", type="Frame", parent="frameBackdrop", layer=15, visibilityBinding="blocked",
@@ -88,7 +88,7 @@ function RaidFrame:Construct(options)
 				-- visibilityBinding="id",
 				growthDirection="right",
 				-- Type Specific Element Configuration
-				binding="healthPercent", colorBinding="callingColor",
+				binding="healthPercent", -- colorBinding="callingColor",
 				media="octanusHP",
 				backgroundColor={r=0, g=0, b=0, a=1}
 			},
@@ -99,7 +99,7 @@ function RaidFrame:Construct(options)
 				-- Type Specific Element Configuration
 				nameBinding="role", 
 				names = { ["tank"] = "octanusTank", ["heal"] = "octanusHeal", ["dps"] = "octanusDPS", ["support"] = "octanusSupport" },
-			},
+			},		
 			{
 				-- Generic Element Configuration
 				id="labelName", type="Label", parent="frameBackdrop", layer=20,

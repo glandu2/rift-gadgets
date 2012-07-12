@@ -4,7 +4,8 @@ local AddonId = toc.identifier
 local theme = {} 
 WT.Themes["classic"] = theme
 
-function theme.ApplyOverlayTheme(frame)
+function theme.ApplyOverlayTheme(frame, createOptions)
+
 	local handle = frame.gadgetOverlay.handle
 	local resizer = frame.gadgetOverlay.resizer
 	local box = frame.gadgetOverlay.box
@@ -19,6 +20,13 @@ function theme.ApplyOverlayTheme(frame)
 	if resizer then
 		resizer:SetTexture(AddonId, "themes/classic/GadgetResizeHandle.png")
 		resizer:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 2, 2)
+	end
+
+	if createOptions.caption then
+		local uiCaption = UI.CreateFrame("Text", "wtCaption", mvHandle)
+		uiCaption:SetText(createOptions.caption)
+		uiCaption:SetPoint("CENTERLEFT", handle, "CENTERRIGHT")
+		uiCaption:SetFontSize(10)
 	end
 			
 end

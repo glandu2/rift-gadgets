@@ -1,6 +1,19 @@
 --[[
-	Wildtide @ Blightweald (EU) / DoomSprout @ forums.riftgame.com
+                                G A D G E T S
+      -----------------------------------------------------------------
+                            wildtide@wildtide.net
+                           DoomSprout: Rift Forums 
+      -----------------------------------------------------------------
+      Gadgets Framework   : @project-version@
+      Project Date (UTC)  : @project-date-iso@
+      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      -----------------------------------------------------------------     
+--]]
 
+local toc, data = ...
+local AddonId = toc.identifier
+
+--[[
 	Tags currently used by Gadgets:
 		bar - texture is suitable for use as a bar
 		colorize - texture will work OK with a background colour

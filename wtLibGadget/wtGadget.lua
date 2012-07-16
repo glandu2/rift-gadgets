@@ -1,7 +1,20 @@
---[[ 
-	This file is part of Wildtide's WT Addon Framework
-	Wildtide @ Blightweald (EU) / DoomSprout @ forums.riftgame.com
+--[[
+                                G A D G E T S
+      -----------------------------------------------------------------
+                            wildtide@wildtide.net
+                           DoomSprout: Rift Forums 
+      -----------------------------------------------------------------
+      Gadgets Framework   : @project-version@
+      Project Date (UTC)  : @project-date-iso@
+      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      -----------------------------------------------------------------     
+--]]
 
+local toc, data = ...
+local AddonId = toc.identifier
+local TXT = Library.Translate
+
+--[[
 	wtGadget
 	Core Gadget functionality
 	
@@ -25,16 +38,14 @@
 				the user should ideally reload.
 --]]
 
-local toc, data = ...
-local AddonId = toc.identifier
-
-local TXT = Library.Translate
 
 local GRAB_KEYBOARD_ON_UNLOCK = false
 
 -- Events -----------------------------------------------------------------------------------------------------
 WT.Event.Trigger.GadgetsLocked, WT.Event.GadgetsLocked = Utility.Event.Create(AddonId, "GadgetsLocked")
 WT.Event.Trigger.GadgetsUnlocked, WT.Event.GadgetsUnlocked = Utility.Event.Create(AddonId, "GadgetsUnlocked")
+WT.Event.Trigger.GadgetSelected, WT.Event.GadgetSelected = Utility.Event.Create(AddonId, "GadgetSelected")
+WT.Event.Trigger.GadgetPropertyChanged, WT.Event.GadgetPropertyChanged = Utility.Event.Create(AddonId, "GadgetPropertyChanged")
 ---------------------------------------------------------------------------------------------------------------
 
 WT.Gadget = {}
@@ -295,6 +306,8 @@ function WT.Gadget:DragStart()
 		self.mouseStartX = mouse.x
 		self.mouseStartY = mouse.y	
 		WT.Log.Debug("DragStart " .. self.startX .. "," .. self.startY)
+		WT.Event.Trigger.GadgetSelected(self.gadgetId)
+		WT.Log.Info("Gadget Selected: " .. self.gadgetId) 
 	end
 end
 
@@ -306,8 +319,17 @@ function WT.Gadget:DragStop()
 		WT.Gadget.InDragMode = false
 		
 		wtxGadgets[self.gadgetId] = wtxGadgets[self.gadgetId] or {}
+		
 		wtxGadgets[self.gadgetId].xpos = self.frame:GetLeft()
 		wtxGadgets[self.gadgetId].ypos = self.frame:GetTop()
+
+		if wtxGadgets[self.gadgetId].xpos ~= self.startX then
+			WT.Event.Trigger.GadgetPropertyChanged(self.gadgetId, "xpos", wtxGadgets[self.gadgetId].xpos) 
+		end
+
+		if wtxGadgets[self.gadgetId].ypos ~= self.startY then
+			WT.Event.Trigger.GadgetPropertyChanged(self.gadgetId, "ypos", wtxGadgets[self.gadgetId].ypos) 
+		end
 
 		if WT.Gadget.alignTo then
 			WT.Gadget.alignTo:NormalMode()

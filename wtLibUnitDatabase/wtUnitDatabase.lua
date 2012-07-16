@@ -1,7 +1,20 @@
---[[ 
-	This file is part of Wildtide's WT Addon Framework 
-	Wildtide @ Blightweald (EU) / DoomSprout @ forums.riftgame.com
+--[[
+                                G A D G E T S
+      -----------------------------------------------------------------
+                            wildtide@wildtide.net
+                           DoomSprout: Rift Forums 
+      -----------------------------------------------------------------
+      Gadgets Framework   : @project-version@
+      Project Date (UTC)  : @project-date-iso@
+      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      -----------------------------------------------------------------     
+--]]
 
+local toc, data = ...
+local AddonId = toc.identifier
+local TXT = Library.Translate
+
+--[[
 	WT.UnitDatabase
 	
 		Manages a collection of all currently available units, and maintains unit properties to automatically
@@ -46,11 +59,6 @@
 				A unit's castbar was hidden
 
 --]]
-
-local toc, data = ...
-local AddonId = toc.identifier
-
-local TXT = Library.Translate
 
 -- Global store of all WT.Unit instances
 WT.Units = {}

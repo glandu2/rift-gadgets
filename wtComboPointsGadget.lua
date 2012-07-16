@@ -1,11 +1,19 @@
 --[[
-	This file is part of Wildtide's WT Addon Framework
-	Wildtide @ Blightweald (EU) / DoomSprout @ forums.riftgame.com
+                                G A D G E T S
+      -----------------------------------------------------------------
+                            wildtide@wildtide.net
+                           DoomSprout: Rift Forums 
+      -----------------------------------------------------------------
+      Gadgets Framework   : @project-version@
+      Project Date (UTC)  : @project-date-iso@
+      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      -----------------------------------------------------------------     
 --]]
 
 local toc, data = ...
 local AddonId = toc.identifier
-local TXT=Library.Translate
+local TXT = Library.Translate
+
 
 -- wtComboPoints provides a simple bar for the player's charge
 -- Only useful for mages, and it only exists because I didn't want to add a charge bar to the standard frame

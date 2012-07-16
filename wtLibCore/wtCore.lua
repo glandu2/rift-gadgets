@@ -1,7 +1,20 @@
---[[ 
-	This file is part of Wildtide's WT Addon Framework 
-	Wildtide @ Blightweald (EU) / DoomSprout @ forums.riftgame.com
+--[[
+                                G A D G E T S
+      -----------------------------------------------------------------
+                            wildtide@wildtide.net
+                           DoomSprout: Rift Forums 
+      -----------------------------------------------------------------
+      Gadgets Framework   : @project-version@
+      Project Date (UTC)  : @project-date-iso@
+      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      -----------------------------------------------------------------     
+--]]
 
+local toc, data = ...
+local AddonId = toc.identifier
+local TXT = Library.Translate
+
+--[[ 
 	wtCore
 	wtLibrary Core Functionality
 	
@@ -21,12 +34,6 @@
 		WT.AddonStartTime <double>
 		WT.AddonUpTime <double>
 --]]
-
--- wtCore - Core Addon Functionality
-
-local toc, data = ...
-local AddonId = toc.identifier
-local TXT = Library.Translate
 
 -- Public Interface
 WT = {}
@@ -50,8 +57,7 @@ WT.AddonStartTime = Inspect.Time.Frame()
 WT.AddonUpTime = 0
 
 -- Switch DEBUG mode on
-WT.DEBUG = true
-
+WT.DEBUG = false
 
 -- Events ------------------------------------------------------------------------------
 WT.Event.Trigger.Tick, WT.Event.Tick = Utility.Event.Create(AddonId, "Tick")

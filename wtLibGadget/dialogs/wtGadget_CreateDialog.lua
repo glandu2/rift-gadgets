@@ -1,14 +1,19 @@
 --[[
-	This file is part of Wildtide's WT Addon Framework
-	Wildtide @ Blightweald (EU) / DoomSprout @ forums.riftgame.com
-
-	wtGadget
-	Gadget functionality
+                                G A D G E T S
+      -----------------------------------------------------------------
+                            wildtide@wildtide.net
+                           DoomSprout: Rift Forums 
+      -----------------------------------------------------------------
+      Gadgets Framework   : @project-version@
+      Project Date (UTC)  : @project-date-iso@
+      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      -----------------------------------------------------------------     
 --]]
 
 local toc, data = ...
 local AddonId = toc.identifier
 local TXT = Library.Translate
+
 
 -- This is going to be a biggie!
 -- Need to ask the user to select a gadget type (ie. a factory), and then present configuration options
@@ -70,6 +75,9 @@ function WT.Gadget.ShowCreationUI()
 				local idx = 1
 				while WT.Gadgets[gadget.gadgetType .. idx] do idx = idx + 1 end
 				config.id = gadget.gadgetType .. idx
+				
+				-- WT.Gadget.InitializePropertyConfig(config)
+				
 				WT.Gadget.Create(config)
 				WT.Utility.ClearKeyFocus(window)
 				window:SetVisible(false)

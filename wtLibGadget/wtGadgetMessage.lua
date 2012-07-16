@@ -1,11 +1,19 @@
 --[[
-	This file is part of Wildtide's WT Addon Framework
-	Wildtide @ Blightweald (EU) / DoomSprout @ forums.riftgame.com
+                                G A D G E T S
+      -----------------------------------------------------------------
+                            wildtide@wildtide.net
+                           DoomSprout: Rift Forums 
+      -----------------------------------------------------------------
+      Gadgets Framework   : @project-version@
+      Project Date (UTC)  : @project-date-iso@
+      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      -----------------------------------------------------------------     
 --]]
 
 local toc, data = ...
 local AddonId = toc.identifier
 local TXT = Library.Translate
+
 
 -- A gadget can call this function to recommend to the user that they reload the UI (/reloadui)
 -- This could be called every time a gadget is deleted, for example

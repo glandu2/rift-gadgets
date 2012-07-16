@@ -169,7 +169,7 @@ function wtBar:Construct()
 	-- available within self.Configuration, so there is no need to check them again here.
 
 	-- Not quite ready to use this yet due to alpha issues
-	if self.Configuration.backgroundColor then
+	if (self.Configuration.backgroundColor) and (self.Configuration.backgroundColor.a == 1) then
 		self:ConstructNonMaskBased()
 	else
 		self:ConstructMaskBased()

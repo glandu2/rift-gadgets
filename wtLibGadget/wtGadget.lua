@@ -148,6 +148,74 @@ function WT.Gadget.Create(configuration)
 				return
 			end
 			
+			-- Add in the standard system properties
+
+			gadget.properties = {}
+
+			gadget.properties["xpos"] = 
+					{
+						group = "Gadget",
+						name = "XPos",
+						type = "integer",
+						min = 0,
+						max = UIParent:GetWidth(),
+						default = 200,
+						apply = function(value)
+								gadget:SetPoint("LEFT", UIParent, "LEFT", value, nil)
+								gadget.xpos = value
+								configuration.xpos = value
+							end,
+					}
+
+			gadget.properties["ypos"] = 
+					{
+						group = "Gadget",
+						name = "YPos",
+						type = "integer",
+						min = 0,
+						max = UIParent:GetHeight(),
+						default = 200,
+						apply = function(value)
+								gadget:SetPoint("TOP", UIParent, "TOP", nil, value)
+								configuration.ypos = value
+							end,
+					}
+
+			gadget.properties["combatAlpha"] = 
+					{
+						group = "Gadget",
+						name = "Combat Alpha",
+						type = "integer",
+						min = 0,
+						max = 100,
+						default = 100,
+						apply = function(value)
+								gadget:SetAlpha(value / 100)
+							end,
+					}
+
+			gadget.properties["nonCombatAlpha"] = 
+					{
+						group = "Gadget",
+						name = "Non Combat Alpha",
+						type = "integer",
+						min = 0,
+						max = 100,
+						default = 100,
+						apply = function(value)
+								gadget:SetAlpha(value / 100)
+							end,
+					}				
+
+			-- Add in any additional properties
+			
+			if createOptions.properties then
+				for propertyId,propertyDef in pairs(createOptions.properties) do
+					gadget.properties[propertyId] = propertyDef
+				end
+			end
+		
+			
 			if createOptions.resizable and configuration.width then
 				if (configuration.width < createOptions.resizable[1]) then configuration.width = createOptions.resizable[1] end  
 				if (configuration.width > createOptions.resizable[3]) then configuration.width = createOptions.resizable[3] end  

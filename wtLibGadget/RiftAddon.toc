@@ -32,6 +32,11 @@ RunOnStartup =
   "dialogs/wtGadgetSettings.lua",
   "dialogs/wtGadget_CreateDialog.lua",
   "dialogs/wtGadget_ModifyDialog.lua",
+  
+  "properties/wtProperty.lua",
+  "properties/wtPropertyTypeHandlers.lua",
+  "properties/wtPropertyPanel.lua",
+  
 }
 
 SavedVariables = 

@@ -64,6 +64,19 @@ function WT.Gadget.Command.toggle()
 	WT.Gadget.ToggleAll()
 end
 
+function WT.Gadget.Command.setproperty(gadgetId, propertyId, value)
+	local gadget = WT.Gadgets[gadgetId]
+	if not gadget then
+		Command.Console.Display("general", true, "Unknown gadget: " .. gadgetId, false)
+	end
+	local err, errMsg = pcall(
+		function()
+			WT.Gadget.SetProperty(gadgetId, propertyId, value)
+		end)
+	if not err then
+		Command.Console.Display("general", true, "SetProperty failed: " .. errMsg, false)
+	end
+end
 
 function WT.Gadget.OnSlashCommand(cmd)
 	local words = {}

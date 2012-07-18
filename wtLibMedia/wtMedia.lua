@@ -95,3 +95,10 @@ end
 function Library.Media.GetFont(mediaId) --> fontEntry
 	return fonts[mediaId]
 end
+
+function Library.Media.SetFont(frame, mediaId, fontSize)
+	frame:SetFont(fonts[mediaId].addonId, fonts[mediaId].filename)
+	if fontSize then
+		frame:SetFontSize(fontSize)
+	end
+end

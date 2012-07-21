@@ -21,7 +21,7 @@ local gadgetIndex = 0
 local xpGadgets = {}
 
 local function OnExperience(accum, rested, needed)
-	if not accum then print("no accum") return end
+	if not accum then return end
 	local percent = (accum / needed) * 100
 	local percentString = string.format("%i", math.floor(percent)) .. "%"
 	for idx, gadget in ipairs(xpGadgets) do

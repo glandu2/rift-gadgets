@@ -36,6 +36,8 @@ RunOnStartup =
   "wtPlanarChargeGadget.lua",
   "wtSoulVitalityGadget.lua",
   "wtCastbarGadget.lua",
+  "wtLiveDPS.lua",
+  "wtEncounterDPS.lua",
   "wtXPPercentGadget.lua",
   "wtXPBarGadget.lua",
 }

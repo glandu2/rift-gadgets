@@ -33,9 +33,9 @@ RunOnStartup =
   "dialogs/wtGadget_CreateDialog.lua",
   "dialogs/wtGadget_ModifyDialog.lua",
   
-  "properties/wtProperty.lua",
-  "properties/wtPropertyTypeHandlers.lua",
-  "properties/wtPropertyPanel.lua",
+--  "properties/wtProperty.lua",
+--  "properties/wtPropertyTypeHandlers.lua",
+--  "properties/wtPropertyPanel.lua",
   
 }
 

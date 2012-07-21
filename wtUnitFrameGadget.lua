@@ -66,7 +66,7 @@ local function rfConfigDialog(container)
 	end
 
 	rfDialog = WT.Dialog(container)
-		:Select("template", TXT.RaidFrameTemplate, "RaidFrame", templateListItems, true)
+		:Select("template", TXT.RaidFrameTemplate, "OctanusRaidFrame", templateListItems, true)
 		:Select("layout", "Layout", "4 x 5", { "4 x 5", "5 x 4", "2 x 10", "10 x 2", "1 x 20", "20 x 1" }, false)
 		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
 		:Checkbox("contextMenu", TXT.EnableContextMenu, true)

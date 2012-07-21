@@ -36,6 +36,8 @@ RunOnStartup =
   "wtPlanarChargeGadget.lua",
   "wtSoulVitalityGadget.lua",
   "wtCastbarGadget.lua",
+  "wtXPPercentGadget.lua",
+  "wtXPBarGadget.lua",
 }
 
 SavedVariables = 

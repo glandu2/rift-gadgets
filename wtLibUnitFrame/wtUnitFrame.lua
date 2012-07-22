@@ -101,6 +101,10 @@ WT.UnitFrame = {}
 WT.UnitFrames = {}
 WT.UnitFrame.Templates = {}
 
+WT.UnitFrameContext = UI.CreateContext("WTUnitFrameContext")
+WT.UnitFrameContext:SetStrata("hud")
+WT.UnitFrameContext:SetSecureMode("restricted")
+
 -- namespaces for element implementations
 WT.Element = {} 
 WT.ElementFactories = {}
@@ -220,7 +224,7 @@ function WT.UnitFrame:Create(unitSpec, options)
 	
 	if not self.Configuration then self.Configuration = {} end
 	
-	local frame = UI.CreateFrame(self.Configuration.FrameType or "Frame", frameName, WT.Context)
+	local frame = UI.CreateFrame(self.Configuration.FrameType or "Frame", frameName, WT.UnitFrameContext)
 	if self.Configuration.Width then frame:SetWidth(self.Configuration.Width) end
 	if self.Configuration.Height then frame:SetHeight(self.Configuration.Height) end
 

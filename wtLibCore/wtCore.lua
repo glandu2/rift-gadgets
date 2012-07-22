@@ -35,16 +35,6 @@ local TXT = Library.Translate
 		WT.AddonUpTime <double>
 --]]
 
--- Public Interface
-WT = {}
-WT.Event = {}
-WT.Event.Trigger = {}
-WT.Command = {}
-WT.NameCounters = {}
-WT.Initializers = {}
-WT.Faders = {}
-wtxOptions = {} -- general purpose saved variables table (account wide)
-
 -- Generate the root context for UI elements, and secure it
 WT.Context = UI.CreateContext("wtContext")
 WT.Context:SetSecureMode("restricted")
@@ -60,7 +50,7 @@ WT.AddonUpTime = 0
 WT.DEBUG = false
 
 -- Events ------------------------------------------------------------------------------
-WT.Event.Trigger.Tick, WT.Event.Tick = Utility.Event.Create(AddonId, "Tick")
+WT.Event.Trigger.Tick, WT.Event.Tick = WT.CreateEvent(AddonId, "Tick")
 ----------------------------------------------------------------------------------------
 
 -- Private Data
@@ -70,10 +60,7 @@ local LastFrameTime = nil
 
 
 -- Per frame Tick event
--- Calculates FPS every second, and fires off the tick event. All WT modules should use 
--- the tick event rather than directly using Event.System.Update.Begin to ensure anything that
--- WT needs to maintain in future is updated first
--- *** THIS COULD PROBABLY BE REMOVED. TICK EVENTS AREN'T USED ANYWHERE AT THE MOMENT, AND NOT SURE THEY WILL BE.
+-- Calculates FPS every second, and fires off the tick event. 
 function WT.Tick()
 	FPSTimer = FPSTimer + WT.FrameDeltaTime
 	FPSFrameCount = FPSFrameCount + 1
@@ -243,4 +230,3 @@ table.insert(Event.Addon.Startup.End, { WT.OnAddonStartupEnd, AddonId, AddonId .
 table.insert(Event.Addon.SavedVariables.Load.End, { WT.OnSavedVariablesLoaded, AddonId, AddonId .. "_OnAddonVariablesLoaded" })
 table.insert(Command.Slash.Register("wt"), { WT.OnSlashCommand, AddonId, AddonId .. "_OnSlashCommand" })
 
---table.insert(Event.Unit.Availability.Full,	{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })

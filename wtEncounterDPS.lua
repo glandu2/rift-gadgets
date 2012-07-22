@@ -71,6 +71,9 @@ local encounterStart = 0
 local damage = 0
 
 local function OnDamage(info)
+
+	if not info.damage then return end
+
 	if info.caster ~= WT.Player.id then return end
 	
 	local currTime = Inspect.Time.Frame()

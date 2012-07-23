@@ -75,7 +75,9 @@ local function Create(configuration)
 	castBar.barCast.Event.Size = 
 		function(frame)
 			castBar.labelCast:SetFontSize(frame:GetHeight() * 0.5)
-			castBar.labelTime:SetFontSize(frame:GetHeight() * 0.4)
+			if castBar.labelTime then
+				castBar.labelTime:SetFontSize(frame:GetHeight() * 0.4)
+			end
 		end
 
 	castBar:CreateBinding("castName", castBar, OnCastName, nil)

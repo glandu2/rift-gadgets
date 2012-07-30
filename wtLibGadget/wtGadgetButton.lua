@@ -78,9 +78,11 @@ local menuItems = {}
 local menuItemsAdd = 1
 local menuItemsToggleLock = 2
 local menuItemsSettings = 3
+local menuItemsImport = 4
 menuItems[menuItemsAdd] = {text=TXT.AddGadget, value=function() WT.Gadget.ShowCreationUI() end } 
 menuItems[menuItemsToggleLock] = {text=TXT.UnlockGadgets, value=function() WT.Gadget.ToggleAll() end }
 menuItems[menuItemsSettings] = {text=TXT.Settings, value=function() WT.Gadget.ShowSettings() end }
+menuItems[menuItemsImport] = {text="Import Layout", value=function() WT.Gadget.ShowImportDialog() end }
 
 local btnMenu = WT.Control.Menu.Create(btnGadget, menuItems)
 btnMenu:SetPoint("TOPRIGHT", btnGadget, "CENTER")

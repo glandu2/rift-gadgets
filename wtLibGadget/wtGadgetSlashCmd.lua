@@ -31,6 +31,16 @@ function WT.Gadget.Command.copy(gadgetId)
 	WT.Gadget.Copy(gadgetId)
 end
 
+function WT.Gadget.Command.import(charId)
+	if wtxLayouts[charId] then
+		local def = Utility.Serialize.Inline(wtxLayouts[charId])
+		wtxGadgets = loadstring("return " .. def)()
+		print("You must type /reloadui now")
+	else
+		print("Layout not found: " .. charId)
+	end
+end
+
 function WT.Gadget.Command.list()
 	for gadgetId,config in pairs(wtxGadgets) do
 		print(string.format("Gadget: %s (%s)", gadgetId, config.type)) 

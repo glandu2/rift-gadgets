@@ -30,6 +30,7 @@ RunOnStartup =
   "themes/subtle/subtle.theme.lua",
 
   "dialogs/wtGadgetSettings.lua",
+  "dialogs/wtGadgetImport.lua",
   "dialogs/wtGadget_CreateDialog.lua",
   "dialogs/wtGadget_ModifyDialog.lua",
   

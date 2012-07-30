@@ -212,7 +212,9 @@ function WT.Gadget.ShowCreationUI()
 
 		-- there are 48 pixels per entry in the list (total height of wrapper + margin)
 		local wrappersHeight = numListItems * 48
-		typeListScrollbar:SetRange(0, wrappersHeight - 48)
+		local listHeight = frameTypeList:GetHeight()
+		local maxMoveDistance = math.max(0, wrappersHeight - listHeight)
+		typeListScrollbar:SetRange(0, maxMoveDistance + 16)
 		typeListScrollbar.Event.ScrollbarChange = 
 			function()
 				frameScrollAnchor:SetPoint("TOPLEFT", frameTypeList, "TOPLEFT", 0, -typeListScrollbar:GetPosition())

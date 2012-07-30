@@ -121,7 +121,7 @@ function WT.OnAddonStartupEnd()
 	WT.Log.Info("All addons have started up")
 
 	-- Run any initializers
-	Command.System.Watchdog.Quiet()
+	WT.WatchdogSleep()
 	for idx,init in ipairs(WT.Initializers) do
 		WT.Log.Info("Running initializer...") 
 		init()
@@ -216,6 +216,11 @@ function WT.FadeOut(frame, duration)
 	frame:SetVisible(true)
 end
 
+function WT.WatchdogSleep()
+	if not Inspect.System.Secure() then
+		Command.System.Watchdog.Quiet()
+	end
+end
 
 function WT.RegisterInitializer(init)
 	table.insert(WT.Initializers, init)

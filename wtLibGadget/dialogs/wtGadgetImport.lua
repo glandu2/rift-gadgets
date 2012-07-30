@@ -21,6 +21,12 @@ local function OnWindowClosed()
 end
 
 function WT.Gadget.ShowImportDialog()
+
+	if (Inspect.System.Secure()) then
+		print("Cannot import settings while in combat")
+		return
+	end
+
 	if not window then
 		window = UI.CreateFrame("SimpleWindow", "winGadgetImport", WT.Context)
 		window:SetCloseButtonVisible(true)		

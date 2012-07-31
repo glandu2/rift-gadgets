@@ -19,6 +19,7 @@ RunOnStartup =
   "wtUnitFrame_Buffs.lua",
   "wtUnitFrame_Creation.lua",
   "wtUnitFrame_VirtualProperties.lua",
+  "wtUnitFrame_Macros.lua",
   "wtElement.lua",
   "wtTemplate.lua",
   "elements/wtFrame.lua",

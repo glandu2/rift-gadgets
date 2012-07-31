@@ -55,8 +55,18 @@ local function ufSetConfiguration(config)
 	ufDialog:SetValues(config)
 end
 
+local rfEditors = {}
+local macroTypes = { "Left", "Middle", "Right", "Mouse4", "Mouse5", "WheelForward", "WheelBack" } 
+local macroNames = { "Left", "Middle", "Right", "Button 4", "Button 5", "Wheel Forward", "Wheel Back" } 
+
 local rfDialog = false
 local function rfConfigDialog(container)
+
+	container.Reset = function()
+		for idx, editor in ipairs(rfEditors) do editor:SetText("") end
+		rfEditors[1]:SetText("target @unit")
+		rfEditors[3]:SetText("menu")
+	end
 
 	local templateListItems = {}
 	for templateId, template in pairs(WT.UnitFrame.Templates) do
@@ -65,25 +75,80 @@ local function rfConfigDialog(container)
 		end
 	end
 
-	rfDialog = WT.Dialog(container)
+	local rfTabs = UI.CreateFrame("SimpleTabView", "rfTabs", container)
+	rfTabs:SetPoint("TOPLEFT", container, "TOPLEFT")
+	rfTabs:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -32)
+	
+	local frmConfig = UI.CreateFrame("Frame", "rfConfig", rfTabs.tabContent)
+	local frmConfigInner = UI.CreateFrame("Frame", "rfConfigInner", frmConfig)
+	frmConfigInner:SetPoint("TOPLEFT", frmConfig, "TOPLEFT", 12, 12)
+	frmConfigInner:SetPoint("BOTTOMRIGHT", frmConfig, "BOTTOMRIGHT", -12, -12)
+	
+	local frmMacros = UI.CreateFrame("Frame", "rfMacros", rfTabs.tabContent)
+	local frmMacrosInner = UI.CreateFrame("Frame", "rfMacrosInner", frmMacros)
+	frmMacrosInner:SetPoint("TOPLEFT", frmMacros, "TOPLEFT", 4, 4)
+	frmMacrosInner:SetPoint("BOTTOMRIGHT", frmMacros, "BOTTOMRIGHT", -4, -4)
+
+	rfTabs:SetTabPosition("top")
+	rfTabs:AddTab("Configuration", frmConfig)
+	rfTabs:AddTab("Mouse Macros", frmMacros)	
+
+	rfDialog = WT.Dialog(frmConfigInner)
 		:Select("template", TXT.RaidFrameTemplate, "OctanusRaidFrame", templateListItems, true)
 		:Select("layout", "Layout", "4 x 5", { "4 x 5", "5 x 4", "2 x 10", "10 x 2", "1 x 20", "20 x 1" }, false)
-		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
-		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
 		:Checkbox("showBackground", TXT.ShowBackground, true)
 		:FieldNote(TXT.ShowBackgroundNote)
 		:Checkbox("reverseGroups", TXT.ReverseGroups, false)
 		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
 
+	local macroTabs = UI.CreateFrame("SimpleTabView", "macroTabs", frmMacrosInner)
+	macroTabs:SetTabPosition("left")
+	macroTabs:SetAllPoints(frmMacrosInner)
+	
+	for idx, name in ipairs(macroNames) do
+	
+		local tabContent = UI.CreateFrame("Frame", "content", macroTabs.tabContent)
+		macroTabs:AddTab(name, tabContent)
+	
+		local txt = UI.CreateFrame("SimpleTextArea", "text", tabContent)
+		txt:SetPoint("TOPLEFT", tabContent, "TOPLEFT", 16, 16)
+		txt:SetPoint("BOTTOMRIGHT", tabContent, "BOTTOMRIGHT", -16, -16)
+		txt:SetText("")
+		txt:SetBackgroundColor(0.4,0.4,0.4,1)
+		rfEditors[idx] = txt
+		
+	end
+	
 end
 
 
 local function rfGetConfiguration()
-	return rfDialog:GetValues()
+	local conf = rfDialog:GetValues()
+	conf.macros = {}
+	for idx, editor in ipairs(rfEditors) do
+		local macroText = rfEditors[idx]:GetText()
+		if macroText and (macroText:len() > 0) then
+			conf.macros[macroTypes[idx]] = macroText
+		else
+			conf.macros[macroTypes[idx]] = nil 
+		end
+	end
+	return conf
 end
 
 local function rfSetConfiguration(config)
 	rfDialog:SetValues(config)
+	if not config.macros then config.macros = {} end
+	
+	for idx, editor in ipairs(rfEditors) do
+		local macroText = config.macros[macroTypes[idx]]
+		if macroText and (macroText:len() > 0) then
+			rfEditors[idx]:SetText(macroText)
+		else
+			rfEditors[idx]:SetText("")
+		end
+	end
+
 end
 
 

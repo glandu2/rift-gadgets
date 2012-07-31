@@ -140,6 +140,23 @@ function CDialog:Select(id, label, default, listItems, sort, onchange)
 	return self
 end
 
+function CDialog:MacroSet(id, label)
+	local control = WT.Control.MacroSet.Create(self.container, label)
+	local frm = self:add(id, "Mouse Macros", control)
+	frm.getValue = control.GetMacros
+	frm.setValue = control.SetMacros
+	return self
+end
+
+function CDialog:Spacer(height)
+	-- Double span notes... (note - setting stretch to true with no control will make the label span the full width)
+	local gap = UI.CreateFrame("Frame", "spacer", self.container)
+	gap:SetPoint("TOPLEFT", self.fields[#self.fields], "BOTTOMLEFT")
+	gap:SetHeight(height)
+	self.fields[#self.fields+1] = gap
+	return self
+end
+
 function CDialog:TexSelect(id, label, default, mediaTag, onchange)
 	local control = WT.Control.TexSelect.Create(self.container, nil, default, mediaTag, onchange)
 	control:SetText(default)

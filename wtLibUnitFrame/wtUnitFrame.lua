@@ -195,6 +195,10 @@ local el = frame:CreateElement
 
 function WT.UnitFrame:TrackUnit(unitSpec)
 
+	if Inspect.System.Secure() then
+		WT.Log.Warning("Cannot change a unit tracker while in combat")
+	end
+
 	if not unitChangeTrackers[unitSpec] then
 		unitChangeTrackers[unitSpec] = 
 			function(unitId)
@@ -209,6 +213,7 @@ function WT.UnitFrame:TrackUnit(unitSpec)
 
 	local unitId = Inspect.Unit.Lookup(unitSpec)
 	self:PopulateUnit(unitId)
+	self:RebuildMacros()
 
 end
 

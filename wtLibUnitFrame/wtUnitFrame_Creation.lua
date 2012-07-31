@@ -82,7 +82,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	if not _debug then
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, sequence[1], configuration)
 	else
-		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player.target", configuration)
+		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "focus", configuration)
 		--local debugDesc = UI.CreateFrame("Text", "TXT", WT.Context)
 		--debugDesc:SetText(sequence[1])
 		--debugDesc:SetLayer(500)
@@ -98,10 +98,6 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 			frames[i] = WT.UnitFrame.CreateFromTemplate(template, sequence[i], configuration)
 		else
 			frames[i] = WT.UnitFrame.CreateFromTemplate(template, "player.target", configuration)
-			--local debugDesc = UI.CreateFrame("Text", "TXT", WT.Context)
-			--debugDesc:SetText(sequence[i])
-			--debugDesc:SetLayer(500)
-			--debugDesc:SetPoint("BOTTOMLEFT", frames[i], "BOTTOMLEFT")
 		end
 		frames[i]:SetParent(wrapper)
 		frames[i]:SetLayer(i)
@@ -185,6 +181,12 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 				frames[i]:OnResize(frmWidth, frmHeight)
 			end
 		end
+
+	if configuration.macros then
+		for i = 1,20 do 
+			frames[i]:SetMacros(configuration.macros) 
+		end 
+	end
 	
 	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 2, (bottom - top + 1) * 2,  } }
 end
@@ -298,15 +300,27 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 			end
 		end
 	
+	if configuration.macros then
+		for i = 1,5 do frames[i]:SetMacros(configuration.macros) end 
+	end
+		
 	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 2, (bottom - top + 1) * 2,  }, caption=configuration.group }
 end
 
 
 
 function WT.UnitFrame.CreateFromTemplate(templateName, unitSpec, options)
+
 	WT.Log.Info("Creating unit frame from template " .. tostring(templateName) .. " for unit " .. tostring(unitSpec))
 	local template = WT.UnitFrame.Templates[templateName]
 	if not template then return nil end
-	return template:Create(unitSpec, options)
+	local uf, createOptions = template:Create(unitSpec, options)
+
+	-- Override any existing mouse handling and add our own
+	-- This is a precursor to full macro handling 	
+	uf:SetSecureMode("restricted")
+	uf:SetMouseoverUnit(uf.UnitSpec)
+	
+	return uf, createOptions
 end
 

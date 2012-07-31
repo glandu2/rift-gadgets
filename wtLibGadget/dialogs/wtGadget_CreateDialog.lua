@@ -199,6 +199,7 @@ function WT.Gadget.ShowCreationUI()
 							gadget._configDialog = container
 						end
 						window.dialog = gadget._configDialog 
+						if window.dialog.Reset then window.dialog.Reset() end
 						
 						window.dialog:SetParent(frameOptions)
 						window.dialog:SetPoint("TOPLEFT", gadgetDetails, "BOTTOMLEFT", 0, 8)

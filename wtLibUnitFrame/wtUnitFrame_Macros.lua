@@ -189,12 +189,12 @@ function WT.UnitFrame:SetMacros(macros)
 end
 
 local function UpdateAllMacros()
+	if Inspect.System.Secure() then return end
 	for idx, frame in ipairs(WT.UnitFrames) do frame:RebuildMacros() end
 end
 
 local function OnRoleChange(role)
 	WT.Player.Role = role
-	print("Player Role = " .. tostring(role))
 	UpdateAllMacros()
 end
 

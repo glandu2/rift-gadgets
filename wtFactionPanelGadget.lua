@@ -22,7 +22,7 @@ local details = nil
 
 local function UpdatePanel(panel, showAll)
 
-	local filters = wtxGadgets[panel.GadgetId].filters or {}
+	local filters = panel.config.filters
 
 	if not panel.Categories then panel.Categories = {} end
 	for factionId, detail in pairs(details) do
@@ -175,7 +175,10 @@ local function Create(configuration)
 	wrapper:SetHeight(100)
 	wrapper:SetBackgroundColor(0,0,0,0.4)
 	
-	wrapper.GadgetId = configuration.id
+	wrapper.config = configuration
+	if not configuration.filters then 
+		configuration.filters = {} 
+	end
 
 	table.insert(factionGadgets, wrapper)
 
@@ -219,11 +222,10 @@ end
 
 local function OnUnlocked()
 	for idx, panel in ipairs(factionGadgets) do
-		-- Create the tick boxes if needed
-		
+		-- Create the tick boxes if needed	
 		if not panel.filters then
 			panel.filters = true
-			local filters = wtxGadgets[panel.GadgetId].filters
+			local filters = panel.config.filters
 			for _, category in pairs(panel.Categories) do
 				for factionName, bar in pairs(category.Factions) do
 					local check = UI.CreateFrame("RiftCheckbox", "check", panel.mvHandle)
@@ -244,13 +246,10 @@ end
 local function OnLocked()
 	for idx, panel in ipairs(factionGadgets) do
 		if panel.filters then
-			wtxGadgets[panel.GadgetId].filters = {}
 			for _, category in pairs(panel.Categories) do
 				for factionName, bar in pairs(category.Factions) do
 					if bar.Filter then
-						wtxGadgets[panel.GadgetId].filters[factionName] = bar.Filter:GetChecked()
-					else
-						print("No Filter")
+						panel.config.filters[factionName] = bar.Filter:GetChecked()
 					end 
 				end
 			end

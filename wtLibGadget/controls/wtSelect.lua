@@ -43,6 +43,7 @@ function WT.Control.Select.Create(parent, label, default, listItems, sort, oncha
 		txtLabel:SetText(label)
 		txtLabel:SetPoint("TOPLEFT", control, "TOPLEFT")
 		tfValue:SetPoint("CENTERLEFT", txtLabel, "CENTERRIGHT", 8, 0)
+		control.Label = txtLabel
 	else
 		tfValue:SetPoint("TOPLEFT", control, "TOPLEFT", 0, 0)
 	end	

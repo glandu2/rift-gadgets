@@ -21,12 +21,12 @@ local gadgetFactory = false
 local gadgetConfig = false
 local gadgetId = false
 
-local ENABLE_RECONFIGURE = false
+local ENABLE_RECONFIGURE = true
 
 local function ApplyModification()
 
 	-- Give the creation enough time to run
-	Command.System.Watchdog.Quiet()
+	WT.WatchdogSleep()
 
 	if gadgetFactory.GetConfiguration then
 	 	local config = gadgetFactory.GetConfiguration()
@@ -36,6 +36,7 @@ local function ApplyModification()
 				if config[k] == nil then config[k] = v end
 			end
 			gadgetFactory.Reconfigure(config)
+			wtxGadgets[gadgetId] = config
 		else
 			for k,v in pairs(config) do gadgetConfig[k] = v end
 			WT.Gadget.Delete(gadgetId)					

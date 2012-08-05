@@ -14,6 +14,8 @@ local toc, data = ...
 local AddonId = toc.identifier
 local TXT = Library.Translate
 
+local ctxMenu = UI.CreateContext("wtMenu")
+ctxMenu:SetStrata("menu")
 
 WT.Control.Menu = {}
 WT.Control.Menu_mt = 
@@ -34,7 +36,7 @@ local function OnClickOutside()
 	end
 end
 
-local catchAllClicks = UI.CreateFrame("Frame", WT.UniqueName("Menu"), WT.Context)
+local catchAllClicks = UI.CreateFrame("Frame", WT.UniqueName("Menu"), ctxMenu)
 catchAllClicks:SetLayer(10000)
 catchAllClicks:SetVisible(false)
 catchAllClicks:SetAllPoints(UIParent)

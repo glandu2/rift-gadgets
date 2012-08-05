@@ -45,6 +45,10 @@ function WT.Gadget.ShowCreationUI()
 		local typeListScrollbar = UI.CreateFrame("RiftScrollbar", "WTGadgetTypeScroll", content)
 		typeListScrollbar:SetPoint("TOPRIGHT", frameTypeList, "TOPRIGHT", -1, 1)
 		typeListScrollbar:SetPoint("BOTTOM", frameTypeList, "BOTTOM", nil, -1)	
+		typeListScrollbar.Event.ScrollbarChange = 
+			function()
+				frameScrollAnchor:SetPoint("TOPLEFT", frameTypeList, "TOPLEFT", 0, -typeListScrollbar:GetPosition())
+			end
 
 		local frameOptions = UI.CreateFrame("Frame", "WTGadgetOptions", content)
 		frameOptions:SetPoint("TOPLEFT", frameTypeList, "TOPRIGHT", 0, 0)
@@ -63,7 +67,7 @@ function WT.Gadget.ShowCreationUI()
 			function()
 			
 				-- Give the creation enough time to run
-				Command.System.Watchdog.Quiet()			
+				WT.WatchdogSleep()			
 			
 				local gadget = window.selected.gadgetConfig
 				local config = {}
@@ -114,7 +118,8 @@ function WT.Gadget.ShowCreationUI()
 		table.sort(sorted, function(a,b) return a.name < b.name end)
 
 		local numListItems = 0
-		for idx, config in ipairs(sorted) do
+		
+		local function fnAddGadget(idx, config)
 			local gadgetType = config.gadgetType
 			local name = config.name
 			local description = config.description
@@ -209,17 +214,31 @@ function WT.Gadget.ShowCreationUI()
 					
 					btnOK:SetEnabled(true)					
 				end			
-		end
 
-		-- there are 48 pixels per entry in the list (total height of wrapper + margin)
-		local wrappersHeight = numListItems * 48
-		local listHeight = frameTypeList:GetHeight()
-		local maxMoveDistance = math.max(0, wrappersHeight - listHeight)
-		typeListScrollbar:SetRange(0, maxMoveDistance + 16)
-		typeListScrollbar.Event.ScrollbarChange = 
-			function()
-				frameScrollAnchor:SetPoint("TOPLEFT", frameTypeList, "TOPLEFT", 0, -typeListScrollbar:GetPosition())
+			-- there are 48 pixels per entry in the list (total height of wrapper + margin)
+			local wrappersHeight = numListItems * 48
+			local listHeight = frameTypeList:GetHeight()
+			local maxMoveDistance = math.max(0, wrappersHeight - listHeight)
+			typeListScrollbar:SetRange(0, maxMoveDistance + 16)
+		end
+		
+		function buildLoop()
+			for idx, config in ipairs(sorted) do
+				fnAddGadget(idx, config)
+				coroutine.yield()
 			end
+		end
+		
+		co = coroutine.create(buildLoop)
+		table.insert(Event.System.Update.Begin,
+		{
+			function()
+				if coroutine.status(co) ~= "dead" then
+					coroutine.resume(co)
+				end 
+			end, AddonId, "GadgetCreateWindowCoroutineEvent"
+		})
+		
 
 	else
 		WT.Gadget.CreateGadgetWindow:SetVisible(true)

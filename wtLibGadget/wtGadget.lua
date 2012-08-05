@@ -45,7 +45,6 @@ local GRAB_KEYBOARD_ON_UNLOCK = false
 WT.Event.Trigger.GadgetsLocked, WT.Event.GadgetsLocked = Utility.Event.Create(AddonId, "GadgetsLocked")
 WT.Event.Trigger.GadgetsUnlocked, WT.Event.GadgetsUnlocked = Utility.Event.Create(AddonId, "GadgetsUnlocked")
 WT.Event.Trigger.GadgetSelected, WT.Event.GadgetSelected = Utility.Event.Create(AddonId, "GadgetSelected")
-WT.Event.Trigger.GadgetPropertyChanged, WT.Event.GadgetPropertyChanged = Utility.Event.Create(AddonId, "GadgetPropertyChanged")
 ---------------------------------------------------------------------------------------------------------------
 
 WT.Gadget = {}
@@ -146,75 +145,7 @@ function WT.Gadget.Create(configuration)
 			if not gadget then
 				WT.Log.Warning("Factory for gadget type " .. gadgetType .. " failed to create gadget")
 				return
-			end
-			
-			-- Add in the standard system properties
-
-			gadget.properties = {}
-
-			gadget.properties["xpos"] = 
-					{
-						group = "Gadget",
-						name = "XPos",
-						type = "integer",
-						min = 0,
-						max = UIParent:GetWidth(),
-						default = 200,
-						apply = function(value)
-								gadget:SetPoint("LEFT", UIParent, "LEFT", value, nil)
-								gadget.xpos = value
-								configuration.xpos = value
-							end,
-					}
-
-			gadget.properties["ypos"] = 
-					{
-						group = "Gadget",
-						name = "YPos",
-						type = "integer",
-						min = 0,
-						max = UIParent:GetHeight(),
-						default = 200,
-						apply = function(value)
-								gadget:SetPoint("TOP", UIParent, "TOP", nil, value)
-								configuration.ypos = value
-							end,
-					}
-
-			gadget.properties["combatAlpha"] = 
-					{
-						group = "Gadget",
-						name = "Combat Alpha",
-						type = "integer",
-						min = 0,
-						max = 100,
-						default = 100,
-						apply = function(value)
-								gadget:SetAlpha(value / 100)
-							end,
-					}
-
-			gadget.properties["nonCombatAlpha"] = 
-					{
-						group = "Gadget",
-						name = "Non Combat Alpha",
-						type = "integer",
-						min = 0,
-						max = 100,
-						default = 100,
-						apply = function(value)
-								gadget:SetAlpha(value / 100)
-							end,
-					}				
-
-			-- Add in any additional properties
-			
-			if createOptions.properties then
-				for propertyId,propertyDef in pairs(createOptions.properties) do
-					gadget.properties[propertyId] = propertyDef
-				end
-			end
-		
+			end		
 			
 			if createOptions.resizable and configuration.width then
 				if (configuration.width < createOptions.resizable[1]) then configuration.width = createOptions.resizable[1] end  
@@ -390,14 +321,6 @@ function WT.Gadget:DragStop()
 		
 		wtxGadgets[self.gadgetId].xpos = self.frame:GetLeft()
 		wtxGadgets[self.gadgetId].ypos = self.frame:GetTop()
-
-		if wtxGadgets[self.gadgetId].xpos ~= self.startX then
-			WT.Event.Trigger.GadgetPropertyChanged(self.gadgetId, "xpos", wtxGadgets[self.gadgetId].xpos) 
-		end
-
-		if wtxGadgets[self.gadgetId].ypos ~= self.startY then
-			WT.Event.Trigger.GadgetPropertyChanged(self.gadgetId, "ypos", wtxGadgets[self.gadgetId].ypos) 
-		end
 
 		if WT.Gadget.alignTo then
 			WT.Gadget.alignTo:NormalMode()

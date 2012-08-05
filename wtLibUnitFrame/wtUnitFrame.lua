@@ -211,6 +211,7 @@ function WT.UnitFrame:TrackUnit(unitSpec)
 		table.insert(Library.LibUnitChange.Register(unitSpec), { unitChangeTrackers[unitSpec],  AddonId, AddonId .. "_UnitFrame_OnUnitChange_" .. unitSpec })
 	end
 
+	self.UnitSpec = unitSpec
 	local unitId = Inspect.Unit.Lookup(unitSpec)
 	self:PopulateUnit(unitId)
 	self:RebuildMacros()

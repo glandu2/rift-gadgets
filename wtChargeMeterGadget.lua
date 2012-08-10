@@ -45,7 +45,7 @@ local function Create(configuration)
 		text="{chargePercent}% CHARGE", fontSize=10,
 	});
 
-	return chargeMeter, { resizable = { 140, 30, 300, 50 } }
+	return chargeMeter, { resizable = { 140, 12, 300, 50 } }
 end
 
 

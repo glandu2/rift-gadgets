@@ -202,13 +202,37 @@ function StandardFrame:Construct(options)
 	}
 	
 	for idx,element in ipairs(elements) do
-		if options.excludeBuffs and element.type=="BuffPanel" then
-			-- Don't add buff panels if excluding them
-		else
+		local showElement = true
+		if options.excludeBuffs and element.type=="BuffPanel" then showElement = false end
+		if options.excludeCasts and ((element.id == "barCast") or (element.id == "labelCast")) then showElement = false end
+		if showElement then
 			self:CreateElement(element)
 		end 
 	end
 	
+	
+	
+	if options.showBackground then
+		self:SetBackgroundColor(0,0,0,0.2)
+	end
+	
+	self:SetSecureMode("restricted")
+	self:SetMouseoverUnit(self.UnitSpec)
+	
+	if options.clickToTarget then 
+		self.Event.LeftClick = "target @" .. self.UnitSpec 
+	end
+	
+	if options.contextMenu then 
+		self.Event.RightClick = 
+			function() 
+				if self.UnitId then 
+					Command.Unit.Menu(self.UnitId) 
+				end 
+			end 
+	end
+		
+	--[[ 
 	if options.showBackground then
 		self:SetBackgroundColor(0,0,0,0.2)
 	end
@@ -216,6 +240,7 @@ function StandardFrame:Construct(options)
 	self:SetMouseoverUnit(self.UnitSpec)
 	self.Event.LeftClick = "target @" .. self.UnitSpec
 	self.Event.RightClick = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
+	--]]
 	
 	self.ConfigurationDialog = configDialog
 end

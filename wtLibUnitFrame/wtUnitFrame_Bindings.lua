@@ -18,6 +18,35 @@ function WT.UnitFrame:CreateBinding(property, bindToObject, bindToMethod, defaul
 end
 
 
+local function CommaFormat(n)
+	local left,num,right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
+	return left..(num:reverse():gsub('(%d%d%d)','%1,'):reverse())..right
+end
+
+
+local function NumberFormat(tokenValue)
+
+	local numFormat = wtxOptions.numberFormat or "short"
+
+	tokenValue = math.ceil(tokenValue)
+	
+	if numFormat == "long" then
+		tokenValue = CommaFormat(tokenValue)
+	end
+	
+	if numFormat == "short" then
+		if (tokenValue >= 1000000) then 
+			tokenValue = CommaFormat(string.format("%.1f", tokenValue / 1000000)) .. "M" 
+		elseif tokenValue >= 10000 then
+			tokenValue = CommaFormat(string.format("%.1f", tokenValue / 1000)) .. "K"
+		end 
+	end
+	
+	return tokenValue
+	
+end
+
+
 -- Creates a binding from a token string
 function WT.UnitFrame:CreateTokenBinding(tokenString, bindToObject, bindToMethod, default, maxLength)
 
@@ -47,12 +76,7 @@ function WT.UnitFrame:CreateTokenBinding(tokenString, bindToObject, bindToMethod
 			end
 			local tokenValue = self.Unit[token]
 			if type(tokenValue) == "number" then 
-				tokenValue = math.ceil(tokenValue)
-				if (tokenValue >= 1000000) then 
-					tokenValue = string.format("%.1f", tokenValue / 1000000) .. "M" 
-				elseif tokenValue >= 10000 then
-					tokenValue = string.format("%.1f", tokenValue / 1000) .. "K" 
-				end 
+				tokenValue = NumberFormat(tokenValue)
 			end
 			text = text:gsub("{" .. token .. "}", tokenValue)
 		end
@@ -99,3 +123,12 @@ function WT.UnitFrame:ApplyBindings()
 	end
 	self.rebinding = false
 end
+
+
+function WT.UnitFrame.RefreshAllBindings()
+	for idx, uf in ipairs(WT.UnitFrames) do
+		uf:ApplyBindings()
+	end
+end
+
+WT.RegisterEventHandler(WT.Event.SettingsChanged, WT.UnitFrame.RefreshAllBindings)

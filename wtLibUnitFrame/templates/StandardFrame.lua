@@ -134,14 +134,6 @@ function StandardFrame:Construct(options)
 			text=" {resource}/{resourceMax}", default="", fontSize=10
 		},
 		{
-			id="labelresource", type="Label", parent="barResource", layer=20,
-			attach = {{ point="CENTERLEFT", element="barResource", targetPoint="CENTERLEFT" }},
-			visibilityBinding="resource",
-			text=" {resource}/{resourceMax}", default="", fontSize=10
-		},
-
-
-		{
 			id="labelresourceR", type="Label", parent="barResource", layer=20,
 			attach = {{ point="CENTERRIGHT", element="barResource", targetPoint="CENTERRIGHT" }},
 			visibilityBinding="resource",

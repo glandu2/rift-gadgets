@@ -56,7 +56,30 @@ function wtLabel:Construct()
 		end
 	end
 	
-	unitFrame:CreateTokenBinding(config.text, self, self.SetText, config.default or "", self.maxLength)
+	if config.outline then
+		self.outline = {}
+		for idx = 1,4 do
+			self.outline[idx] = UI.CreateFrame("Text", "txtOutline", self:GetParent())
+			self.outline[idx]:SetLayer(self:GetLayer()-1)
+			self.outline[idx]:SetFontColor(0,0,0,1.0)
+			self.outline[idx]:SetFontSize(self:GetFontSize())
+		end
+		self.outline[1]:SetPoint("TOPLEFT", self, "TOPLEFT", -1, -1)
+		self.outline[2]:SetPoint("TOPLEFT", self, "TOPLEFT",  1, -1)
+		self.outline[3]:SetPoint("TOPLEFT", self, "TOPLEFT",  1,  1)
+		self.outline[4]:SetPoint("TOPLEFT", self, "TOPLEFT", -1,  1)
+		
+	end
+	
+	self.SetLabelText = 
+		function(frame, text)
+			self:SetText(text)
+			if self.outline then
+				for idx = 1,4 do self.outline[idx]:SetText(text) end
+			end
+		end
+	
+	unitFrame:CreateTokenBinding(config.text, self, self.SetLabelText, config.default or "", self.maxLength)
 	
 	if config.linkedHeightElement then
 		self.linkedHeightElement = unitFrame.Elements[config.linkedHeightElement]
@@ -72,6 +95,9 @@ function wtLabel:Construct()
 				if newHeight ~= self.oldLinkedHeight then
 					for idx, el in ipairs(self.linkedHeightElement.linkedElements) do
 						el:SetFontSize(newHeight * self.linkedHeightScale)
+						if self.outline then
+							for idx=1,4 do self.outline[idx]:SetFontSize(newHeight * self.linkedHeightScale) end
+						end 
 					end					
 					self.oldLinkedHeight = newHeight
 				end

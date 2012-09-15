@@ -125,7 +125,7 @@ function StandardFrame:Construct(options)
 			id="labelName", type="Label", parent="frameBackdrop", layer=20,
 			attach = {{ point="CENTERLEFT", element="imgRole", targetPoint="CENTERRIGHT" }},
 			visibilityBinding="name",
-			text="{nameShort}", default="", fontSize=14
+			text="{nameShort}", default="", fontSize=14, outline=true
 		},
 		{
 			id="labelresource", type="Label", parent="barResource", layer=20,
@@ -143,7 +143,7 @@ function StandardFrame:Construct(options)
 			id="labelDetails", type="Label", parent="frameBackdrop", layer=20,
 			attach = {{ point="TOPRIGHT", element="frameBackdrop", targetPoint="BOTTOMRIGHT", offsetX=0, offsetY=-2 }},
 			visibilityBinding="level",
-			text="{level} {callingText}", default="", fontSize=10
+			text="{level} {callingText}", default="", fontSize=10, outline=true,
 		},
 		{
 			id="barCast", type="Bar", parent="frameBackdrop", layer=25,

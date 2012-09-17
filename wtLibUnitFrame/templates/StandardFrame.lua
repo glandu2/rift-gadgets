@@ -171,11 +171,33 @@ function StandardFrame:Construct(options)
 		},
 
 		{
-			id="labelMark", type="Label", parent="frameBackdrop", layer=30,
-			attach = {{ point="CENTER", element="frameBackdrop", targetPoint="CENTER", offsetX=20, offsetY=0 }},
-			visibilityBinding="mark",alpha=0.6,
-			text="{mark}", default="X", fontSize=24
+		    id="imgMark", type="MediaSet", parent="frameBackdrop", layer=30,
+		    attach = {{ point="CENTER", element="frameBackdrop", targetPoint="CENTER", offsetX=20, offsetY=0 }},
+		    width = 32, height = 32,
+		    nameBinding="mark",
+		    names = 
+		    {
+		        [1] = "riftMark01",
+		        [2] = "riftMark02",
+		        [3] = "riftMark03",
+		        [4] = "riftMark04",
+		        [5] = "riftMark05",
+		        [6] = "riftMark06",
+		        [7] = "riftMark07",
+		        [8] = "riftMark08",
+		        [9] = "riftMark09",
+		        [10] = "riftMark10",
+		        [11] = "riftMark11",
+		        [12] = "riftMark12",
+		        [13] = "riftMark13",
+		        [14] = "riftMark14",
+		        [15] = "riftMark15",
+		        [16] = "riftMark16",
+		        [17] = "riftMark17",
+		    },
+		    visibilityBinding="mark",alpha=1.0,
 		},
+
 		{
 			id="imgReady", type="ImageSet", parent="frameBackdrop", layer=30,
 			attach = {{ point="CENTER", element="frame", targetPoint="CENTER" }}, -- visibilityBinding="id",

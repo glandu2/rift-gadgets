@@ -153,6 +153,7 @@ function RaidFrame:Construct(options)
 				-- Type Specific Element Configuration
 				text=" {raidStatus}", default="", fontSize=10
 			},
+			--[[
 			{
 				-- Generic Element Configuration
 				id="labelMark", type="Label", parent="frameBackdrop", layer=30,
@@ -161,6 +162,36 @@ function RaidFrame:Construct(options)
 				-- Type Specific Element Configuration
 				text="{mark}", default="X", fontSize=18
 			},
+			--]]
+			{
+			    id="imgMark", type="MediaSet", parent="frameBackdrop", layer=30,
+			    attach = {{ point="TOPRIGHT", element="frameBackdrop", targetPoint="TOPRIGHT", offsetX=-3, offsetY=4 }},
+			    width = 16, height = 16,
+			    nameBinding="mark",
+			    names = 
+			    {
+			        [1] = "riftMark01_mini",
+			        [2] = "riftMark02_mini",
+			        [3] = "riftMark03_mini",
+			        [4] = "riftMark04_mini",
+			        [5] = "riftMark05_mini",
+			        [6] = "riftMark06_mini",
+			        [7] = "riftMark07_mini",
+			        [8] = "riftMark08_mini",
+			        [9] = "riftMark09_mini",
+			        [10] = "riftMark10_mini",
+			        [11] = "riftMark11_mini",
+			        [12] = "riftMark12_mini",
+			        [13] = "riftMark13_mini",
+			        [14] = "riftMark14_mini",
+			        [15] = "riftMark15_mini",
+			        [16] = "riftMark16_mini",
+			        [17] = "riftMark17_mini",
+			    },
+			    visibilityBinding="mark",alpha=1.0,
+			},
+			
+			
 			{
 				-- Generic Element Configuration
 				id="imgReady", type="ImageSet", parent="frameBackdrop", layer=30,

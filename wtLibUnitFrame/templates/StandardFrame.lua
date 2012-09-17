@@ -122,6 +122,13 @@ function StandardFrame:Construct(options)
 				 }, defaultIndex = "hide"
 		},
 		{
+			id="imgInCombat", type="Image", parent="frame", layer=55,
+			attach = {{ point="CENTER", element="frameBackdrop", targetPoint="TOPLEFT", offsetX=6, offsetY=6 }}, visibilityBinding="combat",
+			texAddon=AddonId, 
+			texFile="img/InCombat32.png",
+			width=20, height=20,
+		},
+		{
 			id="labelName", type="Label", parent="frameBackdrop", layer=20,
 			attach = {{ point="CENTERLEFT", element="imgRole", targetPoint="CENTERRIGHT" }},
 			visibilityBinding="name",

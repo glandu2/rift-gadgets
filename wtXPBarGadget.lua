@@ -20,12 +20,32 @@ local TXT = Library.Translate
 local gadgetIndex = 0
 local xpGadgets = {}
 
+local iconRestedAddon = "Rift"
+local iconRestedFile = "indicator_friendlyNPC.png.dds"
+
 local function OnExperience(accum, rested, needed)
 	if not accum then return end
 	local percent = (accum / needed) * 100
+	
+	local percentRested = 0
+	if rested and rested > accum then percentRested = (rested / needed) end
+	
 	local percentString = string.format("%i", math.floor(percent)) .. "%"
 	for idx, gadget in ipairs(xpGadgets) do
 		gadget.bar:SetPoint("BOTTOMRIGHT", gadget, accum / needed, 1.0)
+		if percentRested > 0 then
+			if gadget.barRested then
+				gadget.barRested:SetPoint("BOTTOMRIGHT", gadget, percentRested, 1.0)
+				gadget.barRested:SetVisible(true)
+			end
+
+			gadget.iconRested:SetPoint("TOPCENTER", gadget, percentRested, 1.0, 0, -18)
+			-- gadget.iconRested:SetVisible(true)
+			-- Icon doesn't look right yet, will fix later
+		else
+			if gadget.barRested then gadget.barRested:SetVisible(false) end
+			gadget.iconRested:SetVisible(false)
+		end
 		if gadget.text then
 			gadget.text:SetText(WT.Utility.NumberDesc(accum) .. "/" .. WT.Utility.NumberDesc(needed) .. " (" .. percentString .. ")")
 		end
@@ -46,6 +66,21 @@ local function Create(configuration)
 	bar:SetBackgroundColor(0,0.8,0,0.4)
 	wrapper.bar = bar
 
+	if configuration.tintRested then
+		local barRested = UI.CreateFrame("Frame", WT.UniqueName("wtXPRested"), wrapper)
+		barRested:SetPoint("TOPLEFT", bar, "CENTERRIGHT")
+		barRested:SetPoint("BOTTOMRIGHT", wrapper, 0.5, 1.0)
+		barRested:SetBackgroundColor(0.0,0.6,0.0,0.2)
+		barRested:SetVisible(false)
+		wrapper.barRested = barRested
+	end
+
+	local rested = UI.CreateFrame("Texture", "texRested", bar)
+	rested:SetPoint("TOPCENTER", wrapper, "BOTTOMLEFT", 0, -18)
+	rested:SetTexture(iconRestedAddon, iconRestedFile)
+	rested:SetVisible(false)
+	wrapper.iconRested = rested
+	
 	if configuration.showText then
 		local txt = UI.CreateFrame("Text", WT.UniqueName("wtXP"), bar)
 		txt:SetFontColor(1,1,1,1)
@@ -73,6 +108,7 @@ local function ConfigDialog(container)
 	dialog = WT.Dialog(container)
 		:Label("Resizable XP Bar Gadget")
 		:Checkbox("showText", "Show Text", false)
+		:Checkbox("tintRested", "Tint Rested XP on Bar", false)
 end
 
 local function GetConfiguration()

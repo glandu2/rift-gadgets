@@ -14,7 +14,7 @@ local toc, data = ...
 local AddonId = toc.identifier
 local TXT = Library.Translate
 
-
+local dockerIntegration = false
 
 local btnGadget = UI.CreateFrame("Texture", AddonId .. "_btnGadget", WT.Context)
 btnGadget:SetTexture(AddonId, "img/btnGadgetMenu.png")
@@ -27,6 +27,7 @@ local btnMouseStartY = 0
 local btnDragged = false
 
 local function btnDragStart()
+	if dockerIntegration then return end
 	WT.Utility.DeAnchor(btnGadget)
 	local mouse = Inspect.Mouse()
 	btnDragging = true
@@ -91,6 +92,19 @@ local function btnShowMenu()
 	btnMenu:Toggle()
 end
 
+function btnMenu:OnOpen()
+	if dockerIntegration then
+		MINIMAPDOCKER.AUTOHIDE_DOCKED = false
+	end
+end
+
+function btnMenu:OnClose()
+	if dockerIntegration then
+		MINIMAPDOCKER.AUTOHIDE_DOCKED = true
+	end
+end
+
+
 btnGadget.Event.LeftDown = btnDragStart
 btnGadget.Event.MouseMove = btnDragMove
 btnGadget.Event.LeftUp = btnDragStop
@@ -113,10 +127,18 @@ end
 
 
 local function Initialize()
-	if (wtxOptions.btnGadgetX and wtxOptions.btnGadgetY) then
-		btnGadget:SetPoint("TOPLEFT", UIParent, "TOPLEFT", wtxOptions.btnGadgetX, wtxOptions.btnGadgetY)
+
+	-- Docker integration
+	if MINIMAPDOCKER then
+		dockerIntegration = true
+		MINIMAPDOCKER.Register("Gadgets", btnGadget)
 	else
-		btnGadget:SetPoint("CENTER", UIParent, "CENTER")
+		dockerIntegration = false
+		if (wtxOptions.btnGadgetX and wtxOptions.btnGadgetY) then
+			btnGadget:SetPoint("TOPLEFT", UIParent, "TOPLEFT", wtxOptions.btnGadgetX, wtxOptions.btnGadgetY)
+		else
+			btnGadget:SetPoint("CENTER", UIParent, "CENTER")
+		end
 	end
 end
 

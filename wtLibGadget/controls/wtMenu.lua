@@ -197,6 +197,7 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 			catchAllClicks:SetVisible(true) 
 			currMenu = control 
 			WT.FadeIn(control, 0.2) -- fade in
+			if control.OnOpen then control:OnOpen() end
 		end
 		
 	control.Hide = 
@@ -207,6 +208,7 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 				currMenu = false
 			end 
 			WT.FadeOut(control, 0.2) -- fade out
+			if control.OnClose then control:OnClose() end
 		end
 
 	control.Toggle = 

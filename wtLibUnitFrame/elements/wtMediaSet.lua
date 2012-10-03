@@ -25,9 +25,13 @@ function wtMediaSet:Construct()
 	end
 	
 	-- do we have an override to set the width/height of the image
+	--[[
 	if config.width then
 		self:SetWidth(config.width)
 	end
+	--]]
+	self:SetWidth(0)
+	
 	if config.height then
 		self:SetHeight(config.height)
 	end
@@ -38,6 +42,7 @@ function wtMediaSet:Construct()
 
 end
 
+--[[
 function wtMediaSet:Refresh()
 	if self:GetWidth() < 0.5 or self.currIndex == "hide" then return end
 	self:SetWidth(self.tileWidth)
@@ -46,17 +51,25 @@ function wtMediaSet:Refresh()
 	local row = math.floor(idx / self.cols)
 	self.image:SetPoint("TOPLEFT", self, "TOPLEFT", -col * self.tileWidth, -row * self.tileHeight)
 end
+--]]
 
 function wtMediaSet:SetName(name)
 	if (not name) or (name == "") or (not self.names[name]) then 
+		self:SetWidth(0)
 		self:SetVisible(false) 
 		return
 	end	
 	local media = Library.Media.GetTexture(self.names[name])
 	if media then
 		self:SetVisible(true) 
+		if self.Configuration.width then
+			self:SetWidth(self.Configuration.width)
+		else
+			self:ClearWidth()
+		end
 		self:SetTexture(media.addonId, media.filename)
 	else
+		self:SetWidth(0)
 		self:SetVisible(false) 
 	end
 end

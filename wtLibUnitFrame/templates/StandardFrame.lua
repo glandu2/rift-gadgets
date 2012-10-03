@@ -111,6 +111,21 @@ function StandardFrame:Construct(options)
 			texAddon=AddonId, texFile="img/Roles12.png", nameBinding="role", cols=1, rows=5, 
 			names = { ["tank"] = 0, ["heal"] = 1, ["dps"] = 2, ["support"] = 3 }, defaultIndex = "hide"
 		},
+
+		{
+			id="imgPVP", type="MediaSet", parent="frame", layer=100, width=16, height=16,
+			attach = {{ point="CENTERLEFT", element="imgRole", targetPoint="CENTERRIGHT", offsetX=0, offsetY=0 }}, 
+			nameBinding="pvpAlliance",
+			names = 
+			{
+				["defiant"] = "FactionDefiant",
+				["guardian"] = "FactionGuardian",
+				["nightfall"] = "FactionNightfall",
+				["oathsworn"] = "FactionOathsworn",
+				["dominion"] = "FactionDominion",
+			},
+		},
+
 		{
 			id="imgRank", type="ImageSet", parent="frame", layer=50, 
 			attach = {{ point="CENTER", element="frameBackdrop", targetPoint="TOPRIGHT", offsetX=-2, offsetY=2 }}, visibilityBinding="rank",
@@ -128,9 +143,10 @@ function StandardFrame:Construct(options)
 			texFile="img/InCombat32.png",
 			width=20, height=20,
 		},
+		
 		{
 			id="labelName", type="Label", parent="frameBackdrop", layer=20,
-			attach = {{ point="CENTERLEFT", element="imgRole", targetPoint="CENTERRIGHT" }},
+			attach = {{ point="CENTERLEFT", element="imgPVP", targetPoint="CENTERRIGHT" }},
 			visibilityBinding="name",
 			text="{nameShort}", default="", fontSize=14, outline=true
 		},
@@ -204,6 +220,7 @@ function StandardFrame:Construct(options)
 			texAddon=AddonId, texFile="img/wtReady.png", nameBinding="readyStatus", cols=1, rows=2, 
 			names = { ["ready"] = 0, ["notready"] = 1 }, defaultIndex = "hide"
 		},
+
 		{
 			id="buffPanelBuffs", type="BuffPanel", parent="HorizontalBar", layer=30,
 			attach = {{ point="TOPLEFT", element="frameBackdrop", targetPoint="BOTTOMLEFT", offsetX=0, offsetY=0 }},

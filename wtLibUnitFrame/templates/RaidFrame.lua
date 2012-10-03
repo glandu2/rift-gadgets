@@ -65,8 +65,8 @@ function RaidFrame:Construct(options)
 				-- Generic Element Configuration
 				id="barResource", type="Bar", parent="frameBackdrop", layer=10,
 				attach = {
-					{ point="BOTTOMLEFT", element="frame", targetPoint="BOTTOMLEFT", offsetX=1, offsetY=-1 },
-					{ point="RIGHT", element="frame", targetPoint="RIGHT", offsetX=-1 },
+					{ point="BOTTOMLEFT", element="frame", targetPoint="BOTTOMLEFT", offsetX=2, offsetY=-2 },
+					{ point="RIGHT", element="frame", targetPoint="RIGHT", offsetX=-2 },
 				},
 				-- visibilityBinding="id",
 				-- Type Specific Element Configuration
@@ -78,7 +78,7 @@ function RaidFrame:Construct(options)
 				-- Generic Element Configuration
 				id="barHealth", type="Bar", parent="frameBackdrop", layer=10,
 				attach = {
-					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=1, offsetY=1 },
+					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=2, offsetY=2 },
 					{ point="BOTTOMRIGHT", element="barResource", targetPoint="TOPRIGHT" },
 				},
 				-- visibilityBinding="id",

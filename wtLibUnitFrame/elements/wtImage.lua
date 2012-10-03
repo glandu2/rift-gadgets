@@ -17,10 +17,14 @@ function wtImage:Construct()
 	local unitFrame = self.UnitFrame
 
 	-- Validate the configuration
-	if not config.texAddon then error("Image missing required configuration item: texAddon") end
-	if not config.texFile then error("Image missing required configuration item: texFile") end
-
-	self:SetTexture(config.texAddon, config.texFile)
+	
+	if config.media then
+		Library.Media.SetTexture(self, config.media)
+	else
+		if not config.texAddon then error("Image missing required configuration item: texAddon") end
+		if not config.texFile then error("Image missing required configuration item: texFile") end
+		self:SetTexture(config.texAddon, config.texFile)
+	end
 	
 	if config.width then self:SetWidth(config.width) end
 	if config.height then self:SetHeight(config.height) end

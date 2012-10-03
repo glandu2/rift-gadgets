@@ -103,7 +103,11 @@ function WT.Element:Create(unitFrame, configuration, overrideParent)
 		function() 
 			if configuration.attach then
 				for idx, attachTo in ipairs(configuration.attach) do
-					local attachToElement = unitFrame.Elements[attachTo.element]
+					local attachToElement = attachTo.element
+					if type(attachToElement) == "string" then
+						attachToElement = unitFrame.Elements[attachToElement]
+					end
+					
 					if attachToElement then
 						local attachPoint = attachTo.point or "TOPLEFT"
 						local attachTargetPoint = attachTo.targetPoint or "TOPLEFT"

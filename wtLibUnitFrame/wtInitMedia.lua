@@ -64,6 +64,12 @@ Library.Media.AddTexture("riftMark15_mini", "Rift", "vfx_ui_mob_tag_no_mini.png.
 Library.Media.AddTexture("riftMark16_mini", "Rift", "vfx_ui_mob_tag_smile_mini.png.dds", {})
 Library.Media.AddTexture("riftMark17_mini", "Rift", "vfx_ui_mob_tag_squirrel_mini.png.dds", {})
 
+Library.Media.AddTexture("FactionDefiant", AddonId, "img/FactionDefiant.dds", {})
+Library.Media.AddTexture("FactionGuardian", AddonId, "img/FactionGuardian.dds", {})
+Library.Media.AddTexture("FactionDominion", "Rift", "Icon_Dominion_sm.png.dds", {})
+Library.Media.AddTexture("FactionNightfall", "Rift", "Icon_Nightfall_sm.png.dds", {})
+Library.Media.AddTexture("FactionOathsworn", "Rift", "Icon_Oathsworn_sm.png.dds", {})
+
 Library.Media.AddFont("ArmWrestler", AddonId, "font/ArmWrestler.ttf")
 Library.Media.AddFont("Bazooka", AddonId, "font/Bazooka.ttf")
 Library.Media.AddFont("BlackChancery", AddonId, "font/BlackChancery.ttf")

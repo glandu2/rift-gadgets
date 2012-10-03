@@ -48,9 +48,9 @@ local function OnCoordChange(rangeFinder, unitCoord)
 		local range = WT.Utility.MeasureDistance(
 			WT.Player.coord[1], WT.Player.coord[2], WT.Player.coord[3],
 			unitCoord[1], unitCoord[2], unitCoord[3])  
-		rangeFinder.txtRange:SetText(string.format("%.01f", range) .. "m")
+		rangeFinder.txtRange:SetLabelText(string.format("%.01f", range) .. "m")
 	else
-		rangeFinder.txtRange:SetText("--")
+		rangeFinder.txtRange:SetLabelText("--")
 	end
 end
 
@@ -81,11 +81,20 @@ local function Create(configuration)
 	txtHeading:SetFontSize(10)
 	txtHeading:SetFontColor(0.6, 1.0, 0.6, 1.0)
 		
+	--[[
 	local txtRange = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rfBackground)
 	txtRange:SetText("--")
 	txtRange:SetPoint("TOPCENTER", txtHeading, "BOTTOMCENTER", 0, -5)
 	txtRange:SetFontSize(24)
 	txtRange:SetFontColor(0.6, 1.0, 0.6, 1.0)
+	--]]
+	
+	local txtRange = rangeFinder:CreateElement({
+		id="txtRange", type="Label", parent=rfBackground, layer=20,
+		attach = {{ point="TOPCENTER", element=txtHeading, targetPoint="BOTTOMCENTER", offsetX=0, offsetY=-5 }},
+		visibilityBinding="name", text="--", default="", fontSize=24, outline=true,
+		color={ r=0.6, g=1.0, b=0.6, a=1.0 },
+	});
 
 	local txtName = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rfBackground)
 	txtName:SetText("")

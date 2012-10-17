@@ -88,9 +88,39 @@ menuItems[menuItemsImport] = {text="Import Layout", value=function() WT.Gadget.S
 local btnMenu = WT.Control.Menu.Create(btnGadget, menuItems)
 btnMenu:SetPoint("TOPRIGHT", btnGadget, "CENTER")
 
+-- 2012/10/05 - Start Adelea's change to improve Menu popup location
+
+local btnMenu_Anchor = "TOPRIGHT"
+
 local function btnShowMenu()
+	local md = Inspect.Mouse()
+	local sx = UIParent:GetWidth()/2
+	local sy = UIParent:GetHeight()/2
+	local anchor
+	
+	if md.y > sy then
+		anchor = "BOTTOM"
+	else
+		anchor = "TOP"
+	end
+	
+	if md.x <= sx then
+		anchor = anchor.."LEFT"
+	else
+		anchor = anchor.."RIGHT"
+	end
+	
+	if anchor ~= btnMenu_anchor then
+		btnMenu:ClearPoint(btnMenu_Anchor)
+		btnMenu_Anchor = anchor
+		btnMenu:SetPoint(anchor, btnGadget, "CENTER")
+	end
 	btnMenu:Toggle()
 end
+
+-- 2012/10/05 - End Adelea's change to improve Menu popup location
+
+
 
 function btnMenu:OnOpen()
 	if dockerIntegration then

@@ -85,9 +85,10 @@ function StandardFrame:Construct(options)
 				{ point="BOTTOMRIGHT", element="barResource", targetPoint="TOPRIGHT" },
 			},
 			growthDirection="right",
-			binding="healthPercent", color={r=0,g=0.7,b=0,a=1}, 
-			texAddon=AddonId, texFile="img/Diagonal.png", 
-			backgroundColor={r=0, g=0, b=0, a=1}
+			binding="healthPercent", color={r=0,g=0.7,b=0,a=1},
+			media="wtDiagonal", 
+			backgroundColor={r=0, g=0, b=0, a=1},
+			colorBinding = "taggedColor",
 		},
 		{
 			id="labelHealth", type="Label", parent="barHealth", layer=20,
@@ -108,8 +109,19 @@ function StandardFrame:Construct(options)
 			id="imgRole", type="ImageSet", parent="frameBackdrop", layer=20,
 			attach = {{ point="TOPLEFT", element="frameBackdrop", targetPoint="BOTTOMLEFT", offsetX=3, offsetY=3 }}, visibilityBinding="role",
 			-- Type Specific Element Configuration
-			texAddon=AddonId, texFile="img/Roles12.png", nameBinding="role", cols=1, rows=5, 
-			names = { ["tank"] = 0, ["heal"] = 1, ["dps"] = 2, ["support"] = 3 }, defaultIndex = "hide"
+			texAddon=AddonId, texFile="img/Roles12.png", 
+			nameBinding="role", 
+			cols=1, rows=5,
+			names = { ["tank"] = 0, ["heal"] = 1, ["dps"] = 2, ["support"] = 3 }, defaultIndex = "hide",
+			--[[
+			names =
+			{
+				["tank"] = "riftRaidRoleTank",
+				["dps"] = "riftRaidRoleDPS",
+				["heal"] = "riftRaidRoleHeal",
+				["support"] = "riftRaidRoleSupport",				
+			}
+			--]]
 		},
 
 		{

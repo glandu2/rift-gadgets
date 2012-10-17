@@ -95,3 +95,34 @@ WT.Unit.CreateVirtualProperty("pvpAlliance", { "alliance", "pvp" },
 		end
 	end)
 	
+WT.Unit.CreateVirtualProperty("taggedColor", { "tagged", "relation" },
+	function(unit)
+		if unit.tagged == "other" and unit.relation == "hostile" then
+			return { r = 0.4, g = 0.4, b = 0.4, a = 1.0 }
+		else
+			return { r = 0, g = 0.7, b = 0, a = 1.0 }
+		end
+	end)
+	
+WT.Unit.CreateVirtualProperty("absorbPercent", { "absorb", "healthMax" },
+	function(unit)
+		if unit.absorb and unit.healthMax and unit.healthMax > 0 then
+			local absorb = (unit.absorb / unit.healthMax) * 100
+			if absorb > 100 then
+				return 100
+			else
+				return absorb
+			end
+		else 
+			return nil
+		end 
+	end)
+	
+WT.Unit.CreateVirtualProperty("healthAbsorbPercent", { "health", "healthMax", "absorb", "absorbPercent" }, 
+	function(unit)
+		if unit.healthMax and unit.absorbPercent and unit.healthMax > 0 and unit.absorbPercent > 0 then
+			return ((unit.health / unit.healthMax) * 100 ) + unit.absorbPercent
+		else 
+			return nil
+		end 
+	end)

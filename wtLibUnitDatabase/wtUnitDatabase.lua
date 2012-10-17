@@ -368,6 +368,9 @@ local function SetProperty(unitId, property, value)
 	end
 end
 
+local function OnUnitDetailAbsorb(unitsValue)
+	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "absorb", value) end
+end
 
 local function OnUnitDetailHealth(unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "health", value) end
@@ -548,6 +551,12 @@ table.insert(Event.Unit.Availability.Partial,	{ OnUnitAvailablePartial, AddonId,
 table.insert(Event.Unit.Availability.None,		{ OnUnitUnavailable, AddonId, AddonId .. "_OnUnitUnavailable" })
 
 -- Register the event handlers for every changeable property
+
+-- Env 1.11+ Only
+if Event.Unit.Detail.Absorb then
+	table.insert(Event.Unit.Detail.Absorb,			{ OnUnitDetailAbsorb, AddonId, AddonId .. "_OnUnitDetailAbsorb" })
+end
+
 table.insert(Event.Unit.Detail.Afk,				{ OnUnitDetailAfk, AddonId, AddonId .. "_OnUnitDetailAfk" })
 table.insert(Event.Unit.Detail.Aggro,			{ OnUnitDetailAggro, AddonId, AddonId .. "_OnUnitDetailAggro" })
 table.insert(Event.Unit.Detail.Blocked,			{ OnUnitDetailBlocked, AddonId, AddonId .. "_OnUnitDetailBlocked" })

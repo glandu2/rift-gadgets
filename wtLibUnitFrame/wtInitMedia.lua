@@ -28,6 +28,12 @@ Library.Media.AddTexture("octanusHP", AddonId, "img/octanusHP.png", {"bar", "hea
 Library.Media.AddTexture("octanusMana", AddonId, "img/octanusMana.png", {"bar", "manaBar"})
 Library.Media.AddTexture("octanusEnergy", AddonId, "img/octanusEnergy.png", {"bar", "energyBar"})
 
+Library.Media.AddTexture("riftRaidHealthBar", "Rift", "raid_healthbar.png.dds", {"bar"})
+Library.Media.AddTexture("riftRaidRoleHeal", "Rift", "raid_icon_role_heal.png.dds", {"roleHeal"})
+Library.Media.AddTexture("riftRaidRoleDPS", "Rift", "raid_icon_role_dps.png.dds", {"roleDPS"})
+Library.Media.AddTexture("riftRaidRoleTank", "Rift", "raid_icon_role_tank.png.dds", {"roleTank"})
+Library.Media.AddTexture("riftRaidRoleSupport", "Rift", "raid_icon_role_support.png.dds", {"roleSupport"})
+
 Library.Media.AddTexture("riftMark01", "Rift", "vfx_ui_mob_tag_01.png.dds", {})
 Library.Media.AddTexture("riftMark02", "Rift", "vfx_ui_mob_tag_02.png.dds", {})
 Library.Media.AddTexture("riftMark03", "Rift", "vfx_ui_mob_tag_03.png.dds", {})

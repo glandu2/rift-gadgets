@@ -78,6 +78,7 @@ Library.Translate.En(
 	Rogue = "Rogue",
 	SelectGadgetType = "Select Gadget Type",
 	Settings = "Settings",
+	ShowAbsorb = "Show Absorb Display",
 	ShowBackground = "Show Background",
 	ShowBackgroundNote = "Show a transparent background when no unit is available",
 	ShowCastTime = "Show Cast Time",

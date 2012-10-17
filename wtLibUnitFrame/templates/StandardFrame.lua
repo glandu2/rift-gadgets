@@ -87,7 +87,8 @@ function StandardFrame:Construct(options)
 			growthDirection="right",
 			binding="healthPercent", color={r=0,g=0.7,b=0,a=1}, 
 			texAddon=AddonId, texFile="img/Diagonal.png", 
-			backgroundColor={r=0, g=0, b=0, a=1}
+			backgroundColor={r=0, g=0, b=0, a=1},
+			colorBinding = "taggedColor",
 		},
 		{
 			id="labelHealth", type="Label", parent="barHealth", layer=20,

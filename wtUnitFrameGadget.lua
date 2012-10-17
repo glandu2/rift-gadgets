@@ -45,6 +45,7 @@ local function ufConfigDialog(container)
 		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
 		:Checkbox("showBackground", TXT.ShowBackground, true)
 		:FieldNote(TXT.ShowBackgroundNote)
+		:Checkbox("showAbsorb", TXT.ShowAbsorb, true)
 end
 
 local function ufGetConfiguration()
@@ -99,6 +100,7 @@ local function rfConfigDialog(container)
 		:Select("layout", "Layout", "4 x 5", { "4 x 5", "5 x 4", "2 x 10", "10 x 2", "1 x 20", "20 x 1" }, false)
 		:Checkbox("showBackground", TXT.ShowBackground, true)
 		:FieldNote(TXT.ShowBackgroundNote)
+		:Checkbox("showAbsorb", TXT.ShowAbsorb, true)
 		:Checkbox("reverseGroups", TXT.ReverseGroups, false)
 		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
 
@@ -170,6 +172,7 @@ local function gfConfigDialog(container)
 		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
 		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
 		:Checkbox("showBackground", TXT.ShowBackground, true)
+		:Checkbox("showAbsorb", TXT.ShowAbsorb, true)
 		:FieldNote(TXT.ShowBackgroundNote)
 		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
 

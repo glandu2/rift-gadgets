@@ -28,6 +28,18 @@ function wtLabel:Construct()
 	local config = self.Configuration
 	local unitFrame = self.UnitFrame
 
+	self.SetVisibleNative = self.SetVisible
+	self.SetVisible = 
+		function(frame, vis)
+			frame:SetVisibleNative(vis) 
+			if self.outline then
+				self.outline[1]:SetVisible(vis) 
+				self.outline[2]:SetVisible(vis) 
+				self.outline[3]:SetVisible(vis) 
+				self.outline[4]:SetVisible(vis) 
+			end
+		end 
+
 	-- Validate configuration
 	if not config.text then error("Label missing required configuration item: text") end
 	

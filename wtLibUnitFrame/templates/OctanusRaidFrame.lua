@@ -93,6 +93,17 @@ function RaidFrame:Construct(options)
 				backgroundColor={r=0, g=0, b=0, a=1}
 			},
 			{
+				id="barAbsorb", type="Bar", parent="frameBackdrop", layer=11,
+				attach = {
+					{ point="BOTTOMLEFT", element="barHealth", targetPoint="BOTTOMLEFT", offsetX=0, offsetY=0 },
+					{ point="TOPRIGHT", element="barHealth", targetPoint="BOTTOMRIGHT", offsetX=0, offsetY=-4 },
+				},
+				growthDirection="right",
+				binding="absorbPercent", color={r=0,g=1,b=1,a=1},
+				media="wtBantoBar", 
+				backgroundColor={r=0, g=0, b=0, a=0},
+			},
+			{
 				-- Generic Element Configuration
 				id="imgRole", type="MediaSet", parent="frameBackdrop", layer=20,
 				attach = {{ point={0,0}, element="barHealth", targetPoint={0,0}, offsetX=-6, offsetY=-6 }}, visibilityBinding="role",
@@ -215,7 +226,11 @@ function RaidFrame:Construct(options)
 	}
 
 	for idx,element in ipairs(template.elements) do
-		self:CreateElement(element) 
+		if not options.showAbsorb and element.id == "barAbsorb" then 
+			-- showElement = false
+		else 
+			self:CreateElement(element)
+		end
 	end
 	
 	self:SetSecureMode("restricted")

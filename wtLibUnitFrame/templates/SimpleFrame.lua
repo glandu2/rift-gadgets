@@ -92,6 +92,17 @@ function SimpleFrame:Construct(options)
 				backgroundColor={r=0, g=0, b=0, a=1}
 			},
 			{
+				id="barAbsorb", type="Bar", parent="frameBackdrop", layer=11,
+				attach = {
+					{ point="BOTTOMLEFT", element="barHealth", targetPoint="BOTTOMLEFT", offsetX=0, offsetY=0 },
+					{ point="TOPRIGHT", element="barHealth", targetPoint="BOTTOMRIGHT", offsetX=0, offsetY=-4 },
+				},
+				growthDirection="right",
+				binding="absorbPercent", color={r=0,g=1,b=1,a=1},
+				media="wtBantoBar", 
+				backgroundColor={r=0, g=0, b=0, a=0},
+			},
+			{
 				-- Generic Element Configuration
 				id="labelHealthR", type="Label", parent="barHealth", layer=20,
 				attach = {{ point="CENTERRIGHT", element="barHealth", targetPoint="CENTERRIGHT", offsetX=-2, offsetY=0 }},
@@ -158,9 +169,10 @@ function SimpleFrame:Construct(options)
 	}
 	
 	for idx,element in ipairs(template.elements) do
-		if options.excludeBuffs and element.type=="BuffPanel" then
-			-- Don't add buff panels if excluding them
-		else
+		local showElement = true
+		if not options.showAbsorb and element.id == "barAbsorb" then showElement = false end
+		if options.excludeBuffs and element.type=="BuffPanel" then showElement = false end
+		if showElement then
 			self:CreateElement(element)
 		end 
 	end

@@ -91,6 +91,17 @@ function StandardFrame:Construct(options)
 			colorBinding = "taggedColor",
 		},
 		{
+			id="barAbsorb", type="Bar", parent="frameBackdrop", layer=11,
+			attach = {
+				{ point="BOTTOMLEFT", element="barHealth", targetPoint="BOTTOMLEFT", offsetX=0, offsetY=0 },
+				{ point="TOPRIGHT", element="barHealth", targetPoint="BOTTOMRIGHT", offsetX=0, offsetY=-4 },
+			},
+			growthDirection="right",
+			binding="absorbPercent", color={r=0,g=1,b=1,a=1},
+			media="wtBantoBar", 
+			backgroundColor={r=0, g=0, b=0, a=0},
+		},
+		{
 			id="labelHealth", type="Label", parent="barHealth", layer=20,
 			attach = {{ point="CENTERLEFT", element="barHealth", targetPoint="CENTERLEFT" }},
 			visibilityBinding="health",
@@ -274,6 +285,7 @@ function StandardFrame:Construct(options)
 		local showElement = true
 		if options.excludeBuffs and element.type=="BuffPanel" then showElement = false end
 		if options.excludeCasts and ((element.id == "barCast") or (element.id == "labelCast")) then showElement = false end
+		if not options.showAbsorb and element.id == "barAbsorb" then showElement = false end
 		if showElement then
 			self:CreateElement(element)
 		end 

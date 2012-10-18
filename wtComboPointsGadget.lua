@@ -103,7 +103,7 @@ table.insert(Library.LibUnitChange.Register("player.target"),
 { 
 	function(unitId) 
 		if not WT.Player then return end
-		if calling ~= "rogue" then return end
+		if calling ~= "rogue_xx" then return end
 		if unitId and unitId == WT.Player.comboUnit and WT.Player.combo and WT.Player.combo > 0 then 
 			WT.Player.comboIndex = WT.Player.combo - 1
 		else

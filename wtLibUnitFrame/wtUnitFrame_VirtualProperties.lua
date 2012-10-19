@@ -120,7 +120,7 @@ WT.Unit.CreateVirtualProperty("absorbPercent", { "absorb", "healthMax" },
 	
 WT.Unit.CreateVirtualProperty("healthAbsorbPercent", { "health", "healthMax", "absorb", "absorbPercent" }, 
 	function(unit)
-		if unit.healthMax and unit.absorbPercent and unit.healthMax > 0 and unit.absorbPercent > 0 then
+		if unit.health and unit.healthMax and unit.absorbPercent and unit.healthMax > 0 and unit.absorbPercent > 0 then
 			return ((unit.health / unit.healthMax) * 100 ) + unit.absorbPercent
 		else 
 			return nil

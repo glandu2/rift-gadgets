@@ -166,6 +166,15 @@ function CDialog:TexSelect(id, label, default, mediaTag, onchange)
 	return self
 end
 
+function CDialog:ColorPicker(id, label, r, g, b, a)
+	local control = WT.Control.ColorPicker.Create(self.container, nil, r, g, b, a)
+	control:SetColor(r,g,b,a)
+	local frm = self:add(id, label, control)
+	frm.getValue = control.GetValue
+	frm.setValue = control.SetValue
+	return self
+end
+
 function CDialog:FontSize(value)
 	local item = self.fields[#self.fields].control
 	item:SetFontSize(value)

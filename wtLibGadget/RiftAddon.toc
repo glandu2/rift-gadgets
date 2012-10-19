@@ -19,6 +19,7 @@ RunOnStartup =
   "controls/wtSelect.lua",
   "controls/wtTexSelect.lua",
   "controls/wtMacroSet.lua",
+  "controls/wtColorPicker.lua",
   "controls/wtDialog.lua",
 
   "wtGadget.lua",

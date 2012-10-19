@@ -88,7 +88,7 @@ function RaidFrame:Construct(options)
 				-- visibilityBinding="id",
 				growthDirection="right",
 				-- Type Specific Element Configuration
-				binding="healthPercent", -- colorBinding="callingColor",
+				binding="healthPercent", color={r=0, g=0.7, b=0, a=1.0},
 				media="octanusHP",
 				backgroundColor={r=0, g=0, b=0, a=1}
 			},

@@ -315,6 +315,26 @@ function WT.UnitFrame.CreateFromTemplate(templateName, unitSpec, options)
 	local template = WT.UnitFrame.Templates[templateName]
 	if not template then return nil end
 	local uf, createOptions = template:Create(unitSpec, options)
+	
+	if options.ovHealthTexture and options.texHealth then
+		if uf.Elements and uf.Elements.barHealth then
+			Library.Media.SetTexture(uf.Elements.barHealth.Image, options.texHealth)
+		end
+	end
+
+	if options.ovHealthColor and options.colHealth then
+		if uf.Elements and uf.Elements.barHealth then
+			uf.Elements.barHealth.Image:SetBackgroundColor(unpack(options.colHealth))
+		end
+	end
+
+	if options.ovResourceTexture and options.texResource then
+		if uf.Elements and uf.Elements.barResource then
+			Library.Media.SetTexture(uf.Elements.barResource.Image, options.texResource)
+		end
+	end
+	
+	
 
 	-- Override any existing mouse handling and add our own
 	-- This is a precursor to full macro handling 	

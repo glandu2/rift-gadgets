@@ -30,6 +30,7 @@ function WT.Gadget.ShowCreationUI()
 		window:SetHeight(600)
 		window:SetLayer(11000)
 		window:SetTitle(TXT.CreateGadget)
+		
 		WT.Gadget.CreateGadgetWindow = window
 		
 		local content = window:GetContent()
@@ -38,17 +39,25 @@ function WT.Gadget.ShowCreationUI()
 		frameTypeList:SetPoint("TOPLEFT", content, "TOPLEFT")
 		frameTypeList:SetPoint("BOTTOMRIGHT", content, "BOTTOMLEFT", 250, 0) -- 40% of the width given over to the type list
 		frameTypeList:SetBackgroundColor(0,0,0,0.3) -- Set the type list to an almost completely transparent white color, to seperate it from the options panel
-
+		
 		local frameScrollAnchor = UI.CreateFrame("Frame", "WTGadgetScrollAnchor", content)
 		frameScrollAnchor:SetPoint("TOPLEFT", frameTypeList, "TOPLEFT", 0, 0)
 
 		local typeListScrollbar = UI.CreateFrame("RiftScrollbar", "WTGadgetTypeScroll", content)
 		typeListScrollbar:SetPoint("TOPRIGHT", frameTypeList, "TOPRIGHT", -1, 1)
-		typeListScrollbar:SetPoint("BOTTOM", frameTypeList, "BOTTOM", nil, -1)	
+		typeListScrollbar:SetPoint("BOTTOM", frameTypeList, "BOTTOM", nil, -1)
+		--typeListScrollbar:Nudge(120)
 		typeListScrollbar.Event.ScrollbarChange = 
 			function()
 				frameScrollAnchor:SetPoint("TOPLEFT", frameTypeList, "TOPLEFT", 0, -typeListScrollbar:GetPosition())
 			end
+			
+		frameTypeList.Event.WheelForward = function()
+			typeListScrollbar:Nudge(-40)
+		end
+		frameTypeList.Event.WheelBack = function()
+			typeListScrollbar:Nudge(40)
+		end
 
 		local frameOptions = UI.CreateFrame("Frame", "WTGadgetOptions", content)
 		frameOptions:SetPoint("TOPLEFT", frameTypeList, "TOPRIGHT", 0, 0)
@@ -163,6 +172,16 @@ function WT.Gadget.ShowCreationUI()
 			wrapper.label2 = label2
 			
 			wrapper.gadgetConfig = config
+			
+			wrapper.Event.WheelForward = 
+				function()
+					typeListScrollbar:Nudge(-40)
+				end
+				
+			wrapper.Event.WheelBack = 
+				function()
+					typeListScrollbar:Nudge(40)
+				end
 			
 			wrapper.Event.MouseIn = 
 				function() 

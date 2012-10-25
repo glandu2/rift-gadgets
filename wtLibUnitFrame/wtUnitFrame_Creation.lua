@@ -13,6 +13,8 @@ function WT.UnitFrame.CreateFromConfiguration(configuration)
 	return WT.UnitFrame.CreateFromTemplate(template, unitSpec, configuration)
 end
 
+local raidFrameGadgets = {}
+
 -- Gadget Factory Function for grid of 20 UnitFrames
 function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 
@@ -68,6 +70,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		wrapper:SetBackgroundColor(0,0,0,0.2)
 	end
 	
+	wrapper.hideWhenEmpty = configuration.hideWhenEmpty or false
 	
 	wrapper:SetSecureMode("restricted")
 	-- Pass through our clickToTarget preference to the template to allow it to set itself up appropriately
@@ -187,10 +190,20 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 			frames[i]:SetMacros(configuration.macros) 
 		end 
 	end
+
+	if wrapper.hideWhenEmpty then
+		if WT.GetGroupMode() == "solo" then
+			WT.HideSecureFrame(wrapper)
+		end
+	end
+	
+	raidFrameGadgets[wrapper] = true
 	
 	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 2, (bottom - top + 1) * 2,  } }
 end
 
+
+local groupFrameGadgets = {}
 
 -- Gadget Factory Function for grid of 20 UnitFrames
 function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
@@ -234,6 +247,7 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 		wrapper:SetBackgroundColor(0,0,0,0.2)
 	end
 	
+	wrapper.hideWhenEmpty = configuration.hideWhenEmpty or false
 	
 	wrapper:SetSecureMode("restricted")
 	-- Pass through our clickToTarget preference to the template to allow it to set itself up appropriately
@@ -304,6 +318,16 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 		for i = 1,5 do frames[i]:SetMacros(configuration.macros) end 
 	end
 		
+	-- Store a reference to the gadget, to use in the hide/show events
+	groupFrameGadgets[wrapper] = true
+	wrapper.groupId = group
+
+	if wrapper.hideWhenEmpty then
+		if not WT.GroupExists(wrapper.group) then
+			WT.HideSecureFrame(wrapper)
+		end
+	end
+		
 	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 2, (bottom - top + 1) * 2,  }, caption=configuration.group }
 end
 
@@ -344,3 +368,62 @@ function WT.UnitFrame.CreateFromTemplate(templateName, unitSpec, options)
 	return uf, createOptions
 end
 
+
+
+
+
+-- EVENT HANDLING FOR DYNAMICALLY HIDING AND SHOWING UNIT FRAME GADGETS
+
+local function ApplyGroupFrameVisibility()
+	for groupFrame in pairs(groupFrameGadgets) do
+		if groupFrame.hideWhenEmpty and not WT.GroupExists(groupFrame.groupId) then
+			WT.HideSecureFrame(groupFrame)
+		else
+			WT.ShowSecureFrame(groupFrame)
+		end
+	end
+end
+
+local function ApplyRaidFrameVisibility()
+	for raidFrame in pairs(raidFrameGadgets) do
+		if raidFrame.hideWhenEmpty and WT.GetGroupMode() == "solo" then
+			WT.HideSecureFrame(raidFrame)
+		else
+			WT.ShowSecureFrame(raidFrame)
+		end
+	end
+end
+
+local function OnGroupAdded(groupId)
+	ApplyGroupFrameVisibility()
+	ApplyRaidFrameVisibility()
+end
+
+local function OnGroupRemoved(groupId)
+	ApplyGroupFrameVisibility()
+	ApplyRaidFrameVisibility()
+end
+
+local function OnLocked()
+	ApplyGroupFrameVisibility()
+	ApplyRaidFrameVisibility()
+end
+
+local function OnUnlocked()
+	for groupFrame in pairs(groupFrameGadgets) do
+		WT.ShowSecureFrame(groupFrame)
+	end
+	for raidFrame in pairs(raidFrameGadgets) do
+		WT.ShowSecureFrame(raidFrame)
+	end
+end
+
+local function OnGroupModeChanged(mode, oldMode)
+	ApplyRaidFrameVisibility()
+end
+
+table.insert(WT.Event.GroupAdded, { OnGroupAdded, AddonId, "OnGroupAdded" } )
+table.insert(WT.Event.GroupRemoved, { OnGroupRemoved, AddonId, "OnGroupRemoved" } )
+table.insert(WT.Event.GadgetsLocked, { OnLocked, AddonId, "OnLocked" } )
+table.insert(WT.Event.GadgetsUnlocked, { OnUnlocked, AddonId, "OnUnlocked" } )
+table.insert(WT.Event.GroupModeChanged, { OnGroupModeChanged, AddonId, "OnGroupModeChanged" } )

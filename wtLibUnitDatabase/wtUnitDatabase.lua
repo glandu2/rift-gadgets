@@ -79,6 +79,9 @@ WT.Event.Trigger.BuffUpdates, WT.Event.BuffUpdates = Utility.Event.Create(AddonI
 WT.Event.Trigger.CastbarShow, WT.Event.CastbarShow = Utility.Event.Create(AddonId, "CastbarShow")
 WT.Event.Trigger.CastbarHide, WT.Event.CastbarHide = Utility.Event.Create(AddonId, "CastbarHide")
 
+WT.Event.Trigger.GroupAdded, WT.Event.GroupAdded = Utility.Event.Create(AddonId, "GroupAdded")
+WT.Event.Trigger.GroupRemoved, WT.Event.GroupRemoved = Utility.Event.Create(AddonId, "GroupRemoved")
+WT.Event.Trigger.GroupModeChanged, WT.Event.GroupModeChanged = Utility.Event.Create(AddonId, "GroupModeChanged")
 
 local function IsBlackListed(buff)
 	if wtxOptions.buffsBlacklist and wtxOptions.buffsBlacklist[buff.name] then
@@ -549,6 +552,63 @@ end
 table.insert(Event.Unit.Availability.Full,		{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })
 table.insert(Event.Unit.Availability.Partial,	{ OnUnitAvailablePartial, AddonId, AddonId .. "_OnUnitAvailablePartial" })
 table.insert(Event.Unit.Availability.None,		{ OnUnitUnavailable, AddonId, AddonId .. "_OnUnitUnavailable" })
+
+
+-- Register the handlers that will deal with groups being added and removed
+local groupMode = "solo"
+local groupExists = { }
+
+local function OnGroupMemberChange(unitId)
+	local g = {}
+	for i = 1,20 do
+		local grpid = math.floor(((i-1)/5)+1)
+		local uid = Inspect.Unit.Lookup("group" .. string.format("%02d", i))
+		if uid then
+			g[grpid] = true
+		end  
+	end
+	for grp = 1,4 do
+		if g[grp] and not groupExists[grp] then 
+			groupExists[grp] = true
+			WT.Event.Trigger.GroupAdded(grp)
+		end
+		if not g[grp] and groupExists[grp] then 
+			groupExists[grp] = false
+			WT.Event.Trigger.GroupRemoved(grp)
+		end
+		local mode = "solo"
+		if groupExists[1] then mode = "party" end
+		if groupExists[2] or groupExists[3] or groupExists[4] then mode = "raid" end
+		
+		if mode ~= groupMode then
+			local oldMode = groupMode
+			groupMode = mode
+			WT.Event.Trigger.GroupModeChanged(groupMode, oldMode) -- changed(newMode, oldMode)			
+		end 
+	end
+end
+
+WT.RegisterInitializer(OnGroupMemberChange)
+
+local groupEventTables = {}
+for i = 1,20 do 
+	groupEventTables[i] = Library.LibUnitChange.Register("group" .. string.format("%02d", i))
+	table.insert(groupEventTables[i], { OnGroupMemberChange, AddonId, "OnGroupMemberChange" } )
+end
+
+
+function WT.GroupExists(groupId)
+	if groupExists[groupId] then
+		return true
+	else
+		return false
+	end
+end
+
+function WT.GetGroupMode()
+	return groupMode
+end
+
 
 -- Register the event handlers for every changeable property
 

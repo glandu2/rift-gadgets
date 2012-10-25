@@ -119,3 +119,41 @@ end
 function string.wtTrim(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
+
+local pendingVisibility = {}
+
+function WT.ShowSecureFrame(frame)
+	if not Inspect.System.Secure() then
+		frame:SetVisible(true)
+		pendingVisibility[frame] = nil
+	else
+		pendingVisibility[frame] = true
+	end
+end
+
+function WT.HideSecureFrame(frame)
+	if not Inspect.System.Secure() then
+		frame:SetVisible(false)
+		pendingVisibility[frame] = nil
+	else
+		pendingVisibility[frame] = false
+	end
+end
+
+local function OnSecureEnter()
+end
+
+local function OnSecureLeave()
+	for frame, show in pairs(pendingVisibility) do
+		if show == true then
+			frame:SetVisible(true)
+		end
+		if show == false then
+			frame:SetVisible(false)
+		end
+		pendingVisibility[frame] = nil
+	end
+end 
+
+table.insert(Event.System.Secure.Enter, { OnSecureEnter, AddonId, "OnSecureEnter" })
+table.insert(Event.System.Secure.Leave, { OnSecureLeave, AddonId, "OnSecureLeave" })

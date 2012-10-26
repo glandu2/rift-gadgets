@@ -176,6 +176,30 @@ function WT.Gadget.Create(configuration)
 			if not gadget.ypos then gadget.ypos = configuration.ypos or 200 end 
 			gadget:SetPoint("TOPLEFT", UIParent, "TOPLEFT", gadget.xpos, gadget.ypos) 
 			
+			-- Give the gadget a display root
+			gadget.displayRoot = UI.CreateFrame("Frame", "displayRoot", gadget:GetParent())
+			gadget.displayRoot:SetSecureMode(gadget:GetSecureMode())
+			gadget:SetParent(gadget.displayRoot)
+			
+			gadget.showGroup = {}
+			
+			gadget.showGroup.solo = configuration.show_Solo
+			if gadget.showGroup.solo == nil then gadget.showGroup.solo = true end
+			gadget.showGroup.party = configuration.show_Party
+			if gadget.showGroup.party == nil then gadget.showGroup.party = true end
+			gadget.showGroup.raid10 = configuration.show_Raid10
+			if gadget.showGroup.raid10 == nil then gadget.showGroup.raid10 = true end
+			gadget.showGroup.raid20 = configuration.show_Raid20
+			if gadget.showGroup.raid20 == nil then gadget.showGroup.raid20 = true end
+			gadget.alpha_IC = configuration.alpha_IC
+			if gadget.alpha_IC == nil then gadget.alpha_IC = 100 end
+			gadget.alpha_OOC = configuration.alpha_OOC
+			if gadget.alpha_OOC == nil then gadget.alpha_OOC = 100 end
+			
+			gadget.displayRoot:SetAlpha(gadget.alpha_OOC / 100)
+			
+			WT.Gadget.SetGadgetGroupVisible(gadget, WT.GetGroupMode())
+			
 			-- store the configuration table
 			wtxGadgets[gadgetId] = configuration
 		end
@@ -583,16 +607,57 @@ function WT.Gadget.Locked()
 end
 
 
+local function SetGadgetCombatAlpha(gadget, inCombat)
+
+	local alpha = gadget.alpha_OOC
+	if inCombat then alpha = gadget.alpha_IC end
+
+	if alpha == 0 then
+		gadget.displayRoot:SetVisible(false)
+	else
+		gadget.displayRoot:SetVisible(true)
+		gadget.displayRoot:SetAlpha(alpha / 100)
+	end
+
+end 
+
+function WT.Gadget.SetGadgetGroupVisible(gadget, groupMode)
+	local visible = gadget.showGroup[groupMode]
+	if visible then
+		WT.ShowSecureFrame(gadget.displayRoot)
+	else
+		WT.HideSecureFrame(gadget.displayRoot)
+	end
+end
+
+
+local function OnGroupModeChanged(groupMode)
+	for gadgetId, gadget in pairs(WT.Gadgets) do
+		WT.Gadget.SetGadgetGroupVisible(gadget, groupMode)
+	end
+end
+
+
 function WT.Gadget.SecureEnter()
 	WT.Gadget.isSecure = true
 	-- lock gadgets when the environment goes secure (can't move secure frames in secure mode) 
 	if not gadgetsLocked then
 		WT.Gadget.Command.lock()
 	end
+	
+	-- We're entering combat, so set the IC alpha on all gadgets
+	for gadgetId, gadget in pairs(WT.Gadgets) do
+		SetGadgetCombatAlpha(gadget, true)
+	end
 end
 
 function WT.Gadget.SecureLeave()
 	WT.Gadget.isSecure = false
+
+	-- We're entering combat, so set the IC alpha on all gadgets
+	for gadgetId, gadget in pairs(WT.Gadgets) do
+		SetGadgetCombatAlpha(gadget, false)
+	end
 end
 
 
@@ -626,3 +691,5 @@ table.insert(Event.System.Secure.Enter, { WT.Gadget.SecureEnter, AddonId, AddonI
 table.insert(Event.System.Secure.Leave, { WT.Gadget.SecureLeave, AddonId, AddonId .. "_Gadget_SecureLeave" })
 
 table.insert(Event.Addon.SavedVariables.Save.Begin, { OnSaveVariables, AddonId, AddonId .. "_Gadget_OnSaveVariables" })
+
+table.insert(WT.Event.GroupModeChanged, { OnGroupModeChanged, AddonId, AddonId .. "_OnGroupModeChanged" })

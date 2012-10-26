@@ -70,12 +70,25 @@ function WT.Gadget.ShowModifyUI(id)
 	gadgetFactory = WT.GadgetFactories[gadgetConfig.type:lower()]
 
 	if not WT.Gadget.ModifyGadgetWindow then
+	
+	 	WT.Gadget.ShowCreationUI()
+	 	WT.Gadget.ModifyGadgetWindow = WT.Gadget.CreateGadgetWindow
+
+		
+		local btnOK = UI.CreateFrame("RiftButton", "WTGadgetBtnOK", WT.Gadget.ModifyGadgetWindow.frameOptions)
+		btnOK:SetText(TXT.Modify)
+		btnOK:SetPoint("CENTERRIGHT", WT.Gadget.ModifyGadgetWindow.btnCancel, "CENTERLEFT", 8, 0)
+		btnOK:SetEnabled(true)
+		btnOK.Event.LeftPress = OnModifyClick 
+
+--[[ 
+	
 		local window  = UI.CreateFrame("SimpleWindow", "WTGadgetModify", WT.Context)
 		window:SetPoint("CENTER", UIParent, "CENTER")
 		--window:SetController("content")
 		window:SetCloseButtonVisible(true)
 		window:SetWidth(800)
-		window:SetHeight(600)
+		window:SetHeight(700) -- added 100 pixels to make room for standard gadget options
 		window:SetLayer(11000)
 		window:SetTitle(TXT.ModifyGadget)
 		WT.Gadget.ModifyGadgetWindow = window
@@ -117,10 +130,16 @@ function WT.Gadget.ShowModifyUI(id)
 		gadgetDetails:SetPoint("TOPLEFT", frameOptionsHeading, "BOTTOMLEFT", 0, -4)
 		gadgetDetails:SetFontColor(0.8, 0.8, 0.8, 1.0)
 	else
-		WT.Gadget.ModifyGadgetWindow:SetVisible(true)
+	--]]
 	end
+ 
+	WT.Gadget.ModifyGadgetWindow:SetVisible(true)
 
 	local window = WT.Gadget.ModifyGadgetWindow
+	gadgetDetails = window.gadgetDetails
+	window:SetTitle(TXT.ModifyGadget)
+
+	window.StandardOptions:SetVisible(true)
 
 	-- Hide any pre-existing dialog frame
 	if window.dialog then
@@ -141,8 +160,8 @@ function WT.Gadget.ShowModifyUI(id)
 		window.dialog = gadgetFactory._configDialog 
 		
 		window.dialog:SetParent(gadgetDetails)
-		window.dialog:SetPoint("TOPLEFT", gadgetDetails, "BOTTOMLEFT", 0, 8)
-		window.dialog:SetPoint("BOTTOMRIGHT", frameOptions, "BOTTOMRIGHT", -8, -8)
+		window.dialog:SetPoint("TOPLEFT", window.StandardOptions, "BOTTOMLEFT", 0, 8)
+		window.dialog:SetPoint("BOTTOMRIGHT", window.frameOptions, "BOTTOMRIGHT", -8, -8)
 		
 		if gadgetFactory.SetConfiguration then
 			gadgetFactory.SetConfiguration(gadgetConfig)

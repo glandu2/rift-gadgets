@@ -123,6 +123,12 @@ end
 local pendingVisibility = {}
 
 function WT.ShowSecureFrame(frame)
+
+	if not frame:GetSecureMode() then
+		frame:SetVisible(true)
+		return
+	end
+
 	if not Inspect.System.Secure() then
 		frame:SetVisible(true)
 		pendingVisibility[frame] = nil
@@ -132,6 +138,12 @@ function WT.ShowSecureFrame(frame)
 end
 
 function WT.HideSecureFrame(frame)
+
+	if not frame:GetSecureMode() then
+		frame:SetVisible(false)
+		return
+	end
+
 	if not Inspect.System.Secure() then
 		frame:SetVisible(false)
 		pendingVisibility[frame] = nil

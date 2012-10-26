@@ -576,16 +576,19 @@ local function OnGroupMemberChange(unitId)
 			groupExists[grp] = false
 			WT.Event.Trigger.GroupRemoved(grp)
 		end
-		local mode = "solo"
-		if groupExists[1] then mode = "party" end
-		if groupExists[2] or groupExists[3] or groupExists[4] then mode = "raid" end
-		
-		if mode ~= groupMode then
-			local oldMode = groupMode
-			groupMode = mode
-			WT.Event.Trigger.GroupModeChanged(groupMode, oldMode) -- changed(newMode, oldMode)			
-		end 
 	end
+
+	local mode = "solo"
+	if groupExists[1] then mode = "party" end
+	if groupExists[2] then mode = "raid10" end
+	if groupExists[3] or groupExists[4] then mode = "raid20" end
+	
+	if mode ~= groupMode then
+		local oldMode = groupMode
+		groupMode = mode
+		WT.Event.Trigger.GroupModeChanged(groupMode, oldMode) -- changed(newMode, oldMode)			
+	end 
+
 end
 
 WT.RegisterInitializer(OnGroupMemberChange)

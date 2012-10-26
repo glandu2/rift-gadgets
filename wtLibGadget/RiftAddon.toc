@@ -34,7 +34,7 @@ RunOnStartup =
   "dialogs/wtGadgetSettings.lua",
   "dialogs/wtGadgetImport.lua",
   "dialogs/wtGadget_CreateDialog.lua",
-  "dialogs/wtGadget_ModifyDialog.lua",
+--  "dialogs/wtGadget_ModifyDialog.lua",
   
 --  "properties/wtProperty.lua",
 --  "properties/wtPropertyTypeHandlers.lua",
@@ -56,4 +56,5 @@ Dependencies =
 {
 	LibSimpleWidgets = {"required", "before"},
 	wtLibCore = {"required", "before"},	
+	wtLibUnitDatabase = {"required", "before"},	
 }

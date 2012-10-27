@@ -28,6 +28,9 @@ function wtFrame:Construct()
 		unitFrame:CreateBinding(config.colorBinding, self, self.BindColor, nil)
 	end
 
+	if config.width then self:SetWidth(config.width) end
+	if config.height then self:SetHeight(config.height) end
+
 end
 
 

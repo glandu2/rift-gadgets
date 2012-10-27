@@ -34,6 +34,16 @@ Library.Media.AddTexture("riftRaidRoleDPS", "Rift", "raid_icon_role_dps.png.dds"
 Library.Media.AddTexture("riftRaidRoleTank", "Rift", "raid_icon_role_tank.png.dds", {"roleTank"})
 Library.Media.AddTexture("riftRaidRoleSupport", "Rift", "raid_icon_role_support.png.dds", {"roleSupport"})
 
+Library.Media.AddTexture("riftRaidRoleHeal_Medium", "Rift", "role_heal_big.png.dds", {"roleHealMedium"})
+Library.Media.AddTexture("riftRaidRoleDPS_Medium", "Rift", "role_dps_big.png.dds", {"roleDPSMedium"})
+Library.Media.AddTexture("riftRaidRoleTank_Medium", "Rift", "role_tank_big.png.dds", {"roleTankMedium"})
+Library.Media.AddTexture("riftRaidRoleSupport_Medium", "Rift", "role_support_big.png.dds", {"roleSupportMedium"})
+
+Library.Media.AddTexture("riftRaidRoleHeal_Large", "Rift", "LFP_Roles_Heal_(normal).png.dds", {"roleHealLarge"})
+Library.Media.AddTexture("riftRaidRoleDPS_Large", "Rift", "LFP_Roles_DPS_(normal).png.dds", {"roleDPSLarge"})
+Library.Media.AddTexture("riftRaidRoleTank_Large", "Rift", "LFP_Roles_Tank_(normal).png.dds", {"roleTankLarge"})
+Library.Media.AddTexture("riftRaidRoleSupport_Large", "Rift", "LFP_Roles_Support_(normal).png.dds", {"roleSupportLarge"})
+
 Library.Media.AddTexture("riftMark01", "Rift", "vfx_ui_mob_tag_01.png.dds", {})
 Library.Media.AddTexture("riftMark02", "Rift", "vfx_ui_mob_tag_02.png.dds", {})
 Library.Media.AddTexture("riftMark03", "Rift", "vfx_ui_mob_tag_03.png.dds", {})

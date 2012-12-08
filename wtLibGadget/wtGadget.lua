@@ -180,6 +180,7 @@ function WT.Gadget.Create(configuration)
 			gadget.displayRoot = UI.CreateFrame("Frame", "displayRoot", gadget:GetParent())
 			gadget.displayRoot:SetSecureMode(gadget:GetSecureMode())
 			gadget:SetParent(gadget.displayRoot)
+			gadget.displayRoot:SetLayer(gadget:GetLayer())
 			
 			gadget.showGroup = {}
 			

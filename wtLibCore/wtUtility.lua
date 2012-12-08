@@ -59,6 +59,17 @@ function WT.Utility.NumberDesc(x)
 	return string.format("%.1fM", x / 1000000)
 end
 
+function WT.Utility.NumberComma(amount)
+  local formatted = amount
+  while true do  
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end
+
 function WT.Utility.ToBoolean(value)
 	if value then
 		return true

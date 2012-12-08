@@ -233,6 +233,7 @@ function wtBuffPanel:Construct()
 		
 		icon.Event.MouseIn = ShowTooltip
 		icon.Event.MouseOut = HideTooltip
+		icon:SetMouseMasking("limited")
 	end
 
 	self.buffs = {}

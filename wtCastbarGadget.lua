@@ -84,7 +84,7 @@ local function Create(configuration)
 
 	castBar.barCast:SetVisible(false)
 
-	return castBar, { resizable = { 140, 15, 300, 50 } }
+	return castBar, { resizable = { 140, 15, 1000, 300 } }
 end
 
 local dialog = false

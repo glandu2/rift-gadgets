@@ -119,7 +119,7 @@ function RaidFrame:Construct(options)
 				-- Generic Element Configuration
 				id="labelStatus", type="Label", parent="frameBackdrop", layer=20,
 				attach = {{ point="BOTTOMCENTER", element="frameBackdrop", targetPoint="BOTTOMCENTER", offsetX=0, offsetY=-4 }},
-				visibilityBinding="name",
+				visibilityBinding="raidStatus",
 				-- Type Specific Element Configuration
 				text=" {raidStatus}", default="", fontSize=12
 			},

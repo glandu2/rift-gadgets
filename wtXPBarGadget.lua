@@ -47,7 +47,11 @@ local function OnExperience(accum, rested, needed)
 			gadget.iconRested:SetVisible(false)
 		end
 		if gadget.text then
-			gadget.text:SetText(WT.Utility.NumberDesc(accum) .. "/" .. WT.Utility.NumberDesc(needed) .. " (" .. percentString .. ")")
+			if gadget.textType then
+				gadget.text:SetText(WT.Utility.NumberComma(accum) .. "/" .. WT.Utility.NumberComma(needed) .. " (" .. percentString .. ")")
+			else
+				gadget.text:SetText(WT.Utility.NumberDesc(accum) .. "/" .. WT.Utility.NumberDesc(needed) .. " (" .. percentString .. ")")
+			end
 		end
 	end
 end
@@ -86,6 +90,7 @@ local function Create(configuration)
 		txt:SetFontColor(1,1,1,1)
 		txt:SetPoint("CENTER", wrapper, "CENTER")
 		txt:SetText("-/- (0%)")
+		wrapper.textType = configuration.showFullText
 		wrapper.text = txt
 		bar.Event.Size = 
 			function()
@@ -108,6 +113,7 @@ local function ConfigDialog(container)
 	dialog = WT.Dialog(container)
 		:Label("Resizable XP Bar Gadget")
 		:Checkbox("showText", "Show Text", false)
+		:Checkbox("showFullText", "Show Full XP Values", false)
 		:Checkbox("tintRested", "Tint Rested XP on Bar", false)
 end
 

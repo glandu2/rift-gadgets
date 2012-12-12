@@ -627,7 +627,6 @@ table.insert(Event.Unit.Detail.Charge,			{ OnUnitDetailCharge, AddonId, AddonId 
 table.insert(Event.Unit.Detail.ChargeMax,		{ OnUnitDetailChargeMax, AddonId, AddonId .. "_OnUnitDetailChargeMax" })
 table.insert(Event.Unit.Detail.Combat,			{ OnUnitDetailCombat, AddonId, AddonId .. "_OnUnitDetailCombat" })
 table.insert(Event.Unit.Detail.Combo,			{ OnUnitDetailCombo, AddonId, AddonId .. "_OnUnitDetailCombo" })
-table.insert(Event.Unit.Detail.ComboUnit,		{ OnUnitDetailComboUnit, AddonId, AddonId .. "_OnUnitDetailComboUnit" })
 table.insert(Event.Unit.Detail.Energy,			{ OnUnitDetailEnergy, AddonId, AddonId .. "_OnUnitDetailEnergy" })
 table.insert(Event.Unit.Detail.EnergyMax,		{ OnUnitDetailEnergyMax, AddonId, AddonId .. "_OnUnitDetailEnergyMax" })
 table.insert(Event.Unit.Detail.Guild,			{ OnUnitDetailGuild, AddonId, AddonId .. "_OnUnitDetailGuild" })

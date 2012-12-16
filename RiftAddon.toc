@@ -41,6 +41,7 @@ RunOnStartup =
   "wtXPPercentGadget.lua",
   "wtXPBarGadget.lua",
   "wtFactionPanelGadget.lua",
+  "wtHudArcGadget.lua",
 }
 
 SavedVariables = 

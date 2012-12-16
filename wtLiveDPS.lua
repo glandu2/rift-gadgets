@@ -69,26 +69,35 @@ WT.Gadget.RegisterFactory("DPS",
 
 
 local dmgAccum = 0
+local healAccum = 0
 local runningSeconds = 10
 local runningCursor = 1
 local runningDamage = {}
+local runningHeal = {}
 local lastSecond = math.floor(Inspect.Time.Frame())
 for i = 1,runningSeconds do runningDamage[i] = 0 end
+for i = 1,runningSeconds do runningHeal[i] = 0 end
 
 local function OnTick()
 	local currSecond = math.floor(Inspect.Time.Frame())
 	if currSecond ~= lastSecond then
 		runningDamage[runningCursor] = dmgAccum
+		runningHeal[runningCursor] = healAccum
 		dmgAccum = 0
+		healAccum = 0
 		runningCursor = runningCursor + 1
 		if runningCursor > runningSeconds then runningCursor = 1 end
 		local total = 0
+		local totalHeal = 0
 		for i = 1, runningSeconds do
 			total = total + runningDamage[i]
+			totalHeal = totalHeal + runningHeal[i]
 		end
 		local dps = math.floor((total / runningSeconds) + 0.5)
+		local hps = math.floor((totalHeal / runningSeconds) + 0.5)
 		for idx, frame in ipairs(dpsGadgets) do
 			frame:SetText(tostring(dps))
+			-- frame:SetText(tostring(dps) .. " | " .. tostring(hps))
 		end
 		lastSecond = currSecond
 	end
@@ -98,10 +107,33 @@ end
 local function OnDamage(info)
 
 	if not info.damage then return end
-	if info.caster ~= WT.Player.id then return end
+	
+	if info.caster == WT.Player.id then
+		dmgAccum = dmgAccum + info.damage
+	else
+		local playerPet = Inspect.Unit.Lookup("player.pet")
+		if playerPet and info.caster == playerPet then
+			dmgAccum = dmgAccum + info.damage
+		end
+	end
+	
+end
 
-	dmgAccum = dmgAccum + info.damage
+local function OnHeal(info)
+
+	if not info.heal then return end
+
+	if info.caster == WT.Player.id then
+		healAccum = healAccum + info.heal
+	else
+		local playerPet = Inspect.Unit.Lookup("player.pet")
+		if playerPet and info.caster == playerPet then
+			healAccum = healAccum + info.heal
+		end
+	end
+	
 end
 
 table.insert(Event.System.Update.Begin, { OnTick, AddonId, AddonId .. "_OnTick" })
 table.insert(Event.Combat.Damage, { OnDamage, AddonId, AddonId .. "_OnDamage" })
+table.insert(Event.Combat.Heal, { OnHeal, AddonId, AddonId .. "_OnHeal" })

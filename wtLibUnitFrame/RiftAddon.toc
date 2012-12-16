@@ -37,6 +37,7 @@ RunOnStartup =
   "templates/HealthOrb.lua",
   "templates/ManaOrb.lua",
   "templates/OctanusRaidFrame.lua",
+  "templates/HealFrame.lua",
 }
 
 SavedVariables = 

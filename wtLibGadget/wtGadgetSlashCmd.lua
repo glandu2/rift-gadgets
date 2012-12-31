@@ -74,6 +74,21 @@ function WT.Gadget.Command.toggle()
 	WT.Gadget.ToggleAll()
 end
 
+function WT.Gadget.Command.grid(gridSize)
+	local gs = tonumber(gridSize) or 1
+	if (gs < 1) then gs = 1 end	
+	WT.Gadget.GridSize = gs
+	Command.Console.Display("general", true, "Gadgets grid snapping set to " .. gs .. " pixels", false)
+end
+
+function WT.Gadget.GetGridSize()
+	if WT.Gadget.GridSize and WT.Gadget.GridSize >= 1 then
+		return WT.Gadget.GridSize
+	else
+		return 1
+	end
+end
+
 function WT.Gadget.Command.setproperty(gadgetId, propertyId, value)
 	local gadget = WT.Gadgets[gadgetId]
 	if not gadget then
@@ -103,4 +118,6 @@ function WT.Gadget.OnSlashCommand(cmd)
 	end
 end
 
-table.insert(Command.Slash.Register("gadget"), { WT.Gadget.OnSlashCommand, AddonId, AddonId .. "_OnSlashCommand" })
+table.insert(Command.Slash.Register("gadget"), { WT.Gadget.OnSlashCommand, AddonId, AddonId .. "_OnSlashCommand1" })
+table.insert(Command.Slash.Register("gadgets"), { WT.Gadget.OnSlashCommand, AddonId, AddonId .. "_OnSlashCommand2" })
+

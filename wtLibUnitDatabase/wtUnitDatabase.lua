@@ -92,6 +92,24 @@ local function IsBlackListed(buff)
 end
 
 
+local function TriggerBuffUpdates(unitId, changes)
+	local unit = WT.Units[unitId]
+	local needsCleanse = false	
+	for buffId, buffDetail in pairs(unit.Buffs) do	
+		if buffDetail.curse or buffDetail.disease or buffDetail.poison then
+			needsCleanse = true
+		end
+	end
+	if not unit.cleansable and needsCleanse then
+		unit.cleansable = needsCleanse
+	end
+	if unit.cleansable and not needsCleanse then
+		unit.cleansable = false
+	end
+	WT.Event.Trigger.BuffUpdates(unitId, changes)
+end
+
+
 local function OnBuffAdd(unitId, buffs)
 
 	if not buffs then return end
@@ -110,7 +128,7 @@ local function OnBuffAdd(unitId, buffs)
 		end
 	end
 
-	WT.Event.Trigger.BuffUpdates(unitId, changes)
+	TriggerBuffUpdates(unitId, changes)
 
 end
 
@@ -129,7 +147,7 @@ local function OnBuffRemove(unitId, buffs)
 		end
 	end
 
-	WT.Event.Trigger.BuffUpdates(unitId, changes)
+	TriggerBuffUpdates(unitId, changes)
 
 end
 
@@ -150,7 +168,7 @@ local function OnBuffChange(unitId, buffs)
 		end
 	end
 
-	WT.Event.Trigger.BuffUpdates(unitId, changes)
+	TriggerBuffUpdates(unitId, changes)
 
 end
 
@@ -304,6 +322,10 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 				playerAvailableFired = true
 			end 
 		end
+
+		if unitId == Inspect.Unit.Lookup("player.target") then
+			unit.playerTarget = true
+		end 
 		
 		
 		-- Add all buffs currently on the unit
@@ -311,6 +333,14 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 			OnBuffRemove(unitId, unit.Buffs)
 			OnBuffAdd(unitId, Inspect.Buff.List(unitId))
 		end
+			
+		local needsCleanse = false	
+		for buffId, buffDetail in pairs(unit.Buffs) do	
+			if buffDetail.curse or buffDetail.disease or buffDetail.poison then
+				needsCleanse = true
+			end
+		end
+		unit.cleansable = needsCleanse
 				
 		return unit
 	else
@@ -544,8 +574,62 @@ local function OnUnitDetailCoord(xValues, yValues, zValues)
 	end
 end
 
+local lastRangeCalc = nil
+local rangeThrottle = 0.5
+
+local function CalculateRanges()
+
+	if (lastRangeCalc and ((Inspect.Time.Frame() - lastRangeCalc) < rangeThrottle)) then
+		return
+	end
+
+	lastRangeCalc = Inspect.Time.Frame()
+
+	if not WT.Player or not WT.Player.coord then return end
+
+	local px = WT.Player.coord[1]
+	local py = WT.Player.coord[2]
+	local pz = WT.Player.coord[3]
+	
+	for unitId,details in pairs(WT.Units) do
+	
+		if details.coord then
+		
+			local ux = details.coord[1] 			
+			local uy = details.coord[2] 			
+			local uz = details.coord[3]
+
+			local radiusDiff = (WT.Player.radius or 0.5) + (details.radius or 0.5)	
+		
+			local dx = px - ux  			
+			local dy = py - uy 			
+			local dz = pz - uz			
+
+			local rangeSqr = (dx * dx + dy * dy + dz * dz)
+			local oor = not (rangeSqr < ((35+radiusDiff)*(35+radiusDiff)))
+			
+			if oor and not details.outOfRange then
+				details.outOfRange = true
+			end
+			if not oor and details.outOfRange then
+				details.outOfRange = nil
+			end
+			
+			local blocked = details.blocked or details.outOfRange
+			if not details.blockedOrOutOfRange and blocked then
+				details.blockedOrOutOfRange = true
+			end
+			if details.blockedOrOutOfRange and not blocked then
+				details.blockedOrOutOfRange = nil
+			end
+			
+		end
+	end
+end
+
 local function OnSystemUpdateBegin()
 	CalculateCastChanges()
+	CalculateRanges()
 end
 
 -- Setup Event Handlers
@@ -613,6 +697,18 @@ function WT.GetGroupMode()
 end
 
 
+local playerTargetId = nil
+local function OnPlayerTargetChange(unitId)
+	if playerTargetId and WT.Units[playerTargetId] then
+		WT.Units[playerTargetId].playerTarget = nil
+	end
+	playerTargetId = unitId
+	if playerTargetId and WT.Units[playerTargetId] then
+		WT.Units[playerTargetId].playerTarget = true
+	end	
+end
+
+
 -- Register the event handlers for every changeable property
 
 -- Env 1.11+ Only
@@ -660,3 +756,6 @@ table.insert(Event.Unit.Detail.Zone,			{ OnUnitDetailZone, AddonId, AddonId .. "
 table.insert(Event.Unit.Detail.Coord,			{ OnUnitDetailCoord, AddonId, AddonId .. "_OnUnitDetailCoord" })
 
 table.insert(Event.System.Update.Begin,			{ OnSystemUpdateBegin, AddonId, AddonId .. "_DB_OnSystemUpdateBegin" })
+
+
+table.insert(Library.LibUnitChange.Register("player.target"), { OnPlayerTargetChange,  AddonId, AddonId .. "_OnPlayerTargetChange" })

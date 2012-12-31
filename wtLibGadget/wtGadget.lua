@@ -361,6 +361,10 @@ function WT.Gadget:DragMove()
 		local x = math.ceil(mouse.x - self.mouseStartX + self.startX)
 		local y = math.ceil(mouse.y - self.mouseStartY + self.startY)
 			
+		local gs = WT.Gadget.GetGridSize()
+		x = math.floor(x / gs) * gs
+		y = math.floor(y / gs) * gs
+			
 		if WT.Gadget.alignTo then
 			local alignTop = WT.Gadget.alignTo.frame:GetTop()
 			local alignLeft = WT.Gadget.alignTo.frame:GetLeft()
@@ -447,6 +451,11 @@ function WT.Gadget:SizeMove()
 		local mouse = Inspect.Mouse()
 		local x = mouse.x - self.mouseStartX + self.startX
 		local y = mouse.y - self.mouseStartY + self.startY
+		
+		local gs = WT.Gadget.GetGridSize()
+		x = math.floor(x / gs) * gs
+		y = math.floor(y / gs) * gs		
+		
 		local newWidth = math.ceil(x - self.frame:GetLeft() + 1)		
 		local newHeight = math.ceil(y - self.frame:GetTop() + 1)
 		if newWidth < self.minX then newWidth = self.minX end

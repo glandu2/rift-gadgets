@@ -100,7 +100,11 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		if not _debug then
 			frames[i] = WT.UnitFrame.CreateFromTemplate(template, sequence[i], configuration)
 		else
-			frames[i] = WT.UnitFrame.CreateFromTemplate(template, "player.target", configuration)
+			if i % 2 == 0 then
+				frames[i] = WT.UnitFrame.CreateFromTemplate(template, "player.target", configuration)
+			else
+				frames[i] = WT.UnitFrame.CreateFromTemplate(template, "focus", configuration)
+			end
 		end
 		frames[i]:SetParent(wrapper)
 		frames[i]:SetLayer(i)

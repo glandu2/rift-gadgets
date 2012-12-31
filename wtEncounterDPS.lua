@@ -76,8 +76,19 @@ local function OnDamage(info)
 
 	if not info.damage then return end
 
-	if info.caster ~= WT.Player.id then return end
-	
+	local isPlayer = false
+
+	if info.caster == WT.Player.id then
+		isPlayer = true
+	else
+		local playerPet = Inspect.Unit.Lookup("player.pet")
+		if playerPet and info.caster == playerPet then
+			isPlayer = true
+		end
+	end
+
+	if not isPlayer then return end
+
 	local currTime = Inspect.Time.Frame()
 	if (currTime - lastDamageTime) > 8.0 then
 		-- new encounter

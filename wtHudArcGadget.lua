@@ -164,6 +164,7 @@ local dialog = nil
 local function ConfigDialog(container)	
 	dialog = WT.Dialog(container)
 		:Label("The HUD Arc gadget allows you to add arc shaped bars as HUD elements")
+		:Label("To create arcs with matching sizes, please use the 'Copy Gadget' option, which is available when gadgets are unlocked")
 		:Combobox("unitSpec", TXT.UnitToTrack, "player",
 			{
 				{text="Player", value="player"},

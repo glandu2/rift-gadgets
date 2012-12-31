@@ -211,6 +211,7 @@ local function rfSetConfiguration(config)
 end
 
 
+local gfEditors = {}
 local gfDialog = false
 local gfAppearance = false
 local function gfConfigDialog(container)
@@ -230,6 +231,11 @@ local function gfConfigDialog(container)
 	local frmConfigInner = UI.CreateFrame("Frame", "ufConfigInner", frmConfig)
 	frmConfigInner:SetPoint("TOPLEFT", frmConfig, "TOPLEFT", 12, 12)
 	frmConfigInner:SetPoint("BOTTOMRIGHT", frmConfig, "BOTTOMRIGHT", -12, -12)
+
+	local frmMacros = UI.CreateFrame("Frame", "rfMacros", ufTabs.tabContent)
+	local frmMacrosInner = UI.CreateFrame("Frame", "rfMacrosInner", frmMacros)
+	frmMacrosInner:SetPoint("TOPLEFT", frmMacros, "TOPLEFT", 4, 4)
+	frmMacrosInner:SetPoint("BOTTOMRIGHT", frmMacros, "BOTTOMRIGHT", -4, -4)
 	
 	local frmOverride = UI.CreateFrame("Frame", "frmOverride", ufTabs.tabContent)
 	local frmOverrideInner = UI.CreateFrame("Frame", "frmOverrideInner", frmOverride)
@@ -238,6 +244,7 @@ local function gfConfigDialog(container)
 
 	ufTabs:SetTabPosition("top")
 	ufTabs:AddTab("Configuration", frmConfig)
+	ufTabs:AddTab("Mouse Macros", frmMacros)	
 	ufTabs:AddTab("Appearance", frmOverride)	
 	
 	gfDialog = WT.Dialog(frmConfigInner)
@@ -252,6 +259,10 @@ local function gfConfigDialog(container)
 		:FieldNote(TXT.ShowBackgroundNote)
 		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
 
+	local macroTabs = UI.CreateFrame("SimpleTabView", "macroTabs", frmMacrosInner)
+	macroTabs:SetTabPosition("left")
+	macroTabs:SetAllPoints(frmMacrosInner)
+
 	gfAppearance = WT.Dialog(frmOverrideInner)
 		:Checkbox("ovHealthTexture", "Override Health Texture?", false)
 		:TexSelect("texHealth", "Health Texture", "wtDiagonal", "bar")
@@ -262,6 +273,20 @@ local function gfConfigDialog(container)
 --		:Checkbox("ovResourceColor", "Override Resource Color?", false)
 --		:ColorPicker("colResource", "Resource Color", 0.4, 0.6, 0.8, 1)
 
+	for idx, name in ipairs(macroNames) do
+	
+		local tabContent = UI.CreateFrame("Frame", "content", macroTabs.tabContent)
+		macroTabs:AddTab(name, tabContent)
+	
+		local txt = UI.CreateFrame("SimpleTextArea", "text", tabContent)
+		txt:SetPoint("TOPLEFT", tabContent, "TOPLEFT", 16, 16)
+		txt:SetPoint("BOTTOMRIGHT", tabContent, "BOTTOMRIGHT", -16, -16)
+		txt:SetText("")
+		txt:SetBackgroundColor(0.4,0.4,0.4,1)
+		gfEditors[idx] = txt
+		
+	end
+
 end
 
 
@@ -269,12 +294,33 @@ local function gfGetConfiguration()
 	local conf = gfDialog:GetValues()
 	local conf2 = gfAppearance:GetValues()
 	for k,v in pairs(conf2) do conf[k] = v end
+	conf.macros = {}
+	for idx, editor in ipairs(gfEditors) do
+		local macroText = gfEditors[idx]:GetText()
+		if macroText and (macroText:len() > 0) then
+			conf.macros[macroTypes[idx]] = macroText
+		else
+			conf.macros[macroTypes[idx]] = nil 
+		end
+	end
 	return conf
 end
 
 local function gfSetConfiguration(config)
 	gfDialog:SetValues(config)
 	gfAppearance:SetValues(config)
+
+	if not config.macros then config.macros = {} end
+	
+	for idx, editor in ipairs(gfEditors) do
+		local macroText = config.macros[macroTypes[idx]]
+		if macroText and (macroText:len() > 0) then
+			gfEditors[idx]:SetText(macroText)
+		else
+			gfEditors[idx]:SetText("")
+		end
+	end
+
 end
 
 

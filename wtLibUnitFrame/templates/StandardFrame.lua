@@ -234,6 +234,14 @@ function StandardFrame:Construct(options)
 		},
 
 		{
+			id="imgRare", type="Image", parent="frameBackdrop", layer=35,
+			attach = {{ point="CENTER", element="frameBackdrop", targetPoint="CENTER" }},
+			texAddon="Rift", texFile="ControlPoint_Diamond_Grey.png.dds",
+			visibilityBinding="guaranteedLoot",
+			width=32, height=32,
+		},			
+
+		{
 			id="buffPanelBuffs", type="BuffPanel", parent="HorizontalBar", layer=30,
 			attach = {{ point="TOPLEFT", element="frameBackdrop", targetPoint="BOTTOMLEFT", offsetX=0, offsetY=0 }},
 			rows=3, cols=4, iconSize=26, iconSpacingHorizontal=0, iconSpacingVertical=13, borderThickness=1,

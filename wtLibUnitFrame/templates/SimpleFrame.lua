@@ -155,6 +155,43 @@ function SimpleFrame:Construct(options)
 				-- Type Specific Element Configuration
 				text="{resourcePercent}%", default="", fontSize=10
 			},
+			
+			{
+		    id="imgMark", type="MediaSet", parent="frameBackdrop", layer=30,
+		    attach = {{ point="CENTER", element="frameBackdrop", targetPoint="CENTER", offsetX=15, offsetY=0 }},
+		    width = 24, height = 24,
+		    nameBinding="mark",
+		    names = 
+			    {
+				        ["1"] = "riftMark01",
+				        ["2"] = "riftMark02",
+				        ["3"] = "riftMark03",
+				        ["4"] = "riftMark04",
+				        ["5"] = "riftMark05",
+				        ["6"] = "riftMark06",
+				        ["7"] = "riftMark07",
+				        ["8"] = "riftMark08",
+				        ["9"] = "riftMark09",
+				        ["10"] = "riftMark10",
+				        ["11"] = "riftMark11",
+				        ["12"] = "riftMark12",
+				        ["13"] = "riftMark13",
+				        ["14"] = "riftMark14",
+				        ["15"] = "riftMark15",
+				        ["16"] = "riftMark16",
+				        ["17"] = "riftMark17",
+			    },
+			    visibilityBinding="mark",alpha=1.0,
+			},			
+
+			{
+				id="imgRare", type="Image", parent="frameBackdrop", layer=35,
+				attach = {{ point="CENTER", element="frameBackdrop", targetPoint="CENTER" }},
+				texAddon="Rift", texFile="ControlPoint_Diamond_Grey.png.dds",
+				visibilityBinding="guaranteedLoot",
+				width=32, height=32,
+			},
+			
 			{
 				id="buffPanelDebuffs", type="BuffPanel", parent="frameBackdrop", layer=30,
 				attach = {{ point="BOTTOMRIGHT", element="frameBackdrop", targetPoint="BOTTOMRIGHT", offsetX=-2, offsetY=-2 }},

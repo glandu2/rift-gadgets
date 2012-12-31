@@ -215,6 +215,6 @@ WT.Unit.CreateVirtualProperty("raidStatus", { "offline", "afk", "dead" },
 		elseif unit.dead then
 			return "DEAD"
 		else
-			return nil
+			return ""
 		end
 	end)

@@ -569,11 +569,13 @@ function WT.Gadget.Delete(gadgetId)
 		return
 	end
 	
-	WT.Gadgets[gadgetId]:SetVisible(false)
-	WT.Gadgets[gadgetId].mvHandle:SetVisible(false)
-	WT.Gadgets[gadgetId] = nil
+	if WT.Gadgets[gadgetId] then
+		WT.Gadgets[gadgetId]:SetVisible(false)
+		WT.Gadgets[gadgetId].mvHandle:SetVisible(false)
+		WT.Gadgets[gadgetId] = nil
+	end
 	wtxGadgets[gadgetId] = nil
-	
+		
 	-- Recommend a reload following deletions 
 	WT.Gadget.RecommendReload()
 end

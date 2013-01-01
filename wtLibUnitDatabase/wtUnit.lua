@@ -116,3 +116,20 @@ function WT.Unit.CreateVirtualProperty(propertyName, dependencies, fn)
 	
 	WT.Unit.VirtualProperties[propertyName] = calc
 end
+
+function WT.Unit:UpdateCleanseStatus()
+	if self.Buffs then
+		local needsCleanse = false	
+		for buffId, buffDetail in pairs(self.Buffs) do	
+			if buffDetail.curse or buffDetail.disease or buffDetail.poison then
+				needsCleanse = true
+			end
+		end
+		if not self.cleansable and needsCleanse then
+			self.cleansable = needsCleanse
+		end
+		if self.cleansable and not needsCleanse then
+			self.cleansable = false
+		end
+	end
+end

@@ -94,18 +94,7 @@ end
 
 local function TriggerBuffUpdates(unitId, changes)
 	local unit = WT.Units[unitId]
-	local needsCleanse = false	
-	for buffId, buffDetail in pairs(unit.Buffs) do	
-		if buffDetail.curse or buffDetail.disease or buffDetail.poison then
-			needsCleanse = true
-		end
-	end
-	if not unit.cleansable and needsCleanse then
-		unit.cleansable = needsCleanse
-	end
-	if unit.cleansable and not needsCleanse then
-		unit.cleansable = false
-	end
+	WT.Unit.UpdateCleanseStatus(unit)
 	WT.Event.Trigger.BuffUpdates(unitId, changes)
 end
 
@@ -592,6 +581,9 @@ local function CalculateRanges()
 	local pz = WT.Player.coord[3]
 	
 	for unitId,details in pairs(WT.Units) do
+	
+	    -- Force a recalculation of the cleansable status
+	    WT.Unit.UpdateCleanseStatus(details)
 	
 		if details.coord then
 		

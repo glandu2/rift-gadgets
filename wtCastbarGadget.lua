@@ -15,6 +15,9 @@ local AddonId = toc.identifier
 local TXT = Library.Translate
 
 
+local castBars = {}
+
+
 -- wtCastBar provides a simple bar for the player's charge
 -- Only useful for mages, and it only exists because I didn't want to add a charge bar to the standard frame
 
@@ -80,9 +83,46 @@ local function Create(configuration)
 			end
 		end
 
+	if configuration.gcdSparkAbove then
+		castBar.gcdTrack = UI.CreateFrame("Frame", "gcdTrack", castBar)
+		castBar.gcdTrack:SetLayer(100)
+		castBar.gcdTrack:SetPoint("BOTTOMLEFT", castBar, "TOPLEFT")
+		castBar.gcdTrack:SetPoint("TOPRIGHT", castBar, "TOPRIGHT", 0, -3)
+		if configuration.showCooldownTrack then
+			castBar.gcdTrack:SetBackgroundColor(0,0,0,0.6)
+		else
+			castBar.gcdTrack:SetBackgroundColor(0,0,0,0.0)
+		end
+	else
+		castBar.gcdTrack = UI.CreateFrame("Frame", "gcdTrack", castBar)
+		castBar.gcdTrack:SetLayer(100)
+		castBar.gcdTrack:SetPoint("TOPLEFT", castBar, "BOTTOMLEFT")
+		castBar.gcdTrack:SetPoint("BOTTOMRIGHT", castBar, "BOTTOMRIGHT", 0, 3)
+		castBar.gcdTrack:SetBackgroundColor(0,0,0,0.6)
+		if configuration.showGCDTrack then
+			castBar.gcdTrack:SetBackgroundColor(0,0,0,0.6)
+		else
+			castBar.gcdTrack:SetBackgroundColor(0,0,0,0.0)
+		end
+	end
+	
+	castBar.gcdSpark = UI.CreateFrame("Texture", "gcdSpark", castBar.gcdTrack)
+	castBar.gcdSpark:SetTexture("Rift", "LightOrb_Yellow.png.dds")
+	castBar.gcdSpark:SetPoint("CENTER", castBar.gcdTrack, 0.0, 0.5, 1, 1)
+	castBar.gcdSpark:SetHeight(12)
+	castBar.gcdSpark:SetWidth(12)
+	castBar.gcdSpark:SetAlpha(0.6)
+	castBar.gcdSpark:SetVisible(false)
+
+	if not configuration.showGCDSpark then
+		castBar.gcdTrack:SetVisible(false)
+	end
+
 	castBar:CreateBinding("castName", castBar, OnCastName, nil)
 
 	castBar.barCast:SetVisible(false)
+
+	table.insert(castBars, castBar)
 
 	return castBar, { resizable = { 140, 15, 1000, 300 } }
 end
@@ -112,6 +152,9 @@ local function ConfigDialog(container)
 		:TexSelect("textureNoInterrupt", TXT.TextureNoInterrupt, "wtCastUninterruptable", "bar")
 		:Checkbox("hideNotCasting", TXT.HideWhenNotCasting, true)
 		:Checkbox("showCastTime", TXT.ShowCastTime, true)
+		:Checkbox("showGCDSpark", "Show Cooldown Spark", false)
+		:Checkbox("showGCDTrack", "Show Cooldown Track", false)
+		:Checkbox("gcdSparkAbove", "Cooldown Spark Above", false)
 	
 end
 
@@ -167,6 +210,29 @@ local function Reconfigure(config)
 		requireRecreate = true
 	end
 
+
+	if config.gcdSparkAbove then
+		gadget.gcdTrack:SetPoint("BOTTOMLEFT", gadget, "TOPLEFT")
+		gadget.gcdTrack:SetPoint("TOPRIGHT", gadget, "TOPRIGHT", 0, -3)
+		gadget.gcdTrack:SetBackgroundColor(0,0,0,0.6)
+	else
+		gadget.gcdTrack:SetPoint("TOPLEFT", gadget, "BOTTOMLEFT")
+		gadget.gcdTrack:SetPoint("BOTTOMRIGHT", gadget, "BOTTOMRIGHT", 0, 3)
+		gadget.gcdTrack:SetBackgroundColor(0,0,0,0.6)
+	end
+
+	if config.showGCDTrack then
+		gadget.gcdTrack:SetBackgroundColor(0,0,0,0.6)
+	else
+		gadget.gcdTrack:SetBackgroundColor(0,0,0,0.0)
+	end
+	
+	if not config.showGCDSpark then
+		gadget.gcdTrack:SetVisible(false)
+	else
+		gadget.gcdTrack:SetVisible(true)
+	end
+
 	if requireRecreate then
 		WT.Gadget.Delete(gadgetConfig.id)
 		WT.Gadget.Create(gadgetConfig)
@@ -189,3 +255,45 @@ WT.Gadget.RegisterFactory("CastBar",
 		["Reconfigure"] = Reconfigure,
 	})
 
+local trackingCD = nil
+local trackingStart = nil
+local trackingDuration = nil
+
+local function cdBegin(list)
+	for abilityId, cooldown in pairs(list) do
+		if (cooldown >= 0.9) and (cooldown <= 1.51) then
+			trackingCD = abilityId
+			trackingStart = Inspect.Time.Frame()
+			trackingDuration = cooldown
+			for idx, castbar in ipairs(castBars) do
+				castbar.gcdSpark:SetVisible(true)
+			end
+			break
+		end
+	end
+end
+
+local function cdEnd(list)
+	if trackingCD and list[trackingCD] then
+		-- GCD has ended
+		trackingCD = nil
+		for idx, castbar in ipairs(castBars) do
+			castbar.gcdSpark:SetVisible(false)
+		end
+	end
+end
+
+local function cdUpdate()
+	if not trackingCD then return end
+	local elapsed = Inspect.Time.Frame() - trackingStart
+	local percent = elapsed / trackingDuration
+	if percent > 1.0 then percent = 1.0 end
+	for idx, castBar in ipairs(castBars) do
+		castBar.gcdSpark:SetPoint("CENTER", castBar.gcdTrack, percent, 0.5, 1, 1)	
+	end	
+end
+
+
+table.insert(Event.Ability.New.Cooldown.Begin, { cdBegin, AddonId, AddonId .. "_CooldownBegin" })
+table.insert(Event.Ability.New.Cooldown.End, { cdEnd, AddonId, AddonId .. "_CooldownEnd"  })
+table.insert(Event.System.Update.Begin, { cdUpdate, AddonId, AddonId .. "_CooldownUpdate" })

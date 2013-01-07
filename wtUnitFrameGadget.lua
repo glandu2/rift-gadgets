@@ -65,6 +65,8 @@ local function ufConfigDialog(container)
 		:Checkbox("showBackground", TXT.ShowBackground, true)
 		:FieldNote(TXT.ShowBackgroundNote)
 		:Checkbox("showAbsorb", TXT.ShowAbsorb, true)
+		:Checkbox("showLeftPortrait", "Fake Portrait on Left", false)
+		:Checkbox("showRightPortrait", "Fake Portrait on Right", false)
 
 	ufAppearance = WT.Dialog(frmOverrideInner)
 		:Checkbox("ovHealthTexture", "Override Health Texture?", false)
@@ -324,6 +326,131 @@ local function gfSetConfiguration(config)
 end
 
 
+local function CreateUnitFrame(config)
+
+	local uf, options = WT.UnitFrame.CreateFromConfiguration(config)
+	
+	if config.showLeftPortrait then
+	
+		local elPortBorder = uf:CreateElement(
+		{
+			id="portraitBorder", type="Frame", parent="frameBackdrop", layer=1,
+			attach=
+			{
+				{ point="TOPRIGHT", element="frameBackdrop", targetPoint="TOPLEFT" },
+				{ point="BOTTOM", element="frameBackdrop", targetPoint="BOTTOM" },
+			},
+			visibilityBinding="id",
+			color={r=0, g=0, b=0, a=1},
+		})
+		
+		local elPortBackdrop = uf:CreateElement(		
+		{
+			id="portraitBackdrop", type="MediaSet", parent="portraitBorder", layer=5,
+			attach=
+			{
+				{ point="TOPLEFT", element="portraitBorder", targetPoint="TOPLEFT", offsetX=1, offsetY=1 },
+				{ point="BOTTOMRIGHT", element="portraitBorder", targetPoint="BOTTOMRIGHT", offsetX=0, offsetY=-1 },
+			},
+			visibilityBinding="hostility",
+			nameBinding="hostility",
+			names = 
+			{
+				["friendly"] = "Portrait_BG_Friendly",
+				["hostile"] = "Portrait_BG_Hostile",
+				["neutral"] = "Portrait_BG_Neutral",
+			},			
+		})
+		
+		local elPortCalling = uf:CreateElement(
+		{
+			id="portraitImage", type="MediaSet", parent="portraitBorder", layer=10,
+			attach=
+			{
+				{ point="TOPLEFT", element="portraitBackdrop", targetPoint="TOPLEFT" },
+				{ point="BOTTOMRIGHT", element="portraitBackdrop", targetPoint="BOTTOMRIGHT" },
+			},
+			visibilityBinding="calling",
+			nameBinding="calling",
+			names = 
+			{
+				["cleric"] = "Portrait_Calling_Cleric",
+				["mage"] = "Portrait_Calling_Mage",
+				["rogue"] = "Portrait_Calling_Rogue",
+				["warrior"] = "Portrait_Calling_Warrior",
+			},			
+		})
+	 
+	 	elPortBorder.Event.Size = 
+	 		function()
+	 			elPortBorder:SetWidth(elPortBorder:GetHeight())
+	 		end
+
+	end
+
+	if config.showRightPortrait then
+	
+		local elPortBorderR = uf:CreateElement(
+		{
+			id="portraitBorderR", type="Frame", parent="frameBackdrop", layer=1,
+			attach=
+			{
+				{ point="TOPLEFT", element="frameBackdrop", targetPoint="TOPRIGHT" },
+				{ point="BOTTOM", element="frameBackdrop", targetPoint="BOTTOM" },
+			},
+			visibilityBinding="id",
+			color={r=0, g=0, b=0, a=1},
+		})
+		
+		local elPortBackdropR = uf:CreateElement(		
+		{
+			id="portraitBackdropR", type="MediaSet", parent="portraitBorderR", layer=5,
+			attach=
+			{
+				{ point="TOPLEFT", element="portraitBorderR", targetPoint="TOPLEFT", offsetX=0, offsetY=1 },
+				{ point="BOTTOMRIGHT", element="portraitBorderR", targetPoint="BOTTOMRIGHT", offsetX=-1, offsetY=-1 },
+			},
+			visibilityBinding="hostility",
+			nameBinding="hostility",
+			names = 
+			{
+				["friendly"] = "Portrait_BG_Friendly",
+				["hostile"] = "Portrait_BG_Hostile",
+				["neutral"] = "Portrait_BG_Neutral",
+			},			
+		})
+		
+		local elPortCallingR = uf:CreateElement(
+		{
+			id="portraitImageR", type="MediaSet", parent="portraitBorderR", layer=10,
+			attach=
+			{
+				{ point="TOPLEFT", element="portraitBackdropR", targetPoint="TOPLEFT" },
+				{ point="BOTTOMRIGHT", element="portraitBackdropR", targetPoint="BOTTOMRIGHT" },
+			},
+			visibilityBinding="calling",
+			nameBinding="calling",
+			names = 
+			{
+				["cleric"] = "Portrait_Calling_Cleric",
+				["mage"] = "Portrait_Calling_Mage",
+				["rogue"] = "Portrait_Calling_Rogue",
+				["warrior"] = "Portrait_Calling_Warrior",
+			},			
+		})
+	 
+	 	elPortBorderR.Event.Size = 
+	 		function()
+	 			elPortBorderR:SetWidth(elPortBorderR:GetHeight())
+	 		end
+
+	end
+	
+	return uf, options
+	
+end
+
+
 -- Register as a gadget factory for creating unit frames from templates
 WT.Gadget.RegisterFactory("UnitFrame",
 	{
@@ -331,7 +458,7 @@ WT.Gadget.RegisterFactory("UnitFrame",
 		description=TXT.gadgetUnitFrame_desc,
 		author="Wildtide",
 		version="0.1.3",
-		["Create"] = WT.UnitFrame.CreateFromConfiguration,
+		["Create"] = CreateUnitFrame, -- WT.UnitFrame.CreateFromConfiguration,
 		["ConfigDialog"] = ufConfigDialog,
 		["GetConfiguration"] = ufGetConfiguration,
 		["SetConfiguration"] = ufSetConfiguration,

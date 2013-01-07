@@ -120,9 +120,11 @@ end
 function WT.Unit:UpdateCleanseStatus()
 	if self.Buffs then
 		local needsCleanse = false	
-		for buffId, buffDetail in pairs(self.Buffs) do	
-			if buffDetail.curse or buffDetail.disease or buffDetail.poison then
-				needsCleanse = true
+		for buffId, buffDetail in pairs(self.Buffs) do
+			if buffDetail.debuff then	
+				if buffDetail.curse or buffDetail.disease or buffDetail.poison then
+					needsCleanse = true
+				end
 			end
 		end
 		if not self.cleansable and needsCleanse then

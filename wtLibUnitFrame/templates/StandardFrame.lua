@@ -57,7 +57,7 @@ function StandardFrame:Construct(options)
 			visibilityBinding="id",
 			texAddon = AddonId, texFile = "img/wtMiniFrame_bg.png", alpha=0.8,
 			color={r=0,g=0,b=0,a=0.4}, colorBinding="aggroColor",
-		}, 
+		},
 		{
 			id="frameBlocked", type="Frame", parent="frameBackdrop", layer=15, visibilityBinding="blocked",
 			color={r=0,g=0,b=0},alpha=0.6,
@@ -276,9 +276,7 @@ function StandardFrame:Construct(options)
 			self:CreateElement(element)
 		end 
 	end
-	
-	
-	
+
 	if options.showBackground then
 		self:SetBackgroundColor(0,0,0,0.2)
 	end

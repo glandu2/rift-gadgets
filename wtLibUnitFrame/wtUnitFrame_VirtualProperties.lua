@@ -86,6 +86,12 @@ WT.Unit.CreateVirtualProperty("rank", { "relation", "tier" },
 		return rel .. tier
 	end)
 
+WT.Unit.CreateVirtualProperty("hostility", { "id", "relation" },
+	function(unit)
+		if not unit.id then return nil end
+		return unit.relation or "neutral"
+	end)
+
 WT.Unit.CreateVirtualProperty("pvpAlliance", { "alliance", "pvp" },
 	function(unit)
 		if not unit.pvp then

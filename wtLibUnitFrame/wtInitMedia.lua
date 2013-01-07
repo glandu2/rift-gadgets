@@ -86,6 +86,14 @@ Library.Media.AddTexture("FactionDominion", "Rift", "Icon_Dominion_sm.png.dds", 
 Library.Media.AddTexture("FactionNightfall", "Rift", "Icon_Nightfall_sm.png.dds", {})
 Library.Media.AddTexture("FactionOathsworn", "Rift", "Icon_Oathsworn_sm.png.dds", {})
 
+Library.Media.AddTexture("Portrait_BG_Friendly", AddonId, "img/Portrait_BG_Friendly.png", {})
+Library.Media.AddTexture("Portrait_BG_Hostile", AddonId, "img/Portrait_BG_Hostile.png", {})
+Library.Media.AddTexture("Portrait_BG_Neutral", AddonId, "img/Portrait_BG_Neutral.png", {})
+Library.Media.AddTexture("Portrait_Calling_Cleric", AddonId, "img/Portrait_Calling_Cleric.png", {})
+Library.Media.AddTexture("Portrait_Calling_Mage", AddonId, "img/Portrait_Calling_Mage.png", {})
+Library.Media.AddTexture("Portrait_Calling_Rogue", AddonId, "img/Portrait_Calling_Rogue.png", {})
+Library.Media.AddTexture("Portrait_Calling_Warrior", AddonId, "img/Portrait_Calling_Warrior.png", {})
+
 Library.Media.AddFont("ArmWrestler", AddonId, "font/ArmWrestler.ttf")
 Library.Media.AddFont("Bazooka", AddonId, "font/Bazooka.ttf")
 Library.Media.AddFont("BlackChancery", AddonId, "font/BlackChancery.ttf")

@@ -560,6 +560,9 @@ local function OnUnitDetailCoord(xValues, yValues, zValues)
 	end
 	for unitId,map in pairs(maps) do
 		SetProperty(unitId, "coord", {map[1],map[2],map[3]}) -- create an additional property to allow single property position tracking
+		SetProperty(unitId, "coordX", map[1])
+		SetProperty(unitId, "coordY", map[2])
+		SetProperty(unitId, "coordZ", map[3])
 	end
 end
 
@@ -614,6 +617,8 @@ local function CalculateRanges()
 			if details.blockedOrOutOfRange and not blocked then
 				details.blockedOrOutOfRange = nil
 			end
+			
+			details.rangeSqr = rangeSqr
 			
 		end
 	end

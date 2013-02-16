@@ -102,3 +102,7 @@ function Library.Media.SetFont(frame, mediaId, fontSize)
 		frame:SetFontSize(fontSize)
 	end
 end
+
+function Library.Media.ListFonts()
+	return fonts
+end

@@ -52,7 +52,10 @@ function WT.Control.ComboBox.Create(parent, label, default, listItems, sort, onc
 	dropDownIcon:SetWidth(tfValue:GetHeight())
 	dropDownIcon:SetPoint("TOPLEFT", tfValue, "TOPRIGHT", -10, 0)
 
-	local menu = WT.Control.Menu.Create(parent, listItems, function(value) tfValue:SetText(value) end, sort)
+	-- local menu = WT.Control.Menu.Create(parent, listItems, function(value) tfValue:SetText(value) end, sort)
+	local menu = WT.Control.Menu.Create(parent, listItems, function(value) control:SetText(value) end, sort)
+	control.listItems = listItems
+	
 	menu:SetPoint("TOPRIGHT", dropDownIcon, "BOTTOMCENTER")
 
 	dropDownIcon.Event.LeftClick = function() menu:Toggle() end

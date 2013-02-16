@@ -177,7 +177,10 @@ function WT.Gadget.Create(configuration)
 			gadget:SetPoint("TOPLEFT", UIParent, "TOPLEFT", gadget.xpos, gadget.ypos) 
 			
 			-- Give the gadget a display root
-			gadget.displayRoot = UI.CreateFrame("Frame", "displayRoot", gadget:GetParent())
+			-- gadget.displayRoot = UI.CreateFrame("Frame", "displayRoot", gadget:GetParent())
+			gadget.displayRoot = UI.CreateFrame("Frame", "displayRoot", WT.UnitFrameContext)
+			-- Note: forcing all gadgets onto the same context so that layering can work
+			
 			gadget.displayRoot:SetSecureMode(gadget:GetSecureMode())
 			gadget:SetParent(gadget.displayRoot)
 			gadget.displayRoot:SetLayer(gadget:GetLayer())
@@ -623,15 +626,16 @@ local function SetGadgetCombatAlpha(gadget, inCombat)
 
 	local alpha = gadget.alpha_OOC
 	if inCombat then alpha = gadget.alpha_IC end
-
-	if alpha == 0 then
+	
+	if alpha == 0 or gadget.showGroup[WT.GetGroupMode()] == false then
 		gadget.displayRoot:SetVisible(false)
 	else
 		gadget.displayRoot:SetVisible(true)
 		gadget.displayRoot:SetAlpha(alpha / 100)
 	end
 
-end 
+end
+
 
 function WT.Gadget.SetGadgetGroupVisible(gadget, groupMode)
 	local visible = gadget.showGroup[groupMode]

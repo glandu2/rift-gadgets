@@ -380,6 +380,18 @@ local function CreateUnitFrame(config)
 				["warrior"] = "Portrait_Calling_Warrior",
 			},			
 		})
+
+	 	local elPortElite = uf:CreateElement(
+	 	{
+	 		id="portraitElite", type="Image", parent="portraitBorder", layer=20,
+			attach=
+			{
+				{ point="TOPLEFT", element="portraitBackdrop", targetPoint="TOPLEFT", offsetX=-5, offsetY=-5 },
+				{ point="BOTTOMRIGHT", element="portraitBackdrop", targetPoint="BOTTOMRIGHT", offsetX=5, offsetY=5 },
+			},
+	 		texAddon="Rift", texFile="UpgradableNPC_I18.dds",
+	 		visibilityBinding="tier",
+	 	})
 	 
 	 	elPortBorder.Event.Size = 
 	 		function()
@@ -438,6 +450,18 @@ local function CreateUnitFrame(config)
 				["warrior"] = "Portrait_Calling_Warrior",
 			},			
 		})
+	 
+	 	local elPortEliteR = uf:CreateElement(
+	 	{
+	 		id="portraitEliteR", type="Image", parent="portraitBorderR", layer=20,
+			attach=
+			{
+				{ point="TOPLEFT", element="portraitBackdropR", targetPoint="TOPLEFT", offsetX=-5, offsetY=-5 },
+				{ point="BOTTOMRIGHT", element="portraitBackdropR", targetPoint="BOTTOMRIGHT", offsetX=5, offsetY=5 },
+			},
+	 		texAddon="Rift", texFile="UpgradableNPC_I18.dds",
+	 		visibilityBinding="tier",
+	 	})
 	 
 	 	elPortBorderR.Event.Size = 
 	 		function()

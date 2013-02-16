@@ -75,6 +75,7 @@ function wtLabel:Construct()
 			self.outline[idx]:SetLayer(self:GetLayer()-1)
 			self.outline[idx]:SetFontColor(0,0,0,1.0)
 			self.outline[idx]:SetFontSize(self:GetFontSize())
+			self.outline[idx]:SetFont(self:GetFont())
 		end
 		self.outline[1]:SetPoint("TOPLEFT", self, "TOPLEFT", -1, -1)
 		self.outline[2]:SetPoint("TOPLEFT", self, "TOPLEFT",  1, -1)

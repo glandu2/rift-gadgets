@@ -25,6 +25,7 @@ RunOnStartup =
   "wtEvent.lua",
   "wtLog.lua",
   "wtCore.lua",
+  "wtVersionCheck.lua",
   "wtUtility.lua",
 }
 

@@ -83,6 +83,8 @@ function XBG.OnPrestige(accum)
 			prDetails.needed=1
 		end
 	end
+	-- Fix for strange error with nil needed value (API bug?)
+	prDetails.needed = prDetails.needed or 1
 	
 	local percent = (accum/prDetails.needed) * 100
 	for idx, gadget in ipairs(prGadgets) do

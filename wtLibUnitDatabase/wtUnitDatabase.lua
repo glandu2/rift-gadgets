@@ -619,6 +619,7 @@ local function CalculateRanges()
 			end
 			
 			details.rangeSqr = rangeSqr
+			details.range = math.sqrt(rangeSqr)
 			
 		end
 	end

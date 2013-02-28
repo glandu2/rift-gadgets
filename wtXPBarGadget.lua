@@ -254,8 +254,20 @@ WT.Gadget.RegisterFactory("XPBar",
 
 function XBG.OnPlayerAvailable()
 	XBG.OnExperience(Inspect.TEMPORARY.Experience())
-	XBG.OnPrestige(Inspect.Pvp.Prestige().accumulated or 0)
-	XBG.OnPAChange(Inspect.Attunement.Progress().accumulated or 0)	
+	
+	local prestige = Inspect.Pvp.Prestige()
+	if prestige and prestige.accumulated then
+		XBG.OnPrestige(prestige.accumulated)
+	else
+		XBG.OnPrestige(0)
+	end
+	
+	local attunement = Inspect.Attunement.Progress()
+	if attunement and attunement.accumulated then
+		XBG.OnPAChange(attunement.accumulated)
+	else
+		XBG.OnPAChange(0)
+	end	
 end
 
 table.insert(Event.TEMPORARY.Experience, { XBG.OnExperience, AddonId, "OnExperienceBar" })

@@ -51,8 +51,11 @@ function WT.Gadget.ShowImportDialog()
 		local lastButton = nil
 		
 		local charList = {}
-		for charId in pairs(wtxLayouts) do table.insert(charList, charId) end
-		table.sort(charList)
+	
+		if wtxLayouts then
+			for charId in pairs(wtxLayouts) do table.insert(charList, charId) end
+			table.sort(charList)
+		end
 		
 		for idx, charId in ipairs(charList) do
 		

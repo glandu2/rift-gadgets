@@ -131,6 +131,8 @@ local function GetEnabled(self)
 end
 
 local function SetEnabled(self, enabled)
+  assert(type(enabled) == "boolean", "param 1 must be a boolean!")
+
   self.enabled = enabled
   self.blocker:SetVisible(not enabled)
 end

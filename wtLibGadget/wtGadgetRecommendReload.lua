@@ -20,9 +20,6 @@ local TXT = Library.Translate
 -- It will display a small window somewhere not *too* obtrusive, with a button to reload the UI
 function WT.Gadget.RecommendReload()
 
-	-- TEMPORARY: DO NOT RECOMMEND RELOAD UNTIL TRION FIX THE BUG INTRODUCED IN 2.2 THAT CLEARS ACTION BARS
-	--[[
-
 	if not WT.Gadget.ReloadDialog then
 		local dialog = UI.CreateFrame("Texture", "WTReloadDialog", WT.Context)
 		dialog:SetLayer(9000)
@@ -54,5 +51,5 @@ function WT.Gadget.RecommendReload()
 
 	-- Fade the dialog in
 	WT.FadeIn(WT.Gadget.ReloadDialog, 0.5)
-	--]]
+
 end

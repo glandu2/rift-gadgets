@@ -1,0 +1,14 @@
+tag v1.13.2
+3cb10ed0a4a1725adafbcb0d810bfd2a53b0c927
+Gordon Tyler <gordon@doxxx.net>
+2013-02-12 19:32:12 -0500
+
+Tag version 1.13.2.
+
+
+--------------------
+
+Gordon Tyler:
+	- Prepare for v1.13.2 release.
+	- Use ClearSelection() instead of SetSelectedIndex(nil).
+	- Fix index param checking in SimpleLisst's SetSelectedIndex.

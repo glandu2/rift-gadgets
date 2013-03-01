@@ -15,7 +15,9 @@ The new frame types inherit all of Frame's functions and add a few more function
 
 SimpleRadioButton has a companion function called RadioButtonGroup, which returns a controller object that manages a group of radio buttons to ensure that only one is selected at a time and to generate an event when the selected radio button changes.
 
-The Layout function, given a table describing a widget layout, will create frames and lay them out accordingly. If you've ever used AceConfig and AceGUI, then you'll find this familiar. You can call Layout with the same parent frame and config table to refresh the widgets without creating new frames.
+The Layout function, given a table describing a widget layout, will create frames and lay them out accordingly. If you've ever used AceConfig and AceGUI, then you'll find this familiar. You can call Layout with the same parent frame and config table to refresh the widgets without creating new frames. You can find more details near the bottom of this document after the Frame Types.
+
+The SetBorder function adds a border to any frame. There are three types of border: plain, rounded and tooltip. Widgets have a SetBorder function which is equivalent to the plain border style. You can find more details near the bottom of this document after the Frame Types.
 
 
 Frame Type: SimpleCheckbox
@@ -246,6 +248,8 @@ Frame Type: SimpleSelect
 
 SimpleSelect displays a dropdown selection list of strings. It supports the following standard functions: GetEnabled, SetEnabled.
 
+The dropdown is automatically resized to fit the number of items, up to a configured maximum height, beyond which it will instead display a scrollbar. The default maximum height for the dropdown is the equivalent of 10 items at the default font size. 
+
 For the best look, it is recommended that you don't set the border on this widget, since it has a preset border.
 
 Functions
@@ -268,6 +272,12 @@ Gets whether the down arrow button is shown.
 
 **SetShowArrow(showArrow)**  
 Sets whether the down arrow button is shown.
+
+**GetMaxDropdownHeight()**  
+Gets the maximum height to which the dropdown will expand in order to accommodate the list of items before the scrollbar becomes visible.
+
+**SetMaxDropdownHeight(height)**  
+Sets the maximum height to which the dropdown will expand in order to accommodate the list of items before the scrollbar becomes visible.
 
 **GetItems()**  
 Returns the list of items set by SetItems.
@@ -421,7 +431,7 @@ Frame Type: SimpleTooltip
 
 SimpleTooltip is a frame that can be configured to popup when the user mouses over a frame.
 
-The recommended method of using it is to create one tooltip frame per top-level window and then call InjectEvents for each frame in the window you want to have a tooltip.
+The recommended method of using it is to create one tooltip frame per top-level window and then call InjectEvents for each frame in the window you want to have a tooltip. However, you can handle the events yourself and just call Show() and Hide() when necessary.
 
 Functions
 ---------
@@ -432,14 +442,14 @@ Gets the font size.
 **SetFontSize(size)**  
 Sets the font size. Automatically resizes the frame.
 
-**Show(owner, text)**  
-Attach the tooltip to the 'owner' frame and display 'text' in the tooltip.
+**Show(owner, text, anchor, xoffset, yoffset)**  
+Attach the tooltip to the *owner* frame and display *text* in the tooltip. The remaining arguments are optional: *anchor* determines how the tooltip is positioned on the screen: "MOUSE" (the default) anchors the top-left of the tooltip to the lower right corner of the mouse cursor while the mouse is over the *owner* frame. The standard anchor names like "TOPLEFT", etc. will anchor the tooltip by its opposite corner  (e.g. "BOTTOMRIGHT") to the specified corner of the *owner* frame. *xoffset* and *yoffset* (both 0 by default) modify the tooltip's position relative to the anchor point.
 
 **Hide(owner)**  
-Hides the tooltip if it is still associated with the 'owner' frame.
+Hides the tooltip if it is still associated with the *owner* frame.
 
-**InjectEvents(frame, tooltipTextFunc)**  
-Injects MouseIn/MouseOut/MouseOver events into 'frame' which will show and hide the tooltip as appropriate, calling 'tooltipTextFunc(tooltip)' to get the text to display in the tooltip.
+**InjectEvents(frame, tooltipTextFunc, anchor, xoffset, yoffset)**  
+Injects MouseIn/MouseOut/MouseOver events into *frame* which will show and hide the tooltip as appropriate. *tooltipTextFunc* will be called, passing the tooltip frame as the first argument, to get the text to display in the tooltip. The optional *anchor*, *xoffset* and *yoffset* arguments are passed to the Show function when the tooltip is shown.
 
 
 
@@ -584,12 +594,33 @@ slider
       labelPos = <string>, -- label position: top, left, right
       get = <function>, -- function which returns the initial value to be displayed
       set = <function>, -- function to be called when value is changed by user
-      min = <number>, -- minimum value for slider,
-      max = <number>, -- maximum value for slider,
+      min = <number>, -- minimum value for slider
+      max = <number>, -- maximum value for slider
+      editable = <boolean>, -- whether the slider value can be edited directly
     }
 
 When a *set* function is called, the new value being set is passed as the only parameter. For select widgets though, the selected item, the corresponding value (if available) and the selected index are all passed to the set function.
 
+
+# Function: SetBorder #
+
+**Library.LibSimpleWidgets.SetBorder(type, frame, ...)**  
+Sets the border on *frame*. *type* can be one of "plain", "rounded" or "tooltip". The remainder of the arguments depend on the type.
+
+## Border Type: plain ##
+
+**SetBorder("plain", frame, width, r, g, b, a, borders)**  
+Sets the border to a plain line of the specified width and color. *borders* is an optional string containing a combination of one or more of the characters "t", "b", "l" and "r", that indicate which of the borders are visible -- top, bottom, left and right, respectively.
+
+## Border Type: rounded ##
+
+**SetBorder("rounded", frame)**  
+Sets the border to a textured line with rounded corners.
+
+## Border Type: tooltip ##
+
+**SetBorder("rounded", frame)**  
+Sets the border to a textured line that looks like the standard Rift tooltip border.
 
 
 Code Examples

@@ -116,6 +116,9 @@ local function updateCheckbox(widget, id, config, parent)
     widget:SetChecked(config.get())
   end
   widget:SetText(config.label)
+  if config.labelFontSize then
+    widget:SetFontSize(config.labelFontSize)
+  end
   widget.Event.CheckboxChange = function(self)
     if config.set then
       config.set(widget:GetChecked())
@@ -189,6 +192,11 @@ local function updateSlider(widget, id, config, parent)
     slider:SetPosition(min)
   end
   slider.value = slider:GetPosition()
+  if config.editable ~= nil then
+    slider:SetEditable(config.editable)
+  else
+    slider:SetEditable(true)
+  end
   slider.Event.SliderRelease = function(self)
     local value = slider:GetPosition()
     if slider.value ~= value then

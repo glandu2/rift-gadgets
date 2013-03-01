@@ -1,8 +1,8 @@
-local PADDING = 3
+local PADDING = 10 -- tooltip border width
 local MAX_WIDTH = 250
 local MAX_HEIGHT = 500
-local MOUSE_X_OFFSET = 18
-local MOUSE_Y_OFFSET = 25
+local MOUSE_X_OFFSET = 15
+local MOUSE_Y_OFFSET = 20
 
 -- Helper Functions
 
@@ -25,6 +25,8 @@ local function GetFontSize(self)
 end
 
 local function SetFontSize(self, size)
+  assert(type(size) == "number", "param 1 must be a number!")
+
   self.text:SetFontSize(size)
   ResizeToFit(self)
 end
@@ -37,14 +39,62 @@ local function SetFontColor(self, r, g, b, a)
   self.text:SetFontColor(r, g, b, a)
 end
 
-local function Show(self, owner, text)
+local INVERSE_ANCHORS = {
+  TOPLEFT = "BOTTOMRIGHT",
+  TOPRIGHT = "BOTTOMLEFT",
+  BOTTOMLEFT = "TOPRIGHT",
+  BOTTOMRIGHT = "TOPLEFT",
+  TOPCENTER = "BOTTOMCENTER",
+  BOTTOMCENTER = "TOPCENTER",
+  CENTERLEFT = "CENTERRIGHT",
+  CENTERRIGHT = "CENTERLEFT",
+}
+
+local function Show(self, owner, text, anchor, xoffset, yoffset)
+  assert(type(owner) == "table", "param 1 must be a frame!")
+  assert(type(text) == "string", "param 2 must be a string!")
+  assert(anchor == nil or type(anchor) == "string", "param 3 must be a string!")
+  assert(xoffset == nil or type(xoffset) == "number", "param 4 must be a number!")
+  assert(yoffset == nil or type(yoffset) == "number", "param 5 must be a number!")
+
+  anchor = anchor or "MOUSE"
+  xoffset = 0
+  yoffset = 0
+
   self.owner = owner
   self.text:SetText(text)
+  self:ClearAll()
   ResizeToFit(self)
 
-  local m = Inspect.Mouse()
-  local left, top = owner:GetBounds()
-  self:SetPoint("TOPLEFT", owner, "TOPLEFT", m.x - left + MOUSE_X_OFFSET, m.y - top + MOUSE_Y_OFFSET)
+  if anchor == "MOUSE" then
+    local m = Inspect.Mouse()
+    --  bottom right location by default
+    local selfAnchor = "TOPLEFT"
+    local targetAnchor = "TOPLEFT"
+    local x = m.x + MOUSE_X_OFFSET
+    local y = m.y + MOUSE_Y_OFFSET
+    local _, _, screenWidth, screenHeight = UIParent:GetBounds()
+    -- flip to the left if it goes past the right edge of the screen
+    if x + self:GetWidth() > screenWidth then
+      x = m.x
+      selfAnchor = string.gsub(selfAnchor, "LEFT", "RIGHT")
+    end
+    -- flip upwards if it goes past the bottom edge of the screen
+    if y + self:GetHeight() > screenHeight then
+      y = m.y
+      selfAnchor = string.gsub(selfAnchor, "TOP", "BOTTOM")
+    end
+    self:SetPoint(selfAnchor, UIParent, targetAnchor, x, y)
+  else
+    local ttAnchor = INVERSE_ANCHORS[anchor]
+    if not ttAnchor then
+        print("LSW: Unsupported anchor point for tooltip: " .. anchor)
+      ttAnchor = "TOPLEFT"
+      anchor = "BOTTOMRIGHT"
+    end
+    self:SetPoint(ttAnchor, owner, anchor, xoffset, yoffset)
+  end
+
   self:SetVisible(true)
 end
 
@@ -54,14 +104,35 @@ local function Hide(self, owner)
   self.owner = nil
 end
 
-local function InjectEvents(self, frame, tooltipTextFunc)
+local function InjectEvents(self, frame, tooltipTextFunc, anchor, xoffset, yoffset)
+  assert(type(frame) == "table", "param 1 must be a frame!")
+  assert(type(tooltipTextFunc) == "function", "param 2 must be a function!")
+  assert(anchor == nil or type(anchor) == "string", "param 3 must be a string!")
+  assert(xoffset == nil or type(xoffset) == "number", "param 4 must be a number!")
+  assert(yoffset == nil or type(yoffset) == "number", "param 5 must be a number!")
+
+  -- Can't use self inside the event functions since it will then refer to the frame, not our tooltip.
   local tooltip = self
-  frame.Event.MouseIn = function() tooltip:Show(frame, tooltipTextFunc(tooltip)) end
-  frame.Event.MouseMove = function() tooltip:Show(frame, tooltipTextFunc(tooltip)) end
-  frame.Event.MouseOut = function() tooltip:Hide(frame) end
+  local oldMouseIn = frame.Event.MouseIn
+  local oldMouseMove = frame.Event.MouseMove
+  local oldMouseOut = frame.Event.MouseOut
+  frame.Event.MouseIn = function()
+    tooltip:Show(frame, tooltipTextFunc(tooltip), anchor, xoffset, yoffset)
+    if oldMouseIn then oldMouseIn() end
+  end
+  frame.Event.MouseMove = function(x, y)
+    tooltip:Show(frame, tooltipTextFunc(tooltip), anchor, xoffset, yoffset)
+    if oldMouseMove then oldMouseMove(x, y) end
+  end
+  frame.Event.MouseOut = function()
+    tooltip:Hide(frame)
+    if oldMouseOut then oldMouseOut() end
+  end
 end
 
 local function RemoveEvents(self, frame)
+  assert(type(frame) == "table", "param 1 must be a frame!")
+
   frame.Event.MouseIn = nil
   frame.Event.MouseMove = nil
   frame.Event.MouseOut = nil
@@ -74,9 +145,10 @@ function Library.LibSimpleWidgets.Tooltip(name, parent)
   local widget = UI.CreateFrame("Frame", name, parent)
   widget.text = UI.CreateFrame("Text", name .. "Text", widget)
 
-  widget:SetBackgroundColor(0, 0, 0, 1)
+  widget.text:SetBackgroundColor(0, 0, 0, 1)
   widget:SetLayer(999)
-  Library.LibSimpleWidgets.SetBorder(widget, 1, 0.5, 0.5, 0.5, 1)
+  Library.LibSimpleWidgets.SetBorder("tooltip", widget)
+  widget.__lsw_border:SetPosition("inside")
   widget:SetVisible(false)
 
   widget.text:SetWordwrap(true)

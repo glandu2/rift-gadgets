@@ -12,9 +12,9 @@ Description = {
 
 Author = "Gordon Tyler"
 Website = "http://www.riftui.com/downloads/info108-LibSimpleWidgets.html"
-Version = "1.10"
+Version = "1.13.2"
 Email = "gordon@doxxx.net"
-Environment = "1.8"
+Environment = "2.0"
 
 RunOnStartup = {
   "main.lua",
@@ -31,10 +31,11 @@ RunOnStartup = {
   "tooltip.lua",
   "radiobutton.lua",
   "radiobuttongroup.lua",
+  "scrolllist.lua",
   "uicreateframe.lua",
   "layout.lua",
 }
--- X-Curse-Packaged-Version: v1.10
+-- X-Curse-Packaged-Version: v1.13.2
 -- X-Curse-Project-Name: LibSimpleWidgets
 -- X-Curse-Project-ID: libsimplewidgets
 -- X-Curse-Repository-ID: rift/libsimplewidgets/mainline

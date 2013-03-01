@@ -44,6 +44,9 @@ end
 -- Public Functions
 
 local function AddTab(self, label, frame)
+  assert(type(label) == "string", "param 1 must be a string!")
+  assert(type(frame) == "table", "param 2 must be a frame!")
+
   local tab = {
     frame = frame,
     active = false,
@@ -130,6 +133,8 @@ local function AddTab(self, label, frame)
 end
 
 local function RemoveTab(self, index)
+  assert(type(index) == "number", "param 1 must be a number!")
+
   local tab = self.tabs[index]
   if tab == nil then return end
 
@@ -193,6 +198,8 @@ local function GetActiveTab(self)
 end
 
 local function SetActiveTab(self, index)
+  assert(type(index) == "number", "param 1 must be a number!")
+
   local origTab
   for i, tab in ipairs(self.tabs) do
     if tab.active then
@@ -229,6 +236,9 @@ local function SetActiveTab(self, index)
 end
 
 local function SetTabLabel(self, index, label)
+  assert(type(index) == "number", "param 1 must be a number!")
+  assert(type(label) == "string", "param 2 must be a string!")
+
   local tab = self.tabs[index]
   if tab == nil then return end
 
@@ -248,6 +258,9 @@ local function SetTabLabel(self, index, label)
 end
 
 local function SetTabContent(self, index, frame)
+  assert(type(index) == "number", "param 1 must be a number!")
+  assert(type(frame) == "table", "param 2 must be a frame!")
+
   local tab = self.tabs[index]
   if tab == nil then return end
 
@@ -264,6 +277,8 @@ local function SetTabContent(self, index, frame)
 end
 
 local function SetMinimumTabWidth(self, width)
+  assert(type(width) == "number", "param 1 must be a number!")
+
   self.minimumTabWidth = width
 
   for i, tab in ipairs(self.tabs) do
@@ -362,6 +377,8 @@ local function GetFontSize(self)
 end
 
 local function SetFontSize(self, size)
+  assert(type(size) == "number", "param 1 must be a number!")
+
   self.fontSize = size
 
   for i, tab in ipairs(self.tabs) do

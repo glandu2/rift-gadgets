@@ -1,3 +1,5 @@
+-- Helper Functions
+
 local function AddDragEventsToBorder(window)
   local border = window:GetBorder()
   function border.Event:LeftDown()
@@ -56,7 +58,11 @@ local function AddDragFrame(window)
   end
 end
 
+-- Public Functions
+
 local function SetCloseButtonVisible(self, visible)
+  assert(type(visible) == "boolean", "param 1 must be a boolean!")
+
   if visible then
     if self.closeButton then
       self.closeButton:SetVisible(true)
@@ -77,6 +83,8 @@ local function SetCloseButtonVisible(self, visible)
     self.closeButton:SetVisible(false)
   end
 end
+
+-- Constructor Function
 
 function Library.LibSimpleWidgets.Window(name, parent)
   local window = UI.CreateFrame("RiftWindow", name, parent)

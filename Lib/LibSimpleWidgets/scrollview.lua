@@ -112,11 +112,15 @@ local function SetBackgroundColor(self, r, g, b, a)
 end
 
 local function SetVisible(self, visible)
+  assert(type(visible) == "boolean", "param 1 must be a boolean!")
+
   self:SavedSetVisible(visible)
   self:UpdateScrollbarVisiblity()
 end
 
 local function SetContent(self, content)
+  assert(type(content) == "table", "param 1 must be a frame!")
+
   if self.content then
     self.content:SetVisible(false)
     self.content.Event.Size = self.oldContentSizeFunc
@@ -145,6 +149,8 @@ local function GetScrollInterval(self)
 end
 
 local function SetScrollInterval(self, interval)
+  assert(type(interval) == "number", "param 1 must be a number!")
+
   self.scrollInterval = interval
 end
 
@@ -153,6 +159,8 @@ local function GetShowScrollbar(self)
 end
 
 local function SetShowScrollbar(self, show)
+  assert(type(show) == "boolean", "param 1 must be a boolean!")
+
   self.showScrollbar = show
   self:UpdateScrollbarVisiblity()
 end
@@ -162,6 +170,8 @@ local function GetScrollbarWidth(self)
 end
 
 local function SetScrollbarWidth(self, width)
+  assert(type(width) == "number", "param 1 must be a number!")
+
   self.scrollbar:SetWidth(width)
 end
 

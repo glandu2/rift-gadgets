@@ -27,6 +27,8 @@ local function GetEnabled(self)
 end
 
 local function SetEnabled(self, enabled)
+  assert(type(enabled) == "boolean", "param 1 must be a boolean!")
+
   self.enabled = enabled
   if enabled then
     self.current:SetFontColor(1, 1, 1, 1)
@@ -44,8 +46,15 @@ local function GetRange(self)
   return self.slider:GetRange()
 end
 
-local function SetRange(self, min, max)
+local function SetRange(self, min, max, silent)
+  assert(type(min) == "number", "param 1 must be a number!")
+  assert(type(max) == "number", "param 2 must be a number!")
+  assert(min <= max, "min must be less than or equal to max!")
+  assert(silent == nil or type(silent) == "boolean", "param 3 must be a boolean!")
+
+  self.silent = silent ~= nil and silent
   self.slider:SetRange(min, max)
+  self.silent = false
   resizeCurrentForRange(self.current, max)
 end
 
@@ -54,6 +63,12 @@ local function GetPosition(self)
 end
 
 local function SetPosition(self, position, silent)
+  assert(type(position) == "number", "param 1 must be a number!")
+  local min, max = self.slider:GetRange()
+  assert(position >= min, "position must be greater than or equal to range minimum")
+  assert(position <= max, "position must be less than or equal to range minimum")
+  assert(silent == nil or type(silent) == "boolean", "param 2 must be a boolean!")
+
   self.silent = silent ~= nil and silent
   self.slider:SetPosition(position)
   self.silent = false
@@ -81,6 +96,8 @@ local function GetEditable(self)
 end
 
 local function SetEditable(self, editable)
+  assert(type(editable) == "boolean", "param 1 must be a boolean!")
+
   if editable then
     if not self.editor then
       self.editor = UI.CreateFrame("RiftTextfield", self:GetName().."Editor", self)

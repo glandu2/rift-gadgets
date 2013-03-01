@@ -2,6 +2,7 @@ local frameConstructors = {
   SimpleCheckbox    = Library.LibSimpleWidgets.Checkbox,
   SimpleList        = Library.LibSimpleWidgets.List,
   SimpleRadioButton = Library.LibSimpleWidgets.RadioButton,
+  SimpleScrollList  = Library.LibSimpleWidgets.ScrollList,
   SimpleScrollView  = Library.LibSimpleWidgets.ScrollView,
   SimpleSelect      = Library.LibSimpleWidgets.Select,
   SimpleSlider      = Library.LibSimpleWidgets.Slider,
@@ -12,11 +13,15 @@ local frameConstructors = {
 }
 
 local oldUICreateFrame = UI.CreateFrame
-UI.CreateFrame = function(type, name, parent)
-  local constructor = frameConstructors[type]
+UI.CreateFrame = function(frameType, name, parent)
+  assert(type(frameType) == "string", "param 1 must be a string!")
+  assert(type(name) == "string", "param 2 must be a string!")
+  assert(type(parent) == "table", "param 3 must be a valid frame parent!")
+
+  local constructor = frameConstructors[frameType]
   if constructor then
     return constructor(name, parent)
   else
-    return oldUICreateFrame(type, name, parent)
+    return oldUICreateFrame(frameType, name, parent)
   end
 end

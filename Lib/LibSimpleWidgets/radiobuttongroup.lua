@@ -23,6 +23,8 @@ function class:AddRadioButton(radioButton)
 end
 
 function class:RemoveRadioButton(radioButton)
+  assert(type(radioButton) == "number" or type(radioButton) == "table", "param 1 must be a number or a radiobutton frame!")
+
   radioButton.group = nil
   if type(radioButton) == "number" then
     table.remove(self.radioButtons, radioButton)
@@ -36,6 +38,8 @@ function class:RemoveRadioButton(radioButton)
 end
 
 function class:GetRadioButton(index)
+  assert(type(index) == "number", "param 1 must be a number!")
+
   return self.radioButtons[index]
 end
 
@@ -56,11 +60,16 @@ function class:GetSelectedIndex()
 end
 
 function class:SetSelectedIndex(index, silent)
+  assert(type(index) == "number", "param 1 must be a number!")
+  assert(silent == nil or type(silent) == "boolean", "param 2 must be a boolean!")
+
   local radioButton = self.radioButtons[index]
   radioButton:SetSelected(true, silent)
 end
 
 function class:SetEnabled(enabled)
+  assert(type(enabled) == "boolean", "param 1 must be a boolean!")
+
   for i, radioButton in ipairs(self.radioButtons) do
     radioButton:SetEnabled(enabled)
   end
@@ -78,6 +87,8 @@ end
 -- Constructor Function
 
 function Library.LibSimpleWidgets.RadioButtonGroup(name)
+  assert(type(name) == "string", "param 1 must be a string!")
+
   local group = {}
   setmetatable(group, class)
   group.name = name

@@ -21,6 +21,9 @@ local function GetSelected(self)
 end
 
 local function SetSelected(self, selected, silent)
+  assert(type(selected) == "boolean", "param 1 must be a boolean!")
+  assert(silent == nil or type(silent) == "boolean", "param 2 must be a boolean!")
+
   if self.check.checked == selected then return end
   self.check.checked = selected
   self.check:SetTexture("LibSimpleWidgets", GetTexture(self.check.checked, self.enabled))
@@ -37,6 +40,8 @@ local function GetEnabled(self)
 end
 
 local function SetEnabled(self, enabled)
+  assert(type(enabled) == "boolean", "param 1 must be a boolean!")
+
   self.enabled = enabled
   self.check:SetTexture("LibSimpleWidgets", GetTexture(self.check.checked, self.enabled))
   if enabled then
@@ -51,11 +56,16 @@ local function GetText(self)
 end
 
 local function SetText(self, text)
+  assert(type(text) == "string", "param 1 must be a string!")
+
   self.label:SetText(text)
   self:ResizeToFit()
 end
 
 local function SetLabelPos(self, pos)
+  assert(type(pos) == "string", "param 1 must be a string!")
+  assert(pos == "left" or pos == "right", "param 1 must be one of: left, right")
+
   if pos == "right" then
     self.check:ClearAll()
     self.label:ClearAll()
@@ -77,6 +87,8 @@ local function GetFontSize(self)
 end
 
 local function SetFontSize(self, size)
+  assert(type(size) == "number", "param 1 must be a number!")
+
   self.label:SetFontSize(size)
   self:ResizeToFit()
 end
@@ -150,7 +162,6 @@ function Library.LibSimpleWidgets.RadioButton(name, parent)
   widget.check.Event.LeftClick = LeftClick
 
   widget.SetBorder = SetBorder
-  widget.SetBackgroundColor = SetBackgroundColor
   widget.GetFontSize = GetFontSize
   widget.SetFontSize = SetFontSize
   widget.GetFontColor = GetFontColor

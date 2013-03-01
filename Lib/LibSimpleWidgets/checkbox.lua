@@ -9,6 +9,8 @@ local function GetChecked(self)
 end
 
 local function SetChecked(self, checked)
+  assert(type(checked) == "boolean", "param 1 must be a boolean!")
+
   self.check:SetChecked(checked)
 end
 
@@ -17,6 +19,8 @@ local function GetEnabled(self)
 end
 
 local function SetEnabled(self, enabled)
+  assert(type(enabled) == "boolean", "param 1 must be a boolean!")
+
   self.check:SetEnabled(enabled)
   if enabled then
     self.label:SetFontColor(1, 1, 1, 1)
@@ -30,11 +34,16 @@ local function GetText(self)
 end
 
 local function SetText(self, text)
+  assert(type(text) == "string", "param 1 must be a string!")
+
   self.label:SetText(text)
   self:ResizeToFit()
 end
 
 local function SetLabelPos(self, pos)
+  assert(type(pos) == "string", "param 1 must be a string!")
+  assert(pos == "left" or pos == "right", "param 1 must be one of: left, right")
+
   if pos == "right" then
     self.check:ClearAll()
     self.label:ClearAll()
@@ -56,6 +65,8 @@ local function GetFontSize(self)
 end
 
 local function SetFontSize(self, size)
+  assert(type(size) == "number", "param 1 must be a number!")
+
   self.label:SetFontSize(size)
   self:ResizeToFit()
 end
@@ -125,7 +136,6 @@ function Library.LibSimpleWidgets.Checkbox(name, parent)
   end
 
   widget.SetBorder = SetBorder
-  widget.SetBackgroundColor = SetBackgroundColor
   widget.GetFontSize = GetFontSize
   widget.SetFontSize = SetFontSize
   widget.GetFontColor = GetFontColor

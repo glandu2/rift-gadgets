@@ -20,6 +20,19 @@ function wtImageSet:Construct()
 	local config = self.Configuration
 	local unitFrame = self.UnitFrame
 
+	self.dynamicX = false
+	self.dynamicY = false
+	
+	local points = self:ReadAll()
+	if points.x and #points.x == 1 then
+		-- we have 2 points set, this is a dynamically sizable element horizontally
+		self.dynamicX = true
+	end
+	if points.y and #points.y == 1 then
+		-- we have 2 points set, this is a dynamically sizable element vertically
+		self.dynamicY = true
+	end
+	
 	-- Validate the configuration
 	if not config.texAddon then error("ImageSet missing required configuration item: texAddon") end
 	if not config.texFile then error("ImageSet missing required configuration item: texFile") end
@@ -55,13 +68,25 @@ function wtImageSet:Construct()
 		self.tileHeight = config.height
 	end
 	
+	if self.dynamicX then
+		self.totalWidth = self:GetWidth() * self.cols
+		self.image:SetWidth(self.totalWidth)
+		self.tileWidth = self:GetWidth()
+	end
+	
+	if self.dynamicY then
+		self.totalHeight = self:GetHeight() * self.rows
+		self.image:SetHeight(self.totalHeight)
+		self.tileHeight = self:GetHeight()
+	end
+	
 	-- wrapIndex can be a number which forces the index to be between 0 and (wrapIndex - 1), otherwise the index
 	-- wraps around the max number of tiles the source image can hold
 	self.wrapIndex = config.wrapIndex or (self.rows * self.cols) 
 	
 	-- Set the mask to the size of an individual tile
-	self:SetWidth(self.tileWidth)
-	self:SetHeight(self.tileHeight)
+	if not self.dynamicX then self:SetWidth(self.tileWidth) end
+	if not self.dynamicY then self:SetHeight(self.tileHeight) end
 	
 	self.defaultIndex = config.defaultIndex or 0
 	self:SetIndex(self.defaultIndex)
@@ -78,7 +103,7 @@ function wtImageSet:Construct()
 		function()
 			local newWidth = self:GetWidth()
 			local newHeight = self:GetHeight()
-
+		
 			if newWidth >= 1.0 and newHeight >= 1.0 then
 
 				self.totalWidth = newWidth * self.cols
@@ -98,7 +123,9 @@ end
 
 function wtImageSet:Refresh()
 	if self:GetWidth() < 0.5 or self.currIndex == "hide" then return end
-	self:SetWidth(self.tileWidth)
+	if not self.dynamicX then
+		self:SetWidth(self.tileWidth)
+	end
 	local idx = self.currIndex % self.wrapIndex 
 	local col = (idx % self.cols)
 	local row = math.floor(idx / self.cols)
@@ -107,9 +134,13 @@ end
 
 function wtImageSet:SetIndex(index)
 	if index == "hide" then
-		self:SetWidth(0)
+		if not self.dynamicX then
+			self:SetWidth(0)
+		end
 	else
-		self:SetWidth(self.tileWidth)
+		if not self.dynamicX then
+			self:SetWidth(self.tileWidth)
+		end
 		local idx = index % self.wrapIndex 
 		local col = (idx % self.cols)
 		local row = math.floor(idx / self.cols)

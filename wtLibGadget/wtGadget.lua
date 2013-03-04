@@ -423,6 +423,11 @@ end
 
 -- RESIZING FUNCTIONALITY
 
+local origWidth = 0
+local origHeight = 0
+local constrainProportions = false
+
+
 function WT.Gadget:SizeStart()
 	if not WT.Gadget.InSizeMode then
 		self.sizing = true	
@@ -434,6 +439,9 @@ function WT.Gadget:SizeStart()
 		self.mouseStartX = mouse.x
 		self.mouseStartY = mouse.y	
 		WT.Log.Debug("SizeStart " .. self.startX .. "," .. self.startY)
+		
+		origWidth = self.frame:GetWidth()
+		origHeight = self.frame:GetHeight()
 	end
 end
 
@@ -461,10 +469,26 @@ function WT.Gadget:SizeMove()
 		
 		local newWidth = math.ceil(x - self.frame:GetLeft() + 1)		
 		local newHeight = math.ceil(y - self.frame:GetTop() + 1)
+			
 		if newWidth < self.minX then newWidth = self.minX end
 		if newWidth > self.maxX then newWidth = self.maxX end
 		if newHeight < self.minY then newHeight = self.minY end
 		if newHeight > self.maxY then newHeight = self.maxY end
+		
+		if constrainProportions then
+			local deltaW = newWidth - origWidth
+			local deltaH = newHeight - origHeight
+			if math.abs(deltaH) > math.abs(deltaW) then
+				-- moved mainly vertically
+				local frac = newHeight / origHeight
+				newWidth = origWidth * frac				
+			else
+				-- moved mainly horizontally
+				local frac = newWidth / origWidth
+				newHeight = origHeight * frac 			
+			end 
+		end
+		
 		self.frame:SetWidth(newWidth)
 		self.frame:SetHeight(newHeight)
 		wtxGadgets[self.gadgetId].width = newWidth
@@ -477,11 +501,23 @@ end
 local keyFocusFrame = nil
 local escMessageShown = false
 
-local function GadgetKeyDown(frame, key)
+local function GadgetKeyDown(frame, hEvent, key)
+
+	if (key == "Left Shift") or (key == "Shift") then
+		constrainProportions = true
+		print("Contrain On")
+	end
+
 end
 
-local function GadgetKeyUp(frame, key)
-	if key:byte() == 27 then
+local function GadgetKeyUp(frame, hEvent, key)
+
+	if (key == "Left Shift") or (key == "Shift") then
+		constrainProportions = false
+		print("Contrain Off")
+	end
+
+	if key == "Escape" then
 		WT.Gadget.LockAll()
 	else
 		if not escMessageShown then
@@ -496,6 +532,7 @@ function WT.Gadget.UnlockAll()
 		print("Cannot alter gadgets in combat")
 		return
 	end
+	
 	for gadgetId, gadget in pairs(WT.Gadgets) do
 		gadget.mvHandle:SetVisible(true)
 	end
@@ -506,8 +543,8 @@ function WT.Gadget.UnlockAll()
 			keyFocusFrame = UI.CreateFrame("Frame", "Gadgets_KeyHandler", WT.Context)
 			keyFocusFrame:SetAllPoints(UIParent)
 			keyFocusFrame:SetLayer(9900)
-			keyFocusFrame.Event.KeyDown = GadgetKeyDown
-			keyFocusFrame.Event.KeyUp = GadgetKeyUp
+			keyFocusFrame:EventAttach(Event.UI.Input.Key.Down, GadgetKeyDown, "GdtKeyDown")
+			keyFocusFrame:EventAttach(Event.UI.Input.Key.Up, GadgetKeyUp, "GdtKeyUp")
 		end
 		keyFocusFrame:SetVisible(true)
 		keyFocusFrame:SetKeyFocus(true)	

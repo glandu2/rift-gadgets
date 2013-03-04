@@ -251,6 +251,7 @@ function WT.UnitFrame:Create(unitSpec, options)
 	frame.UnitSpec = unitSpec
 	frame.Bindings = {}
 	frame.Elements = {}	
+	frame.Animations = {}
 	frame.Options = options or {}
 	frame.BuffAllocations = {}
 	frame.BuffData = {}

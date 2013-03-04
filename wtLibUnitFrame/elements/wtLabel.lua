@@ -40,6 +40,17 @@ function wtLabel:Construct()
 			end
 		end 
 
+	self._SetFontSize = self.SetFontSize
+	self.SetFontSize = 
+		function(lbl, fontSize)
+			self:_SetFontSize(fontSize)
+			if self.outline then
+				for idx = 1,4 do
+					self.outline[idx]:SetFontSize(self:GetFontSize())
+				end
+			end
+		end
+
 	-- Validate configuration
 	if not config.text then error("Label missing required configuration item: text") end
 	

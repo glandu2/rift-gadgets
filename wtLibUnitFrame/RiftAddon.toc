@@ -20,6 +20,8 @@ RunOnStartup =
   "wtUnitFrame_Creation.lua",
   "wtUnitFrame_VirtualProperties.lua",
   "wtUnitFrame_Macros.lua",
+  "wtUnitFrame_Resizable.lua",
+  "wtUnitFrame_Animation.lua",
   "wtElement.lua",
   "wtTemplate.lua",
   "elements/wtFrame.lua",

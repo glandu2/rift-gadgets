@@ -23,7 +23,6 @@ local runningAnimations = {}
 
 local function fnAnimate(frame, animation, value)
 	if value and (not animation.running) then
-		print("Start Animation: " .. animation.trigger)
 		animation.running = true
 		animation.startTime = Inspect.Time.Frame()
 		animation.iteration = 1
@@ -31,7 +30,6 @@ local function fnAnimate(frame, animation, value)
 		runningAnimations[animation] = true
 	end
 	if (not value) and animation.running then
-		print("Stop Animation: " .. animation.trigger)
 		animation.onFinish(frame.Elements)
 		animation.running = false
 		runningAnimations[animation] = nil

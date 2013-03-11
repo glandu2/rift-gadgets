@@ -34,12 +34,12 @@ local function KeyUpHandler(self, key)
   local widget = self:GetParent():GetParent()
 
   -- Handle Enter and Tab
-  local code = string.byte(key)
   local text = self:GetText()
   local pos = self:GetCursor()
   local prefix = string.sub(text, 1, pos)
   local suffix = string.sub(text, pos+1)
-  if tonumber(code) == 13 then
+
+  if key == "Return" then
     local newText = prefix .."\n".. suffix
     resizeToText(self, newText)
     self:OldSetText(newText)
@@ -51,7 +51,7 @@ local function KeyUpHandler(self, key)
     if widget.Event.TextAreaChange then
       widget.Event.TextAreaChange(widget)
     end
-  elseif tonumber(code) == 9 then
+  elseif key == "Tab" then
     if env16 then
       local newText = prefix .."\t".. suffix
       resizeToText(self, newText)

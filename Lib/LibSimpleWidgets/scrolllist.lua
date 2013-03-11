@@ -546,7 +546,7 @@ local function GetSelectedIndex(self)
 end
 
 local function SetSelectedIndex(self, index, silent)
-  assert(type(index) == "number", "param 1 must be a number!")
+  assert(index == nil or type(index) == "number", "param 1 must be a number!")
   assert(silent == nil or type(silent) == "boolean", "param 2 must be a boolean!")
 
   if self.selectionMode ~= "single" then

@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.3.100
+      Project Date (UTC)  : 2013-03-01T00:08:19Z
+      File Modified (UTC) : 2013-02-28T08:20:03Z (Wildtide)
       -----------------------------------------------------------------     
 --]]
 
@@ -28,7 +28,20 @@ local paDetails = nil
 local iconRestedAddon = "Rift"
 local iconRestedFile = "indicator_friendlyNPC.png.dds"
 
-function XBG.OnPAChange(accum)
+local MAX_CH_LEVEL = 60
+
+local PA_T2_CAP = 628
+local PA_T3_CAP = 1079
+
+local PA_T2_EXP = PA_T2_CAP*((PA_T2_CAP*1219)+98781)
+local PA_T3_EXP = PA_T3_CAP*((PA_T3_CAP*1219)+98781)
+
+local PA_T3_ONLY = PA_T3_EXP - PA_T2_EXP
+
+local MAX_PA_LEVEL = PA_T3_CAP
+local MAX_PAXP_REQ = PA_T3_EXP
+
+function XBG.OnPAChange(h, accum)
 	if not accum then return end
 	if paDetails == nil then
 		paDetails = Inspect.Attunement.Progress()
@@ -41,12 +54,11 @@ function XBG.OnPAChange(accum)
 			end
 		end
 	else
-		local percent = (accum / paDetails.needed) * 100
+		local percent
 		local percentRested = 0
 		if paDetails.rested and paDetails.rested > accum then percentRested = (paDetails.rested / paDetails.needed) end
 
 		for idx, gadget in ipairs(paGadgets) do
-			gadget.bar:SetPoint("BOTTOMRIGHT", gadget, accum / paDetails.needed, 1.0)
 			if percentRested > 0 then
 				if gadget.barRested then
 					gadget.barRested:SetPoint("BOTTOMRIGHT", gadget, percentRested, 1.0)
@@ -56,26 +68,50 @@ function XBG.OnPAChange(accum)
 				if gadget.barRested then gadget.barRested:SetVisible(false) end
 			end		
 			if gadget.text then
-				local unspent = ""
+				local unspent = ""	
+				local pa_cur = 0
+				local pa_req = 0
 				if paDetails.available then
 					unspent = string.format("[%d] ", paDetails.available)
 				end
-				if gadget.textType then
-					gadget.text:SetText(string.format("[PA#: %d] %s/%s %s(%.2f%%)", paDetails.spent+paDetails.available+1, WT.Utility.NumberComma(accum), WT.Utility.NumberComma(paDetails.needed), unspent, percent))
+				if gadget.xpType == "PAXP" then
+					pa_cur = accum
+					pa_req = paDetails.needed
 				else
-					gadget.text:SetText(string.format("[PA#: %d] %s/%s %s(%.2f%%)", paDetails.spent+paDetails.available+1, WT.Utility.NumberDesc(accum), WT.Utility.NumberDesc(paDetails.needed), unspent, percent))
+					local pa_pts = paDetails.spent+paDetails.available					
+					pa_cur = (pa_pts*((pa_pts*1219)+98781))+accum
+					
+					if gadget.pat3 then
+						pa_req = PA_T3_ONLY
+						if pa_cur >= PA_T2_EXP then
+							pa_cur = pa_cur - PA_T2_EXP
+						else
+							pa_cur = 0
+						end
+					else
+						pa_req = MAX_PAXP_REQ
+					end
 				end
+				
+				percent = (pa_cur / pa_req)
+				gadget.bar:SetPoint("BOTTOMRIGHT", gadget, percent, 1.0)
+				percent = percent*100
+				if gadget.textType then
+					gadget.text:SetText(string.format("[PA#: %d] %s/%s %s(%.2f%%)", paDetails.spent+paDetails.available+1, WT.Utility.NumberComma(pa_cur), WT.Utility.NumberComma(pa_req), unspent, percent))
+				else
+					gadget.text:SetText(string.format("[PA#: %d] %s/%s %s(%.2f%%)", paDetails.spent+paDetails.available+1, WT.Utility.NumberDesc(pa_cur), WT.Utility.NumberDesc(pa_req), unspent, percent))
+				end				
 			end
 		end
 	end
 end
 
-function XBG.PAPtChange()
+function XBG.PAPtChange(h)
 	paDetails = Inspect.Attunement.Progress()
-	XBG.OnPAChange(paDetails.accumulated)
+	XBG.OnPAChange(0, paDetails.accumulated)
 end
 
-function XBG.OnPrestige(accum)
+function XBG.OnPrestige(h, accum)
 	if not accum then return end
 	if prDetails == nil then
 		prDetails = Inspect.Pvp.Prestige()
@@ -99,15 +135,18 @@ function XBG.OnPrestige(accum)
 	end
 end
 
-function XBG.RankChange()
+function XBG.RankChange(h)
 	prDetails = Inspect.Pvp.Prestige()
-	XBG.OnPrestige(prDetails.accumulated)	
+	XBG.OnPrestige(0, prDetails.accumulated)	
 end
 
-function XBG.OnExperience(accum, rested, needed)
+function XBG.OnExperience(h, accum, rested, needed)
 	if not accum then return end
 	
 	local pLevel = Inspect.Unit.Detail("player").level
+	if pLevel == MAX_CH_LEVEL then
+		needed = -1
+	end
 	
 	if needed == -1 then
 		for idx, gadget in ipairs(xpGadgets) do
@@ -205,7 +244,9 @@ function XBG.Create(configuration)
 
 	if configuration.xpType == "XP" then
 		table.insert(xpGadgets, wrapper)
-	elseif configuration.xpType == "PAXP" then
+	elseif configuration.xpType == "PAXP" or configuration.xpType == "PAXPCAP" then
+		wrapper.xpType = configuration.xpType
+		wrapper.pat3 = configuration.pat3
 		table.insert(paGadgets, wrapper)
 	elseif configuration.xpType == "PRXP" then
 		table.insert(prGadgets, wrapper)
@@ -227,8 +268,10 @@ function XBG.ConfigDialog(container)
 			{
 				{text="XP", value="XP"},
 				{text="PA XP", value="PAXP"},
+				{text="PA XP to cap", value="PAXPCAP"},
 				{text="Prestige", value="PRXP"}
 			})
+		:Checkbox("pat3", "Show PA Cap for T3 only", false)
 		:ColorPicker("colBar", "Bar Color", 0, 0.8, 0, 0.4)
 end
 
@@ -252,27 +295,28 @@ WT.Gadget.RegisterFactory("XPBar",
 		["SetConfiguration"] = XBG.SetConfiguration, 
 	})
 
-function XBG.OnPlayerAvailable()
-	XBG.OnExperience(Inspect.TEMPORARY.Experience())
+function XBG.OnPlayerAvailable(h)
+	XBG.OnExperience(0, Inspect.TEMPORARY.Experience())
 	
 	local prestige = Inspect.Pvp.Prestige()
 	if prestige and prestige.accumulated then
-		XBG.OnPrestige(prestige.accumulated)
+		XBG.OnPrestige(0,prestige.accumulated)
 	else
-		XBG.OnPrestige(0)
+		XBG.OnPrestige(0,0)
 	end
 	
 	local attunement = Inspect.Attunement.Progress()
 	if attunement and attunement.accumulated then
-		XBG.OnPAChange(attunement.accumulated)
+		XBG.OnPAChange(0,attunement.accumulated)
 	else
-		XBG.OnPAChange(0)
+		XBG.OnPAChange(0,0)
 	end	
 end
 
-table.insert(Event.TEMPORARY.Experience, { XBG.OnExperience, AddonId, "OnExperienceBar" })
 table.insert(WT.Event.PlayerAvailable, {XBG.OnPlayerAvailable, AddonId, "XPBarGadget_OnPlayerAvailable"})	
-table.insert(Event.Pvp.Prestige.Accumulated,{XBG.OnPrestige, AddonId, "Event.Pvp.Prestige.Accumulated"})
-table.insert(Event.Pvp.Prestige.Rank, { XBG.RankChange, AddonId, "Event.Pvp.Prestige.Rank"})
-table.insert(Event.Attunement.Progress.Accumulated, { XBG.OnPAChange, AddonId, "Inspect.Attunement.Progress" })
-table.insert(Event.Attunement.Progress.Available, { XBG.PAPtChange, AddonId, "Event.Attunement.Progress.Available" })
+
+Command.Event.Attach(Event.TEMPORARY.Experience, XBG.OnExperience, "OnExperienceBar")
+Command.Event.Attach(Event.Pvp.Prestige.Accumulated, XBG.OnPrestige, "Event.Pvp.Prestige.Accumulated")
+Command.Event.Attach(Event.Pvp.Prestige.Rank, XBG.RankChange, "Event.Pvp.Prestige.Rank")
+Command.Event.Attach(Event.Attunement.Progress.Accumulated, XBG.OnPAChange, "Inspect.Attunement.Progress")
+Command.Event.Attach(Event.Attunement.Progress.Available, XBG.PAPtChange, "Event.Attunement.Progress.Available")

@@ -4,19 +4,16 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.3.91
+      Project Date (UTC)  : 2012-12-12T21:27:16Z
+      File Modified (UTC) : 2012-12-08T18:16:51Z (Wildtide)
       -----------------------------------------------------------------     
 --]]
 
 local toc, data = ...
 local AddonId = toc.identifier
-local TXT = Library.Translate
 
-
-local castBars = {}
-
+local PHICON = "Data/\\UI\\texture\\global\\placeholder_icon.dds"
 
 -- wtCastBar provides a simple bar for the player's charge
 -- Only useful for mages, and it only exists because I didn't want to add a charge bar to the standard frame
@@ -24,10 +21,25 @@ local castBars = {}
 local function OnCastName(unitFrame, castname)
 	if castname then
 		local unit = unitFrame.Unit
+		if unitFrame.icon then
+			local cbd = Inspect.Unit.Castbar(unit.id)
+			if cbd and cbd.abilityNew then
+				local ad = Inspect.Ability.New.Detail(cbd.abilityNew)
+				if ad and ad.icon then
+					unitFrame.icon:SetTexture("Rift", ad.icon)
+				else
+					unitFrame.icon:SetTexture("Rift", PHICON)
+				end
+			else
+				unitFrame.icon:SetTexture("Rift", PHICON)
+			end
+		end
 		if unit.castUninterruptible then
 			unitFrame.barCast.Image:SetTexture(unitFrame.mediaNoInterrupt.addonId, unitFrame.mediaNoInterrupt.filename)  
+			unitFrame.barCast.Image:SetBackgroundColor(unitFrame.colorNoInterrupt[1], unitFrame.colorNoInterrupt[2], unitFrame.colorNoInterrupt[3], unitFrame.colorNoInterrupt[4])
 		else
 			unitFrame.barCast.Image:SetTexture(unitFrame.mediaInterrupt.addonId, unitFrame.mediaInterrupt.filename)  
+			unitFrame.barCast.Image:SetBackgroundColor(unitFrame.colorInterrupt[1], unitFrame.colorInterrupt[2], unitFrame.colorInterrupt[3], unitFrame.colorInterrupt[4])
 		end
 	end
 end
@@ -40,10 +52,16 @@ local function Create(configuration)
 	if not configuration.hideNotCasting then
 		castBar:SetBackgroundColor(0,0,0,0.4)
 	end
+	
+	if configuration.cbColorInt == nil then configuration.cbColorInt = {0,0,1,0.5} end
+	if configuration.cbColorNonInt == nil then configuration.cbColorNonInt = {1,0.75,0.16,0.5} end
 
 	castBar.mediaInterrupt = Library.Media.GetTexture(configuration.texture)
 	castBar.mediaNoInterrupt = Library.Media.GetTexture(configuration.textureNoInterrupt)
 
+	castBar.colorInterrupt = configuration.cbColorInt
+	castBar.colorNoInterrupt = configuration.cbColorNonInt
+	
 	castBar.barCast = castBar:CreateElement(
 	{
 		id="barCast", type="Bar", parent="frame", layer=25,
@@ -53,7 +71,7 @@ local function Create(configuration)
 		},
 		visibilityBinding="castName",
 		binding="castPercent",
-		media=configuration.texture, colorBinding="castColor",
+		media=configuration.texture, --colorBinding="castColor",
 		backgroundColor={r=0, g=0, b=0, a=1}
 	})
 
@@ -69,60 +87,44 @@ local function Create(configuration)
 		castBar.labelTime = castBar:CreateElement(
 		{
 			id="labelTime", type="Label", parent="frame", layer=26,
-			attach = {{ point="CENTERRIGHT", element="barCast", targetPoint="CENTERRIGHT", offsetX=-6, offsetY=0 }},
+			attach = {{ point="BOTTOMRIGHT", element="barCast", targetPoint="BOTTOMRIGHT", offsetX=-4, offsetY=-4 }},
 			visibilityBinding="castName",
 			text="{castTime}", default="", fontSize=10
 		})
 	end
 
-	castBar.barCast.Event.Size = 
-		function(frame)
-			castBar.labelCast:SetFontSize(frame:GetHeight() * 0.5)
-			if castBar.labelTime then
-				castBar.labelTime:SetFontSize(frame:GetHeight() * 0.4)
-			end
-		end
-
-	if configuration.gcdSparkAbove then
-		castBar.gcdTrack = UI.CreateFrame("Frame", "gcdTrack", castBar)
-		castBar.gcdTrack:SetLayer(100)
-		castBar.gcdTrack:SetPoint("BOTTOMLEFT", castBar, "TOPLEFT")
-		castBar.gcdTrack:SetPoint("TOPRIGHT", castBar, "TOPRIGHT", 0, -3)
-		if configuration.showCooldownTrack then
-			castBar.gcdTrack:SetBackgroundColor(0,0,0,0.6)
-		else
-			castBar.gcdTrack:SetBackgroundColor(0,0,0,0.0)
-		end
-	else
-		castBar.gcdTrack = UI.CreateFrame("Frame", "gcdTrack", castBar)
-		castBar.gcdTrack:SetLayer(100)
-		castBar.gcdTrack:SetPoint("TOPLEFT", castBar, "BOTTOMLEFT")
-		castBar.gcdTrack:SetPoint("BOTTOMRIGHT", castBar, "BOTTOMRIGHT", 0, 3)
-		castBar.gcdTrack:SetBackgroundColor(0,0,0,0.6)
-		if configuration.showGCDTrack then
-			castBar.gcdTrack:SetBackgroundColor(0,0,0,0.6)
-		else
-			castBar.gcdTrack:SetBackgroundColor(0,0,0,0.0)
-		end
+	if configuration.showIcon then
+		castBar.icon = castBar:CreateElement({
+			id="abilityIcon", type="Image", parent="frame", layer=30,
+			attach = {{ point = "TOPRIGHT", element="barCast", targetPoint = "TOPLEFT", offsetX=-2, offsetY=0 }},
+			visibilityBinding="castName", texAddon="Rift", texFile=PHICON
+		})
 	end
 	
-	castBar.gcdSpark = UI.CreateFrame("Texture", "gcdSpark", castBar.gcdTrack)
-	castBar.gcdSpark:SetTexture("Rift", "LightOrb_Yellow.png.dds")
-	castBar.gcdSpark:SetPoint("CENTER", castBar.gcdTrack, 0.0, 0.5, 1, 1)
-	castBar.gcdSpark:SetHeight(12)
-	castBar.gcdSpark:SetWidth(12)
-	castBar.gcdSpark:SetAlpha(0.6)
-	castBar.gcdSpark:SetVisible(false)
-
-	if not configuration.showGCDSpark then
-		castBar.gcdTrack:SetVisible(false)
-	end
+	castBar.barCast.Event.Size = 
+		function(frame)
+			local fh = frame:GetHeight()
+			local s = math.floor(fh * 0.4)
+			if s > 24 then
+				s = 24
+			end
+			castBar.labelCast:SetFontSize(s)
+			if castBar.labelTime then
+				local l = math.floor(fh * 0.2)
+				if l < 8 then
+					l = 8
+				end			
+				castBar.labelTime:SetFontSize(l)
+			end
+			if configuration.showIcon then
+				castBar.icon:SetHeight(fh)
+				castBar.icon:SetWidth(fh)
+			end
+		end
 
 	castBar:CreateBinding("castName", castBar, OnCastName, nil)
 
 	castBar.barCast:SetVisible(false)
-
-	table.insert(castBars, castBar)
 
 	return castBar, { resizable = { 140, 15, 1000, 300 } }
 end
@@ -139,7 +141,7 @@ local function ConfigDialog(container)
 	
 	dialog = WT.Dialog(container)
 		:Label("The cast bar gadget shows a cast bar for the unit selected.")
-		:Combobox("unitSpec", TXT.UnitToTrack, "player",
+		:Combobox("unitSpec", "Unit to track", "player",
 			{
 				{text="Player", value="player"},
 				{text="Target", value="player.target"},
@@ -148,14 +150,13 @@ local function ConfigDialog(container)
 				{text="Focus's Target", value="focus.target"},
 				{text="Pet", value="player.pet"},
 			}, false) 
-		:TexSelect("texture", TXT.Texture, "wtCastInterruptable", "bar")
-		:TexSelect("textureNoInterrupt", TXT.TextureNoInterrupt, "wtCastUninterruptable", "bar")
-		:Checkbox("hideNotCasting", TXT.HideWhenNotCasting, true)
-		:Checkbox("showCastTime", TXT.ShowCastTime, true)
-		:Checkbox("showGCDSpark", "Show Cooldown Spark", false)
-		:Checkbox("showGCDTrack", "Show Cooldown Track", false)
-		:Checkbox("gcdSparkAbove", "Cooldown Spark Above", false)
-	
+		:TexSelect("texture", "Texture", "wtCastInterruptable", "bar")
+		:ColorPicker("cbColorInt", "Interruptible color", 0,0,1,0.5)
+		:TexSelect("textureNoInterrupt", "Noninterruptable Texture", "wtCastUninterruptable", "bar")
+		:ColorPicker("cbColorNonInt", "Non-Interruptible color", 1,0.75,0.16,0.5)
+		:Checkbox("hideNotCasting", "Hide when inactive", true)
+		:Checkbox("showCastTime", "Show cast time", true)
+		:Checkbox("showIcon", "Show ability icon", false)
 end
 
 local function GetConfiguration()
@@ -175,7 +176,7 @@ local function Reconfigure(config)
 	
 	assert(gadget, "Gadget id does not exist in WT.Gadgets")
 	assert(gadgetConfig, "Gadget id does not exist in wtxGadgets")
-	assert(gadgetConfig.type == "CastBar", "Reconfigure Gadget is not a castbar")
+	assert(gadgetConfig.type == "adCastBar", "Reconfigure Gadget is not a castbar")
 	
 	-- Detect changes to config and apply them to the gadget
 	
@@ -210,27 +211,9 @@ local function Reconfigure(config)
 		requireRecreate = true
 	end
 
-
-	if config.gcdSparkAbove then
-		gadget.gcdTrack:SetPoint("BOTTOMLEFT", gadget, "TOPLEFT")
-		gadget.gcdTrack:SetPoint("TOPRIGHT", gadget, "TOPRIGHT", 0, -3)
-		gadget.gcdTrack:SetBackgroundColor(0,0,0,0.6)
-	else
-		gadget.gcdTrack:SetPoint("TOPLEFT", gadget, "BOTTOMLEFT")
-		gadget.gcdTrack:SetPoint("BOTTOMRIGHT", gadget, "BOTTOMRIGHT", 0, 3)
-		gadget.gcdTrack:SetBackgroundColor(0,0,0,0.6)
-	end
-
-	if config.showGCDTrack then
-		gadget.gcdTrack:SetBackgroundColor(0,0,0,0.6)
-	else
-		gadget.gcdTrack:SetBackgroundColor(0,0,0,0.0)
-	end
-	
-	if not config.showGCDSpark then
-		gadget.gcdTrack:SetVisible(false)
-	else
-		gadget.gcdTrack:SetVisible(true)
+	if gadgetConfig.showIcon ~= config.showIcon then
+		gadgetConfig.showIcon = config.showIcon
+		requireRecreate = true
 	end
 
 	if requireRecreate then
@@ -242,9 +225,9 @@ end
 
 WT.Gadget.RegisterFactory("CastBar",
 	{
-		name=TXT.gadgetCastBar_name,
-		description=TXT.gadgetCastBar_desc,
-		author="Wildtide",
+		name="Castbar",
+		description="Castbar",
+		author="Wildtide/Adelea",
 		version="1.1.0",
 		iconTexAddon=AddonId,
 		iconTexFile="img/wtCastBar.png",
@@ -254,46 +237,3 @@ WT.Gadget.RegisterFactory("CastBar",
 		["SetConfiguration"] = SetConfiguration, 
 		["Reconfigure"] = Reconfigure,
 	})
-
-local trackingCD = nil
-local trackingStart = nil
-local trackingDuration = nil
-
-local function cdBegin(list)
-	for abilityId, cooldown in pairs(list) do
-		if (cooldown >= 0.9) and (cooldown <= 1.51) then
-			trackingCD = abilityId
-			trackingStart = Inspect.Time.Frame()
-			trackingDuration = cooldown
-			for idx, castbar in ipairs(castBars) do
-				castbar.gcdSpark:SetVisible(true)
-			end
-			break
-		end
-	end
-end
-
-local function cdEnd(list)
-	if trackingCD and list[trackingCD] then
-		-- GCD has ended
-		trackingCD = nil
-		for idx, castbar in ipairs(castBars) do
-			castbar.gcdSpark:SetVisible(false)
-		end
-	end
-end
-
-local function cdUpdate()
-	if not trackingCD then return end
-	local elapsed = Inspect.Time.Frame() - trackingStart
-	local percent = elapsed / trackingDuration
-	if percent > 1.0 then percent = 1.0 end
-	for idx, castBar in ipairs(castBars) do
-		castBar.gcdSpark:SetPoint("CENTER", castBar.gcdTrack, percent, 0.5, 1, 1)	
-	end	
-end
-
-
-table.insert(Event.Ability.New.Cooldown.Begin, { cdBegin, AddonId, AddonId .. "_CooldownBegin" })
-table.insert(Event.Ability.New.Cooldown.End, { cdEnd, AddonId, AddonId .. "_CooldownEnd"  })
-table.insert(Event.System.Update.Begin, { cdUpdate, AddonId, AddonId .. "_CooldownUpdate" })

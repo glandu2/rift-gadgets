@@ -723,8 +723,8 @@ local function Initialize()
 
 	local gadgetList = ""
 	for k,v in pairs(WT.GadgetFactories) do gadgetList = gadgetList .. v.name .. "; " end
-	Command.Console.Display("general", true, "<font color='#6688cc'>Gadgets Initialised:</font> ", true)
-	Command.Console.Display("general", true, "<font color='#cccccc'>" .. gadgetList .. "</font> ", true)
+	Command.Console.Display("general", true, "<font color='#6688cc'>Gadgets Initialised</font> ", true)
+	-- Command.Console.Display("general", true, "<font color='#cccccc'>" .. gadgetList .. "</font> ", true)
 end
 
 

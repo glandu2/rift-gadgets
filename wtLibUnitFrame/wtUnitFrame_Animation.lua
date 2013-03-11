@@ -61,9 +61,7 @@ function WT.UnitFrame.EnableAnimation(rootFrame, animList)
 		if type(animation.onFinish) ~= "function" then error("onFinish is not a function on animation") end
 		
 		table.insert(rootFrame.Animations, animation)	
-		
-		print("Enabled animation #" .. idx .. " with trigger " .. animation.trigger)
-		
+			
 		rootFrame:CreateBinding(animation.trigger, rootFrame, function(frm, val) fnAnimate(frm, animation, val) end, nil, nil) 
 		
 	end

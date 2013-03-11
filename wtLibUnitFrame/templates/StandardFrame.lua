@@ -118,7 +118,10 @@ function StandardFrame:Construct(options)
 		},
 		{
 			id="imgRole", type="ImageSet", parent="frameBackdrop", layer=20,
-			attach = {{ point="BOTTOMLEFT", element="frameBackdrop", targetPoint="TOPLEFT", offsetX=3, offsetY=-3 }}, visibilityBinding="role",
+			attach = {{ point="BOTTOMLEFT", element="frameBackdrop", targetPoint="TOPLEFT", offsetX=3, offsetY=-3 }}, 
+			visibilityBinding="role",
+			width=12,
+			height=12,
 			-- Type Specific Element Configuration
 			texAddon=AddonId, texFile="img/Roles12.png", nameBinding="role", cols=1, rows=5, 
 			names = { ["tank"] = 0, ["heal"] = 1, ["dps"] = 2, ["support"] = 3 }, defaultIndex = "hide"

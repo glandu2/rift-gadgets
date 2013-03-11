@@ -24,11 +24,11 @@ function wtImageSet:Construct()
 	self.dynamicY = false
 	
 	local points = self:ReadAll()
-	if points.x and #points.x == 1 then
+	if points.x and #points.x == 1 and not config.width then
 		-- we have 2 points set, this is a dynamically sizable element horizontally
 		self.dynamicX = true
 	end
-	if points.y and #points.y == 1 then
+	if points.y and #points.y == 1 and not config.height then
 		-- we have 2 points set, this is a dynamically sizable element vertically
 		self.dynamicY = true
 	end

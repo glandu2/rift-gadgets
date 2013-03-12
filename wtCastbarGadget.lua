@@ -176,7 +176,7 @@ local function Reconfigure(config)
 	
 	assert(gadget, "Gadget id does not exist in WT.Gadgets")
 	assert(gadgetConfig, "Gadget id does not exist in wtxGadgets")
-	assert(gadgetConfig.type == "adCastBar", "Reconfigure Gadget is not a castbar")
+	assert(gadgetConfig.type == "CastBar", "Reconfigure Gadget is not a castbar")
 	
 	-- Detect changes to config and apply them to the gadget
 	

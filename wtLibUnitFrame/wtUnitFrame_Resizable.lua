@@ -169,7 +169,9 @@ function WT.UnitFrame.EnableResizableTemplate(rootFrame, frameWidth, frameHeight
 			if el.type == "Label" then
 				local origFontSize = el.fontSize or 10
 				local newFontSize = math.ceil(origFontSize * fracMin)
-				rootFrame.Elements[el.id]:SetFontSize(newFontSize)
+				if el.id and rootFrame.Elements[el.id] then
+					rootFrame.Elements[el.id]:SetFontSize(newFontSize)
+				end
 			end
 		end
 	end

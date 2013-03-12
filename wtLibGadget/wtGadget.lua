@@ -76,6 +76,8 @@ function WT.Gadget.RegisterFactory(gadgetType, configuration)
 	config.iconTexAddon = config.iconTexAddon or AddonId 
 	config.iconTexFile = config.iconTexFile or "img/wtGadget.png" -- should be a 32x32 image
 	
+	config.ownerAddonId = Inspect.Addon.Current()	 
+	
 	if config.CreateDialog then
 		-- This is a function that returns a frame for use during creation of a gadget of this type. It will be included
 		-- within an existing RiftWindow, so this should not be a full window in itself - just a frame that wraps the controls
@@ -98,7 +100,7 @@ function WT.Gadget.RegisterFactory(gadgetType, configuration)
 	end
 	
 	WT.GadgetFactories[gadgetType:lower()] = config
-	WT.Log.Info("Registered gadget factory: " .. gadgetType)
+	WT.Log.Info("Registered gadget factory " .. gadgetType .. " within addon " .. config.ownerAddonId)
 end
 
 

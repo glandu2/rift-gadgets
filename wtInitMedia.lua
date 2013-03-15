@@ -29,4 +29,8 @@ Library.Media.AddTexture("wtOrbDarkRed", AddonId, "img/wtOrbDarkRed.png", {"orb"
 Library.Media.AddTexture("wtOrbDarkGreen", AddonId, "img/wtOrbDarkGreen.png", {"orb"})
 Library.Media.AddTexture("wtOrbDarkBlue", AddonId, "img/wtOrbDarkBlue.png", {"orb"})
 
+Library.Media.AddTexture("gradientD2L", AddonId, "img/gradientD2L.png", {"bar"})
+Library.Media.AddTexture("gradientL2D", AddonId, "img/gradientL2D.png", {"bar"})
+
+
 

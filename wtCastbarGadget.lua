@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : v0.3.91
-      Project Date (UTC)  : 2012-12-12T21:27:16Z
-      File Modified (UTC) : 2012-12-08T18:16:51Z (Wildtide)
+      Gadgets Framework   : @project-version@
+      Project Date (UTC)  : @project-date-iso@
+      File Modified (UTC) : @file-date-iso@ (@file-author@)
       -----------------------------------------------------------------     
 --]]
 
@@ -62,6 +62,8 @@ local function Create(configuration)
 	castBar.colorInterrupt = configuration.cbColorInt
 	castBar.colorNoInterrupt = configuration.cbColorNonInt
 	
+	castBar.smallTimer = configuration.smallCastTime
+	
 	castBar.barCast = castBar:CreateElement(
 	{
 		id="barCast", type="Bar", parent="frame", layer=25,
@@ -91,6 +93,23 @@ local function Create(configuration)
 			visibilityBinding="castName",
 			text="{castTime}", default="", fontSize=10
 		})
+		if configuration.smallCastTime then
+			castBar.labelTime:ClearAll()
+			castBar.labelTime:SetPoint("BOTTOMRIGHT", castBar.barCast, "BOTTOMRIGHT", -4, -4)
+		else
+			castBar.labelTime:ClearAll()
+			castBar.labelTime:SetPoint("CENTERRIGHT", castBar.barCast, "CENTERRIGHT", -4, 0)
+		end
+		
+		-- Mask out the label so it doesn't crash into the timer
+		castBar.labelMask = UI.CreateFrame("Mask", "LabelMask", castBar)
+		castBar.labelMask:SetLayer(26)
+		castBar.labelMask:SetPoint("TOPLEFT", castBar.barCast, "TOPLEFT")
+		castBar.labelMask:SetPoint("BOTTOM", castBar.barCast, "BOTTOM")
+		castBar.labelMask:SetPoint("RIGHT", castBar.labelTime, "LEFT", -8, nil)
+		
+		castBar.labelCast:SetParent(castBar.labelMask)
+		
 	end
 
 	if configuration.showIcon then
@@ -101,7 +120,7 @@ local function Create(configuration)
 		})
 	end
 	
-	castBar.barCast.Event.Size = 
+	castBar.OnResize = 
 		function(frame)
 			local fh = frame:GetHeight()
 			local s = math.floor(fh * 0.4)
@@ -109,18 +128,26 @@ local function Create(configuration)
 				s = 24
 			end
 			castBar.labelCast:SetFontSize(s)
-			if castBar.labelTime then
+			
+			if castBar.labelTime and castBar.smallTimer then
 				local l = math.floor(fh * 0.2)
 				if l < 8 then
 					l = 8
 				end			
 				castBar.labelTime:SetFontSize(l)
 			end
+			
+			if castBar.labelTime and not castBar.smallTimer then
+				castBar.labelTime:SetFontSize(frame:GetHeight() * 0.4)
+			end
+			
 			if configuration.showIcon then
 				castBar.icon:SetHeight(fh)
 				castBar.icon:SetWidth(fh)
 			end
 		end
+	
+	castBar.barCast.Event.Size = castBar.OnResize 
 
 	castBar:CreateBinding("castName", castBar, OnCastName, nil)
 
@@ -156,6 +183,7 @@ local function ConfigDialog(container)
 		:ColorPicker("cbColorNonInt", "Non-Interruptible color", 1,0.75,0.16,0.5)
 		:Checkbox("hideNotCasting", "Hide when inactive", true)
 		:Checkbox("showCastTime", "Show cast time", true)
+		:Checkbox("smallCastTime", "Small cast time text", false)
 		:Checkbox("showIcon", "Show ability icon", false)
 end
 
@@ -206,11 +234,27 @@ local function Reconfigure(config)
 		end
 	end
 
+	if gadget.labelTime then
+		if config.smallCastTime then
+			gadget.labelTime:ClearAll()
+			gadget.labelTime:SetPoint("BOTTOMRIGHT", gadget.barCast, "BOTTOMRIGHT", -4, -4)
+		else
+			gadget.labelTime:ClearAll()
+			gadget.labelTime:SetPoint("CENTERRIGHT", gadget.barCast, "CENTERRIGHT", -4, 0)
+		end
+	end
+
 	if gadgetConfig.showCastTime ~= config.showCastTime then
 		gadgetConfig.showCastTime = config.showCastTime
 		requireRecreate = true
 	end
 
+	if gadgetConfig.smallCastTime ~= config.smallCastTime then
+		gadgetConfig.smallCastTime = config.smallCastTime
+		gadget.smallTimer = config.smallCastTime
+		gadget:OnResize()
+	end
+	
 	if gadgetConfig.showIcon ~= config.showIcon then
 		gadgetConfig.showIcon = config.showIcon
 		requireRecreate = true

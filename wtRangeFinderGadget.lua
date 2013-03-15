@@ -17,11 +17,6 @@ local TXT = Library.Translate
 
 -- wtRangeFinder creates a simple Range to Target UnitFrame
 
-local gadgetIndex = 0
-
-local playerFrame = WT.UnitFrame:Create("player")
-local rangeFinders = {}
-
 local function OnNameChange(rangeFinder, name)
 	if not name then
 		rangeFinder.txtRange:SetVisible(false)
@@ -39,26 +34,15 @@ local function OnNameChange(rangeFinder, name)
 	end
 end
 
-local function OnCoordChange(rangeFinder, unitCoord)
-	if not WT.Player then return end
-	if not WT.Player.coord then return end
-	if not unitCoord then return end
 
-	if WT.Player.coord and unitCoord then
-		local range = WT.Utility.MeasureDistance(
-			WT.Player.coord[1], WT.Player.coord[2], WT.Player.coord[3],
-			unitCoord[1], unitCoord[2], unitCoord[3])  
+local function OnRangeChange(rangeFinder, range)
+	if range then
 		rangeFinder.txtRange:SetLabelText(string.format("%.01f", range) .. "m")
 	else
 		rangeFinder.txtRange:SetLabelText("--")
 	end
 end
 
-local function OnPlayerCoordChange(rangeFinder, playerCoord)
-	for idx,rangeFinder in ipairs(rangeFinders) do
-		rangeFinder:ApplyBindings()		
-	end
-end
 
 local function Create(configuration)
 
@@ -81,14 +65,6 @@ local function Create(configuration)
 	txtHeading:SetFontSize(10)
 	txtHeading:SetFontColor(0.6, 1.0, 0.6, 1.0)
 		
-	--[[
-	local txtRange = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rfBackground)
-	txtRange:SetText("--")
-	txtRange:SetPoint("TOPCENTER", txtHeading, "BOTTOMCENTER", 0, -5)
-	txtRange:SetFontSize(24)
-	txtRange:SetFontColor(0.6, 1.0, 0.6, 1.0)
-	--]]
-	
 	local txtRange = rangeFinder:CreateElement({
 		id="txtRange", type="Label", parent=rfBackground, layer=20,
 		attach = {{ point="TOPCENTER", element=txtHeading, targetPoint="BOTTOMCENTER", offsetX=0, offsetY=-5 }},
@@ -118,10 +94,7 @@ local function Create(configuration)
 	rangeFinder.txtRange = txtRange
 	
 	rangeFinder:CreateBinding("name", rangeFinder, OnNameChange, nil)
-	rangeFinder:CreateBinding("coord", rangeFinder, OnCoordChange, nil)
-	playerFrame:CreateBinding("coord", playerFrame, OnPlayerCoordChange, nil)
-	
-	table.insert(rangeFinders, rangeFinder)
+	rangeFinder:CreateBinding("range", rangeFinder, OnRangeChange, nil)
 	
 	return rangeFinder
 end

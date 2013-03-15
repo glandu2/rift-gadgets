@@ -567,7 +567,7 @@ local function OnUnitDetailCoord(xValues, yValues, zValues)
 end
 
 local lastRangeCalc = nil
-local rangeThrottle = 0.5
+local rangeThrottle = 0.1
 
 local function CalculateRanges()
 
@@ -618,8 +618,11 @@ local function CalculateRanges()
 				details.blockedOrOutOfRange = nil
 			end
 			
+			local rng = math.sqrt(rangeSqr) - radiusDiff
+			if rng < 0 then rng = 0 end
+			
 			details.rangeSqr = rangeSqr
-			details.range = math.sqrt(rangeSqr)
+			details.range = rng
 			
 		end
 	end

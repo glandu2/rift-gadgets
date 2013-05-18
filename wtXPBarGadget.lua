@@ -115,8 +115,12 @@ function XBG.OnPrestige(h, accum)
 	if not accum then return end
 	if prDetails == nil then
 		prDetails = Inspect.Pvp.Prestige()
-		if prDetails.rank == 1 and prDetails.needed == nil and accum==0 then
+		if not prDetails then
 			prDetails.needed=1
+		else
+			if prDetails.rank == 1 and prDetails.needed == nil and accum==0 then
+				prDetails.needed=1
+			end
 		end
 	end
 	-- Fix for strange error with nil needed value (API bug?)

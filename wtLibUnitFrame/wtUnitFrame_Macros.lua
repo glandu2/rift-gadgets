@@ -193,9 +193,9 @@ local function UpdateAllMacros()
 	for idx, frame in ipairs(WT.UnitFrames) do frame:RebuildMacros() end
 end
 
-local function OnRoleChange(role)
+local function OnRoleChange(hEvent, role)
 	WT.Player.Role = role
 	UpdateAllMacros()
 end
 
-table.insert(Event.TEMPORARY.Role, { OnRoleChange, AddonId, "WT_UnitFrame_RoleChange" })
+Command.Event.Attach(Event.TEMPORARY.Role, OnRoleChange, "WT_UnitFrame_RoleChange")

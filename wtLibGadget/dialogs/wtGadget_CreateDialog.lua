@@ -116,12 +116,8 @@ function WT.Gadget.ShowCreationUI()
 				frameScrollAnchor:SetPoint("TOPLEFT", frameTypeList, "TOPLEFT", 0, -typeListScrollbar:GetPosition())
 			end
 			
-		frameTypeList.Event.WheelForward = function()
-			typeListScrollbar:Nudge(-40)
-		end
-		frameTypeList.Event.WheelBack = function()
-			typeListScrollbar:Nudge(40)
-		end
+		frameTypeList:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, function() typeListScrollbar:Nudge(-40) end, "WheelForward")
+		frameTypeList:EventAttach(Event.UI.Input.Mouse.Wheel.Back, function() typeListScrollbar:Nudge(40) end, "WheelBack")
 
 		local frameModifyOverlay = UI.CreateFrame("Texture", "ModifyOverlay", content)
 		frameModifyOverlay:SetAllPoints(frameTypeList)
@@ -411,14 +407,13 @@ function WT.Gadget.ShowCreationUI()
 		
 		co = coroutine.create(buildLoop)
 		coroutine.resume(co)
-		table.insert(Event.System.Update.Begin,
-		{
+		Command.Event.Attach(Event.System.Update.Begin,
 			function()
 				if coroutine.status(co) ~= "dead" then
 					coroutine.resume(co)
 				end 
-			end, AddonId, "GadgetCreateWindowCoroutineEvent"
-		})
+			end, "GadgetCreateWindowCoroutineEvent"
+		)
 		
 
 	else

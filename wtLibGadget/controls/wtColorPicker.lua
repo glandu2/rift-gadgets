@@ -69,7 +69,7 @@ local function CreateSelector()
 	blocker = UI.CreateFrame("Frame", "frmColourPickerBlocker", ctxColourPicker)
 	blocker:SetVisible(false)
 	blocker:SetAllPoints(UIParent)
-	blocker.Event.LeftDown = function() blocker:SetVisible(false) end
+	blocker:EventAttach(Event.UI.Input.Mouse.Left.Down, function() blocker:SetVisible(false) end, "MouseDown")
 
 	local border = UI.CreateFrame("Frame", "frmBorder", blocker)
 	border:SetBackgroundColor(1,1,1,1)
@@ -80,7 +80,7 @@ local function CreateSelector()
 	border:SetPoint("TOPLEFT", selector, "TOPLEFT", -1, -1)
 	border:SetPoint("BOTTOMRIGHT", selector, "BOTTOMRIGHT", 1, 1)
 	
-	selector.Event.LeftDown = function() end
+	selector:EventAttach(Event.UI.Input.Mouse.Left.Down, function() end, "MouseDown")
 	
 	local olayRed = UI.CreateFrame("Frame", "olayRed", selector)
 	olayRed:SetPoint("TOPLEFT", selector, "TOPLEFT", 23, 12) 
@@ -122,7 +122,7 @@ local function CreateSelector()
 	cmdHold:SetPoint("TOPRIGHT", held, "TOPLEFT", -5, 0)
 	cmdHold:SetWidth(40)
 	cmdHold:SetHeight(16)
-	cmdHold.Event.LeftDown = function() held:SetBackgroundColor(selector.swatch:GetBackgroundColor()) end
+	cmdHold:EventAttach(Event.UI.Input.Mouse.Left.Down, function() held:SetBackgroundColor(selector.swatch:GetBackgroundColor()) end, "MouseDown")
 
 	local txtHex = UI.CreateFrame("Text", "txtHex", selector)
 	txtHex:SetPoint("CENTERLEFT", current, "CENTERRIGHT", 4, 0)
@@ -217,7 +217,7 @@ local function CreateSelector()
 		
 	local dragging = nil
 	
-	local function UpdateMarker()
+	local function UpdateMarker(hEvent)
 		if not dragging then return end
 		local ctrlX = dragging:GetLeft()
 		local ctrlWidth = dragging:GetWidth() - 1
@@ -235,21 +235,21 @@ local function CreateSelector()
 		hexEditor.text:SetText(string.format("%02X%02X%02X%02X", selector.olayAlpha.value * 255, selector.olayRed.value * 255, selector.olayGreen.value * 255, selector.olayBlue.value * 255))	
 	end
 	
-	table.insert(Event.Mouse.Move, { UpdateMarker, AddonId, "wtColourPicker_MouseMove" }) 
+	Command.Event.Attach(Event.Mouse.Move, UpdateMarker, "wtColourPicker_MouseMove")
 	
-	olayRed.Event.LeftDown = function() dragging = olayRed; UpdateMarker() end
+	olayRed:EventAttach(Event.UI.Input.Mouse.Left.Down, function() dragging = olayRed; UpdateMarker() end, "MouseDown")
 	olayRed.Event.LeftUp = function() dragging = nil end 
 	olayRed.Event.LeftUpoutside = function() dragging = nil end 
 
-	olayGreen.Event.LeftDown = function() dragging = olayGreen; UpdateMarker() end
+	olayGreen:EventAttach(Event.UI.Input.Mouse.Left.Down, function() dragging = olayGreen; UpdateMarker() end, "MouseDown")
 	olayGreen.Event.LeftUp = function() dragging = nil end 
 	olayGreen.Event.LeftUpoutside = function() dragging = nil end 
 
-	olayBlue.Event.LeftDown = function() dragging = olayBlue; UpdateMarker() end
+	olayBlue:EventAttach(Event.UI.Input.Mouse.Left.Down, function() dragging = olayBlue; UpdateMarker() end, "MouseDown")
 	olayBlue.Event.LeftUp = function() dragging = nil end 
 	olayBlue.Event.LeftUpoutside = function() dragging = nil end 
 
-	olayAlpha.Event.LeftDown = function() dragging = olayAlpha; UpdateMarker() end
+	olayAlpha:EventAttach(Event.UI.Input.Mouse.Left.Down, function() dragging = olayAlpha; UpdateMarker() end, "MouseDown")
 	olayAlpha.Event.LeftUp = function() dragging = nil end 
 	olayAlpha.Event.LeftUpoutside = function() dragging = nil end 
 

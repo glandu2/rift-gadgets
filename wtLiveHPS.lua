@@ -78,7 +78,7 @@ local lastSecond = math.floor(Inspect.Time.Frame())
 for i = 1,runningSeconds do runningDamage[i] = 0 end
 for i = 1,runningSeconds do runningHeal[i] = 0 end
 
-local function OnTick()
+local function OnTick(hEvent)
 	local currSecond = math.floor(Inspect.Time.Frame())
 	if currSecond ~= lastSecond then
 		runningDamage[runningCursor] = dmgAccum
@@ -104,7 +104,7 @@ local function OnTick()
 end
 
 
-local function OnDamage(info)
+local function OnDamage(hEvent, info)
 
 	if not info.damage then return end
 	
@@ -119,7 +119,7 @@ local function OnDamage(info)
 	
 end
 
-local function OnHeal(info)
+local function OnHeal(hEvent, info)
 
 	if not info.heal then return end
 
@@ -134,6 +134,6 @@ local function OnHeal(info)
 	
 end
 
-table.insert(Event.System.Update.Begin, { OnTick, AddonId, AddonId .. "_OnTick" })
-table.insert(Event.Combat.Damage, { OnDamage, AddonId, AddonId .. "_OnDamage" })
-table.insert(Event.Combat.Heal, { OnHeal, AddonId, AddonId .. "_OnHeal" })
+Command.Event.Attach(Event.System.Update.Begin, OnTick, "OnTick")
+Command.Event.Attach(Event.Combat.Damage, OnDamage, "OnDamage")
+Command.Event.Attach(Event.Combat.Heal, OnHeal, "OnHeal")

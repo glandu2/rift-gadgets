@@ -163,10 +163,10 @@ function WT.HideSecureFrame(frame)
 	end
 end
 
-local function OnSecureEnter()
+local function OnSecureEnter(hEvent)
 end
 
-local function OnSecureLeave()
+local function OnSecureLeave(hEvent)
 	for frame, show in pairs(pendingVisibility) do
 		if show == true then
 			frame:SetVisible(true)
@@ -178,5 +178,5 @@ local function OnSecureLeave()
 	end
 end 
 
-table.insert(Event.System.Secure.Enter, { OnSecureEnter, AddonId, "OnSecureEnter" })
-table.insert(Event.System.Secure.Leave, { OnSecureLeave, AddonId, "OnSecureLeave" })
+Command.Event.Attach(Event.System.Secure.Enter, OnSecureEnter, "OnSecureEnter")
+Command.Event.Attach(Event.System.Secure.Leave, OnSecureLeave, "OnSecureLeave")

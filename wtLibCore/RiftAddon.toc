@@ -22,7 +22,6 @@ RunOnStartup =
   "localization/Localization_ru.lua",
   
   "wtInit.lua",
-  "wtEvent.lua",
   "wtLog.lua",
   "wtCore.lua",
   "wtVersionCheck.lua",

@@ -693,7 +693,7 @@ local function OnGroupModeChanged(groupMode)
 end
 
 
-function WT.Gadget.SecureEnter()
+function WT.Gadget.SecureEnter(hEvent)
 	WT.Gadget.isSecure = true
 	-- lock gadgets when the environment goes secure (can't move secure frames in secure mode) 
 	if not gadgetsLocked then
@@ -706,7 +706,7 @@ function WT.Gadget.SecureEnter()
 	end
 end
 
-function WT.Gadget.SecureLeave()
+function WT.Gadget.SecureLeave(hEvent)
 	WT.Gadget.isSecure = false
 
 	-- We're entering combat, so set the IC alpha on all gadgets
@@ -730,7 +730,7 @@ local function Initialize()
 end
 
 
-local function OnSaveVariables(saveAddonId)
+local function OnSaveVariables(hEvent, saveAddonId)
 	if saveAddonId == AddonId then
 		if not wtxLayouts then wtxLayouts = {} end
 		local layoutId = WT.Player.name .. "@" .. Inspect.Shard().name 
@@ -742,9 +742,9 @@ end
 WT.RegisterInitializer(Initialize)
 
 
-table.insert(Event.System.Secure.Enter, { WT.Gadget.SecureEnter, AddonId, AddonId .. "_Gadget_SecureEnter" })
-table.insert(Event.System.Secure.Leave, { WT.Gadget.SecureLeave, AddonId, AddonId .. "_Gadget_SecureLeave" })
+Command.Event.Attach(Event.System.Secure.Enter, WT.Gadget.SecureEnter, "Gadget_SecureEnter")
+Command.Event.Attach(Event.System.Secure.Leave, WT.Gadget.SecureLeave, "Gadget_SecureLeave")
 
-table.insert(Event.Addon.SavedVariables.Save.Begin, { OnSaveVariables, AddonId, AddonId .. "_Gadget_OnSaveVariables" })
+Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, OnSaveVariables, "Gadget_OnSaveVariables")
 
 table.insert(WT.Event.GroupModeChanged, { OnGroupModeChanged, AddonId, AddonId .. "_OnGroupModeChanged" })

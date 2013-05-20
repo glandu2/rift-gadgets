@@ -25,6 +25,7 @@ Library.Media.AddTexture("octanusTank", AddonId, "img/octanusTank.png", {"roleTa
 Library.Media.AddTexture("octanusSupport", AddonId, "img/octanusSupport.png", {"roleSupport"})
 
 Library.Media.AddTexture("octanusHP", AddonId, "img/octanusHP.png", {"bar", "healthBar"})
+Library.Media.AddTexture("OctanusHP_red", AddonId, "img/octanusHP_red.png", {"bar", "healthBar"})
 Library.Media.AddTexture("octanusMana", AddonId, "img/octanusMana.png", {"bar", "manaBar"})
 Library.Media.AddTexture("octanusEnergy", AddonId, "img/octanusEnergy.png", {"bar", "energyBar"})
 
@@ -104,5 +105,8 @@ Library.Media.AddFont("Enigma", AddonId, "font/Enigma.ttf")
 Library.Media.AddFont("LiberationSans", AddonId, "font/LiberationSans.ttf")
 Library.Media.AddFont("SFAtarianSystem", AddonId, "font/SFAtarianSystem.ttf")
 
+
+Library.Media.AddTexture("jnhOrb_RED", AddonId, "img/jnhOrb_red.png", {"orb"})
+Library.Media.AddTexture("jnhOrb2_BLEU", AddonId, "img/jnhOrb2_blue.png", {"orb"})
 
 ---------------------------------------------------------------------------------------------------

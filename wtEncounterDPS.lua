@@ -72,7 +72,7 @@ local lastDamageTime = 0
 local encounterStart = 0
 local damage = 0
 
-local function OnDamage(info)
+local function OnDamage(hEvent, info)
 
 	if not info.damage then return end
 
@@ -109,4 +109,4 @@ local function OnDamage(info)
 
 end
 
-table.insert(Event.Combat.Damage, { OnDamage, AddonId, AddonId .. "_OnEncounterDamage" })
+Command.Event.Attach(Event.Combat.Damage, OnDamage, "OnEncounterDamage")

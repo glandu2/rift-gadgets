@@ -125,10 +125,10 @@ function WT.UnitFrame:ApplyBindings()
 end
 
 
-function WT.UnitFrame.RefreshAllBindings()
+function WT.UnitFrame.RefreshAllBindings(hEvent)
 	for idx, uf in ipairs(WT.UnitFrames) do
 		uf:ApplyBindings()
 	end
 end
 
-WT.RegisterEventHandler(WT.Event.SettingsChanged, WT.UnitFrame.RefreshAllBindings)
+Command.Event.Attach(WT.Event.SettingsChanged, WT.UnitFrame.RefreshAllBindings, "SettingsChanged")

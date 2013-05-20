@@ -99,7 +99,7 @@ local function TriggerBuffUpdates(unitId, changes)
 end
 
 
-local function OnBuffAdd(unitId, buffs)
+local function OnBuffAdd(hEvent, unitId, buffs)
 
 	if not buffs then return end
 	if not WT.Units[unitId] then return end
@@ -122,7 +122,7 @@ local function OnBuffAdd(unitId, buffs)
 end
 
 
-local function OnBuffRemove(unitId, buffs)
+local function OnBuffRemove(hEvent, unitId, buffs)
 
 	if not buffs then return end
 	if not WT.Units[unitId] then return end
@@ -141,7 +141,7 @@ local function OnBuffRemove(unitId, buffs)
 end
 
 
-local function OnBuffChange(unitId, buffs)
+local function OnBuffChange(hEvent, unitId, buffs)
 
 	if not buffs then return end
 	if not WT.Units[unitId] then return end
@@ -211,7 +211,7 @@ local function CalculateCastChanges()
 end
 
 
-local function OnUnitCastbar(units)
+local function OnUnitCastbar(hEvent, units)
 	for unitId, cbVisible in pairs(units) do
 		if WT.Units[unitId] then
 			if cbVisible then
@@ -309,6 +309,7 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 			if not playerAvailableFired then
 				WT.Event.Trigger.PlayerAvailable()
 				playerAvailableFired = true
+				
 			end 
 		end
 
@@ -319,8 +320,8 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 		
 		-- Add all buffs currently on the unit
 		if not omitBuffScan then
-			OnBuffRemove(unitId, unit.Buffs)
-			OnBuffAdd(unitId, Inspect.Buff.List(unitId))
+			OnBuffRemove(nil, unitId, unit.Buffs)
+			OnBuffAdd(nil, unitId, Inspect.Buff.List(unitId))
 		end
 			
 		local needsCleanse = false	
@@ -348,7 +349,7 @@ function WT.UnitDatabase.GetUnit(unitId)
 	
 end
 
-local function OnUnitAvailablePartial(units)
+local function OnUnitAvailablePartial(hEvent, units)
 	for unitId, spec in pairs(units) do
 		if not WT.Units[unitId] then
 			local unit = PopulateUnit(unitId, nil, true)
@@ -361,7 +362,7 @@ local function OnUnitAvailablePartial(units)
 	end		
 end
 
-local function OnUnitAvailable(units)
+local function OnUnitAvailable(hEvent, units)
 	for unitId, spec in pairs(units) do		
 		local unit = PopulateUnit(unitId)
 		if unit then
@@ -370,7 +371,7 @@ local function OnUnitAvailable(units)
 	end
 end
 
-local function OnUnitUnavailable(units)
+local function OnUnitUnavailable(hEvent, units)
 	for unitId in pairs(units) do
 		WT.Units[unitId] = nil
 		WT.Event.Trigger.UnitRemoved(unitId)
@@ -390,163 +391,163 @@ local function SetProperty(unitId, property, value)
 	end
 end
 
-local function OnUnitDetailAbsorb(unitsValue)
+local function OnUnitDetailAbsorb(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "absorb", value) end
 end
 
-local function OnUnitDetailHealth(unitsValue)
+local function OnUnitDetailHealth(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "health", value) end
 end
 
-local function OnUnitDetailHealthCap(unitsValue)
+local function OnUnitDetailHealthCap(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "healthCap", value) end
 end
 
-local function OnUnitDetailHealthMax(unitsValue)
+local function OnUnitDetailHealthMax(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "healthMax", value) end
 end
 
-local function OnUnitDetailMana(unitsValue)
+local function OnUnitDetailMana(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "mana", value) end
 end
 
-local function OnUnitDetailManaMax(unitsValue)
+local function OnUnitDetailManaMax(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "manaMax", value) end
 end
 
-local function OnUnitDetailPower(unitsValue)
+local function OnUnitDetailPower(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "power", value) end
 end
 
-local function OnUnitDetailEnergy(unitsValue)
+local function OnUnitDetailEnergy(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "energy", value) end
 end
 
-local function OnUnitDetailEnergyMax(unitsValue)
+local function OnUnitDetailEnergyMax(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "energyMax", value) end
 end
 
-local function OnUnitDetailCharge(unitsValue)
+local function OnUnitDetailCharge(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "charge", value) end
 end
 
-local function OnUnitDetailChargeMax(unitsValue)
+local function OnUnitDetailChargeMax(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "chargeMax", value) end
 end
 
-local function OnUnitDetailAfk(unitsValue)
+local function OnUnitDetailAfk(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "afk", value) end
 end
 
-local function OnUnitDetailAggro(unitsValue)
+local function OnUnitDetailAggro(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "aggro", value) end
 end
 
-local function OnUnitDetailBlocked(unitsValue)
+local function OnUnitDetailBlocked(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "blocked", value) end
 end
 
-local function OnUnitDetailCombat(unitsValue)
+local function OnUnitDetailCombat(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "combat", value) end
 end
 
-local function OnUnitDetailCombo(unitsValue)
+local function OnUnitDetailCombo(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "combo", value) end
 end
 
-local function OnUnitDetailComboUnit(unitsValue)
+local function OnUnitDetailComboUnit(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "comboUnit", value) end
 end
 
-local function OnUnitDetailGuild(unitsValue)
+local function OnUnitDetailGuild(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "guild", value) end
 end
 
-local function OnUnitDetailLevel(unitsValue)
+local function OnUnitDetailLevel(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "level", value) end
 end
 
-local function OnUnitDetailLocationName(unitsValue)
+local function OnUnitDetailLocationName(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "locationName", value) end
 end
 
-local function OnUnitDetailMark(unitsValue)
+local function OnUnitDetailMark(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "mark", value) end
 end
 
-local function OnUnitDetailName(unitsValue)
+local function OnUnitDetailName(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "name", value) end
 end
 
-local function OnUnitDetailOffline(unitsValue)
+local function OnUnitDetailOffline(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "offline", value) end
 end
 
-local function OnUnitDetailPlanar(unitsValue)
+local function OnUnitDetailPlanar(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "planar", value) end
 end
 
-local function OnUnitDetailPlanarMax(unitsValue)
+local function OnUnitDetailPlanarMax(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "planarMax", value) end
 end
 
-local function OnUnitDetailPublicSize(unitsValue)
+local function OnUnitDetailPublicSize(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "publicSize", value) end
 end
 
-local function OnUnitDetailPvp(unitsValue)
+local function OnUnitDetailPvp(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "pvp", value) end
 end
 
-local function OnUnitDetailReady(unitsValue)
+local function OnUnitDetailReady(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "ready", value) end
 end
 
-local function OnUnitDetailRole(unitsValue)
+local function OnUnitDetailRole(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "role", value) end
 end
 
-local function OnUnitDetailTagged(unitsValue)
+local function OnUnitDetailTagged(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "tagged", value) end
 end
 
-local function OnUnitDetailTitlePrefix(unitsValue)
+local function OnUnitDetailTitlePrefix(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "titlePrefix", value) end
 end
 
-local function OnUnitDetailTitlePrefixId(unitsValue)
+local function OnUnitDetailTitlePrefixId(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "titlePrefixId", value) end
 end
 
-local function OnUnitDetailTitlePrefixName(unitsValue)
+local function OnUnitDetailTitlePrefixName(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "titlePrefixName", value) end
 end
 
-local function OnUnitDetailTitleSuffix(unitsValue)
+local function OnUnitDetailTitleSuffix(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "titleSuffix", value) end
 end
 
-local function OnUnitDetailTitleSuffixId(unitsValue)
+local function OnUnitDetailTitleSuffixId(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "titleSuffixId", value) end
 end
 
-local function OnUnitDetailTitleSuffixName(unitsValue)
+local function OnUnitDetailTitleSuffixName(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "titleSuffixName", value) end
 end
 
-local function OnUnitDetailVitality(unitsValue)
+local function OnUnitDetailVitality(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "vitality", value) end
 end
 
-local function OnUnitDetailWarfront(unitsValue)
+local function OnUnitDetailWarfront(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "warfront", value) end
 end
 
-local function OnUnitDetailZone(unitsValue)
+local function OnUnitDetailZone(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "zone", value) end
 end
 
-local function OnUnitDetailCoord(xValues, yValues, zValues)
+local function OnUnitDetailCoord(hEvent, xValues, yValues, zValues)
 	local maps = {}	
 	for unitId,value in pairs(xValues) do
 		maps[unitId] = {}
@@ -628,15 +629,15 @@ local function CalculateRanges()
 	end
 end
 
-local function OnSystemUpdateBegin()
+local function OnSystemUpdateBegin(hEvent)
 	CalculateCastChanges()
 	CalculateRanges()
 end
 
 -- Setup Event Handlers
-table.insert(Event.Unit.Availability.Full,		{ OnUnitAvailable, AddonId, AddonId .. "_OnUnitAvailable" })
-table.insert(Event.Unit.Availability.Partial,	{ OnUnitAvailablePartial, AddonId, AddonId .. "_OnUnitAvailablePartial" })
-table.insert(Event.Unit.Availability.None,		{ OnUnitUnavailable, AddonId, AddonId .. "_OnUnitUnavailable" })
+Command.Event.Attach(Event.Unit.Availability.Full,		OnUnitAvailable, "OnUnitAvailable")
+Command.Event.Attach(Event.Unit.Availability.Partial,	OnUnitAvailablePartial, "OnUnitAvailablePartial")
+Command.Event.Attach(Event.Unit.Availability.None,		OnUnitUnavailable, "OnUnitUnavailable")
 
 
 -- Register the handlers that will deal with groups being added and removed
@@ -699,64 +700,59 @@ end
 
 
 local playerTargetId = nil
-local function OnPlayerTargetChange(unitId)
+local function OnPlayerTargetChange(hEvent, unitId)
 	if playerTargetId and WT.Units[playerTargetId] then
 		WT.Units[playerTargetId].playerTarget = nil
 	end
 	playerTargetId = unitId
 	if playerTargetId and WT.Units[playerTargetId] then
 		WT.Units[playerTargetId].playerTarget = true
-	end	
+	end
 end
 
 
 -- Register the event handlers for every changeable property
 
--- Env 1.11+ Only
-if Event.Unit.Detail.Absorb then
-	table.insert(Event.Unit.Detail.Absorb,			{ OnUnitDetailAbsorb, AddonId, AddonId .. "_OnUnitDetailAbsorb" })
-end
+Command.Event.Attach(Event.Unit.Detail.Absorb,	OnUnitDetailAbsorb, "OnUnitDetailAbsorb")
+Command.Event.Attach(Event.Unit.Detail.Afk,	OnUnitDetailAfk, "OnUnitDetailAfk")
+Command.Event.Attach(Event.Unit.Detail.Aggro, OnUnitDetailAggro, "OnUnitDetailAggro")
+Command.Event.Attach(Event.Unit.Detail.Blocked, OnUnitDetailBlocked, "OnUnitDetailBlocked")
+Command.Event.Attach(Event.Unit.Detail.Charge, OnUnitDetailCharge, "OnUnitDetailCharge")
+Command.Event.Attach(Event.Unit.Detail.ChargeMax, OnUnitDetailChargeMax, "OnUnitDetailChargeMax")
+Command.Event.Attach(Event.Unit.Detail.Combat, OnUnitDetailCombat, "OnUnitDetailCombat")
+Command.Event.Attach(Event.Unit.Detail.Combo, OnUnitDetailCombo, "OnUnitDetailCombo")
+Command.Event.Attach(Event.Unit.Detail.Energy, OnUnitDetailEnergy, "OnUnitDetailEnergy")
+Command.Event.Attach(Event.Unit.Detail.EnergyMax, OnUnitDetailEnergyMax, "OnUnitDetailEnergyMax")
+Command.Event.Attach(Event.Unit.Detail.Guild, OnUnitDetailGuild, "OnUnitDetailGuild")
+Command.Event.Attach(Event.Unit.Detail.Health, OnUnitDetailHealth, "OnUnitDetailHealth")
+Command.Event.Attach(Event.Unit.Detail.HealthCap, OnUnitDetailHealthCap, "OnUnitDetailHealthCap")
+Command.Event.Attach(Event.Unit.Detail.HealthMax, OnUnitDetailHealthMax, "OnUnitDetailHealthMax")
+Command.Event.Attach(Event.Unit.Detail.Level, OnUnitDetailLevel, "OnUnitDetailLevel")
+Command.Event.Attach(Event.Unit.Detail.LocationName, OnUnitDetailLocationName, "OnUnitDetailLocationName")
+Command.Event.Attach(Event.Unit.Detail.Mana, OnUnitDetailMana, "OnUnitDetailMana")
+Command.Event.Attach(Event.Unit.Detail.ManaMax, OnUnitDetailManaMax, "OnUnitDetailManaMax")
+Command.Event.Attach(Event.Unit.Detail.Mark, OnUnitDetailMark, "OnUnitDetailMark")
+Command.Event.Attach(Event.Unit.Detail.Name, OnUnitDetailName, "OnUnitDetailName")
+Command.Event.Attach(Event.Unit.Detail.Offline, OnUnitDetailOffline, "OnUnitDetailOffline")
+Command.Event.Attach(Event.Unit.Detail.Planar, OnUnitDetailPlanar, "OnUnitDetailPlanar")
+Command.Event.Attach(Event.Unit.Detail.PlanarMax, OnUnitDetailPlanarMax, "OnUnitDetailPlanarMax")
+Command.Event.Attach(Event.Unit.Detail.Power, OnUnitDetailPower, "OnUnitDetailPower")
+Command.Event.Attach(Event.Unit.Detail.PublicSize, OnUnitDetailPublicSize, "OnUnitDetailPublicSize")
+Command.Event.Attach(Event.Unit.Detail.Pvp, OnUnitDetailPvp, "OnUnitDetailPvp")
+Command.Event.Attach(Event.Unit.Detail.Ready, OnUnitDetailReady, "OnUnitDetailReady")
+Command.Event.Attach(Event.Unit.Detail.Role, OnUnitDetailRole, "OnUnitDetailRole")
+Command.Event.Attach(Event.Unit.Detail.Tagged, OnUnitDetailTagged, "OnUnitDetailTagged")
+Command.Event.Attach(Event.Unit.Detail.TitlePrefixId, OnUnitDetailTitlePrefixId, "OnUnitDetailTitlePrefixId")
+Command.Event.Attach(Event.Unit.Detail.TitleSuffixId, OnUnitDetailTitleSuffixId, "OnUnitDetailTitleSuffixId")
+Command.Event.Attach(Event.Unit.Detail.Vitality, OnUnitDetailVitality, "OnUnitDetailVitality")
+Command.Event.Attach(Event.Unit.Detail.Warfront, OnUnitDetailWarfront, "OnUnitDetailWarfront")
+Command.Event.Attach(Event.Buff.Add, OnBuffAdd, "OnBuffAdd")
+Command.Event.Attach(Event.Buff.Change, OnBuffChange, "OnBuffChange")
+Command.Event.Attach(Event.Buff.Remove, OnBuffRemove, "OnBuffRemove")
+Command.Event.Attach(Event.Unit.Castbar, OnUnitCastbar, "OnUnitCastbar")
+Command.Event.Attach(Event.Unit.Detail.Zone, OnUnitDetailZone, "OnUnitDetailZone")
+Command.Event.Attach(Event.Unit.Detail.Coord, OnUnitDetailCoord, "OnUnitDetailCoord")
 
-table.insert(Event.Unit.Detail.Afk,				{ OnUnitDetailAfk, AddonId, AddonId .. "_OnUnitDetailAfk" })
-table.insert(Event.Unit.Detail.Aggro,			{ OnUnitDetailAggro, AddonId, AddonId .. "_OnUnitDetailAggro" })
-table.insert(Event.Unit.Detail.Blocked,			{ OnUnitDetailBlocked, AddonId, AddonId .. "_OnUnitDetailBlocked" })
-table.insert(Event.Unit.Detail.Charge,			{ OnUnitDetailCharge, AddonId, AddonId .. "_OnUnitDetailCharge" })
-table.insert(Event.Unit.Detail.ChargeMax,		{ OnUnitDetailChargeMax, AddonId, AddonId .. "_OnUnitDetailChargeMax" })
-table.insert(Event.Unit.Detail.Combat,			{ OnUnitDetailCombat, AddonId, AddonId .. "_OnUnitDetailCombat" })
-table.insert(Event.Unit.Detail.Combo,			{ OnUnitDetailCombo, AddonId, AddonId .. "_OnUnitDetailCombo" })
-table.insert(Event.Unit.Detail.Energy,			{ OnUnitDetailEnergy, AddonId, AddonId .. "_OnUnitDetailEnergy" })
-table.insert(Event.Unit.Detail.EnergyMax,		{ OnUnitDetailEnergyMax, AddonId, AddonId .. "_OnUnitDetailEnergyMax" })
-table.insert(Event.Unit.Detail.Guild,			{ OnUnitDetailGuild, AddonId, AddonId .. "_OnUnitDetailGuild" })
-table.insert(Event.Unit.Detail.Health,			{ OnUnitDetailHealth, AddonId, AddonId .. "_OnUnitDetailHealth" })
-table.insert(Event.Unit.Detail.HealthCap,		{ OnUnitDetailHealthCap, AddonId, AddonId .. "_OnUnitDetailHealthCap" })
-table.insert(Event.Unit.Detail.HealthMax,		{ OnUnitDetailHealthMax, AddonId, AddonId .. "_OnUnitDetailHealthMax" })
-table.insert(Event.Unit.Detail.Level,			{ OnUnitDetailLevel, AddonId, AddonId .. "_OnUnitDetailLevel" })
-table.insert(Event.Unit.Detail.LocationName,	{ OnUnitDetailLocationName, AddonId, AddonId .. "_OnUnitDetailLocationName" })
-table.insert(Event.Unit.Detail.Mana,			{ OnUnitDetailMana, AddonId, AddonId .. "_OnUnitDetailMana" })
-table.insert(Event.Unit.Detail.ManaMax,			{ OnUnitDetailManaMax, AddonId, AddonId .. "_OnUnitDetailManaMax" })
-table.insert(Event.Unit.Detail.Mark,			{ OnUnitDetailMark, AddonId, AddonId .. "_OnUnitDetailMark" })
-table.insert(Event.Unit.Detail.Name,			{ OnUnitDetailName, AddonId, AddonId .. "_OnUnitDetailName" })
-table.insert(Event.Unit.Detail.Offline,			{ OnUnitDetailOffline, AddonId, AddonId .. "_OnUnitDetailOffline" })
-table.insert(Event.Unit.Detail.Planar,			{ OnUnitDetailPlanar, AddonId, AddonId .. "_OnUnitDetailPlanar" })
-table.insert(Event.Unit.Detail.PlanarMax,		{ OnUnitDetailPlanarMax, AddonId, AddonId .. "_OnUnitDetailPlanarMax" })
-table.insert(Event.Unit.Detail.Power,			{ OnUnitDetailPower, AddonId, AddonId .. "_OnUnitDetailPower" })
-table.insert(Event.Unit.Detail.PublicSize,		{ OnUnitDetailPublicSize, AddonId, AddonId .. "_OnUnitDetailPublicSize" })
-table.insert(Event.Unit.Detail.Pvp,				{ OnUnitDetailPvp, AddonId, AddonId .. "_OnUnitDetailPvp" })
-table.insert(Event.Unit.Detail.Ready,			{ OnUnitDetailReady, AddonId, AddonId .. "_OnUnitDetailReady" })
-table.insert(Event.Unit.Detail.Role,			{ OnUnitDetailRole, AddonId, AddonId .. "_OnUnitDetailRole" })
-table.insert(Event.Unit.Detail.Tagged,			{ OnUnitDetailTagged, AddonId, AddonId .. "_OnUnitDetailTagged" })
-table.insert(Event.Unit.Detail.TitlePrefixId,	{ OnUnitDetailTitlePrefixId, AddonId, AddonId .. "_OnUnitDetailTitlePrefixId" })
-table.insert(Event.Unit.Detail.TitleSuffixId,	{ OnUnitDetailTitleSuffixId, AddonId, AddonId .. "_OnUnitDetailTitleSuffixId" })
-table.insert(Event.Unit.Detail.Vitality,		{ OnUnitDetailVitality, AddonId, AddonId .. "_OnUnitDetailVitality" })
-table.insert(Event.Unit.Detail.Warfront,		{ OnUnitDetailWarfront, AddonId, AddonId .. "_OnUnitDetailWarfront" })
-table.insert(Event.Buff.Add,					{ OnBuffAdd, AddonId, AddonId .. "_OnBuffAdd" })
-table.insert(Event.Buff.Change,					{ OnBuffChange, AddonId, AddonId .. "_OnBuffChange" })
-table.insert(Event.Buff.Remove,					{ OnBuffRemove, AddonId, AddonId .. "_OnBuffRemove" })
-table.insert(Event.Unit.Castbar,				{ OnUnitCastbar, AddonId, AddonId .. "_OnUnitCastbar" })
-table.insert(Event.Unit.Detail.Zone,			{ OnUnitDetailZone, AddonId, AddonId .. "_OnUnitDetailZone" })
-table.insert(Event.Unit.Detail.Coord,			{ OnUnitDetailCoord, AddonId, AddonId .. "_OnUnitDetailCoord" })
+Command.Event.Attach(Event.System.Update.Begin,	OnSystemUpdateBegin, "DB_OnSystemUpdateBegin")
 
-table.insert(Event.System.Update.Begin,			{ OnSystemUpdateBegin, AddonId, AddonId .. "_DB_OnSystemUpdateBegin" })
-
-
-table.insert(Library.LibUnitChange.Register("player.target"), { OnPlayerTargetChange,  AddonId, AddonId .. "_OnPlayerTargetChange" })
+Command.Event.Attach(Library.LibUnitChange.Register("player.target"), OnPlayerTargetChange, "OnPlayerTargetChange")

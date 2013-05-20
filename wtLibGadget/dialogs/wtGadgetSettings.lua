@@ -15,7 +15,7 @@ local AddonId = toc.identifier
 local TXT = Library.Translate
 
 -- Events ---------------------------------------------------------------------
-WT.Event.Trigger.SettingsChanged, WT.Event.SettingsChanged = WT.CreateEvent(AddonId, "SettingsChanged")
+WT.Event.Trigger.SettingsChanged, WT.Event.SettingsChanged = Utility.Event.Create(AddonId, "SettingsChanged")
 -------------------------------------------------------------------------------
 
 local window = nil

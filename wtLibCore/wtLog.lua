@@ -25,7 +25,7 @@ local wtLogConsoleId = nil
 
 local needScan = true
 
-local function ScanForConsole()
+local function ScanForConsole(hEvent)
 	if not needScan then return end
 	local list = Inspect.Console.List()
 	if list then
@@ -39,25 +39,25 @@ local function ScanForConsole()
 	end		
 end
 
-table.insert(Event.Unit.Availability.Full, { ScanForConsole, AddonId, AddonId .. "_OnAddonStartupEnd" })
+Command.Event.Attach(Event.Unit.Availability.Full, ScanForConsole, "OnAddonStartupEnd")
 
-table.insert(Event.Addon.SavedVariables.Load.End, {
-	function(addonId)
+Command.Event.Attach(Event.Addon.SavedVariables.Load.End,
+	function(hEvent, addonId)
 		if addonId == AddonId then
 			WT.Log.Level = wtxLogLevel or 2
 		end
 	end,
-	AddonId, "LoadSavedVariables"
-})
+	"LoadSavedVariables"
+)
 
-table.insert(Event.Addon.SavedVariables.Save.Begin, {
-	function(addonId)
+Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin,
+	function(hEvent, addonId)
 		if addonId == AddonId then
 			wtxLogLevel = WT.Log.Level
 		end
 	end,
-	AddonId, "LoadSavedVariables"
-})
+	"SaveSavedVariables"
+)
 
 local logColours = {
 	VRB = "#888888",

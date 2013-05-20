@@ -50,7 +50,7 @@ WT.AddonUpTime = 0
 WT.DEBUG = false
 
 -- Events ------------------------------------------------------------------------------
-WT.Event.Trigger.Tick, WT.Event.Tick = WT.CreateEvent(AddonId, "Tick")
+WT.Event.Trigger.Tick, WT.Event.Tick = Utility.Event.Create(AddonId, "Tick")
 ----------------------------------------------------------------------------------------
 
 -- Private Data
@@ -110,14 +110,14 @@ end
 
 
 -- Event Handler: Event.Addon.Load.End
-function WT.OnAddonLoadEnd(addonId)
+function WT.OnAddonLoadEnd(hEvent, addonId)
 	WT.Log.Info("Addon Loaded: " .. addonId or "<Unnamed>")
 end
 
 
 -- All addons have been executed
 -- Runs any functions in the WT.Initializers table. Allows dependent WT addons to defer initialization until everything has loaded 
-function WT.OnAddonStartupEnd()
+function WT.OnAddonStartupEnd(hEvent)
 	WT.Log.Info("All addons have started up")
 
 	-- Run any initializers
@@ -138,7 +138,7 @@ end
 
 
 -- Standard command handler for /wt commands
-function WT.OnSlashCommand(cmd)
+function WT.OnSlashCommand(hEvent, cmd)
 	local words = {}
 	for word in string.gmatch(cmd, "[^%s]+") do table.insert(words, word) end
 	local numWords = table.getn(words)
@@ -200,7 +200,7 @@ function WT.UniqueName(prefix, suffix)
 end
 
 
-function WT.OnSavedVariablesLoaded(addonId)
+function WT.OnSavedVariablesLoaded(hEvent, addonId)
 end
 
 
@@ -229,9 +229,8 @@ end
 
 -- ADDON INITIALISATION
 -------------------------------------------------------------------------------
-table.insert(Event.System.Update.Begin, { WT.OnSystemUpdateBegin, AddonId, AddonId .. "_OnSystemUpdateBegin" })
-table.insert(Event.Addon.Load.End, { WT.OnAddonLoadEnd, AddonId, AddonId .. "_OnAddonLoadEnd" })
-table.insert(Event.Addon.Startup.End, { WT.OnAddonStartupEnd, AddonId, AddonId .. "_OnAddonStartupEnd" })
-table.insert(Event.Addon.SavedVariables.Load.End, { WT.OnSavedVariablesLoaded, AddonId, AddonId .. "_OnAddonVariablesLoaded" })
-table.insert(Command.Slash.Register("wt"), { WT.OnSlashCommand, AddonId, AddonId .. "_OnSlashCommand" })
-
+Command.Event.Attach(Event.System.Update.Begin, WT.OnSystemUpdateBegin, "OnSystemUpdateBegin")
+Command.Event.Attach(Event.Addon.Load.End, WT.OnAddonLoadEnd, "OnAddonLoadEnd")
+Command.Event.Attach(Event.Addon.Startup.End, WT.OnAddonStartupEnd, "OnAddonStartupEnd")
+Command.Event.Attach(Event.Addon.SavedVariables.Load.End, WT.OnSavedVariablesLoaded, "OnAddonVariablesLoaded")
+Command.Event.Attach(Command.Slash.Register("wt"), WT.OnSlashCommand, "OnSlashCommand")

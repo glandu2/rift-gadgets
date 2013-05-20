@@ -21,9 +21,10 @@ local gadgetIndex = 0
 local xpGadgets = {}
 
 
-local function OnExperience(accum, rested, needed)
+local function OnExperience(hEvent, accum, rested, needed)
 
 	if not accum then return end
+	if not needed then return end
 
 	local percent = (accum / needed) * 100
 	local percentString = string.format("%i", math.floor(percent)) .. "%"
@@ -99,5 +100,5 @@ local function OnPlayerAvailable()
 	OnExperience(Inspect.TEMPORARY.Experience())
 end
 
-table.insert(Event.TEMPORARY.Experience, { OnExperience, AddonId, "OnExperience" })
+Command.Event.Attach(Event.TEMPORARY.Experience, OnExperience, "OnExperience")
 table.insert(WT.Event.PlayerAvailable, {OnPlayerAvailable, AddonId, "XPPercentGadget_OnPlayerAvailable"})	

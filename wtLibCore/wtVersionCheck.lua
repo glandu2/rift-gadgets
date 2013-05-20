@@ -23,7 +23,7 @@ local function SendVersion()
 	Command.Message.Broadcast("raid", nil, "GDT:VERSION", toc.toc.Version)
 end
 
-local function OnMessageRecieved(from, type, channel, identifier, data)
+local function OnMessageRecieved(hEvent, from, type, channel, identifier, data)
 	if identifier == "GDT:VERSION" then
 		versionList[from] = data
 	end
@@ -37,7 +37,7 @@ end
 
 local timeLastTick = nil
 
-local function OnVersionTick()
+local function OnVersionTick(hEvent)
 
 	-- If first tick of the session, send the version and initialise the timer
 	if not timeLastTick then
@@ -53,5 +53,5 @@ local function OnVersionTick()
 
 end
 
-table.insert(Event.Message.Receive, { OnMessageRecieved, AddonId, "OnMessageRecieved" } )
-table.insert(Event.System.Update.End, { OnVersionTick, AddonId, "OnVersionTick" } )
+Command.Event.Attach(Event.Message.Receive, OnMessageRecieved, "OnMessageRecieved")
+Command.Event.Attach(Event.System.Update.End, OnVersionTick, "OnVersionTick")

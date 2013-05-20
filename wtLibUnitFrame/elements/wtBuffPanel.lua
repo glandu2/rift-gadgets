@@ -403,7 +403,7 @@ function wtBuffPanel:Remove(buff)
 
 end
 
-local function BuffTimerTick()
+local function BuffTimerTick(hEvent)
 
 	local currTime = Inspect.Time.Frame()
 	if WT.BuffTimers then
@@ -450,4 +450,4 @@ local function BuffTimerTick()
 	
 end
 
-table.insert(Event.System.Update.Begin, { BuffTimerTick, AddonId, AddonId .. "_BuffTimerTick" } )
+Command.Event.Attach(Event.System.Update.Begin, BuffTimerTick, "BuffTimerTick")

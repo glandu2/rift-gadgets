@@ -43,6 +43,7 @@ RunOnStartup =
   "wtXPBarGadget.lua",
   "wtFactionPanelGadget.lua",
   "wtHudArcGadget.lua",
+  "wtHealer.lua",
 }
 
 SavedVariables = 

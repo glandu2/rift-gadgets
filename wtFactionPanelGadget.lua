@@ -163,7 +163,7 @@ local function UpdatePanels(showAll)
 end
 
 
-local function OnNotoriety(notoriety)
+local function OnNotoriety(hEvent, notoriety)
 	UpdatePanels()
 end
 
@@ -216,7 +216,7 @@ WT.Gadget.RegisterFactory("FactionPanel",
 		["SetConfiguration"] = SetConfiguration, 
 	})
 
-local function OnPlayerAvailable()
+local function OnPlayerAvailable(hEvent)
 	UpdatePanels()
 end
 
@@ -259,8 +259,8 @@ local function OnLocked()
 	UpdatePanels()
 end
 
-table.insert(Event.Faction.Notoriety, { OnNotoriety, AddonId, "OnNotoriety" })
-table.insert(WT.Event.PlayerAvailable, {OnPlayerAvailable, AddonId, "FactionPanel_OnPlayerAvailable"})	
+Command.Event.Attach(Event.Faction.Notoriety, OnNotoriety, "OnNotoriety")
+Command.Event.Attach(WT.Event.PlayerAvailable, OnPlayerAvailable, "FactionPanel_OnPlayerAvailable")	
 
 table.insert(WT.Event.GadgetsUnlocked, {OnUnlocked, AddonId, "FactionPanel_OnUnlocked"})
 table.insert(WT.Event.GadgetsLocked, {OnLocked, AddonId, "FactionPanel_OnLocked"})

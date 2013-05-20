@@ -191,6 +191,16 @@ local function ApplyConfig(config)
 				uf:CreateElement(element)
 			end 
 			
+			-- Create bindings for everything we need to monitor when dynamically
+			-- altering the cell's appearance. Can't effectively use normal template 
+			-- bindings because of the need to change what is being bound.
+			uf:CreateBinding("aggro", uf, OnChange_Aggro)
+			uf:CreateBinding("calling", uf, OnChange_Calling)
+			uf:CreateBinding("combat", uf, OnChange_Combat)
+			uf:CreateBinding("dead", uf, OnChange_Dead)
+			uf:CreateBinding("resourceName", uf, OnChange_ResourceName)
+			uf:CreateBinding("playerTarget", uf, OnChange_PlayerTarget)
+			
 		end
 		
 		HealerGadgets[gadgetId] = gadget

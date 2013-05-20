@@ -46,7 +46,80 @@ local function SetConfiguration(config)
 	-- do nothing yet
 end
 
+
+local started = false
+
+
+local function StartUp()
+
+	WT.Unit.CreateVirtualProperty("wtHLR_CallingColor", { "calling" },
+		function(unit)	
+			if (not unit) or (not unit.id) then
+				return nil
+			end
+			if unit.calling == "cleric" then
+				return GX.Settings.Colors.CallingCleric
+			elseif unit.calling == "mage" then
+				return GX.Settings.Colors.CallingMage
+			elseif unit.calling == "rogue" then
+				return GX.Settings.Colors.CallingRogue
+			elseif unit.calling == "warrior" then
+				return GX.Settings.Colors.CallingWarrior
+			else
+				return GX.Settings.Colors.CallingNone
+			end
+		end)
+
+	WT.Unit.CreateVirtualProperty("wtHLR_ResourceColor", { "resourceName" },
+		function(unit)	
+			if (not unit) or (not unit.id) then
+				return nil
+			end
+			if unit.resourceName == "mana" then
+				return GX.Settings.Colors.ResourceMana
+			elseif unit.calling == "energy" then
+				return GX.Settings.Colors.ResourceEnergy
+			elseif unit.calling == "power" then
+				return GX.Settings.Colors.ResourcePower
+			else
+				return nil
+			end
+		end)
+
+	WT.Unit.CreateVirtualProperty("wtHLR_AggroColor", { "aggro" },
+		function (unit)
+			if (not unit) or (not unit.id) then
+				return nil
+			end
+			if unit.aggro then
+				return GX.Settings.Colors.Aggro
+			else
+				return GX.Constants.Colors.Black
+			end
+			
+		end)
+		
+	WT.Unit.CreateVirtualProperty("wtHLR_TargetColor", { "playerTarget" },
+		function (unit)
+			if (not unit) or (not unit.id) then
+				return nil
+			end
+			if unit.playerTarget then
+				return GX.Settings.Colors.Target
+			else
+				return GX.Constants.Colors.Black
+			end
+			
+		end)
+		
+end
+
+
 local function ApplyConfig(config)
+
+	if not started then
+		Startup()
+	end
 
 	local gadgetId = config.id
 	local gadget = HealerGadgets[gadgetId]
@@ -65,13 +138,6 @@ local function ApplyConfig(config)
 	config.padding = 1
 	config.groupOrientation = "horizontal"
 	config.groupsReversed = false
-	
-	--
-
-	local imgTank = "GroupPortrait_IAC.dds"
-	local imgHeal = "GroupPortrait_IAE.dds"
-	local imgDPS = "GroupPortrait_IB0.dds"
-	local imgSupport = "GroupPortrait_IB2.dds"
 	
 	local cellCountX, cellCountY
 	

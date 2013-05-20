@@ -43,7 +43,7 @@ data.wtHealer.CellTemplate =
 			{ point="TOPRIGHT", element="frame", targetPoint="BOTTOMRIGHT", offsetX=-2, offsetY=-4 },
 		},
 		binding="resourcePercent", 
-		height=raidFrameBottomBarHeight, 
+		height=3, 
 		colorBinding="resourceColor",
 		media="wtBantoBar",
 		backgroundColor={r=0, g=0, b=0, a=1}
@@ -183,30 +183,6 @@ data.wtHealer.CellTemplate =
 			["notready"] = 1 
 		}, 
 		defaultIndex = "hide",
-	},
-	
-	{
-		id="buffPanelDebuffs", 
-		type="BuffPanel", 
-		parent="frame", 
-		layer=30,
-		attach = {
-			{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT", offsetX=-1, offsetY=-1 }
-		},
-		rows=1, 
-		cols=3, 
-		iconSize=16, 
-		iconSpacing=1, 
-		borderThickness=1, 
-		acceptLowPriorityBuffs=false, 
-		acceptMediumPriorityBuffs=false, 
-		acceptHighPriorityBuffs=false, 
-		acceptCriticalPriorityBuffs=false,
-		acceptLowPriorityDebuffs=true, 
-		acceptMediumPriorityDebuffs=true, 
-		acceptHighPriorityDebuffs=true, 
-		acceptCriticalPriorityDebuffs=true,
-		growthDirection = "left_up"
 	},
 	
 }

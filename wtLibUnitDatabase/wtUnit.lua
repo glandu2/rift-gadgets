@@ -85,7 +85,7 @@ function WT.Unit.__newindex(table, property, value)
 		-- does this trigger a virtual property?
 		local dependencies = WT.Unit.VirtualPropertyDependencies[property] 
 		if dependencies then
-			for idx, dependency in ipairs(dependencies) do
+			for propName, dependency in pairs(dependencies) do
 				local depValue = dependency.method(table)
 				local oldDepValue = table._shadow[dependency.name]
 				if depValue ~= oldDepValue then 
@@ -98,6 +98,7 @@ function WT.Unit.__newindex(table, property, value)
 end
 
 function WT.Unit.CreateVirtualProperty(propertyName, dependencies, fn)
+
 	if WT.Unit.VirtualProperties[propertyName] then
 		WT.Log.Warning("Duplicate virtual property: " .. propertyName)
 		return 
@@ -111,10 +112,18 @@ function WT.Unit.CreateVirtualProperty(propertyName, dependencies, fn)
 		if not WT.Unit.VirtualPropertyDependencies[dependency] then
  			WT.Unit.VirtualPropertyDependencies[dependency] = {}
 		end	
-		table.insert(WT.Unit.VirtualPropertyDependencies[dependency], calc)
+		WT.Unit.VirtualPropertyDependencies[dependency][propertyName] = calc
 	end
-	
 	WT.Unit.VirtualProperties[propertyName] = calc
+end
+
+
+function WT.Unit.DeleteVirtualProperty(propertyName)
+	local calc = WT.Unit.VirtualProperties[propertyName]
+	if not calc then return end
+	for dep, list in pairs(WT.Unit.VirtualPropertyDependencies) do
+		list[propertyName] = nil
+	end
 end
 
 function WT.Unit:UpdateCleanseStatus()

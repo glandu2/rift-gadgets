@@ -162,6 +162,7 @@ local function ApplyConfig(config)
 		gadget = UI.CreateFrame("Frame", "HealerFrame", ctx)
 		gadget.UIContext = ctx
 		gadget.id = gadgetId
+		gadget.healerConfig = config
 		gadget:SetWidth(totalWidth)
 		gadget:SetHeight(totalHeight)
 		gadget.Frames = {}
@@ -182,6 +183,7 @@ local function ApplyConfig(config)
 		
 		for groupId = 1, 20 do
 			local uf = WT.UnitFrame:Create("group" .. string.format("%02d", groupId))
+			uf.gadget = gadget
 			uf:SetParent(gadget)
 			uf:SetLayer(20)
 			gadget.UnitFrames[groupId] = uf
@@ -194,13 +196,7 @@ local function ApplyConfig(config)
 			-- Create bindings for everything we need to monitor when dynamically
 			-- altering the cell's appearance. Can't effectively use normal template 
 			-- bindings because of the need to change what is being bound.
-			uf:CreateBinding("aggro", uf, OnChange_Aggro)
-			uf:CreateBinding("calling", uf, OnChange_Calling)
-			uf:CreateBinding("combat", uf, OnChange_Combat)
-			uf:CreateBinding("dead", uf, OnChange_Dead)
-			uf:CreateBinding("resourceName", uf, OnChange_ResourceName)
-			uf:CreateBinding("playerTarget", uf, OnChange_PlayerTarget)
-			
+			data.wtHealer.RegisterForChanges(uf)			
 		end
 		
 		HealerGadgets[gadgetId] = gadget

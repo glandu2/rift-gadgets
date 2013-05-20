@@ -16,7 +16,6 @@ local TXT = Library.Translate
 
 local HealerGadgets = {}
 
-
 local function ConfigDialog(container)
 
 	local tabs = UI.CreateFrame("SimpleTabView", "hlTabs", container)
@@ -121,11 +120,10 @@ local function ApplyConfig(config)
 			uf:SetLayer(20)
 			gadget.UnitFrames[groupId] = uf
 			
-			local txtGroupNumber = UI.CreateFrame("Text", "txtGroupId", uf)
-			txtGroupNumber:SetFontSize(8)
-			txtGroupNumber:SetText(string.format("%02d", groupId))
-			txtGroupNumber:SetPoint("CENTER", uf, "CENTER")
-			txtGroupNumber:SetFontColor(1,1,1,1)
+			-- Add all of the elements from the cell template
+			for idx, element in ipairs(data.wtHealer.CellTemplate) do
+				uf:CreateElement(element)
+			end 
 			
 		end
 		

@@ -38,22 +38,16 @@ local function ColorString(col)
 		error("Invalid colour string")
 	end
 
-	local ret = {}
+	return {
+		a = tonumber(col:sub(1,2), 16) / 255,
+		r = tonumber(col:sub(3,4), 16) / 255,
+		g = tonumber(col:sub(5,6), 16) / 255,
+		b = tonumber(col:sub(7,8), 16) / 255,
+	}
 	
-	ret.a = tonumber(col:sub(1,2), 16) / 255
-	ret.r = tonumber(col:sub(3,4), 16) / 255
-	ret.g = tonumber(col:sub(5,6), 16) / 255
-	ret.b = tonumber(col:sub(7,8), 16) / 255
-
-	--ret[1] = r
-	--ret[2] = g
-	--ret[3] = b
-	--ret[4] = a
-
-	return ret
 end
 
--- Colours are defined as arrays in the order ARGB
+-- Colours are defined as tables { r, g, b, a }
 
 GX.Settings.Colors.CallingCleric = ColorString("#77ef00")
 GX.Settings.Colors.CallingMage = ColorString("#c85eff")
@@ -92,3 +86,15 @@ GX.Settings.Colors.Target = ColorString("#ffffff")
 
 GX.Constants.Colors.Black = ColorString("#000000")
 GX.Constants.Colors.White = ColorString("#ffffff")
+GX.Constants.Colors.Red = ColorString("#ff0000")
+GX.Constants.Colors.Green = ColorString("#00ff00")
+GX.Constants.Colors.Blue = ColorString("#0000ff")
+GX.Constants.Colors.Yellow = ColorString("#ffff00")
+GX.Constants.Colors.Orange = ColorString("#ffa500")
+GX.Constants.Colors.Purple = ColorString("#800080")
+GX.Constants.Colors.Brown = ColorString("#a52a2a")
+GX.Constants.Colors.Cyan = ColorString("#00ffff")
+GX.Constants.Colors.Gray = ColorString("#888888")
+GX.Constants.Colors.LightGray = ColorString("#cccccc")
+GX.Constants.Colors.DarkGray = ColorString("#444444")
+GX.Constants.Colors.Transparent = ColorString("#00000000")

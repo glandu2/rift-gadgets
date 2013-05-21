@@ -121,10 +121,10 @@ local function OnBuffAdd(hEvent, unitId, buffs)
 			end
 			if not WT.PlayerBuffs[roleId][buff.type] then
 				WT.PlayerBuffs[roleId][buff.type] = buff
-				print("Learned player buff for role " .. roleId .. ": " .. buff.name)
+				WT.Log.Info("Learned player buff for role " .. roleId .. ": " .. buff.name)
 			end
 		end
-
+		-- End Buff Learning Logic
 	
 		if not IsBlackListed(buff) then 
 			if not WT.Units[unitId].Buffs[buffId] then

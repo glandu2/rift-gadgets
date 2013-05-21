@@ -8,7 +8,7 @@ local jnhOrbHeight = 214 * scale
 ---------------------------------------------------------------------------------
 
 -- Frame Configuration Options --------------------------------------------------
-local jnhOrb = WT.UnitFrame:Template("jnhOrb")
+local jnhOrb = WT.UnitFrame:Template("jnhOrbReversed")
 jnhOrb.Configuration.Name = "Health+Mana+lvl Orb Unit Frame"
 jnhOrb.Configuration.RaidSuitable = false
 jnhOrb.Configuration.FrameType = "Frame"
@@ -31,8 +31,8 @@ function jnhOrb:Construct(options)
 				id="orbBACK", type="Image", parent="frame", layer=10, alpha=1,
 				attach = 
 				{ 
-					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" },
-					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT" } 
+					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=-90, offsetY=0 },
+					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT", offsetX=-90, offsetY=0 } 
 				}, 				
 				visibilityBinding="id", texAddon = AddonId, texFile = "img/jnhOrb_back.png"		
 			}, 
@@ -42,7 +42,7 @@ function jnhOrb:Construct(options)
 				id="orbFILLING", type="Bar", parent="frame", layer=11, alpha=1,
 				attach = 
 				{ 
-					{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=44, offsetY=1 } 
+					{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=-46, offsetY=1 } 
 				}, visibilityBinding="id", binding="healthPercent", growthDirection="up",
 				media="jnhOrb_RED", 
 				height=142, width=140,		
@@ -53,8 +53,8 @@ function jnhOrb:Construct(options)
 				id="orbRING", type="Image", parent="frame", layer=12, alpha=1,
 				attach = 
 				{ 
-					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" },
-					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT" } 
+					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=-90, offsetY=0 },
+					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT", offsetX=-90, offsetY=0 } 
 				}, 				
 				visibilityBinding="id", texAddon = AddonId, texFile = "img/jnhOrb_ring.png"		
 			},
@@ -83,8 +83,8 @@ function jnhOrb:Construct(options)
 				id="orbBACK2", type="Image", parent="frame", layer=5, alpha=1,
 				attach = 
 				{ 
-					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" },
-					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT" } 
+					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=140, offsetY=0 },
+					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT", offsetX=140, offsetY=0 } 
 				}, 				
 				visibilityBinding="resource", texAddon = AddonId, texFile = "img/jnhOrb2_back.png"		
 			}, 
@@ -94,7 +94,7 @@ function jnhOrb:Construct(options)
 				id="orbFILLING2", type="Bar", parent="frame", layer=6, alpha=1,
 				attach = 
 				{ 
-					{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=-68, offsetY=35 } 
+					{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=72, offsetY=35 } 
 				}, visibilityBinding="resource", binding="resourcePercent", growthDirection="up",
 				media="jnhOrb2_BLEU", 
 				height=106, width=105,		
@@ -105,8 +105,8 @@ function jnhOrb:Construct(options)
 				id="orbRING2", type="Image", parent="frame", layer=7, alpha=1,
 				attach = 
 				{ 
-					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" },
-					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT" } 
+					{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=140, offsetY=0 },
+					{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT", offsetX=140, offsetY=0 } 
 				}, 				
 				visibilityBinding="resource", texAddon = AddonId, texFile = "img/jnhOrb2_ring.png"		
 			},

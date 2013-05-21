@@ -60,8 +60,11 @@ local TXT = Library.Translate
 
 --]]
 
+
 -- Global store of all WT.Unit instances
 WT.Units = {}
+
+WT.PlayerBuffs = {}
 
 -- Hold a reference to the player
 local playerId = Inspect.Unit.Lookup("player")
@@ -99,6 +102,7 @@ local function TriggerBuffUpdates(unitId, changes)
 end
 
 
+
 local function OnBuffAdd(hEvent, unitId, buffs)
 
 	if not buffs then return end
@@ -108,6 +112,19 @@ local function OnBuffAdd(hEvent, unitId, buffs)
 	local changes = { add = {} }
 	
 	for buffId, buff in pairs(bdesc) do
+	
+		-- We learn all of the buffs the player is capable of casting in their current role, and store them
+		if buff.caster == WT.Player.id then
+			local roleId = Inspect.TEMPORARY.Role()
+			if not WT.PlayerBuffs[roleId] then
+				WT.PlayerBuffs[roleId] = {}
+			end
+			if not WT.PlayerBuffs[roleId][buff.type] then
+				WT.PlayerBuffs[roleId][buff.type] = buff
+				print("Learned player buff for role " .. roleId .. ": " .. buff.name)
+			end
+		end
+
 	
 		if not IsBlackListed(buff) then 
 			if not WT.Units[unitId].Buffs[buffId] then
@@ -165,6 +182,8 @@ end
 local castColorUninterruptable = { r=0.8, g=0.4, b=0, a=1 }
 local castColorInterruptable = { r=0, g=0.7, b=0.7, a=1 }
 
+local castbarRefresh = {}
+
 local function UpdateCastbarDetails(unitId, cb)
 	if cb then
 		local unit = WT.Units[unitId] 
@@ -175,7 +194,7 @@ local function UpdateCastbarDetails(unitId, cb)
 			unit.castColor = castColorInterruptable
 		end
 		-- Need to store some extra data to handle pushback properly
-		WT.Units[unitId].castUpdated = Inspect.Time.Frame()
+		WT.Units[unitId].castUpdated = Inspect.Time.Frame()		
 		WT.Units[unitId].castRemaining = cb.remaining
 		WT.Units[unitId].castDuration = cb.duration
 		unit.castName = cb.abilityName or ""
@@ -192,18 +211,24 @@ end
 
 
 local function CalculateCastChanges()
+
+	for unitId in pairs(castbarRefresh) do
+		WT.UnitDatabase.Casting[unitId] = Inspect.Unit.Castbar(unitId)
+		castbarRefresh[unitId] = nil 
+	end
+
 	local currTime = Inspect.Time.Frame()
 	for unitId, castbar in pairs(WT.UnitDatabase.Casting) do
 		local unit = WT.Units[unitId]			
 		if unit then
-			local cb = Inspect.Unit.Castbar(unitId)
-			UpdateCastbarDetails(unitId, cb)
+			castbar.remaining = castbar.duration - (Inspect.Time.Frame() - castbar.begin)
+			UpdateCastbarDetails(unitId, castbar)
 			local percent = 0
 			pcall(
 				function() 
-					percent = (1 - (cb.remaining / cb.duration)) * 100 
-					if cb.channeled then percent = 100 - percent end
-					unit.castTime = string.format("%.2f/%.2fs", cb.duration - cb.remaining, cb.duration)
+					percent = (1 - (castbar.remaining / castbar.duration)) * 100 
+					if castbar.channeled then percent = 100 - percent end
+					unit.castTime = string.format("%.2f/%.2fs", castbar.duration - castbar.remaining, castbar.duration)
 				end)
 			unit.castPercent = percent
 		end
@@ -215,13 +240,23 @@ local function OnUnitCastbar(hEvent, units)
 	for unitId, cbVisible in pairs(units) do
 		if WT.Units[unitId] then
 			if cbVisible then
-				local cb = Inspect.Unit.Castbar(unitId)			
+				castbarRefresh[unitId] = true
+				--local cb = Inspect.Unit.Castbar(unitId)
+				--dump(cb)
+				--cb.elapsed = 0
+				--cb.remaining = cb.duration
+				--cb.begin = Inspect.Time.Frame()
+				--[[
 				if cb then 
+					WT.Units[unitId]._castbar = cb
 					WT.Event.Trigger.CastbarShow(unitId, cb)
 					WT.UnitDatabase.Casting[unitId] = cb
 					UpdateCastbarDetails(unitId, cb)
 				end
+				--]]
 			else
+				castbarRefresh[unitId] = nil
+				WT.Units[unitId]._castbar = nil
 				WT.Event.Trigger.CastbarHide(unitId)
 				WT.UnitDatabase.Casting[unitId] = nil
 				WT.Units[unitId].castPercent = nil

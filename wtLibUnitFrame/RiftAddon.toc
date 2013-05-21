@@ -42,6 +42,7 @@ RunOnStartup =
   "templates/HealFrame.lua",
 
   "templates/jnhOrbs.lua",
+  "templates/jnhOrbsReversed.lua",
 }
 
 SavedVariables = 

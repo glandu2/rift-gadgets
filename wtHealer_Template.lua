@@ -61,7 +61,7 @@ data.wtHealer.CellTemplate =
 		growthDirection="right",
 		binding="healthPercent", 
 		colorBinding="raidHealthColor",
-		media="wtHealbot",
+		media="riftRaidHealthBar",
 		backgroundColor={r=0, g=0, b=0, a=1},
 	},
 	
@@ -87,15 +87,15 @@ data.wtHealer.CellTemplate =
 		parent="frame", 
 		layer=20,
 		attach = {
-			{ point="CENTER", element="barHealth", targetPoint="TOPLEFT", offsetX=2, offsetY=2 }
+			{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=2, offsetY=2 }
 		}, 
 		visibilityBinding="role",
 		nameBinding="role", 
 		names = { 
-			["tank"] = "octanusTank", 
-			["heal"] = "octanusHeal", 
-			["dps"] = "octanusDPS", 
-			["support"] = "octanusSupport" 
+			["tank"] = "riftRaidRoleTank", 
+			["heal"] = "riftRaidRoleHeal", 
+			["dps"] = "riftRaidRoleDPS", 
+			["support"] = "riftRaidRoleSupport" 
 		},
 	},	
 		
@@ -105,13 +105,14 @@ data.wtHealer.CellTemplate =
 		parent="frame", 
 		layer=20,
 		attach = {
-			{ point="CENTER", element="barHealth", targetPoint="CENTER", offsetX=0, offsetY=0 }
+			{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=0, offsetY=0 }
 		},
 		visibilityBinding="name",
 		text="{name}", 
-		maxLength=5, 
+		maxLength=8, 
 		default="", 
-		fontSize=12, 
+		fontSize=12,
+		fontx="DroidSansBold", 
 		outline=true,
 		colorBinding="callingColor",
 	},

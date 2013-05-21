@@ -49,69 +49,46 @@ end
 
 local started = false
 
+local isSecure = false
 
-local function StartUp()
+local function OnSecureModeEnter()
+	isSecure = true
+end
 
-	WT.Unit.CreateVirtualProperty("wtHLR_CallingColor", { "calling" },
-		function(unit)	
-			if (not unit) or (not unit.id) then
-				return nil
-			end
-			if unit.calling == "cleric" then
-				return GX.Settings.Colors.CallingCleric
-			elseif unit.calling == "mage" then
-				return GX.Settings.Colors.CallingMage
-			elseif unit.calling == "rogue" then
-				return GX.Settings.Colors.CallingRogue
-			elseif unit.calling == "warrior" then
-				return GX.Settings.Colors.CallingWarrior
-			else
-				return GX.Settings.Colors.CallingNone
-			end
-		end)
+local function OnSecureModeLeave()
+	isSecure = false
+end
 
-	WT.Unit.CreateVirtualProperty("wtHLR_ResourceColor", { "resourceName" },
-		function(unit)	
-			if (not unit) or (not unit.id) then
-				return nil
-			end
-			if unit.resourceName == "mana" then
-				return GX.Settings.Colors.ResourceMana
-			elseif unit.calling == "energy" then
-				return GX.Settings.Colors.ResourceEnergy
-			elseif unit.calling == "power" then
-				return GX.Settings.Colors.ResourcePower
-			else
-				return nil
-			end
-		end)
+local function Startup()
+	Command.Event.Attach(Event.System.Secure.Enter, OnSecureModeEnter, "OnSecureModeEnter")
+	Command.Event.Attach(Event.System.Secure.Leave, OnSecureModeLeave, "OnSecureModeLeave")
+end
 
-	WT.Unit.CreateVirtualProperty("wtHLR_AggroColor", { "aggro" },
-		function (unit)
-			if (not unit) or (not unit.id) then
-				return nil
-			end
-			if unit.aggro then
-				return GX.Settings.Colors.Aggro
-			else
-				return GX.Constants.Colors.Black
-			end
-			
-		end)
-		
-	WT.Unit.CreateVirtualProperty("wtHLR_TargetColor", { "playerTarget" },
-		function (unit)
-			if (not unit) or (not unit.id) then
-				return nil
-			end
-			if unit.playerTarget then
-				return GX.Settings.Colors.Target
-			else
-				return GX.Constants.Colors.Black
-			end
-			
-		end)
-		
+local function OnCellClickLeft(ufOverlay, hEvent)
+	local uf = ufOverlay.unitFrame
+end
+
+local function OnCellClickMiddle(ufOverlay, hEvent)
+	local uf = ufOverlay.unitFrame
+end
+
+local function OnCellClickRight(ufOverlay, hEvent)
+	local uf = ufOverlay.unitFrame
+end
+
+local function OnCellClickMouse4(ufOverlay, hEvent)
+	local uf = ufOverlay.unitFrame
+end
+
+local function OnCellClickMouse5(ufOverlay, hEvent)
+	local uf = ufOverlay.unitFrame
+end
+
+local function OnCellWheelForward(ufOverlay, hEvent)
+	local uf = ufOverlay.unitFrame
+end
+
+local function OnCellWheelBack(ufOverlay, hEvent)
 end
 
 
@@ -125,14 +102,13 @@ local function ApplyConfig(config)
 	local gadget = HealerGadgets[gadgetId]
 
 	-- For testing
-	config.borderThickness = 1
-	config.borderColor = { 1, 1, 1, 1 }
-	config.backgroundColor = { 0, 0, 0, 1 }
-	-- config.backgroundTexture = {"Rift", "aa_fire_bg.jpg"}
+	config.borderThickness = 2
+	config.borderColor = { 0, 0, 0, 0.7 }
+	config.backgroundColor = { 0.5, 0.5, 0.5, 1 }
 	config.backgroundTexture = {"Rift", "mtx_window_medium_bg_(blue).png.dds"}
 	
 	config.cellWidth = 100
-	config.cellHeight = 50
+	config.cellHeight = 40
 	config.cellSpacing = 1
 	config.cellBackgroundColor = { 0, 0, 0, 0.6 }
 	config.padding = 1
@@ -165,6 +141,7 @@ local function ApplyConfig(config)
 		gadget.healerConfig = config
 		gadget:SetWidth(totalWidth)
 		gadget:SetHeight(totalHeight)
+		gadget:SetSecureMode("restricted")
 		gadget.Frames = {}
 		gadget.UnitFrames = {}
 		-- gadget:SetBackgroundColor(0.2, 0.4, 0.6)
@@ -177,21 +154,56 @@ local function ApplyConfig(config)
 		gadget.Frames.Background = UI.CreateFrame("Texture", "Background", gadget)
 		gadget.Frames.Background:SetTexture(config.backgroundTexture[1], config.backgroundTexture[2])
 		gadget.Frames.Background:SetLayer(10)
+		gadget.Frames.Background:SetAlpha(0.4)
 		gadget.Frames.Background:SetBackgroundColor(unpack(config.backgroundColor))
 		gadget.Frames.Background:SetPoint("TOPLEFT", gadget.Frames.Border, "TOPLEFT", config.borderThickness, config.borderThickness)
 		gadget.Frames.Background:SetPoint("BOTTOMRIGHT", gadget.Frames.Border, "BOTTOMRIGHT", -config.borderThickness, -config.borderThickness)
 		
+		local DEBUG = true
+		
 		for groupId = 1, 20 do
-			local uf = WT.UnitFrame:Create("group" .. string.format("%02d", groupId))
+			local uf
+			if not DEBUG then
+				uf = WT.UnitFrame:Create("group" .. string.format("%02d", groupId))
+			else
+				if groupId == 1 then
+					uf = WT.UnitFrame:Create("player")
+				else
+					uf = WT.UnitFrame:Create("player.target")
+				end
+			end
 			uf.gadget = gadget
 			uf:SetParent(gadget)
 			uf:SetLayer(20)
 			gadget.UnitFrames[groupId] = uf
+
+			-- To seperate mouse handling from graphical display, the secure frame is going to be separated
+			-- and overlaid.
+			
+			uf.secureOverlay = UI.CreateFrame("Frame", "SecureFrame", gadget)
+			uf.secureOverlay.unitFrame = uf
+			uf.secureOverlay:SetSecureMode("restricted")
+			uf.secureOverlay:SetLayer(30)
+			uf.secureOverlay:SetAllPoints(uf)
+			uf.secureOverlay:EventAttach(Event.UI.Input.Mouse.Left.Down, OnCellClickLeft, "OnCellClickLeft") 
+			uf.secureOverlay:EventAttach(Event.UI.Input.Mouse.Middle.Down, OnCellClickMiddle, "OnCellClickMiddle") 
+			uf.secureOverlay:EventAttach(Event.UI.Input.Mouse.Right.Down, OnCellClickRight, "OnCellClickRight") 
+			uf.secureOverlay:EventAttach(Event.UI.Input.Mouse.Mouse4.Down, OnCellClickMouse4, "OnCellClickMouse4") 
+			uf.secureOverlay:EventAttach(Event.UI.Input.Mouse.Mouse5.Down, OnCellClickMouse5, "OnCellClickMouse5") 
+			uf.secureOverlay:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, OnCellWheelForward, "OnCellWheelForward") 
+			uf.secureOverlay:EventAttach(Event.UI.Input.Mouse.Wheel.Back, OnCellWheelBack, "OnCellWheelBack") 
+			if DEBUG then 
+				uf.secureOverlay:SetBackgroundColor(1,0,0,0.1)
+			end
+			
+			uf:CreateBinding("id", uf, function(frm, id) if id then frm:SetVisible(true) else frm:SetVisible(false) end end)
 			
 			-- Add all of the elements from the cell template
 			for idx, element in ipairs(data.wtHealer.CellTemplate) do
 				uf:CreateElement(element)
 			end 
+			
+			uf:ApplyDefaultBindings()
 			
 			-- Create bindings for everything we need to monitor when dynamically
 			-- altering the cell's appearance. Can't effectively use normal template 

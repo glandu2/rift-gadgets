@@ -40,15 +40,15 @@ local function ColorString(col)
 
 	local ret = {}
 	
-	ret.a = col:sub(1,2)
-	ret.r = col:sub(3,4)
-	ret.g = col:sub(5,6)
-	ret.b = col:sub(7,8)
+	ret.a = tonumber(col:sub(1,2), 16) / 255
+	ret.r = tonumber(col:sub(3,4), 16) / 255
+	ret.g = tonumber(col:sub(5,6), 16) / 255
+	ret.b = tonumber(col:sub(7,8), 16) / 255
 
-	ret[1] = ret.r
-	ret[2] = ret.g
-	ret[3] = ret.b
-	ret[4] = ret.a
+	--ret[1] = r
+	--ret[2] = g
+	--ret[3] = b
+	--ret[4] = a
 
 	return ret
 end

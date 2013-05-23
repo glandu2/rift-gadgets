@@ -33,3 +33,5 @@ Library.Media.AddTexture("gradientD2L", AddonId, "img/gradientD2L.png", {"bar"})
 Library.Media.AddTexture("gradientL2D", AddonId, "img/gradientL2D.png", {"bar"})
 
 Library.Media.AddTexture("HealerBackdrop01", "Rift", "mtx_window_medium_bg_(blue).png.dds", {"backdrop"})
+Library.Media.AddTexture("RaidFrameBackdrop01", "Rift", "window_conquest_dominion.png.dds", {"backdrop"})
+

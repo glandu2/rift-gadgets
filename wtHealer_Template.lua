@@ -19,6 +19,30 @@ data.wtHealer = data.wtHealer or {}
 data.wtHealer.CellTemplate =
 {
 	{
+		id="outerBorder",
+		type="Frame",
+		parent="frame",
+		layer = 0,
+		attach = 
+		{
+			{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" },
+			{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT" } 
+		}
+	},
+
+	{
+		id="innerBorder",
+		type="Frame",
+		parent="frame",
+		layer = 1,
+		attach = 
+		{
+			{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" },
+			{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT" } 
+		}
+	},
+
+	{
 		id="frameBlocked", 
 		type="Frame", 
 		parent="frame", 
@@ -62,7 +86,7 @@ data.wtHealer.CellTemplate =
 		binding="healthPercent", 
 		colorBinding="raidHealthColor",
 		media="riftRaidHealthBar",
-		backgroundColor={r=0, g=0, b=0, a=1},
+		-- backgroundColor={r=0, g=0, b=0, a=1},
 	},
 	
 	{

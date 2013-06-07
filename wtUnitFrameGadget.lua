@@ -140,7 +140,7 @@ local function rfConfigDialog(container)
 	rfTabs:AddTab("Appearance", frmOverride)	
 
 	rfDialog = WT.Dialog(frmConfigInner)
-		:Select("template", TXT.RaidFrameTemplate, "OctanusRaidFrame", templateListItems, true)
+		:Select("template", TXT.RaidFrameTemplate, "HealFrame", templateListItems, true)
 		:Select("layout", "Layout", "4 x 5", { "4 x 5", "5 x 4", "2 x 10", "10 x 2", "1 x 20", "20 x 1" }, false)
 		:Checkbox("hideWhenEmpty", "Hide When Raid Is Empty", false)
 		:Checkbox("showBackground", TXT.ShowBackground, true)

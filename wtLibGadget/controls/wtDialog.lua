@@ -62,6 +62,7 @@ function CDialog:add(id, label, control, labelFontSize, stretch, iconFile)
 	frm:SetPoint("RIGHT", self.container, "RIGHT")
 
 	if control then
+		control:SetParent(frm)
 		control:SetPoint("TOPLEFT", frm, "TOPLEFT", self.labelWidth, 0)
 		if stretch then
 			control:SetPoint("RIGHT", frm, "RIGHT")

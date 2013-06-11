@@ -9,6 +9,7 @@ HealFrame.Configuration.FrameType = "Frame"
 HealFrame.Configuration.Width = 55
 HealFrame.Configuration.Height = 40
 HealFrame.Configuration.Resizable = { 55, 40, 500, 70 }
+HealFrame.Configuration.SupportsHoTTracking = true
 
 ---------------------------------------------------------------------------------
 
@@ -160,6 +161,7 @@ function HealFrame:Construct(options)
 			{
 				id="hotTracker01", 
 				type="ProgressWheel", 
+				semantic="HoTTracker",
 				parent="frameBackdrop",
 				layer=100,
 				attach = 
@@ -177,6 +179,7 @@ function HealFrame:Construct(options)
 			{
 				id="hotTracker02", 
 				type="ProgressWheel", 
+				semantic="HoTTracker",
 				parent="frameBackdrop",
 				layer=100,
 				attach = 
@@ -195,6 +198,7 @@ function HealFrame:Construct(options)
 			{
 				id="hotTracker03", 
 				type="ProgressWheel", 
+				semantic="HoTTracker",
 				parent="frameBackdrop",
 				layer=100,
 				attach = 
@@ -216,6 +220,8 @@ function HealFrame:Construct(options)
 	for idx,element in ipairs(template.elements) do
 		if not options.showAbsorb and element.id == "barAbsorb" then 
 			-- showElement = false
+		elseif element.semantic == "HoTTracker" and not options.showHoTTrackers then
+			-- showElement = false	
 		else 
 			self:CreateElement(element)
 		end

@@ -100,6 +100,19 @@ local macroNames = { "Left", "Middle", "Right", "Button 4", "Button 5", "Wheel F
 
 local rfDialog = false
 local rfAppearance = false
+
+
+local function rf_OnTemplateChange(templateId)
+	if rfDialog == false then return end
+	local templateConfig = WT.UnitFrame.Templates[templateId].Configuration
+	if templateConfig.SupportsHoTTracking then
+		rfDialog:GetControl("showHoTTrackers"):SetVisible(true)
+	else
+		rfDialog:GetControl("showHoTTrackers"):SetVisible(false)
+	end
+end
+
+
 local function rfConfigDialog(container)
 
 	container.Reset = function()
@@ -140,7 +153,7 @@ local function rfConfigDialog(container)
 	rfTabs:AddTab("Appearance", frmOverride)	
 
 	rfDialog = WT.Dialog(frmConfigInner)
-		:Select("template", TXT.RaidFrameTemplate, "Heal Frame", templateListItems, true)
+		:Select("template", TXT.RaidFrameTemplate, "Heal Frame", templateListItems, true, rf_OnTemplateChange)
 		:Select("layout", "Layout", "4 x 5", { "4 x 5", "5 x 4", "2 x 10", "10 x 2", "1 x 20", "20 x 1" }, false)
 		:Checkbox("hideWhenEmpty", "Hide When Raid Is Empty", false)
 		:Checkbox("showBackground", TXT.ShowBackground, true)
@@ -148,6 +161,18 @@ local function rfConfigDialog(container)
 		:Checkbox("showAbsorb", TXT.ShowAbsorb, true)
 		:Checkbox("reverseGroups", TXT.ReverseGroups, false)
 		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
+		:Checkbox("showHoTTrackers", "Show HoT Trackers", false)
+		
+	local templateControl = rfDialog:GetControl("template")
+	local templateId = templateControl.getValue()
+	local hotTrack = WT.UnitFrame.Templates[templateId].Configuration.SupportsHoTTracking
+	if hotTrack then
+		print("TRACKING")
+		rfDialog:GetControl("showHoTTrackers"):SetVisible(true)
+	else
+		print("NO TRACKING")
+		rfDialog:GetControl("showHoTTrackers"):SetVisible(false)
+	end
 
 	local macroTabs = UI.CreateFrame("SimpleTabView", "macroTabs", frmMacrosInner)
 	macroTabs:SetTabPosition("left")

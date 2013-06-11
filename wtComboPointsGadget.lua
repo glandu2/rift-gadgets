@@ -21,9 +21,30 @@ local TXT = Library.Translate
 local deferSetup = {}
 local calling = nil
 
+local function OnComboSingle(uf, value)
+	 
+	uf.Elements["imgCombo01"]:SetVisible(false) 
+	uf.Elements["imgCombo02"]:SetVisible(false) 
+	uf.Elements["imgCombo03"]:SetVisible(false) 
+	uf.Elements["imgCombo04"]:SetVisible(false) 
+	uf.Elements["imgCombo05"]:SetVisible(false)
+	
+	if not value then return end
+	
+	if value >= 1 then uf.Elements["imgCombo01"]:SetVisible(true) end
+	if value >= 2 then uf.Elements["imgCombo02"]:SetVisible(true) end
+	if value >= 3 then uf.Elements["imgCombo03"]:SetVisible(true) end
+	if value >= 4 then uf.Elements["imgCombo04"]:SetVisible(true) end
+	if value >= 5 then uf.Elements["imgCombo05"]:SetVisible(true) end
+	 
+end
+
 local function Setup(unitFrame, configuration)
 
 	local img = nil
+	local addon = AddonId
+	 
+	local isSingle = false
 	 
 	if calling == "rogue" then 
 		img = "img/wtComboBlue.png"
@@ -31,15 +52,89 @@ local function Setup(unitFrame, configuration)
 		img = "img/wtComboRed.png"
 	end
 	
-	unitFrame:CreateElement(
-	{
-		id="imgCombo", type="ImageSet", parent="frame", layer=10,
-		attach = {{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" }},	
-		indexBinding="comboIndex", rows=5, cols=1,
-		visibilityBinding="comboIndex",		
-		texAddon=AddonId, texFile=img,
-	});
+	if configuration.texture then
+		local media = Library.Media.GetTexture(configuration.texture)
+		if media then
+			img = media.filename
+			addon = media.addonId
+			
+			if media.tags["combo_single"] then
+				isSingle = true
+			end
+			
+		end
+	end
+	
+	if not isSingle then
+	
+		unitFrame:CreateElement(
+		{
+			id="imgCombo", type="ImageSet", parent="frame", layer=10,
+			attach = {
+				{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" },
+				{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT" },
+			},	
+			indexBinding="comboIndex", rows=5, cols=1,
+			visibilityBinding="comboIndex",		
+			texAddon=addon, texFile=img,
+		});
+	
+	else
+	
+		-- Need to handle the single icon method differently
+	
+		unitFrame:CreateElement(
+		{
+			id="imgCombo01", type="Image", parent="frame", layer=10,
+			attach = {
+				{ point="TOPLEFT", element="frame", targetPoint={0.0, 0.0} },
+				{ point="BOTTOMRIGHT", element="frame", targetPoint={0.2, 1.0} },
+			},
+			media = configuration.texture,
+		})
+		unitFrame:CreateElement(
+		{
+			id="imgCombo02", type="Image", parent="frame", layer=10,
+			attach = {
+				{ point="TOPLEFT", element="frame", targetPoint={0.2, 0.0} },
+				{ point="BOTTOMRIGHT", element="frame", targetPoint={0.4, 1.0} },
+			},
+			media = configuration.texture,
+		})
+		unitFrame:CreateElement(
+		{
+			id="imgCombo03", type="Image", parent="frame", layer=10,
+			attach = {
+				{ point="TOPLEFT", element="frame", targetPoint={0.4, 0.0} },
+				{ point="BOTTOMRIGHT", element="frame", targetPoint={0.6, 1.0} },
+			},
+			media = configuration.texture,
+		})
+		unitFrame:CreateElement(
+		{
+			id="imgCombo04", type="Image", parent="frame", layer=10,
+			attach = {
+				{ point="TOPLEFT", element="frame", targetPoint={0.6, 0.0} },
+				{ point="BOTTOMRIGHT", element="frame", targetPoint={0.8, 1.0} },
+			},
+			media = configuration.texture,
+		})
+		unitFrame:CreateElement(
+		{
+			id="imgCombo05", type="Image", parent="frame", layer=10,
+			attach = {
+				{ point="TOPLEFT", element="frame", targetPoint={0.8, 0.0} },
+				{ point="BOTTOMRIGHT", element="frame", targetPoint={1.0, 1.0} },
+			},
+			media = configuration.texture,
+		})
+	
+		unitFrame:CreateBinding("combo", unitFrame, OnComboSingle, nil)
+	
+	end
 
+	unitFrame:ApplyBindings()
+	
 end
 
 
@@ -57,7 +152,7 @@ local function Create(configuration)
 		table.insert(deferSetup, { unitFrame = comboPoints, configuration = configuration })
 	end
 
-	return comboPoints
+	return comboPoints, { resizable = { 50, 10, 800, 500 } }
 end
 
 local dialog = false
@@ -65,6 +160,8 @@ local dialog = false
 local function ConfigDialog(container)	
 	dialog = WT.Dialog(container)
 		:Label("The Combo Points gadget displays current combo (Rogue) or attack (Warrior) points for the player.")
+		:ImgSelect("texture", "Texture", "wtComboBlue", "combo")
+
 end
 
 local function GetConfiguration()

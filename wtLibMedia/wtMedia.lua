@@ -106,3 +106,15 @@ end
 function Library.Media.ListFonts()
 	return fonts
 end
+
+--- Returns a sorted list of available font names
+function Library.Media.GetFontIds()
+	local ret = {}
+	for k, _ in pairs(fonts) do
+		table.insert(ret, k)
+	end
+	table.sort(ret)
+	return ret
+end
+
+Library.Media.AddFont("#Default", "Rift", "$Flareserif_medium")

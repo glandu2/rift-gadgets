@@ -234,6 +234,7 @@ function XBG.Create(configuration)
 		txt:SetFontColor(1,1,1,1)
 		txt:SetPoint("CENTER", wrapper, "CENTER")
 		txt:SetText("-/- (0%)")
+		txt:SetEffectGlow({ strength = 1 })
 		wrapper.textType = configuration.showFullText
 		wrapper.text = txt
 		bar.Event.Size = 

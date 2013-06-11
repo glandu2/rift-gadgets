@@ -166,6 +166,15 @@ function CDialog:TexSelect(id, label, default, mediaTag, onchange)
 	return self
 end
 
+function CDialog:ImgSelect(id, label, default, mediaTag, onchange)
+	local control = WT.Control.ImgSelect.Create(self.container, nil, default, mediaTag, onchange)
+	control:SetText(default)
+	local frm = self:add(id, label, control)
+	frm.getValue = control.GetText
+	frm.setValue = control.SetText
+	return self
+end
+
 function CDialog:ColorPicker(id, label, r, g, b, a)
 	local control = WT.Control.ColorPicker.Create(self.container, nil, r, g, b, a)
 	control:SetColor(r,g,b,a)

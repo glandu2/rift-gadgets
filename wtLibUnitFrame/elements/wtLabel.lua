@@ -28,29 +28,6 @@ function wtLabel:Construct()
 	local config = self.Configuration
 	local unitFrame = self.UnitFrame
 
-	self.SetVisibleNative = self.SetVisible
-	self.SetVisible = 
-		function(frame, vis)
-			frame:SetVisibleNative(vis) 
-			if self.outline then
-				self.outline[1]:SetVisible(vis) 
-				self.outline[2]:SetVisible(vis) 
-				self.outline[3]:SetVisible(vis) 
-				self.outline[4]:SetVisible(vis) 
-			end
-		end 
-
-	self._SetFontSize = self.SetFontSize
-	self.SetFontSize = 
-		function(lbl, fontSize)
-			self:_SetFontSize(fontSize)
-			if self.outline then
-				for idx = 1,4 do
-					self.outline[idx]:SetFontSize(self:GetFontSize())
-				end
-			end
-		end
-
 	-- Validate configuration
 	if not config.text then error("Label missing required configuration item: text") end
 	
@@ -80,19 +57,7 @@ function wtLabel:Construct()
 	end
 	
 	if config.outline then
-		self.outline = {}
-		for idx = 1,4 do
-			self.outline[idx] = UI.CreateFrame("Text", "txtOutline", self:GetParent())
-			self.outline[idx]:SetLayer(self:GetLayer()-1)
-			self.outline[idx]:SetFontColor(0,0,0,1.0)
-			self.outline[idx]:SetFontSize(self:GetFontSize())
-			self.outline[idx]:SetFont(self:GetFont())
-		end
-		self.outline[1]:SetPoint("TOPLEFT", self, "TOPLEFT", -1, -1)
-		self.outline[2]:SetPoint("TOPLEFT", self, "TOPLEFT",  1, -1)
-		self.outline[3]:SetPoint("TOPLEFT", self, "TOPLEFT",  1,  1)
-		self.outline[4]:SetPoint("TOPLEFT", self, "TOPLEFT", -1,  1)
-		
+		self:SetEffectGlow({ strength = 3 })
 	end
 	
 	self.SetLabelText = 
@@ -119,9 +84,6 @@ function wtLabel:Construct()
 				if newHeight ~= self.oldLinkedHeight then
 					for idx, el in ipairs(self.linkedHeightElement.linkedElements) do
 						el:SetFontSize(newHeight * self.linkedHeightScale)
-						if self.outline then
-							for idx=1,4 do self.outline[idx]:SetFontSize(newHeight * self.linkedHeightScale) end
-						end 
 					end					
 					self.oldLinkedHeight = newHeight
 				end

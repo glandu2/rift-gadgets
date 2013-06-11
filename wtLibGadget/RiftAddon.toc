@@ -18,6 +18,7 @@ RunOnStartup =
   "controls/wtComboBox.lua",
   "controls/wtSelect.lua",
   "controls/wtTexSelect.lua",
+  "controls/wtImgSelect.lua",
   "controls/wtMacroSet.lua",
   "controls/wtColorPicker.lua",
   "controls/wtDialog.lua",

@@ -35,3 +35,18 @@ Library.Media.AddTexture("gradientL2D", AddonId, "img/gradientL2D.png", {"bar"})
 Library.Media.AddTexture("HealerBackdrop01", "Rift", "mtx_window_medium_bg_(blue).png.dds", {"backdrop"})
 Library.Media.AddTexture("RaidFrameBackdrop01", "Rift", "window_conquest_dominion.png.dds", {"backdrop"})
 
+Library.Media.AddTexture("CP Biohazard", AddonId, "img/combo/combo_Biohazard.png", {"combo"})
+Library.Media.AddTexture("CP Bullet Holes", AddonId, "img/combo/combo_BulletHole.png", {"combo"})
+Library.Media.AddTexture("CP Cupcakes", AddonId, "img/combo/combo_Cupcake.png", {"combo"})
+Library.Media.AddTexture("CP Lips", AddonId, "img/combo/combo_Lips.png", {"combo"})
+Library.Media.AddTexture("CP Pink Skulls", AddonId, "img/combo/combo_PinkSkull.png", {"combo"})
+Library.Media.AddTexture("CP Target", AddonId, "img/combo/combo_Target.png", {"combo"})
+
+Library.Media.AddTexture("CP Rogue", "Rift", "target_portrait_roguepoints_on.png.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP Warrior", "Rift", "target_portrait_warrior_hp.png.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP Skull", "Rift", "vfx_ui_mob_tag_skull.png.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP Twitter", "Rift", "twitter.png.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP Red Sword", "Rift", "vfx_ui_mob_tag_damage.png.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP Squirrel", "Rift", "vfx_ui_mob_tag_squirrel.png.dds", {"combo", "combo_single"})
+
+

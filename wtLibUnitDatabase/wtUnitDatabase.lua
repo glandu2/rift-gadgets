@@ -95,12 +95,44 @@ local function IsBlackListed(buff)
 end
 
 
+local numHotTrackers = 3
+local hotTrackers =
+{
+	role6 = 
+	{
+		"Soothing Stream",
+		"Healing Spray",
+		"Healing Flood",
+	}
+}
+
 local function TriggerBuffUpdates(unitId, changes)
 	local unit = WT.Units[unitId]
 	WT.Unit.UpdateCleanseStatus(unit)
 	WT.Event.Trigger.BuffUpdates(unitId, changes)
-end
 
+	-- Buffs have changed on the unit, update the HoT tracking data	
+	-- HoT tracking is restricted to friendly units to save processing
+	if unit.relation == "friendly" then
+		local htrack = hotTrackers["role" .. Inspect.TEMPORARY.Role()]
+		if not htrack then
+			for idx = 1,numHotTrackers do
+				unit["HoT" .. idx .. "Percent"] = nil
+			end
+		else
+			unit.HoTs = {}
+			for idx, hotName in ipairs(htrack) do
+				unit.HoTs[idx] = false
+				for buffId, buff in pairs(unit.Buffs) do
+					if buff.name == hotName then
+						unit.HoTs[idx] = buff
+					end
+				end
+			end
+		end
+	end
+
+end
 
 
 local function OnBuffAdd(hEvent, unitId, buffs)
@@ -112,6 +144,8 @@ local function OnBuffAdd(hEvent, unitId, buffs)
 	local changes = { add = {} }
 	
 	for buffId, buff in pairs(bdesc) do
+
+		buff.unitId = unitId
 	
 		-- We learn all of the buffs the player is capable of casting in their current role, and store them
 		if buff.caster == WT.Player.id then
@@ -122,7 +156,7 @@ local function OnBuffAdd(hEvent, unitId, buffs)
 			if not WT.PlayerBuffs[roleId][buff.type] then
 				WT.PlayerBuffs[roleId][buff.type] = buff
 				WT.Log.Info("Learned player buff for role " .. roleId .. ": " .. buff.name)
-			end
+			end		
 		end
 		-- End Buff Learning Logic
 	
@@ -664,9 +698,39 @@ local function CalculateRanges()
 	end
 end
 
+
+local function CalculateHoTTrackers()
+
+	local currTime = Inspect.Time.Frame()
+
+	for unitId, unit in pairs(WT.Units) do
+		if unit.HoTs then
+			for idx, buff in ipairs(unit.HoTs) do
+				if not buff then
+					unit["HoT" .. idx .. "Percent"] = nil
+				else
+					if buff.duration then
+						local elapsed = currTime - buff.begin
+						local remaining = math.floor(buff.duration - elapsed)
+						if remaining > 0 then
+							local percent = (remaining / buff.duration) * 100
+							unit["HoT" .. idx .. "Percent"] = percent
+						else
+							unit["HoT" .. idx .. "Percent"] = 0
+						end
+					end	
+				end
+			end			
+		end
+	end
+
+end
+
+
 local function OnSystemUpdateBegin(hEvent)
 	CalculateCastChanges()
 	CalculateRanges()
+	CalculateHoTTrackers()
 end
 
 -- Setup Event Handlers

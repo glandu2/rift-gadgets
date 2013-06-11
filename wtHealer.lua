@@ -30,7 +30,7 @@ local defaultConfig =
 	
 	groups = 
 	{
-		orientation = "vertical",
+		orientation = "horizontal",
 		-- NOT IMPLEMENTED YET: collapseEmptyGroups = true,
 	},
 
@@ -401,7 +401,7 @@ local function ApplyConfig(config)
 		gadget.Frames.Background = UI.CreateFrame("Texture", "Background", gadget)
 		gadget.Frames.Background:SetLayer(10)
 		
-		local DEBUG = true
+		local DEBUG = false
 		
 		for groupId = 1, 20 do
 
@@ -578,7 +578,7 @@ local function ApplyConfig(config)
 			setupHotBar(uf, uf.hotbar02, config.hotbars.hotbar02)
 			setupHotBar(uf, uf.hotbar03, config.hotbars.hotbar03)
 						
-			if config.cells.orientation == "horizontal" then
+			if config.groups.orientation == "horizontal" then
 				uf:SetPoint("TOPLEFT", gadget, "TOPLEFT", cellPos(x, y) )
 			else
 				uf:SetPoint("TOPLEFT", gadget, "TOPLEFT", cellPos(y, x) )

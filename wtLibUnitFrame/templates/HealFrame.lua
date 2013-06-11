@@ -8,7 +8,7 @@ HealFrame.Configuration.RaidSuitable = true
 HealFrame.Configuration.FrameType = "Frame"
 HealFrame.Configuration.Width = 55
 HealFrame.Configuration.Height = 40
-HealFrame.Configuration.Resizable = { 55, 40, 300, 70 }
+HealFrame.Configuration.Resizable = { 55, 40, 500, 70 }
 
 ---------------------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ function HealFrame:Construct(options)
 				id="labelName", type="Label", parent="frameBackdrop", layer=20,
 				attach = {{ point="CENTER", element="barHealth", targetPoint="CENTER", offsetX=0, offsetY=0 }},
 				visibilityBinding="name",
-				text="{name}", maxLength=5, default="", fontSize=12, outline=true,
+				text="{name}", maxLength=8, default="", fontSize=12, outline=true,
 				colorBinding="callingColor",
 			},
 			{
@@ -155,6 +155,61 @@ function HealFrame:Construct(options)
 				acceptLowPriorityDebuffs=true, acceptMediumPriorityDebuffs=true, acceptHighPriorityDebuffs=true, acceptCriticalPriorityDebuffs=true,
 				growthDirection = "left_up"
 			},
+
+
+			{
+				id="hotTracker01", 
+				type="ProgressWheel", 
+				parent="frameBackdrop",
+				layer=100,
+				attach = 
+				{
+					{ point = "TOPRIGHT", element="frameBackdrop", targetPoint="TOPRIGHT", offsetX=0, offsetY=1 }
+				},
+				size=9,
+				color={r=1,g=1,b=1,a=1},
+				-- colorBinding="callingColor",
+				outline=true,
+				binding="HoT1Percent",
+				visibilityBinding="HoT1Percent",
+			},
+
+			{
+				id="hotTracker02", 
+				type="ProgressWheel", 
+				parent="frameBackdrop",
+				layer=100,
+				attach = 
+				{
+					{ point = "TOPRIGHT", element="hotTracker01", targetPoint="TOPLEFT", offsetX=3, offsetY=0 }
+				},
+				size=9,
+				backgroundColor={r=0,g=0,b=0,a=1},
+				color={r=1,g=1,b=0,a=1},
+				-- colorBinding="callingColor",
+				outline=true,
+				binding="HoT2Percent",
+				visibilityBinding="HoT2Percent",
+			},
+
+			{
+				id="hotTracker03", 
+				type="ProgressWheel", 
+				parent="frameBackdrop",
+				layer=100,
+				attach = 
+				{
+					{ point = "TOPRIGHT", element="hotTracker02", targetPoint="TOPLEFT", offsetX=3, offsetY=0 }
+				},
+				size=9,
+				color={r=0,g=1,b=1,a=1},
+				-- colorBinding="callingColor",
+				outline=true,
+				binding="HoT3Percent",
+				visibilityBinding="HoT3Percent",
+			},
+		
+
 		}
 	}
 

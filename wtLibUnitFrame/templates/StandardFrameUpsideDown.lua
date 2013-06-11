@@ -108,12 +108,14 @@ function StandardFrame:Construct(options)
 			text=" {health}/{healthMax}", default="",
 			--linkedHeightElement = "barHealth",
 			--linkedHeightScale = 0.5, 
+			outline=true,
 			fontSize=12
 		},
 		{
 			id="labelHealthR", type="Label", parent="barHealth", layer=20,
 			attach = {{ point="CENTERRIGHT", element="barHealth", targetPoint="CENTERRIGHT" }},
 			visibilityBinding="health",
+			outline=true,
 			text="{healthPercent}%", default="", fontSize=12
 		},
 		{
@@ -182,13 +184,15 @@ function StandardFrame:Construct(options)
 			id="labelresource", type="Label", parent="barResource", layer=20,
 			attach = {{ point="CENTERLEFT", element="barResource", targetPoint="CENTERLEFT" }},
 			visibilityBinding="resource",
-			text=" {resource}/{resourceMax}", default="", fontSize=10
+			text=" {resource}/{resourceMax}", default="", fontSize=10,
+			outline=true,
 		},
 		{
 			id="labelresourceR", type="Label", parent="barResource", layer=20,
 			attach = {{ point="CENTERRIGHT", element="barResource", targetPoint="CENTERRIGHT" }},
 			visibilityBinding="resource",
-			text="{resourcePercent}%", default="", fontSize=10
+			text="{resourcePercent}%", default="", fontSize=10,
+			outline=true,			
 		},
 		{
 			id="labelDetails", type="Label", parent="frameBackdrop", layer=20,
@@ -287,7 +291,7 @@ function StandardFrame:Construct(options)
 			borderColor={r=1,g=0,b=0,a=1},
 			sweepOverlay=true,
 		},
-	}
+}
 	
 	for idx,element in ipairs(elements) do
 		local showElement = true

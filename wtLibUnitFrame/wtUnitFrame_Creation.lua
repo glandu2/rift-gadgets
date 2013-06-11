@@ -79,13 +79,13 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	
 	local frames = {}
 	
-	local _debug = false
+	local _debug = true
 	
 	
 	if not _debug then
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, sequence[1], configuration)
 	else
-		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "focus", configuration)
+		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
 		--local debugDesc = UI.CreateFrame("Text", "TXT", WT.Context)
 		--debugDesc:SetText(sequence[1])
 		--debugDesc:SetLayer(500)
@@ -100,8 +100,12 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		if not _debug then
 			frames[i] = WT.UnitFrame.CreateFromTemplate(template, sequence[i], configuration)
 		else
-			if i % 2 == 0 then
+			if i <= 5 then
+				frames[i] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
+			elseif i <= 10 then
 				frames[i] = WT.UnitFrame.CreateFromTemplate(template, "player.target", configuration)
+			elseif i <= 15 then
+				frames[i] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
 			else
 				frames[i] = WT.UnitFrame.CreateFromTemplate(template, "focus", configuration)
 			end

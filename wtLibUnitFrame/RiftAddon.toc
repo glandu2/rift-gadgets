@@ -41,7 +41,7 @@ RunOnStartup =
   "templates/ManaOrb.lua",
   "templates/OctanusRaidFrame.lua",
   "templates/HealFrame.lua",
-
+  
   "templates/jnhOrbs.lua",
   "templates/jnhOrbsReversed.lua",
 }

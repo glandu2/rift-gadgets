@@ -63,9 +63,6 @@ function wtLabel:Construct()
 	self.SetLabelText = 
 		function(frame, text)
 			self:SetText(text)
-			if self.outline then
-				for idx = 1,4 do self.outline[idx]:SetText(text) end
-			end
 		end
 	
 	unitFrame:CreateTokenBinding(config.text, self, self.SetLabelText, config.default or "", self.maxLength)

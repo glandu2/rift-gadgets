@@ -617,22 +617,12 @@ local function OnUnitDetailZone(hEvent, unitsValue)
 end
 
 local function OnUnitDetailCoord(hEvent, xValues, yValues, zValues)
-	local maps = {}	
+	--local maps = {}	
 	for unitId,value in pairs(xValues) do
-		maps[unitId] = {}
-		table.insert(maps[unitId], value)
-	end
-	for unitId,value in pairs(yValues) do
-		table.insert(maps[unitId], value)
-	end
-	for unitId,value in pairs(zValues) do
-		table.insert(maps[unitId], value)
-	end
-	for unitId,map in pairs(maps) do
-		SetProperty(unitId, "coord", {map[1],map[2],map[3]}) -- create an additional property to allow single property position tracking
-		SetProperty(unitId, "coordX", map[1])
-		SetProperty(unitId, "coordY", map[2])
-		SetProperty(unitId, "coordZ", map[3])
+		SetProperty(unitId, "coord", {xValues[unitId], yValues[unitId], zValues[unitId]}) -- map[1],map[2],map[3]}) -- create an additional property to allow single property position tracking
+--		SetProperty(unitId, "coordX", xValues[unitId])
+--		SetProperty(unitId, "coordY", yValues[unitId])
+--		SetProperty(unitId, "coordZ", zValues[unitId])
 	end
 end
 

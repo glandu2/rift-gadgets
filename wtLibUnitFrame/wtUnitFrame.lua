@@ -334,7 +334,6 @@ end
 
 
 local function OnUnitPropertySet(unit, property, newValue, oldValue)
-	WT.Log.Verbose("PropertySet binding search: " .. tostring(unit.id) .. ":" .. property)
 	-- Execute the bindings for any UnitFrame that is currently linked to this unit
 	for idx, unitFrame in ipairs(WT.UnitFrames) do
 		if unitFrame.Unit and unitFrame.Unit.id == unit.id and unitFrame.Bindings[property] then

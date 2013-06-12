@@ -40,11 +40,11 @@ end
 
 local function PositionContent(self)
   self.content:SetPoint("TOPLEFT", self, "TOPLEFT", 0, -self.offset)
+  local width = self:GetWidth()
   if self.scrollbar:GetVisible() then
-    self.content:SetPoint("TOPRIGHT", self, "TOPRIGHT", -self.scrollbar:GetWidth(), -self.offset)
-  else
-    self.content:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, -self.offset)
+    width = width - self.scrollbar:GetWidth()
   end
+  self.content:SetWidth(width)
 end
 
 local function PositionScrollbar(self)

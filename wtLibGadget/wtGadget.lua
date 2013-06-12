@@ -405,7 +405,6 @@ function WT.Gadget:DragMove()
 		self.frame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
 		wtxGadgets[self.gadgetId].xpos = x
 		wtxGadgets[self.gadgetId].ypos = y
-		WT.Log.Verbose("DragMove " .. x .. "," .. y)
 			
 	end
 end

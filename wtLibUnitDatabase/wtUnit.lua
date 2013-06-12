@@ -78,7 +78,6 @@ end
 function WT.Unit.__newindex(table, property, value)
 	local oldValue = table._shadow[property]
 	if oldValue ~= value then
-		WT.Log.Verbose("Unit Property Set " .. tostring(table.id) .. " " .. tostring(property) .. " = " .. tostring(value))
 		table._shadow[property] = value
 		WT.Event.Trigger.UnitPropertySet(table, property, value, oldValue)
 		

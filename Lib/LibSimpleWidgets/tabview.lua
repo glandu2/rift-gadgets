@@ -2,18 +2,6 @@
 
 local LSW_SetBorder = Library.LibSimpleWidgets.SetBorder
 
-local INACTIVE_TAB_R = 0.12
-local INACTIVE_TAB_G = 0.11
-local INACTIVE_TAB_B = 0.12
-local INACTIVE_BORDER_R = 0.23
-local INACTIVE_BORDER_G = 0.22
-local INACTIVE_BORDER_B = 0.23
-local ACTIVE_TAB_R = 0.17
-local ACTIVE_TAB_G = 0.17
-local ACTIVE_TAB_B = 0.17
-local ACTIVE_BORDER_R = 0.47
-local ACTIVE_BORDER_G = 0.48
-local ACTIVE_BORDER_B = 0.40
 local TAB_BORDER_WIDTH = 1
 local TAB_GAP = 4
 
@@ -61,11 +49,11 @@ local function AddTab(self, label, frame)
 
   -- Setup tab background and border
   tab.tabFrame = UI.CreateFrame("Frame", self:GetName().."Tab"..tostring(index), self)
-  tab.tabFrame:SetBackgroundColor(INACTIVE_TAB_R, INACTIVE_TAB_G, INACTIVE_TAB_B, 1)
+  tab.tabFrame:SetBackgroundColor(unpack(self.inactiveTabBackgroundColor))
   tab.tabFrame:SetHeight(25)
   tab.tabFrame:SetLayer(2)
-  LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, 0, 0, 0, 0, self.tabConnectedSide)
-  LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, INACTIVE_BORDER_R, INACTIVE_BORDER_G, INACTIVE_BORDER_B, 1, self.tabOtherSides)
+  local r, g, b, a = unpack(self.inactiveTabBorderColor)
+  LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, r, g, b, a, self.tabOtherSides)
 
   -- Setup label
   tab.labelFrame = UI.CreateFrame("Text", self:GetName().."Label"..tostring(index), tab.tabFrame)
@@ -207,23 +195,23 @@ local function SetActiveTab(self, index)
     end
     if i == index then
       tab.active = true
-      tab.tabFrame:SetBackgroundColor(ACTIVE_TAB_R, ACTIVE_TAB_G, ACTIVE_TAB_B, 1)
+      tab.tabFrame:SetBackgroundColor(unpack(self.activeTabBackgroundColor))
       tab.tabFrame:SetWidth(CalcTabWidth(self, tab) + self.activeTabWidthOffset)
       tab.tabFrame:SetHeight(25 + self.activeTabHeightOffset)
       tab.tabFrame:SetLayer(3)
-      LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, ACTIVE_TAB_R, ACTIVE_TAB_R, ACTIVE_TAB_R, 1, self.tabConnectedSide)
-      LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, ACTIVE_BORDER_R, ACTIVE_BORDER_G, ACTIVE_BORDER_B, 1, self.tabOtherSides)
+      local r, g, b, a = unpack(self.activeTabBorderColor)
+      LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, r, g, b, a, self.tabOtherSides)
       tab.labelFrame:SetFontSize(self.fontSize)
       tab.labelFrame:SetFontColor(unpack(self.activeFontColor))
       tab.frame:SetVisible(true)
     else
       tab.active = false
-      tab.tabFrame:SetBackgroundColor(INACTIVE_TAB_R, INACTIVE_TAB_G, INACTIVE_TAB_B, 1)
+      tab.tabFrame:SetBackgroundColor(unpack(self.inactiveTabBackgroundColor))
       tab.tabFrame:SetWidth(CalcTabWidth(self, tab))
       tab.tabFrame:SetHeight(25)
       tab.tabFrame:SetLayer(2)
-      LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, 0, 0, 0, 0, self.tabConnectedSide)
-      LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, INACTIVE_BORDER_R, INACTIVE_BORDER_R, INACTIVE_BORDER_R, 1, self.tabOtherSides)
+      local r, g, b, a = unpack(self.inactiveTabBorderColor)
+      LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, r, g, b, a, self.tabOtherSides)
       tab.labelFrame:SetFontSize(self.fontSize)
       tab.labelFrame:SetFontColor(unpack(self.inactiveFontColor))
       tab.frame:SetVisible(false)
@@ -336,14 +324,14 @@ local function SetTabPosition(self, pos)
         tab.tabFrame:SetWidth(CalcTabWidth(self, tab) + self.activeTabWidthOffset)
         tab.tabFrame:SetHeight(25 + self.activeTabHeightOffset)
         tab.tabFrame:SetLayer(3)
-        LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, ACTIVE_TAB_R, ACTIVE_TAB_R, ACTIVE_TAB_R, 1, self.tabConnectedSide)
-        LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, ACTIVE_BORDER_R, ACTIVE_BORDER_G, ACTIVE_BORDER_B, 1, self.tabOtherSides)
+        local r, g, b, a = unpack(self.activeTabBorderColor)
+        LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, r, g, b, a, self.tabOtherSides)
       else
         tab.tabFrame:SetWidth(CalcTabWidth(self, tab))
         tab.tabFrame:SetHeight(25)
         tab.tabFrame:SetLayer(2)
-        LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, 0, 0, 0, 0, self.tabConnectedSide)
-        LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, INACTIVE_BORDER_R, INACTIVE_BORDER_R, INACTIVE_BORDER_R, 1, self.tabOtherSides)
+        local r, g, b, a = unpack(self.inactiveTabBorderColor)
+        LSW_SetBorder(tab.tabFrame, TAB_BORDER_WIDTH, r, g, b, a, self.tabOtherSides)
       end
 
       if i == 1 then
@@ -432,6 +420,79 @@ local function SetHighlightFontColor(self, r, g, b, a)
   self.highlightFontColor = {r, g, b, a}
 end
 
+local function GetTabContentBackgroundColor(self)
+  return self.tabContent:GetBackgroundColor()
+end
+
+local function SetTabContentBackgroundColor(self, r, g, b, a)
+  self.tabContent:SetBackgroundColor(r, g, b, a)
+end
+
+local function GetTabContentBorderColor(self)
+  return unpack(self.tabContentBorderColor)
+end
+
+local function SetTabContentBorderColor(self, r, g, b, a)
+  self.tabContentBorderColor = {r, g, b, a }
+  LSW_SetBorder(self.tabContent, 1, r, g, b, a)
+end
+
+local function GetActiveTabBackgroundColor(self)
+  return unpack(self.activeTabBackgroundColor)
+end
+
+local function SetActiveTabBackgroundColor(self, r, g, b, a)
+  self.activeTabBackgroundColor = {r, g, b, a }
+
+  -- reset active tab to apply new color
+  local i = self:GetActiveTab()
+  if i ~= nil then
+    self:SetActiveTab(i)
+  end
+end
+
+local function GetActiveTabBorderColor(self)
+  return unpack(self.activeTabBorderColor)
+end
+
+local function SetActiveTabBorderColor(self, r, g, b, a)
+  self.activeTabBorderColor = {r, g, b, a}
+
+  -- reset active tab to apply new color
+  local i = self:GetActiveTab()
+  if i ~= nil then
+    self:SetActiveTab(i)
+  end
+end
+
+local function GetInactiveTabBackgroundColor(self)
+  return unpack(self.inactiveTabBackgroundColor)
+end
+
+local function SetInactiveTabBackgroundColor(self, r, g, b, a)
+  self.inactiveTabBackgroundColor = {r, g, b, a}
+
+  -- reset active tab to apply new color
+  local i = self:GetActiveTab()
+  if i ~= nil then
+    self:SetActiveTab(i)
+  end
+end
+
+local function GetInactiveTabBorderColor(self)
+  return unpack(self.inactiveTabBorderColor)
+end
+
+local function SetInactiveTabBorderColor(self, r, g, b, a)
+  self.inactiveTabBorderColor = {r, g, b, a}
+
+  -- reset active tab to apply new color
+  local i = self:GetActiveTab()
+  if i ~= nil then
+    self:SetActiveTab(i)
+  end
+end
+
 
 -- Constructor Function
 
@@ -443,12 +504,18 @@ function Library.LibSimpleWidgets.TabView(name, parent)
   widget.inactiveFontColor = {0.66, 0.65, 0.56, 1}
   widget.activeFontColor = {0.86, 0.81, 0.63, 1}
   widget.highlightFontColor = {1, 1, 1, 1}
+  widget.tabContentBorderColor = {0.27, 0.27, 0.27, 1}
+  widget.activeTabBackgroundColor = {0.17, 0.17, 0.17, 1}
+  widget.activeTabBorderColor = {0.47, 0.48, 0.40, 1}
+  widget.inactiveTabBackgroundColor = {0.12, 0.11, 0.12, 1}
+  widget.inactiveTabBorderColor = {0.23, 0.22, 0.23, 1}
   widget.minimumTabWidth = 100
   widget.tabs = {}
 
-  widget.tabContent:SetBackgroundColor(ACTIVE_TAB_R, ACTIVE_TAB_G, ACTIVE_TAB_B, 1)
+  widget.tabContent:SetBackgroundColor(0.17, 0.17, 0.17, 1)
   widget.tabContent:SetLayer(1)
-  LSW_SetBorder(widget.tabContent, 1, 0.27, 0.27, 0.27, 1)
+  local r, g, b, a = unpack(widget.tabContentBorderColor)
+  LSW_SetBorder(widget.tabContent, 1, r, g, b, a)
 
   SetTabPosition(widget, "bottom")
 
@@ -468,6 +535,18 @@ function Library.LibSimpleWidgets.TabView(name, parent)
   widget.SetActiveFontColor = SetActiveFontColor
   widget.GetHighlightFontColor = GetHighlightFontColor
   widget.SetHighlightFontColor = SetHighlightFontColor
+  widget.GetTabContentBackgroundColor = GetTabContentBackgroundColor
+  widget.SetTabContentBackgroundColor = SetTabContentBackgroundColor
+  widget.GetTabContentBorderColor = GetTabContentBorderColor
+  widget.SetTabContentBorderColor = SetTabContentBorderColor
+  widget.GetActiveTabBackgroundColor = GetActiveTabBackgroundColor
+  widget.SetActiveTabBackgroundColor = SetActiveTabBackgroundColor
+  widget.GetActiveTabBorderColor = GetActiveTabBorderColor
+  widget.SetActiveTabBorderColor = SetActiveTabBorderColor
+  widget.GetInactiveTabBackgroundColor = GetInactiveTabBackgroundColor
+  widget.SetInactiveTabBackgroundColor = SetInactiveTabBackgroundColor
+  widget.GetInactiveTabBorderColor = GetInactiveTabBorderColor
+  widget.SetInactiveTabBorderColor = SetInactiveTabBorderColor
 
   Library.LibSimpleWidgets.EventProxy(widget, { "TabSelect" })
 

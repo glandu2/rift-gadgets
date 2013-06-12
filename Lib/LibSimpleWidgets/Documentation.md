@@ -1,6 +1,7 @@
 LibSimpleWidgets is a library which provides a set of simple widgets not provided by the official Rift API. It integrates into the UI.CreateFrame function, adding several new frame types:
 
 * SimpleCheckbox (checkbox with a label)
+* SimpleGrid (grid of widgets)
 * SimpleList (list of selectable strings)
 * SimpleRadioButton (radio button with a label)
 * SimpleScrollView (wraps any fixed-height frame)
@@ -48,6 +49,61 @@ Sets the position of the label, relative to the checkbox. This can be: "left" or
 
 **ResizeToFit()**  
 Resizes the frame to fit the label.
+
+
+Frame Type: SimpleGrid
+======================
+
+SimpleGrid displays a grid of widgets laid out in rows and columns. It supports the following standard functions: GetEnabled, SetEnabled.
+
+The grid has configurable padding between cells and a margin around the edge. Each row's height is determined by the widget with the largest height in that row, with other widgets having their height increased to fit. Each column's width is determined by the widget with the largest width in that column. Specific columns can have their width overridden. By default, cell width is automatically fitted to the column width but columns can be set to center, left or right justification instead, in which case the widget's natural width (as determined by ClearWidth())  is used and the widget is shifted to the center, left or right of the column.
+
+It's recommended that you use widgets with similar heights across all columns and rows, to avoid the grid looking "uneven".
+
+Functions
+---------
+
+**SetBorder(width, r, g, b, a)**  
+Sets a solid border of a specific width and color.
+
+**Layout()**  
+Recalculates the layout of the grid, taking into account new cell widths and heights.
+
+**AddRow(row)**  
+Adds a row to the bottom of the grid. *row* must be an indexed table of Rift Frames or widgets from this library.
+
+**InsertRow(row, index)**  
+Inserts a row at *index*. The row currently at *index* and all the rows below that are shifted down.
+
+**RemoveRow(index)**  
+Removes the row at *index*. Rows below that are shifted up. *index* may also be the exact same row table object used to originally add the row to the grid.
+
+**GetRows()**  
+Returns a table of all the rows in the grid.
+
+**SetRows(rows)**  
+Sets all the rows in the grid, replacing any existing rows. *rows* must be an indexed table of row tables, as described in *AddRow*.
+
+**RemoveAllRows()**  
+Removes all the rows from the grid.
+
+**SetColumnWidth(index, width)**  
+Sets the width of the column at *index*.
+
+**ClearColumnWidth(index)**  
+Clears a previously set width for the column at *index*. The column width is automatically calculated as described in the introduction.
+
+**SetColumnJustification(index, justification)**  
+Sets the justification of the column at *index*. *justification* may be one of "fit", "left", "right" or "center". "fit" means the default behaviour of resizing the widget's width to fit the column width. All other settings use the the widget's natural width. "left" pushes it against the left edge of the column. "right" pushes it against the right edge of the column. "center" positions the widget in the center of the column.
+
+**ClearColumnJustification(index)**  
+Clears a previously set justification for the column at *index*. The default behaviour of "fit" is restored for cells in that column.
+
+**SetCellPadding(padding)**  
+Sets the width in pixels of the gap between cells. By default this is 0.
+
+**SetMargin(margin)**  
+Sets the width in pixels of the gap between the cells and the edge of the SimpleGrid frame. By default this is 0.
 
 
 Frame Type: SimpleList
@@ -392,6 +448,43 @@ Gets the font color for highlighted tabs. Returns red, green. blue, alpha.
 **SetHighlightFontColor(r, g, b, a)**  
 Sets the font color for highlighted tabs.
 
+**GetTabContentBackgroundColor()**  
+Gets the background color for the tab contents. Returns red, green. blue, alpha.
+
+**SetTabContentBackgroundColor(r, g, b, a)**  
+Sets the background color for the tab contents.
+
+**GetTabContentBorderColor()**  
+Gets the border color for the tab contents. Returns red, green. blue, alpha.
+
+**SetTabContentBorderColor(r, g, b, a)**  
+Sets the border color for the tab contents.
+
+**GetActiveTabBackgroundColor()**  
+Gets the background color for the active tab. Returns red, green. blue, alpha.
+
+**SetActiveTabBackgroundColor(r, g, b, a)**  
+Sets the background color for the active tab.
+
+**GetActiveTabBorderColor()**  
+Gets the border color for the active tab. Returns red, green. blue, alpha.
+
+**SetActiveTabBorderColor(r, g, b, a)**  
+Sets the border color for the active tab.
+
+**GetInactiveTabBackgroundColor()**  
+Gets the background color for inactive tabs. Returns red, green. blue, alpha.
+
+**SetInactiveTabBackgroundColor(r, g, b, a)**  
+Sets the background color for inactive tabs.
+
+**GetInactiveTabBorderColor()**  
+Gets the border color for inactive tabs. Returns red, green. blue, alpha.
+
+**SetInactiveTabBorderColor(r, g, b, a)**  
+Sets the border color for inactive tabs.
+
+
 Events
 ------
 
@@ -712,3 +805,28 @@ RadioButtonGroup
     radioButtonGroup:AddRadioButton(radioButton1)
     radioButtonGroup:AddRadioButton(radioButton2)
     radioButtonGroup:AddRadioButton(radioButton3)
+
+Grid
+----
+
+    local grid = UI.CreateFrame("SimpleGrid", "MyGrid", parent)
+    grid:SetPoint("TOPLEFT", parent, "TOPLEFT")
+    grid:SetWidth(parent:GetWidth())
+    grid:SetHeight(parent:GetWidth() * 0.75)
+    grid:SetBorder(1, 1, 1, 1, 1)
+    grid:SetMargin(1)
+    grid:SetCellPadding(1)
+    
+    local cell_1_1 = UI.CreateFrame("Text", "Cell_1_1", grid)
+    cell:SetText("Cell_1_1")
+    local cell_1_2 = UI.CreateFrame("Text", "Cell_1_2", grid)
+    cell:SetText("Cell_1_2")
+    local row1 = { cell_1_1, cell_1_2 }
+    grid:AddRow(row1)
+    
+    local cell_2_1 = UI.CreateFrame("Text", "Cell_2_1", grid)
+    cell:SetText("Cell_2_1")
+    local cell_2_2 = UI.CreateFrame("Text", "Cell_2_2", grid)
+    cell:SetText("Cell_2_2")
+    local row2 = { cell_2_1, cell_2_2 }
+    grid:AddRow(row2)

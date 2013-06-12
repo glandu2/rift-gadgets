@@ -778,6 +778,17 @@ local function SetSelectedValues(self, values, silent)
   self:SetSelectedIndices(indices, silent)
 end
 
+local function GetMaxWidth(self)
+  local maxWidth = 0
+  local f = AcquireItemFrame(self)
+  for i, item in ipairs(self.items) do
+    f:SetText(item)
+    maxWidth = math.max(maxWidth, f:GetWidth())
+  end
+  ReleaseItemFrame(self, f)
+  return maxWidth
+end
+
 
 -- Constructor Functions
 
@@ -870,6 +881,7 @@ function Library.LibSimpleWidgets.ScrollList(name, parent)
   widget.SetSelectedItems = SetSelectedItems
   widget.GetSelectedValues = GetSelectedValues
   widget.SetSelectedValues = SetSelectedValues
+  widget.GetMaxWidth = GetMaxWidth
 
   Library.LibSimpleWidgets.EventProxy(widget, {"ItemClick", "ItemSelect", "SelectionChange"})
 

@@ -12,7 +12,7 @@ Description = {
 
 Author = "Gordon Tyler"
 Website = "http://www.riftui.com/downloads/info108-LibSimpleWidgets.html"
-Version = "1.13.4"
+Version = "1.14.1"
 Email = "gordon@doxxx.net"
 Environment = "2.2"
 
@@ -32,6 +32,7 @@ RunOnStartup = {
   "radiobutton.lua",
   "radiobuttongroup.lua",
   "scrolllist.lua",
+  "grid.lua",
   "uicreateframe.lua",
   "layout.lua",
 }

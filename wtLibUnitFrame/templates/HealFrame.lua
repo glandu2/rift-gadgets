@@ -9,7 +9,7 @@ HealFrame.Configuration.FrameType = "Frame"
 HealFrame.Configuration.Width = 55
 HealFrame.Configuration.Height = 40
 HealFrame.Configuration.Resizable = { 55, 40, 500, 70 }
-HealFrame.Configuration.SupportsHoTTracking = true
+-- HealFrame.Configuration.SupportsHoTTracking = true
 
 ---------------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ function HealFrame:Construct(options)
 				id="labelName", type="Label", parent="frameBackdrop", layer=20,
 				attach = {{ point="CENTER", element="barHealth", targetPoint="CENTER", offsetX=0, offsetY=0 }},
 				visibilityBinding="name",
-				text="{name}", maxLength=8, default="", fontSize=12, outline=true,
+				text="{name}", maxLength=8, default="", fontSize=13, outline=true,
 				colorBinding="callingColor",
 			},
 			{
@@ -158,6 +158,7 @@ function HealFrame:Construct(options)
 			},
 
 
+			--[[
 			{
 				id="hotTracker01", 
 				type="ProgressWheel", 
@@ -212,7 +213,7 @@ function HealFrame:Construct(options)
 				binding="HoT3Percent",
 				visibilityBinding="HoT3Percent",
 			},
-		
+			--]]
 
 		}
 	}
@@ -226,6 +227,22 @@ function HealFrame:Construct(options)
 			self:CreateElement(element)
 		end
 	end
+	
+	self:EventAttach(
+		Event.UI.Layout.Size,
+		function(el)
+			local newWidth = self:GetWidth()
+			local newHeight = self:GetHeight()
+			local fracWidth = newWidth / HealFrame.Configuration.Width
+			local fracHeight = newHeight / HealFrame.Configuration.Height
+			local fracMin = math.min(fracWidth, fracHeight)
+			local fracMax = math.max(fracWidth, fracHeight)
+			local labName = self.Elements.labelName
+			local origFontSize = el.fontSize or 10
+			local newFontSize = math.ceil(origFontSize * fracMin)
+			labName:SetFontSize(newFontSize)
+		end,
+		"LayoutSize")
 	
 	self:SetSecureMode("restricted")
 	self:SetMouseoverUnit(self.UnitSpec)

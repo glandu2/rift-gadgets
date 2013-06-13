@@ -79,7 +79,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	
 	local frames = {}
 	
-	local _debug = true
+	local _debug = false
 	
 	
 	if not _debug then
@@ -207,7 +207,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	
 	raidFrameGadgets[wrapper] = true
 	
-	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 2, (bottom - top + 1) * 2,  } }
+	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 4, (bottom - top + 1) * 4,  } }
 end
 
 

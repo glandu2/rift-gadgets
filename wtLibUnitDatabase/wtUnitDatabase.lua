@@ -148,7 +148,7 @@ local function OnBuffAdd(hEvent, unitId, buffs)
 		buff.unitId = unitId
 	
 		-- We learn all of the buffs the player is capable of casting in their current role, and store them
-		if buff.caster == WT.Player.id then
+		if buff.caster == WT.Player.id and buff.type then
 			local roleId = Inspect.TEMPORARY.Role()
 			if not WT.PlayerBuffs[roleId] then
 				WT.PlayerBuffs[roleId] = {}

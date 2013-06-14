@@ -78,6 +78,7 @@ function WT.UnitFrame:CreateTokenBinding(tokenString, bindToObject, bindToMethod
 			if type(tokenValue) == "number" then 
 				tokenValue = NumberFormat(tokenValue)
 			end
+			if not tokenValue then tokenValue = "" end
 			text = text:gsub("{" .. token .. "}", tokenValue)
 		end
 		if maxLength and (text:len() > maxLength) then

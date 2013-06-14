@@ -114,18 +114,21 @@ local function TriggerBuffUpdates(unitId, changes)
 	-- Buffs have changed on the unit, update the HoT tracking data	
 	-- HoT tracking is restricted to friendly units to save processing
 	if unit.relation == "friendly" then
-		local htrack = hotTrackers["role" .. Inspect.TEMPORARY.Role()]
-		if not htrack then
-			for idx = 1,numHotTrackers do
-				unit["HoT" .. idx .. "Percent"] = nil
-			end
-		else
-			unit.HoTs = {}
-			for idx, hotName in ipairs(htrack) do
-				unit.HoTs[idx] = false
-				for buffId, buff in pairs(unit.Buffs) do
-					if buff.name == hotName then
-						unit.HoTs[idx] = buff
+		local role = Inspect.TEMPORARY.Role()
+		if role then 
+			local htrack = hotTrackers["role" .. role]
+			if not htrack then
+				for idx = 1,numHotTrackers do
+					unit["HoT" .. idx .. "Percent"] = nil
+				end
+			else
+				unit.HoTs = {}
+				for idx, hotName in ipairs(htrack) do
+					unit.HoTs[idx] = false
+					for buffId, buff in pairs(unit.Buffs) do
+						if buff.name == hotName then
+							unit.HoTs[idx] = buff
+						end
 					end
 				end
 			end

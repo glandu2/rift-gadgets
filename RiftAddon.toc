@@ -21,7 +21,7 @@ Email = "wildtide@wildtide.net"
 
 Version = "@project-version@"
 
-Environment = "1.10"
+Environment = "2.3"
 
 RunOnStartup = 
 {

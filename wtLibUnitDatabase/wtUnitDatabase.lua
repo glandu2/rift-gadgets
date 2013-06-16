@@ -265,7 +265,7 @@ local function CalculateCastChanges()
 				function() 
 					percent = (1 - (castbar.remaining / castbar.duration)) * 100 
 					if castbar.channeled then percent = 100 - percent end
-					unit.castTime = string.format("%.2f/%.2fs", castbar.duration - castbar.remaining, castbar.duration)
+					unit.castTime = string.format("%.1f/%.1fs", castbar.duration - castbar.remaining, castbar.duration)
 				end)
 			unit.castPercent = percent
 		end

@@ -55,8 +55,8 @@ local function UpdatePanel(panel, showAll)
 		
 		local notor = detail.notoriety - 23000
 		
-		local notorNames = { "Neutral", "Friendly", "Decorated", "Honored", "Revered", "Glorified" }
-		local notorPoints = { 3000, 10000, 20000, 35000, 60000, 120000 }
+		local notorNames = { "Neutral", "Friendly", "Decorated", "Honored", "Revered", "Glorified", "Venerated" }
+		local notorPoints = { 3000, 10000, 20000, 35000, 60000, 90000, 90000 }
 		
 		local notorIdx = 0
 		for idx, name in ipairs(notorNames) do

@@ -153,12 +153,14 @@ local function OnBuffAdd(hEvent, unitId, buffs)
 		-- We learn all of the buffs the player is capable of casting in their current role, and store them
 		if buff.caster == WT.Player.id and buff.type then
 			local roleId = Inspect.TEMPORARY.Role()
-			if not WT.PlayerBuffs[roleId] then
-				WT.PlayerBuffs[roleId] = {}
-			end
-			if not WT.PlayerBuffs[roleId][buff.type] then
-				WT.PlayerBuffs[roleId][buff.type] = buff
-				WT.Log.Info("Learned player buff for role " .. roleId .. ": " .. buff.name)
+			if roleId then
+				if not WT.PlayerBuffs[roleId] then
+					WT.PlayerBuffs[roleId] = {}
+				end
+				if not WT.PlayerBuffs[roleId][buff.type] then
+					WT.PlayerBuffs[roleId][buff.type] = buff
+					WT.Log.Info("Learned player buff for role " .. roleId .. ": " .. buff.name)
+				end
 			end		
 		end
 		-- End Buff Learning Logic

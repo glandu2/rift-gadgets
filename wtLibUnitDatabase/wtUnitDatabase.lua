@@ -98,6 +98,12 @@ end
 local numHotTrackers = 3
 local hotTrackers =
 {
+	role3 = 
+	{
+		"Motif of Bravery",
+		"Motif of Tenacity",
+		"Motif of Regeneration",
+	},
 	role6 = 
 	{
 		"Soothing Stream",

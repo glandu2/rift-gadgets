@@ -6,9 +6,10 @@ local HealFrame = WT.UnitFrame:Template("Heal Frame")
 HealFrame.Configuration.Name = "Heal Frame"
 HealFrame.Configuration.RaidSuitable = true
 HealFrame.Configuration.FrameType = "Frame"
-HealFrame.Configuration.Width = 55
+HealFrame.Configuration.Width = 90
 HealFrame.Configuration.Height = 40
 HealFrame.Configuration.Resizable = { 55, 40, 500, 70 }
+HealFrame.Configuration.SupportsHoTPanel = true
 -- HealFrame.Configuration.SupportsHoTTracking = true
 
 ---------------------------------------------------------------------------------
@@ -100,7 +101,7 @@ function HealFrame:Construct(options)
 				id="labelName", type="Label", parent="frameBackdrop", layer=20,
 				attach = {{ point="CENTER", element="barHealth", targetPoint="CENTER", offsetX=0, offsetY=0 }},
 				visibilityBinding="name",
-				text="{name}", maxLength=8, default="", fontSize=13, outline=true,
+				text="{name}", maxLength=8, default="", fontSize=14, outline=true,
 				colorBinding="callingColor",
 			},
 			{
@@ -151,69 +152,18 @@ function HealFrame:Construct(options)
 				attach = {{ point="BOTTOMRIGHT", element="frameBackdrop", targetPoint="BOTTOMRIGHT", offsetX=-1, offsetY=-1 }},
 				--visibilityBinding="id",
 				-- Type Specific Element Configuration
-				rows=1, cols=3, iconSize=16, iconSpacing=1, borderThickness=1, 
-				acceptLowPriorityBuffs=false, acceptMediumPriorityBuffs=false, acceptHighPriorityBuffs=false, acceptCriticalPriorityBuffs=false,
-				acceptLowPriorityDebuffs=true, acceptMediumPriorityDebuffs=true, acceptHighPriorityDebuffs=true, acceptCriticalPriorityDebuffs=true,
+				rows=1, cols=3, iconSize=16, iconSpacing=1, borderThickness=1,
+				auraType="debuff", 
 				growthDirection = "left_up"
 			},
 
-
-			--[[
 			{
-				id="hotTracker01", 
-				type="ProgressWheel", 
-				semantic="HoTTracker",
-				parent="frameBackdrop",
-				layer=100,
-				attach = 
-				{
-					{ point = "TOPRIGHT", element="frameBackdrop", targetPoint="TOPRIGHT", offsetX=0, offsetY=1 }
-				},
-				size=9,
-				color={r=1,g=1,b=1,a=1},
-				-- colorBinding="callingColor",
-				outline=true,
-				binding="HoT1Percent",
-				visibilityBinding="HoT1Percent",
+				id="buffPanelHoTs", type="BuffPanel", semantic="HoTPanel", parent="frameBackdrop", layer=30,
+				attach = {{ point="TOPRIGHT", element="frameBackdrop", targetPoint="TOPRIGHT", offsetX=-1, offsetY=1 }},
+				rows=1, cols=6, iconSize=14, iconSpacing=0, borderThickness=1,
+				auraType="hot",selfCast=true, 
+				growthDirection = "left_up",
 			},
-
-			{
-				id="hotTracker02", 
-				type="ProgressWheel", 
-				semantic="HoTTracker",
-				parent="frameBackdrop",
-				layer=100,
-				attach = 
-				{
-					{ point = "TOPRIGHT", element="hotTracker01", targetPoint="TOPLEFT", offsetX=3, offsetY=0 }
-				},
-				size=9,
-				backgroundColor={r=0,g=0,b=0,a=1},
-				color={r=1,g=1,b=0,a=1},
-				-- colorBinding="callingColor",
-				outline=true,
-				binding="HoT2Percent",
-				visibilityBinding="HoT2Percent",
-			},
-
-			{
-				id="hotTracker03", 
-				type="ProgressWheel", 
-				semantic="HoTTracker",
-				parent="frameBackdrop",
-				layer=100,
-				attach = 
-				{
-					{ point = "TOPRIGHT", element="hotTracker02", targetPoint="TOPLEFT", offsetX=3, offsetY=0 }
-				},
-				size=9,
-				color={r=0,g=1,b=1,a=1},
-				-- colorBinding="callingColor",
-				outline=true,
-				binding="HoT3Percent",
-				visibilityBinding="HoT3Percent",
-			},
-			--]]
 
 		}
 	}
@@ -222,6 +172,8 @@ function HealFrame:Construct(options)
 		if not options.showAbsorb and element.id == "barAbsorb" then 
 			-- showElement = false
 		elseif element.semantic == "HoTTracker" and not options.showHoTTrackers then
+			-- showElement = false	
+		elseif element.semantic == "HoTPanel" and not options.showHoTPanel then
 			-- showElement = false	
 		else 
 			self:CreateElement(element)
@@ -238,7 +190,7 @@ function HealFrame:Construct(options)
 			local fracMin = math.min(fracWidth, fracHeight)
 			local fracMax = math.max(fracWidth, fracHeight)
 			local labName = self.Elements.labelName
-			local origFontSize = el.fontSize or 10
+			local origFontSize = el.fontSize or 11
 			local newFontSize = math.ceil(origFontSize * fracMin)
 			labName:SetFontSize(newFontSize)
 		end,

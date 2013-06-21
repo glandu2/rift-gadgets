@@ -110,6 +110,12 @@ local function rf_OnTemplateChange(templateId)
 	else
 		rfDialog:GetControl("showHoTTrackers"):SetVisible(false)
 	end
+	if templateConfig.SupportsHoTPanel then
+		rfDialog:GetControl("showHoTPanel"):SetVisible(true)
+	else
+		rfDialog:GetControl("showHoTPanel"):SetVisible(false)
+	end
+	
 end
 
 
@@ -162,16 +168,23 @@ local function rfConfigDialog(container)
 		:Checkbox("reverseGroups", TXT.ReverseGroups, false)
 		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
 		:Checkbox("showHoTTrackers", "Show HoT Trackers", false)
+		:Checkbox("showHoTPanel", "Show HoTs", false)
 		
 	local templateControl = rfDialog:GetControl("template")
 	local templateId = templateControl.getValue()
+
 	local hotTrack = WT.UnitFrame.Templates[templateId].Configuration.SupportsHoTTracking
 	if hotTrack then
-		print("TRACKING")
 		rfDialog:GetControl("showHoTTrackers"):SetVisible(true)
 	else
-		print("NO TRACKING")
 		rfDialog:GetControl("showHoTTrackers"):SetVisible(false)
+	end
+
+	local hotPanel = WT.UnitFrame.Templates[templateId].Configuration.SupportsHoTPanel
+	if hotPanel then
+		rfDialog:GetControl("showHoTPanel"):SetVisible(true)
+	else
+		rfDialog:GetControl("showHoTPanel"):SetVisible(false)
 	end
 
 	local macroTabs = UI.CreateFrame("SimpleTabView", "macroTabs", frmMacrosInner)
@@ -276,7 +289,7 @@ local function gfConfigDialog(container)
 	
 	gfDialog = WT.Dialog(frmConfigInner)
 		:Select("group", "Select Group", "Group 1", { "Group 1", "Group 2", "Group 3", "Group 4" }, false)
-		:Select("template", TXT.RaidFrameTemplate, "OctanusRaidFrame", templateListItems, true)
+		:Select("template", TXT.RaidFrameTemplate, "Heal Frame", templateListItems, true)
 		:Select("layout", "Layout", "Vertical", { "Vertical", "Horizontal" }, false)
 		:Checkbox("hideWhenEmpty", "Hide When Group Is Empty", false)
 		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
@@ -285,6 +298,7 @@ local function gfConfigDialog(container)
 		:Checkbox("showAbsorb", TXT.ShowAbsorb, true)
 		:FieldNote(TXT.ShowBackgroundNote)
 		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
+		:Checkbox("showHoTPanel", "Show HoTs (if template allows)", false)
 
 	local macroTabs = UI.CreateFrame("SimpleTabView", "macroTabs", frmMacrosInner)
 	macroTabs:SetTabPosition("left")

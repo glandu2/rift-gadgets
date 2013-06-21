@@ -74,6 +74,8 @@ function wtBuffPanel:Construct()
 
 	self.config.growthDirection = config.growthDirection or "right_up"
 
+	self.config.auraType = config.auraType or ""
+
 	self.width = (self.config.cols * self.config.iconSize) + (self.config.iconSpacingHorizontal * (self.config.cols - 1)) 
 	self.height = (self.config.rows * self.config.iconSize) + (self.config.iconSpacingVertical * (self.config.rows - 1)) 
 	self.maxIcons = self.config.cols * self.config.rows 
@@ -275,8 +277,17 @@ function wtBuffPanel:HideIcon(idx)
 end
 
 
+-- This is a map of TYPE IDs that create buffs we want to track
+local additionalHoTs = 
+{
+	["BFA6FB1BAE463D82B"] = "Link of Agony",
+	["BFC515C3AB0F59096"] = "Link of Distress",
+	["BFF27EA366EA0638D"] = "Link of Misery",
+	["BFD2398235B465FED"] = "Link of Suffering",
+}
+
+
 -- Returns true if the panel can accept the buff based on the configuration options
-local playerId = false
 function wtBuffPanel:CanAccept(buff)
 
 	if self.currIcons >= self.maxIcons then return false end
@@ -290,18 +301,30 @@ function wtBuffPanel:CanAccept(buff)
 	if self.config.rejectBuffs and self.config.rejectBuffs[buff.name] then return false end
 
 	if self.config.selfCast then
-		if not playerId then playerId = Inspect.Unit.Lookup("player") end
-		if (buff.caster ~= playerId) then return false end 
+		if (buff.caster ~= WT.Player.id) then return false end 
 	end
 
 	local priority = buff.priority or 2
 
 	if buff.debuff then
+		if self.config.auraType == "debuff" then return true end
 		if priority == 1 and self.config.acceptLowPriorityDebuffs then return true end
 		if priority == 2 and self.config.acceptMediumPriorityDebuffs then return true end
 		if priority == 3 and self.config.acceptHighPriorityDebuffs then return true end
 		if priority == 4 and self.config.acceptCriticalPriorityDebuffs then return true end
 	else
+		if self.config.auraType == "buff" then return true end
+		if self.config.auraType == "hot" then
+			-- print(self.UnitFrame.UnitSpec .. ": " .. buff.name .. " " .. buff.type)
+			if buff.type then
+				if additionalHoTs[buff.type] then 
+					return true 
+				end
+			end
+			if buff.duration and buff.duration > 0 and buff.duration < 61 then
+				return true
+			end
+		end 
 		if priority == 1 and self.config.acceptLowPriorityBuffs then return true end
 		if priority == 2 and self.config.acceptMediumPriorityBuffs then return true end
 		if priority == 3 and self.config.acceptHighPriorityBuffs then return true end

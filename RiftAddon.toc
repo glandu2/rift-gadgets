@@ -49,6 +49,7 @@ SavedVariables =
 {
 }
 
+-- Now pulling in LibSimpleWidgets from its repo
 Embed = 
 {
 	wtLibCore = true,

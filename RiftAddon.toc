@@ -42,14 +42,13 @@ RunOnStartup =
   "wtXPPercentGadget.lua",
   "wtXPBarGadget.lua",
   "wtFactionPanelGadget.lua",
-  "wtHudArcGadget.lua",
+  "wtHudArcGadget.lua", 
 }
 
 SavedVariables = 
 {
 }
 
--- Now pulling in LibSimpleWidgets from its repo
 Embed = 
 {
 	wtLibCore = true,

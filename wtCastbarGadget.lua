@@ -23,15 +23,20 @@ local function OnCastName(unitFrame, castname)
 		local unit = unitFrame.Unit
 		if unitFrame.icon then
 			local cbd = Inspect.Unit.Castbar(unit.id)
-			if cbd and cbd.abilityNew then
-				local ad = Inspect.Ability.New.Detail(cbd.abilityNew)
-				if ad and ad.icon then
-					unitFrame.icon:SetTexture("Rift", ad.icon)
+			if cbd then
+				if cbd.abilityNew then
+					local ad = Inspect.Ability.New.Detail(cbd.abilityNew)
+					if ad and ad.icon then
+						unitFrame.icon:SetTexture("Rift", ad.icon)
+					else
+						unitFrame.icon:SetTexture("Rift", PHICON)
+					end
 				else
 					unitFrame.icon:SetTexture("Rift", PHICON)
 				end
 			else
-				unitFrame.icon:SetTexture("Rift", PHICON)
+				WT.UnitDatabase.Casting[unit.id] = nil
+				WT.Units[unit.id].castName = nil
 			end
 		end
 		if unit.castUninterruptible then

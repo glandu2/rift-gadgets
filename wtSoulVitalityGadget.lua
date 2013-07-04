@@ -26,6 +26,7 @@ local function Create(configuration)
 	vitalityMeter:SetHeight(48)
 	vitalityMeter:SetLayer(100)
 
+	--[[
 	vitalityMeter.img = vitalityMeter:CreateElement(
 	{
 		-- Generic Element Configuration
@@ -36,22 +37,58 @@ local function Create(configuration)
 		texAddon=AddonId, texFile="img/wtVitality.png", rows=10,cols=1,
 		indexBinding="vitalityIndex", visibilityBinding="vitalityIndex",width=48,height=48,
 	});
+	--]]
+
+	vitalityMeter.img = vitalityMeter:CreateElement(
+	{
+		-- Generic Element Configuration
+		id="imgCharge", type="MediaSet", parent="frame", layer=0, alpha=1.0,
+		attach = {
+			{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" },
+		},
+		rows=10,cols=1,
+		nameBinding="vitalityIndex", 
+		names={ 
+			["Vitality_Gray"] = "Vitality_Gray", 
+			["Vitality_Red"] = "Vitality_Red", 
+			["Vitality_Zero"] = "Vitality_Red" 
+		},
+		visibilityBinding="vitalityIndex",width=96,height=96,
+	});
+
+	vitalityMeter.imgZero = vitalityMeter:CreateElement(
+	{
+		-- Generic Element Configuration
+		id="imgZero", type="Image", parent="frame", layer=10, alpha=1.0,
+		attach = {
+			{ point="TOPLEFT", element="imgCharge", targetPoint="TOPLEFT" },
+			{ point="BOTTOMRIGHT", element="imgCharge", targetPoint="BOTTOMRIGHT" },
+		},
+		media="Vitality_Zero", visibilityBinding="zeroVitality",
+	});
+
 	vitalityMeter.txtVitality = vitalityMeter:CreateElement(
 	{
 		-- Generic Element Configuration
-		id="txtVitality", type="Label", parent="imgCharge", layer=20,
-		attach = {{ point="CENTER", element="imgCharge", targetPoint="CENTER", offsetX=0, offsetY=0 }},
+		id="txtVitality", type="Label", parent="frame", layer=20,
+		attach = {{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=0, offsetY=0 }},
 		text="{vitality}%", fontSize=chargeFontSize,
 	});
 	vitalityMeter.txtVitality:SetVisible(false)
 
-	vitalityMeter.Event.MouseIn = function() vitalityMeter.txtVitality:SetVisible(true) end
+	vitalityMeter.Event.MouseIn = 
+		function() 
+			if vitalityMeter.img:GetVisible() then
+				vitalityMeter.txtVitality:SetVisible(true) 
+			end
+		end
 	vitalityMeter.Event.MouseOut = function() vitalityMeter.txtVitality:SetVisible(false) end
 
 	vitalityMeter.OnResize = function(frame, width,height)
+		-- Size * 2 to account for image only filling quarter of the texture
 		vitalityMeter.txtVitality:SetFontSize(height*0.35)
-		vitalityMeter.img:SetWidth(width)
-		vitalityMeter.img:SetHeight(height)
+		vitalityMeter.img:SetWidth(width * 1.6)
+		vitalityMeter.img:SetHeight(height * 1.6)
 	end
 
 	vitalityMeter:ApplyBindings()
@@ -77,15 +114,26 @@ WT.Unit.CreateVirtualProperty("vitalityIndex", {"vitality", "vitalityMax"},
 		if not vitality then return nil end 
 		if vitality > 90 then 
 			return nil
+			--[[
 			elseif vitality > 80 then return 0
 			elseif vitality > 70 then return 1
 			elseif vitality > 60 then return 2
 			elseif vitality > 50 then return 3
 			elseif vitality > 40 then return 4
 			elseif vitality > 30 then return 5
-			elseif vitality > 20 then return 6
-			elseif vitality > 10 then return 7
-			elseif vitality > 0 then return 8
-			else return 9
+			]]
+			elseif vitality >= 20 then return "Vitality_Gray"
+			elseif vitality > 0 then return "Vitality_Red"
+			elseif vitality > 0 then return "Vitality_Zero"
+			else return "Vitality_Zero"
+		end
+	end)
+
+WT.Unit.CreateVirtualProperty("zeroVitality", {"vitality" },
+	function(unit)
+		if unit.vitality and unit.vitality > 0 then
+			return false
+		else
+			return true
 		end
 	end)

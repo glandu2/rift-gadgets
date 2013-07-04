@@ -48,7 +48,9 @@ local function Create(configuration)
 
 	local rfHeight = 70
 
-	local rangeFinder = WT.UnitFrame:Create("player.target")
+	local unitSpec = configuration.unitSpec or "player.target"
+
+	local rangeFinder = WT.UnitFrame:Create(unitSpec)
 	rangeFinder:SetWidth(150)
 
 	local rfBackground = UI.CreateFrame("Frame", "rfBackground", rangeFinder)
@@ -60,7 +62,28 @@ local function Create(configuration)
 	rangeFinder.background = rfBackground
 
 	local txtHeading = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rfBackground)
-	txtHeading:SetText("RANGE TO TARGET")
+
+
+	local desc = ""
+
+	if unitSpec == "player.target" then
+		desc = "TARGET"
+	elseif unitSpec == "player.target.target" then
+		desc = "TGT OF TARGET"
+	elseif unitSpec == "focus" then
+		desc = "FOCUS"
+	elseif unitSpec == "focus.target" then
+		desc = "TGT OF FOCUS"
+	elseif unitSpec == "player.pet" then
+		desc = "PET"
+	elseif unitSpec == "player.pet.target" then
+		desc = "TGT OF PET"
+	else
+		desc = "UNIT"
+	end
+
+	txtHeading:SetText("RANGE TO " .. desc)
+
 	txtHeading:SetPoint("TOPCENTER", rangeFinder, "TOPCENTER", 0, 6)
 	txtHeading:SetFontSize(10)
 	txtHeading:SetFontColor(0.6, 1.0, 0.6, 1.0)
@@ -109,6 +132,14 @@ local function ConfigDialog(container)
 		:Checkbox("showTargetName", TXT.ShowTargetName, true)
 		:Checkbox("hideWhenNoTarget", TXT.HideWhenNoTarget, false)
 		:Checkbox("showBackground", TXT.ShowBackground, true)
+		:Combobox("unitSpec", TXT.UnitToTrack, "player.target",
+			{
+				{text="Target", value="player.target"},
+				{text="Target's Target", value="player.target.target"},
+				{text="Focus", value="focus"},
+				{text="Focus's Target", value="focus.target"},
+				{text="Pet", value="player.pet"},
+			}, false) 
 end
 
 local function GetConfiguration()

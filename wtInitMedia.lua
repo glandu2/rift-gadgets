@@ -49,4 +49,7 @@ Library.Media.AddTexture("CP Twitter", "Rift", "twitter.png.dds", {"combo", "com
 Library.Media.AddTexture("CP Red Sword", "Rift", "vfx_ui_mob_tag_damage.png.dds", {"combo", "combo_single"})
 Library.Media.AddTexture("CP Squirrel", "Rift", "vfx_ui_mob_tag_squirrel.png.dds", {"combo", "combo_single"})
 
+Library.Media.AddTexture("Vitality_Gray", "Rift", "death_icon_(grey).png.dds", {"vitality"})
+Library.Media.AddTexture("Vitality_Red", "Rift", "death_icon_(red).png.dds", {"vitality"})
+Library.Media.AddTexture("Vitality_Zero", "Rift", "death_icon_(glow).png.dds", {"vitality"})
 

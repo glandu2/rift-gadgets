@@ -47,13 +47,13 @@ local function Create(configuration)
 			{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" },
 		},
 		rows=10,cols=1,
-		nameBinding="vitalityIndex", 
+		nameBinding="vitalityTier", 
 		names={ 
 			["Vitality_Gray"] = "Vitality_Gray", 
 			["Vitality_Red"] = "Vitality_Red", 
 			["Vitality_Zero"] = "Vitality_Red" 
 		},
-		visibilityBinding="vitalityIndex",width=96,height=96,
+		visibilityBinding="vitalityTier",width=77,height=77,
 	});
 
 	vitalityMeter.imgZero = vitalityMeter:CreateElement(
@@ -84,11 +84,12 @@ local function Create(configuration)
 		end
 	vitalityMeter.Event.MouseOut = function() vitalityMeter.txtVitality:SetVisible(false) end
 
-	vitalityMeter.OnResize = function(frame, width,height)
-		-- Size * 2 to account for image only filling quarter of the texture
+	vitalityMeter.OnResize = function(frame, width, height)
+		-- Size * 1.6 to account for image only filling quarter of the texture
 		vitalityMeter.txtVitality:SetFontSize(height*0.35)
 		vitalityMeter.img:SetWidth(width * 1.6)
 		vitalityMeter.img:SetHeight(height * 1.6)
+		vitalityMeter.img.Configuration.width = width * 1.6
 	end
 
 	vitalityMeter:ApplyBindings()
@@ -114,14 +115,25 @@ WT.Unit.CreateVirtualProperty("vitalityIndex", {"vitality", "vitalityMax"},
 		if not vitality then return nil end 
 		if vitality > 90 then 
 			return nil
-			--[[
 			elseif vitality > 80 then return 0
 			elseif vitality > 70 then return 1
 			elseif vitality > 60 then return 2
 			elseif vitality > 50 then return 3
 			elseif vitality > 40 then return 4
 			elseif vitality > 30 then return 5
-			]]
+			elseif vitality > 20 then return 6
+			elseif vitality > 10 then return 7
+			elseif vitality > 0 then return 8
+			else return 9
+		end
+	end)
+
+WT.Unit.CreateVirtualProperty("vitalityTier", {"vitality", "vitalityMax"}, 
+	function(unit)
+		local vitality = unit.vitality
+		if not vitality then return nil end 
+		if vitality > 90 then 
+			return nil
 			elseif vitality >= 20 then return "Vitality_Gray"
 			elseif vitality > 0 then return "Vitality_Red"
 			elseif vitality > 0 then return "Vitality_Zero"

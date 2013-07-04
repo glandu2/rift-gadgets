@@ -367,6 +367,7 @@ function WT.Gadget.ShowCreationUI()
 							local container = UI.CreateFrame("Frame", WT.UniqueName("gadgetOptionsContainer"), frameOptions)
 							container:SetPoint("TOPLEFT", standardOptions, "BOTTOMLEFT", 0, 8)
 							container:SetPoint("BOTTOMRIGHT", frameOptions, "BOTTOMRIGHT", -8, -8)
+							container:SetLayer(100)
 							container:SetVisible(false)
 							gadget.ConfigDialog(container)
 							gadget._configDialog = container

@@ -139,7 +139,10 @@ btnGadget:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
 		btnDragStart()
 end, "Event.UI.Input.Mouse.Left.Down")
 btnGadget.Event.MouseMove = btnDragMove
-btnGadget.Event.LeftUp = btnDragStop
+btnGadget:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
+	btnDragStop()
+end, "Event.UI.Input.Mouse.Left.Up")
+
 btnGadget.Event.LeftUpoutside = btnDragStop
 btnGadget.Event.RightClick = btnShowMenu
 

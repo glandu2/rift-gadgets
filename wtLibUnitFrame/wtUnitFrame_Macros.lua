@@ -113,9 +113,9 @@ function WT.UnitFrame:SetMiddleMacro(macroText)
 	self._MACRO.MiddleDown = fn
 	if self._MACRO.middleset == nil then
 		self:EventAttach(Event.UI.Input.Mouse.Middle.Down, function(self, h)
-			if fn == "menu" then 
+			if self._MACRO.MiddleDown == "menu" then 
 				if self.UnitId then Command.Unit.Menu(self.UnitId) end
-			elseif fn then 
+			elseif self._MACRO.MiddleDown then 
 				self._MACRO.MiddleDown()
 			end
 		end, "Event.UI.Input.Mouse.Middle.Down")
@@ -130,12 +130,15 @@ function WT.UnitFrame:SetMouse4Macro(macroText)
 		Command.Console.Display("general", true, "ERROR IN BUTTON 4 MACRO DEFINITION", false)
 	end
 	self._MACRO.Mouse4Down = fn
-	if fn == "menu" then 
-		self.Event.Mouse4Down = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
-	elseif fn then 
-		self.Event.Mouse4Down = fn() 
-	else 
-		self.Event.Mouse4Down = nil 
+	if self._MACRO.mouse4set == nil then
+		self:EventAttach(Event.UI.Input.Mouse.Mouse4.Down, function(self, h)
+			if self._MACRO.Mouse4Down == "menu" then 
+				self.Event.Mouse4Down = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
+			elseif self._MACRO.Mouse4Down then 
+				self._MACRO.Mouse4Down() 
+			end
+		end, "Event.UI.Input.Mouse.Mouse4.Down")
+		self._MACRO.mouse4set = true
 	end
 end
 
@@ -146,12 +149,15 @@ function WT.UnitFrame:SetMouse5Macro(macroText)
 		Command.Console.Display("general", true, "ERROR IN BUTTON 5 MACRO DEFINITION", false)
 	end
 	self._MACRO.Mouse5Down = fn
-	if fn == "menu" then 
-		self.Event.Mouse5Down = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
-	elseif fn then 
-		self.Event.Mouse5Down = fn() 
-	else 
-		self.Event.Mouse5Down = nil 
+	if self._MACRO.mouse5set == nil then
+		self:EventAttach(Event.UI.Input.Mouse.Mouse5.Down, function(self, h)
+			if self._MACRO.Mouse5Down == "menu" then 
+				self.Event.Mouse5Down = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
+			elseif self._MACRO.Mouse5Down then 
+				self._MACRO.Mouse5Down() 
+			end
+		end, "Event.UI.Input.Mouse.Mouse5.Down")
+		self._MACRO.mouse5set = true
 	end
 end
 

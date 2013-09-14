@@ -73,20 +73,15 @@ function WT.UnitFrame:SetLeftMacro(macroText)
 		Command.Console.Display("general", true, "ERROR IN LEFT BUTTON MACRO DEFINITION", false)
 	end
 	self._MACRO.LeftDown = fn
-	if fn == "menu" then 
-		--self.Event.LeftDown = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
+	if self._MACRO.leftset == nil then
 		self:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
-			if self.UnitId then Command.Unit.Menu(self.UnitId) end
+			if self._MACRO.LeftDown == "menu" then
+				if self.UnitId then Command.Unit.Menu(self.UnitId) end
+			elseif self._MACRO.LeftDown then
+				self._MACRO.LeftDown()
+			end
 		end, "Event.UI.Input.Mouse.Left.Down")
-	elseif fn then 
-		--self.Event.LeftDown = fn() 
-		self:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
-			fn()
-		end, "Event.UI.Input.Mouse.Left.Down")
-	else 
-		--self.Event.LeftDown = nil 
-		self:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
-		end, "Event.UI.Input.Mouse.Left.Down")
+		self._MACRO.leftset = true
 	end
 end
 
@@ -97,12 +92,15 @@ function WT.UnitFrame:SetRightMacro(macroText)
 		Command.Console.Display("general", true, "ERROR IN RIGHT BUTTON MACRO DEFINITION", false)
 	end
 	self._MACRO.RightDown = fn
-	if fn == "menu" then
-		self.Event.RightDown = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
-	elseif fn then 
-		self.Event.RightDown = fn() 
-	else 
-		self.Event.RightDown = nil 
+	if self._MACRO.rightset == nil then
+		self:EventAttach(Event.UI.Input.Mouse.Right.Down, function(self, h)
+			if self._MACRO.RightDown == "menu" then
+				if self.UnitId then Command.Unit.Menu(self.UnitId) end
+			elseif self._MACRO.RightDown then 
+				self._MACRO.RightDown()
+			end
+		end, "Event.UI.Input.Mouse.Right.Down")
+		self._MACRO.rightset = true
 	end
 end
 
@@ -113,12 +111,15 @@ function WT.UnitFrame:SetMiddleMacro(macroText)
 		Command.Console.Display("general", true, "ERROR IN MIDDLE BUTTON MACRO DEFINITION", false)
 	end
 	self._MACRO.MiddleDown = fn
-	if fn == "menu" then 
-		self.Event.MiddleDown = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
-	elseif fn then 
-		self.Event.MiddleDown = fn() 
-	else 
-		self.Event.MiddleDown = nil 
+	if self._MACRO.middleset == nil then
+		self:EventAttach(Event.UI.Input.Mouse.Middle.Down, function(self, h)
+			if fn == "menu" then 
+				if self.UnitId then Command.Unit.Menu(self.UnitId) end
+			elseif fn then 
+				self._MACRO.MiddleDown()
+			end
+		end, "Event.UI.Input.Mouse.Middle.Down")
+		self._MACRO.middleset = true
 	end
 end
 

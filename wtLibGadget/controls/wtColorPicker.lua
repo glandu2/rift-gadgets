@@ -241,33 +241,33 @@ local function CreateSelector()
 	olayRed:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
 		dragging = nil
 	end, "Event.UI.Input.Mouse.Left.Up")
-	olayRed:EventAttach(Event.UI.Input.Mouse.Left.UpOutside, function(self, h)
+	olayRed:EventAttach(Event.UI.Input.Mouse.Left.Upoutside, function(self, h)
 		dragging = nil
-	end, "Event.UI.Input.Mouse.Left.UpOutside")
+	end, "Event.UI.Input.Mouse.Left.Upoutside")
 
 	olayGreen:EventAttach(Event.UI.Input.Mouse.Left.Down, function() dragging = olayGreen; UpdateMarker() end, "MouseDown")
 	olayGreen:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
 		dragging = nil
 	end, "Event.UI.Input.Mouse.Left.Up")
-	olayGreen:EventAttach(Event.UI.Input.Mouse.Left.UpOutside, function(self, h)
+	olayGreen:EventAttach(Event.UI.Input.Mouse.Left.Upoutside, function(self, h)
 		dragging = nil
-	end, "Event.UI.Input.Mouse.Left.UpOutside")
+	end, "Event.UI.Input.Mouse.Left.Upoutside")
 
 	olayBlue:EventAttach(Event.UI.Input.Mouse.Left.Down, function() dragging = olayBlue; UpdateMarker() end, "MouseDown")
 	olayBlue:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
 		dragging = nil
 	end, "Event.UI.Input.Mouse.Left.Up")
-	olayBlue:EventAttach(Event.UI.Input.Mouse.Left.UpOutside, function(self, h)
+	olayBlue:EventAttach(Event.UI.Input.Mouse.Left.Upoutside, function(self, h)
 		dragging = nil
-	end, "Event.UI.Input.Mouse.Left.UpOutside")
+	end, "Event.UI.Input.Mouse.Left.Upoutside")
 
 	olayAlpha:EventAttach(Event.UI.Input.Mouse.Left.Down, function() dragging = olayAlpha; UpdateMarker() end, "MouseDown")
 	olayAlpha:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
 		dragging = nil
 	end, "Event.UI.Input.Mouse.Left.Up")
-	olayAlpha:EventAttach(Event.UI.Input.Mouse.Left.UpOutside, function(self, h)
+	olayAlpha:EventAttach(Event.UI.Input.Mouse.Left.Upoutside, function(self, h)
 		dragging = nil
-	end, "Event.UI.Input.Mouse.Left.UpOutside")
+	end, "Event.UI.Input.Mouse.Left.Upoutside")
 
 	txtHex:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
 		local show = not hexEditor:GetVisible()

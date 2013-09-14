@@ -342,7 +342,7 @@ function WT.Gadget.ShowCreationUI()
 				end 
 			end, "Event.UI.Input.Mouse.Cursor.Out")
 
-			wrapper.fn_LeftClick()			
+			function wrapper.fn_LeftClick()			
 				local gadget = wrapper.gadgetConfig
 				if (window.selected) then
 					window.selected:SetBackgroundColor(0, 0, 0, 0)

@@ -402,12 +402,12 @@ local function ApplyRaidFrameVisibility()
 	end
 end
 
-local function OnGroupAdded(groupId)
+local function OnGroupAdded(hEvent, groupId)
 	ApplyGroupFrameVisibility()
 	ApplyRaidFrameVisibility()
 end
 
-local function OnGroupRemoved(groupId)
+local function OnGroupRemoved(hEvent, groupId)
 	ApplyGroupFrameVisibility()
 	ApplyRaidFrameVisibility()
 end
@@ -426,12 +426,12 @@ local function OnUnlocked()
 	end
 end
 
-local function OnGroupModeChanged(mode, oldMode)
+local function OnGroupModeChanged(hEvent, mode, oldMode)
 	ApplyRaidFrameVisibility()
 end
 
-table.insert(WT.Event.GroupAdded, { OnGroupAdded, AddonId, "OnGroupAdded" } )
-table.insert(WT.Event.GroupRemoved, { OnGroupRemoved, AddonId, "OnGroupRemoved" } )
-table.insert(WT.Event.GadgetsLocked, { OnLocked, AddonId, "OnLocked" } )
-table.insert(WT.Event.GadgetsUnlocked, { OnUnlocked, AddonId, "OnUnlocked" } )
-table.insert(WT.Event.GroupModeChanged, { OnGroupModeChanged, AddonId, "OnGroupModeChanged" } )
+Command.Event.Attach(WT.Event.GroupAdded, OnGroupAdded, "OnGroupAdded" )
+Command.Event.Attach(WT.Event.GroupRemoved, OnGroupRemoved, "OnGroupRemoved" )
+Command.Event.Attach(WT.Event.GadgetsLocked, OnLocked, "OnLocked" )
+Command.Event.Attach(WT.Event.GadgetsUnlocked, OnUnlocked, "OnUnlocked" )
+Command.Event.Attach(WT.Event.GroupModeChanged, OnGroupModeChanged, "OnGroupModeChanged" )

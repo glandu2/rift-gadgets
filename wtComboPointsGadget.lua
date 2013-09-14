@@ -216,4 +216,4 @@ local function OnPlayerAvailable()
 	end
 end
 
-table.insert(WT.Event.PlayerAvailable, {OnPlayerAvailable, AddonId, "ComboPointsGadget_OnPlayerAvailable"})	
+Command.Event.Attach(WT.Event.PlayerAvailable, OnPlayerAvailable, "ComboPointsGadget_OnPlayerAvailable")	

@@ -62,7 +62,7 @@ local function Create(configuration)
 
 	table.insert(xpGadgets, xpFrame)
 
-	OnExperience(Inspect.TEMPORARY.Experience())	
+	OnExperience(0,Inspect.TEMPORARY.Experience())	
 
 	return wrapper, { resizable={150, 64, 150, 70} }
 	
@@ -97,8 +97,8 @@ WT.Gadget.RegisterFactory("XPPercent",
 	})
 
 local function OnPlayerAvailable()
-	OnExperience(Inspect.TEMPORARY.Experience())
+	OnExperience(0, Inspect.TEMPORARY.Experience())
 end
 
 Command.Event.Attach(Event.TEMPORARY.Experience, OnExperience, "OnExperience")
-table.insert(WT.Event.PlayerAvailable, {OnPlayerAvailable, AddonId, "XPPercentGadget_OnPlayerAvailable"})	
+Command.Event.Attach(WT.Event.PlayerAvailable, OnPlayerAvailable, "XPPercentGadget_OnPlayerAvailable")	

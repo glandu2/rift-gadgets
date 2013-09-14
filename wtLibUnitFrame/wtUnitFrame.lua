@@ -317,7 +317,7 @@ end
 
 -- Event Handlers --------------------------------------------------------------------------------
 
-local function OnUnitAdded(unitId)
+local function OnUnitAdded(hEvent, unitId)
 	for frame in pairs(awaitingDetails) do
 		if frame.UnitId == unitId then
 			frame:PopulateUnit(frame.UnitId)
@@ -333,7 +333,7 @@ local function OnUnitAdded(unitId)
 end
 
 
-local function OnUnitPropertySet(unit, property, newValue, oldValue)
+local function OnUnitPropertySet(hEvent, unit, property, newValue, oldValue)
 	-- Execute the bindings for any UnitFrame that is currently linked to this unit
 	for idx, unitFrame in ipairs(WT.UnitFrames) do
 		if unitFrame.Unit and unitFrame.Unit.id == unit.id and unitFrame.Bindings[property] then
@@ -346,7 +346,7 @@ local function OnUnitPropertySet(unit, property, newValue, oldValue)
 	end
 end
 
-local function OnBuffUpdates(unitId, changes)
+local function OnBuffUpdates(hEvent, unitId, changes)
 	for idx, unitFrame in ipairs(WT.UnitFrames) do
 		if unitFrame.Unit and unitFrame.Unit.id == unitId then
 			unitFrame:BuffHandler(changes.add, changes.remove, changes.update)
@@ -354,7 +354,7 @@ local function OnBuffUpdates(unitId, changes)
 	end
 end
 
-local function OnCastbarShow(unitId, castbar)
+local function OnCastbarShow(hEvent, unitId, castbar)
 	for idx, unitFrame in ipairs(WT.UnitFrames) do
 		if unitFrame.Unit and unitFrame.UnitId == unitId and unitFrame.OnCastBegin then
 			unitFrame:OnCastBegin(castbar)
@@ -362,7 +362,7 @@ local function OnCastbarShow(unitId, castbar)
 	end
 end
 
-local function OnCastbarHide(unitId)
+local function OnCastbarHide(hEvent, unitId)
 	for idx, unitFrame in ipairs(WT.UnitFrames) do
 		if unitFrame.Unit and unitFrame.UnitId == unitId and unitFrame.OnCastEnd then
 			unitFrame:OnCastEnd()
@@ -372,9 +372,9 @@ end
 
 
 -- Register for change events from the UnitDatabase
-table.insert(WT.Event.UnitAdded, { OnUnitAdded, AddonId, AddonId .. "_UnitFrame_UnitAdded" })
-table.insert(WT.Event.UnitPropertySet, { OnUnitPropertySet, AddonId, AddonId .. "_UnitFrame_UnitPropertySet" })
-table.insert(WT.Event.BuffUpdates, { OnBuffUpdates, AddonId, AddonId .. "_UnitFrame_BuffUpdates" })
-table.insert(WT.Event.CastbarShow, { OnCastbarShow, AddonId, AddonId .. "_UnitFrame_CastbarShow" })
-table.insert(WT.Event.CastbarHide, { OnCastbarHide, AddonId, AddonId .. "_UnitFrame_CastbarHide" })
+Command.Event.Attach(WT.Event.UnitAdded, OnUnitAdded, AddonId .. "_UnitFrame_UnitAdded" )
+Command.Event.Attach(WT.Event.UnitPropertySet, OnUnitPropertySet, AddonId .. "_UnitFrame_UnitPropertySet" )
+Command.Event.Attach(WT.Event.BuffUpdates, OnBuffUpdates, AddonId .. "_UnitFrame_BuffUpdates" )
+Command.Event.Attach(WT.Event.CastbarShow, OnCastbarShow, AddonId .. "_UnitFrame_CastbarShow" )
+Command.Event.Attach(WT.Event.CastbarHide, OnCastbarHide, AddonId .. "_UnitFrame_CastbarHide" )
 

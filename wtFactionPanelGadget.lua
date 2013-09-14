@@ -262,5 +262,5 @@ end
 Command.Event.Attach(Event.Faction.Notoriety, OnNotoriety, "OnNotoriety")
 Command.Event.Attach(WT.Event.PlayerAvailable, OnPlayerAvailable, "FactionPanel_OnPlayerAvailable")	
 
-table.insert(WT.Event.GadgetsUnlocked, {OnUnlocked, AddonId, "FactionPanel_OnUnlocked"})
-table.insert(WT.Event.GadgetsLocked, {OnLocked, AddonId, "FactionPanel_OnLocked"})
+Command.Event.Attach(WT.Event.GadgetsUnlocked, OnUnlocked, "FactionPanel_OnUnlocked")
+Command.Event.Attach(WT.Event.GadgetsLocked, OnLocked, "FactionPanel_OnLocked")

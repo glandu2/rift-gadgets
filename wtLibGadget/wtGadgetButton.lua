@@ -176,20 +176,18 @@ end
 -- Register an initializer to handle loading of gadgets
 table.insert(WT.Initializers, Initialize)
 
-table.insert(WT.Event.GadgetsLocked, 
-{
+Command.Event.Attach(WT.Event.GadgetsLocked, 
 	function()
 		menuItems[menuItemsToggleLock].text = TXT.UnlockGadgets
 		btnMenu:SetItems(menuItems)
 	end, 
-	AddonId, AddonId .. "_GadgetsLocked"
-})
+	AddonId .. "_GadgetsLocked"
+)
 
-table.insert(WT.Event.GadgetsUnlocked, 
-{
+Command.Event.Attach(WT.Event.GadgetsUnlocked, 
 	function()
 		menuItems[menuItemsToggleLock].text = TXT.LockGadgets
 		btnMenu:SetItems(menuItems)
 	end, 
-	AddonId, AddonId .. "_GadgetsUnlocked"
-})
+	AddonId .. "_GadgetsUnlocked"
+)

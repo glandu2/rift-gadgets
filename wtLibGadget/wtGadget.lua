@@ -685,7 +685,7 @@ function WT.Gadget.SetGadgetGroupVisible(gadget, groupMode)
 end
 
 
-local function OnGroupModeChanged(groupMode)
+local function OnGroupModeChanged(hEvent, groupMode)
 	for gadgetId, gadget in pairs(WT.Gadgets) do
 		WT.Gadget.SetGadgetGroupVisible(gadget, groupMode)
 	end
@@ -746,4 +746,4 @@ Command.Event.Attach(Event.System.Secure.Leave, WT.Gadget.SecureLeave, "Gadget_S
 
 Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, OnSaveVariables, "Gadget_OnSaveVariables")
 
-table.insert(WT.Event.GroupModeChanged, { OnGroupModeChanged, AddonId, AddonId .. "_OnGroupModeChanged" })
+Command.Event.Attach(WT.Event.GroupModeChanged, OnGroupModeChanged, AddonId .. "_OnGroupModeChanged" )

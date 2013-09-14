@@ -318,7 +318,7 @@ function XBG.OnPlayerAvailable(h)
 	end	
 end
 
-table.insert(WT.Event.PlayerAvailable, {XBG.OnPlayerAvailable, AddonId, "XPBarGadget_OnPlayerAvailable"})	
+Command.Event.Attach(WT.Event.PlayerAvailable, XBG.OnPlayerAvailable, "XPBarGadget_OnPlayerAvailable")	
 
 Command.Event.Attach(Event.TEMPORARY.Experience, XBG.OnExperience, "OnExperienceBar")
 Command.Event.Attach(Event.Pvp.Prestige.Accumulated, XBG.OnPrestige, "Event.Pvp.Prestige.Accumulated")

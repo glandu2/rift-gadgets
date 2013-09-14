@@ -98,7 +98,7 @@ end
 
 
 local delta = 0
-local function OnTick(frameDeltaTime, frameIndex)
+local function OnTick(hEvent, frameDeltaTime, frameIndex)
 	delta = delta + frameDeltaTime
 	if (delta >= 1) then
 		delta = 0
@@ -128,4 +128,4 @@ local function OnTick(frameDeltaTime, frameIndex)
 	end
 end
 
-table.insert(WT.Event.Tick, { OnTick, AddonId, AddonId .. "_OnTick" })
+Command.Event.Attach(WT.Event.Tick, OnTick, AddonId .. "_OnTick")

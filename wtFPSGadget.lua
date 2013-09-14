@@ -75,7 +75,7 @@ WT.Gadget.RegisterFactory("FPS",
 		["SetConfiguration"] = SetConfiguration, 
 	})
 
-local function OnTick(frameDeltaTime, frameIndex)
+local function OnTick(hEvent, frameDeltaTime, frameIndex)
 	local fpsText = tostring(math.ceil(WT.FPS))
 	for idx, gadget in ipairs(fpsGadgets) do
 		if gadget.currText ~= fpsText then
@@ -85,4 +85,4 @@ local function OnTick(frameDeltaTime, frameIndex)
 	end
 end
 
-table.insert(WT.Event.Tick, { OnTick, AddonId, AddonId .. "_OnTick" })
+Command.Event.Attach(WT.Event.Tick, OnTick, AddonId .. "_OnTick" )

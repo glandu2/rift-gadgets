@@ -241,26 +241,33 @@ local function CreateSelector()
 	olayRed:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
 		dragging = nil
 	end, "Event.UI.Input.Mouse.Left.Up")
-
-	olayRed.Event.LeftUpoutside = function() dragging = nil end 
+	olayRed:EventAttach(Event.UI.Input.Mouse.Left.UpOutside, function(self, h)
+		dragging = nil
+	end, "Event.UI.Input.Mouse.Left.UpOutside")
 
 	olayGreen:EventAttach(Event.UI.Input.Mouse.Left.Down, function() dragging = olayGreen; UpdateMarker() end, "MouseDown")
 	olayGreen:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
 		dragging = nil
 	end, "Event.UI.Input.Mouse.Left.Up")
-	olayGreen.Event.LeftUpoutside = function() dragging = nil end 
+	olayGreen:EventAttach(Event.UI.Input.Mouse.Left.UpOutside, function(self, h)
+		dragging = nil
+	end, "Event.UI.Input.Mouse.Left.UpOutside")
 
 	olayBlue:EventAttach(Event.UI.Input.Mouse.Left.Down, function() dragging = olayBlue; UpdateMarker() end, "MouseDown")
 	olayBlue:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
 		dragging = nil
 	end, "Event.UI.Input.Mouse.Left.Up")
-	olayBlue.Event.LeftUpoutside = function() dragging = nil end 
+	olayBlue:EventAttach(Event.UI.Input.Mouse.Left.UpOutside, function(self, h)
+		dragging = nil
+	end, "Event.UI.Input.Mouse.Left.UpOutside")
 
 	olayAlpha:EventAttach(Event.UI.Input.Mouse.Left.Down, function() dragging = olayAlpha; UpdateMarker() end, "MouseDown")
 	olayAlpha:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
 		dragging = nil
 	end, "Event.UI.Input.Mouse.Left.Up")
-	olayAlpha.Event.LeftUpoutside = function() dragging = nil end 
+	olayAlpha:EventAttach(Event.UI.Input.Mouse.Left.UpOutside, function(self, h)
+		dragging = nil
+	end, "Event.UI.Input.Mouse.Left.UpOutside")
 
 	txtHex:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
 		local show = not hexEditor:GetVisible()

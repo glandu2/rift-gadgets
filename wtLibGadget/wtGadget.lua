@@ -272,7 +272,9 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 		WT.Gadget.DragStop(mvHandle)
 	end, "Event.UI.Input.Mouse.Left.Up")
 
-	mvHandle.Event.LeftUpoutside = function() WT.Gadget.DragStop(mvHandle) end
+	mvHandle:EventAttach(Event.UI.Input.Mouse.Left.UpOutside, function(self, h)
+		WT.Gadget.DragStop(mvHandle)
+	end, "Event.UI.Input.Mouse.Left.UpOutside")
 	mvHandle:EventAttach(Event.UI.Input.Mouse.Right.Click, function(self, h)
 		handleShowMenu()
 		menuHandle:SetPoint("TOPLEFT", mvHandle, "BOTTOMLEFT")
@@ -304,7 +306,9 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 		szHandle:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
 			WT.Gadget.SizeStop(szHandle)
 		end, "Event.UI.Input.Mouse.Left.Up")
-		szHandle.Event.LeftUpoutside = function() WT.Gadget.SizeStop(szHandle) end
+		szHandle:EventAttach(Event.UI.Input.Mouse.Left.UpOutside, function(self, h)
+			WT.Gadget.SizeStop(szHandle)
+		end, "Event.UI.Input.Mouse.Left.UpOutside")
 		szHandle.frame = frame
 		szHandle.gadgetId = gadgetId
 		szHandle.minX, szHandle.minY, szHandle.maxX, szHandle.maxY = unpack(createOptions.resizable)  

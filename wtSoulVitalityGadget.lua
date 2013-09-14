@@ -76,13 +76,14 @@ local function Create(configuration)
 	});
 	vitalityMeter.txtVitality:SetVisible(false)
 
-	vitalityMeter.Event.MouseIn = 
-		function() 
-			if vitalityMeter.img:GetVisible() then
-				vitalityMeter.txtVitality:SetVisible(true) 
-			end
+	vitalityMeter:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
+		if vitalityMeter.img:GetVisible() then
+			vitalityMeter.txtVitality:SetVisible(true) 
 		end
-	vitalityMeter.Event.MouseOut = function() vitalityMeter.txtVitality:SetVisible(false) end
+	end, "Event.UI.Input.Mouse.Cursor.In")
+	vitalityMeter:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
+		vitalityMeter.txtVitality:SetVisible(false)
+	end, "Event.UI.Input.Mouse.Cursor.Out")
 
 	vitalityMeter.OnResize = function(frame, width, height)
 		-- Size * 1.6 to account for image only filling quarter of the texture

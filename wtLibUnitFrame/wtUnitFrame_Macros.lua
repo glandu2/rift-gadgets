@@ -133,7 +133,7 @@ function WT.UnitFrame:SetMouse4Macro(macroText)
 	if self._MACRO.mouse4set == nil then
 		self:EventAttach(Event.UI.Input.Mouse.Mouse4.Down, function(self, h)
 			if self._MACRO.Mouse4Down == "menu" then 
-				self.Event.Mouse4Down = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
+				if self.UnitId then Command.Unit.Menu(self.UnitId) end
 			elseif self._MACRO.Mouse4Down then 
 				self._MACRO.Mouse4Down() 
 			end
@@ -152,7 +152,7 @@ function WT.UnitFrame:SetMouse5Macro(macroText)
 	if self._MACRO.mouse5set == nil then
 		self:EventAttach(Event.UI.Input.Mouse.Mouse5.Down, function(self, h)
 			if self._MACRO.Mouse5Down == "menu" then 
-				self.Event.Mouse5Down = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
+				if self.UnitId then Command.Unit.Menu(self.UnitId) end
 			elseif self._MACRO.Mouse5Down then 
 				self._MACRO.Mouse5Down() 
 			end
@@ -168,12 +168,15 @@ function WT.UnitFrame:SetWheelForwardMacro(macroText)
 		Command.Console.Display("general", true, "ERROR IN WHEEL FORWARD MACRO DEFINITION", false)
 	end
 	self._MACRO.WheelForward = fn
-	if fn == "menu" then 
-		self.Event.WheelForward = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
-	elseif fn then 
-		self.Event.WheelForward = fn() 
-	else 
-		self.Event.WheelForward = nil 
+	if self._MACRO.wheelfwd == nil then
+		self:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, function(self, h)
+			if self._MACRO.WheelForward == "menu" then 
+				if self.UnitId then Command.Unit.Menu(self.UnitId) end
+			elseif self._MACRO.WheelForward then 
+				self._MACRO.WheelForward() 
+			end
+		end, "Event.UI.Input.Mouse.Wheel.Forward")
+		self._MACRO.wheelfwd = true
 	end
 end
 
@@ -184,12 +187,15 @@ function WT.UnitFrame:SetWheelBackMacro(macroText)
 		Command.Console.Display("general", true, "ERROR IN WHEEL BACK MACRO DEFINITION", false)
 	end
 	self._MACRO.WheelBack = fn
-	if fn == "menu" then 
-		self.Event.WheelBack = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
-	elseif fn then 
-		self.Event.WheelBack = fn() 
-	else 
-		self.Event.WheelBack = nil 
+	if self._MACRO.wheelbck == nil then
+		self:EventAttach(Event.UI.Input.Mouse.Wheel.Back, function(self, h)
+			if self._MACRO.WheelBack == "menu" then 
+				if self.UnitId then Command.Unit.Menu(self.UnitId) end
+			elseif self._MACRO.WheelBack then 
+				self._MACRO.WheelBack() 
+			end
+		end, "Event.UI.Input.Mouse.Wheel.Back")
+		self._MACRO.wheelbck = true
 	end
 end
 

@@ -233,8 +233,12 @@ function wtBuffPanel:Construct()
 			if row == 0 then col = col - 1 end
 		end
 		
-		icon.Event.MouseIn = ShowTooltip
-		icon.Event.MouseOut = HideTooltip
+		icon:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
+			ShowTooltip(icon)
+		end, "Event.UI.Input.Mouse.Cursor.In")
+		icon:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
+			HideTooltip(icon)
+		end, "Event.UI.Input.Mouse.Cursor.Out")
 		icon:SetMouseMasking("limited")
 	end
 

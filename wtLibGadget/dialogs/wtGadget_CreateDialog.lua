@@ -322,30 +322,26 @@ function WT.Gadget.ShowCreationUI()
 			
 			wrapper.gadgetConfig = config
 			
-			wrapper.Event.WheelForward = 
-				function()
-					typeListScrollbar:Nudge(-40)
-				end
-				
-			wrapper.Event.WheelBack = 
-				function()
-					typeListScrollbar:Nudge(40)
-				end
-			
-			wrapper.Event.MouseIn = 
-				function() 
-					if (not window.selected) or (window.selected ~= wrapper) then
-						wrapper:SetBackgroundColor(0.1, 0.2, 0.3, 0.6)
-					end 
-				end
+			wrapper:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, function(self, h)
+				typeListScrollbar:Nudge(-40)
+			end, "Event.UI.Input.Mouse.Wheel.Forward")
 
-			wrapper.Event.MouseOut = 
-				function() 
-					if (not window.selected) or (window.selected ~= wrapper) then
-						wrapper:SetBackgroundColor(0, 0, 0, 0) 
-					end 
-				end
-			
+			wrapper:EventAttach(Event.UI.Input.Mouse.Wheel.Back, function(self, h)
+				typeListScrollbar:Nudge(40)
+			end, "Event.UI.Input.Mouse.Wheel.Back")
+
+			wrapper:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
+				if (not window.selected) or (window.selected ~= wrapper) then
+					wrapper:SetBackgroundColor(0.1, 0.2, 0.3, 0.6)
+				end 
+			end, "Event.UI.Input.Mouse.Cursor.In")
+
+			wrapper:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
+				if (not window.selected) or (window.selected ~= wrapper) then
+					wrapper:SetBackgroundColor(0, 0, 0, 0) 
+				end 
+			end, "Event.UI.Input.Mouse.Cursor.Out")
+
 			wrapper.fn_LeftClick()			
 				local gadget = wrapper.gadgetConfig
 				if (window.selected) then

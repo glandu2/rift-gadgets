@@ -136,9 +136,11 @@ end
 
 
 btnGadget:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
-		btnDragStart()
+	btnDragStart()
 end, "Event.UI.Input.Mouse.Left.Down")
-btnGadget.Event.MouseMove = btnDragMove
+btnGadget:EventAttach(Event.UI.Input.Mouse.Cursor.Move, function(self, h)
+	btnDragMove
+end, "Event.UI.Input.Mouse.Cursor.Move")
 btnGadget:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
 	btnDragStop()
 end, "Event.UI.Input.Mouse.Left.Up")

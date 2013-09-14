@@ -111,8 +111,12 @@ local function LoadItems(control, listItems)
 	
 	for idx,item in ipairs(control.items) do
 		item:SetWidth(maxWidth)
-		item.Event.MouseIn = function() item:SetBackgroundColor(0.2, 0.4, 0.6, 1.0) end
-		item.Event.MouseOut = function() item:SetBackgroundColor(0.0, 0.0, 0.0, 0.0) end
+		item:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
+			item:SetBackgroundColor(0.2, 0.4, 0.6, 1.0)
+		end, "Event.UI.Input.Mouse.Cursor.In")
+		item:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
+			item:SetBackgroundColor(0.0, 0.0, 0.0, 0.0)
+		end, "Event.UI.Input.Mouse.Cursor.Out")
 	end
 
 end
@@ -194,8 +198,12 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 	
 	for idx,item in ipairs(control.items) do
 		item:SetWidth(maxWidth)
-		item.Event.MouseIn = function() item:SetBackgroundColor(0.2, 0.4, 0.6, 1.0) end
-		item.Event.MouseOut = function() item:SetBackgroundColor(0.0, 0.0, 0.0, 0.0) end
+		item:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
+			item:SetBackgroundColor(0.2, 0.4, 0.6, 1.0)
+		end, "Event.UI.Input.Mouse.Cursor.In")
+		item:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
+			item:SetBackgroundColor(0.0, 0.0, 0.0, 0.0)
+		end, "Event.UI.Input.Mouse.Cursor.Out")
 	end
 	
 	control.GetValue = function() return value end

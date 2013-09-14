@@ -82,9 +82,12 @@ function WT.Gadget.ShowImportDialog()
 			txtImport:SetPoint("CENTER", btnImport, "CENTER")
 
 			btnImport:EventMacroSet(Event.UI.Input.Mouse.Left.Click, "gadget import " .. charId .. "\nreloadui")
-			btnImport.Event.MouseIn = function() fillImport:SetBackgroundColor(0.4,0.6,0.8,1.0) end
-			btnImport.Event.MouseOut = function() fillImport:SetBackgroundColor(0.2,0.4,0.6,1.0) end
-
+			btnImport:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
+				fillImport:SetBackgroundColor(0.4,0.6,0.8,1.0)
+			end, "Event.UI.Input.Mouse.Cursor.In")
+			btnImport:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
+				fillImport:SetBackgroundColor(0.2,0.4,0.6,1.0)
+			end, "Event.UI.Input.Mouse.Cursor.Out")
 			lastButton = btnImport
 		end		
 	end

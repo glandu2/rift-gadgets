@@ -262,7 +262,9 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 
 	-- Configure the default (unthemed) movement handle
 	mvHandle:SetVisible(false)
-	mvHandle.Event.MouseMove = function() WT.Gadget.DragMove(mvHandle) end
+	mvHandle:EventAttach(Event.UI.Input.Mouse.Cursor.Move, function(self, h)
+		WT.Gadget.DragMove(mvHandle)
+	end, "Event.UI.Input.Mouse.Cursor.Move")
 	mvHandle:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
 		WT.Gadget.DragStart(mvHandle)
 	end, "Event.UI.Input.Mouse.Left.Down")
@@ -293,7 +295,9 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 		local szHandle = UI.CreateFrame("Texture", frame:GetName() .. "_szHandle", mvHandle) -- child of mvHandle, so will show/hide automatically 
 		szHandle:SetLayer(9999)
 		szHandle:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT")
-		szHandle.Event.MouseMove = function() WT.Gadget.SizeMove(szHandle) end
+		szHandle:EventAttach(Event.UI.Input.Mouse.Cursor.Move, function(self, h)
+			WT.Gadget.SizeMove(szHandle)
+		end, "Event.UI.Input.Mouse.Cursor.Move")
 		szHandle:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
 			WT.Gadget.DragStart(szHandle)
 		end, "Event.UI.Input.Mouse.Left.Down")

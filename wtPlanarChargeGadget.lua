@@ -69,8 +69,12 @@ local function Create(configuration)
 	});
 	chargeMeter.txtHover:SetVisible(false)
 
-	chargeMeter.Event.MouseIn = function() chargeMeter.txtHover:SetVisible(true) end
-	chargeMeter.Event.MouseOut = function() chargeMeter.txtHover:SetVisible(false) end
+	chargeMeter:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
+		chargeMeter.txtHover:SetVisible(true)
+	end, "Event.UI.Input.Mouse.Cursor.In")
+	chargeMeter:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
+		chargeMeter.txtHover:SetVisible(false)
+	end, "Event.UI.Input.Mouse.Cursor.Out")
 
 	chargeMeter.OnResize = function(frame, width,height)
 		--chargeMeter.txt01:SetFontSize(height*0.66)

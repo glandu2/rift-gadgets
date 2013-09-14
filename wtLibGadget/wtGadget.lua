@@ -263,7 +263,9 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 	-- Configure the default (unthemed) movement handle
 	mvHandle:SetVisible(false)
 	mvHandle.Event.MouseMove = function() WT.Gadget.DragMove(mvHandle) end
-	mvHandle.Event.LeftDown = function() WT.Gadget.DragStart(mvHandle) end
+	mvHandle:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
+		WT.Gadget.DragStart(mvHandle)
+	end, "Event.UI.Input.Mouse.Left.Down")
 	mvHandle.Event.LeftUp = function() WT.Gadget.DragStop(mvHandle) end
 	mvHandle.Event.LeftUpoutside = function() WT.Gadget.DragStop(mvHandle) end
 	mvHandle.Event.RightClick = function() handleShowMenu(); menuHandle:SetPoint("TOPLEFT", mvHandle, "BOTTOMLEFT"); menuHandleForGadget=gadgetId; end
@@ -285,7 +287,9 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 		szHandle:SetLayer(9999)
 		szHandle:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT")
 		szHandle.Event.MouseMove = function() WT.Gadget.SizeMove(szHandle) end
-		szHandle.Event.LeftDown = function() WT.Gadget.SizeStart(szHandle) end
+		szHandle:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
+			WT.Gadget.DragStart(szHandle)
+		end, "Event.UI.Input.Mouse.Left.Down")
 		szHandle.Event.LeftUp = function() WT.Gadget.SizeStop(szHandle) end
 		szHandle.Event.LeftUpoutside = function() WT.Gadget.SizeStop(szHandle) end
 		szHandle.frame = frame

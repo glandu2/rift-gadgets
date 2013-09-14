@@ -113,10 +113,10 @@ local function CreateSelector()
 	held:SetPoint("TOPLEFT", selector, "TOPLEFT", 149, 72)
 	held:SetWidth(16)
 	held:SetHeight(16)
-	held.Event.LeftDown = 
-		function() 
-			SetColor(held:GetBackgroundColor()) UpdateMarkers()
-		end
+	held:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
+		SetColor(held:GetBackgroundColor())
+		UpdateMarkers()
+	end, "Event.UI.Input.Mouse.Left.Down")
 
 	local cmdHold = UI.CreateFrame("Frame", "cmdHold", selector)
 	cmdHold:SetPoint("TOPRIGHT", held, "TOPLEFT", -5, 0)
@@ -253,13 +253,12 @@ local function CreateSelector()
 	olayAlpha.Event.LeftUp = function() dragging = nil end 
 	olayAlpha.Event.LeftUpoutside = function() dragging = nil end 
 
-	txtHex.Event.LeftDown = 
-		function() 				
-			local show = not hexEditor:GetVisible()
-			hexEditor.text:SetKeyFocus(show)
-			hexEditor:SetVisible(show) 
-		end
-			
+	txtHex:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
+		local show = not hexEditor:GetVisible()
+		hexEditor.text:SetKeyFocus(show)
+		hexEditor:SetVisible(show) 
+	end, "Event.UI.Input.Mouse.Left.Down")
+
 end
 		
 
@@ -274,10 +273,7 @@ local function CreateColourPicker(parent, r, g, b, a)
 	colourSwatch:SetBackgroundColor(r,g,b,a)
 	colourSwatch.Control = control
 
-	control.Event.LeftDown =
-	 
-		function()
-		 
+	control:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h) 
 			if not selector then
 				CreateSelector()	
 			end		
@@ -289,7 +285,7 @@ local function CreateColourPicker(parent, r, g, b, a)
 			UpdateMarkers()
 			blocker:SetVisible(true)
 			 
-		end
+	end, "Event.UI.Input.Mouse.Left.Down")
 
 	control.SetColor = 
 		function(ctrl, r, g, b, a)

@@ -74,11 +74,19 @@ function WT.UnitFrame:SetLeftMacro(macroText)
 	end
 	self._MACRO.LeftDown = fn
 	if fn == "menu" then 
-		self.Event.LeftDown = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
+		--self.Event.LeftDown = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
+		self:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
+			if self.UnitId then Command.Unit.Menu(self.UnitId) end
+		end, "Event.UI.Input.Mouse.Left.Down")
 	elseif fn then 
-		self.Event.LeftDown = fn() 
+		--self.Event.LeftDown = fn() 
+		self:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
+			fn()
+		end, "Event.UI.Input.Mouse.Left.Down")
 	else 
-		self.Event.LeftDown = nil 
+		--self.Event.LeftDown = nil 
+		self:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
+		end, "Event.UI.Input.Mouse.Left.Down")
 	end
 end
 

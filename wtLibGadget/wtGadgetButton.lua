@@ -135,7 +135,9 @@ function btnMenu:OnClose()
 end
 
 
-btnGadget.Event.LeftDown = btnDragStart
+btnGadget:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
+		btnDragStart()
+end, "Event.UI.Input.Mouse.Left.Down")
 btnGadget.Event.MouseMove = btnDragMove
 btnGadget.Event.LeftUp = btnDragStop
 btnGadget.Event.LeftUpoutside = btnDragStop

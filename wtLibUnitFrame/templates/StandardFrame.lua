@@ -292,12 +292,9 @@ function StandardFrame:Construct(options)
 	end
 	
 	if options.contextMenu then 
-		self.Event.RightClick = 
-			function() 
-				if self.UnitId then 
-					Command.Unit.Menu(self.UnitId) 
-				end 
-			end 
+		self:EventAttach(Event.UI.Input.Mouse.Right.Click, function(self, h)
+			if self.UnitId then Command.Unit.Menu(self.UnitId) end
+		end, "Event.UI.Input.Mouse.Right.Click")
 	end
 		
 	--[[ 

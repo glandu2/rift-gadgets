@@ -271,7 +271,11 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 	end, "Event.UI.Input.Mouse.Left.Up")
 
 	mvHandle.Event.LeftUpoutside = function() WT.Gadget.DragStop(mvHandle) end
-	mvHandle.Event.RightClick = function() handleShowMenu(); menuHandle:SetPoint("TOPLEFT", mvHandle, "BOTTOMLEFT"); menuHandleForGadget=gadgetId; end
+	mvHandle:EventAttach(Event.UI.Input.Mouse.Right.Click, function(self, h)
+		handleShowMenu()
+		menuHandle:SetPoint("TOPLEFT", mvHandle, "BOTTOMLEFT")
+		menuHandleForGadget=gadgetId;
+	end, "Event.UI.Input.Mouse.Right.Click")
 	mvHandle.frame = frame
 	mvHandle.gadgetId = gadgetId
 	mvHandle:SetPoint("TOPLEFT", frame, "TOPLEFT")

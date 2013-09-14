@@ -237,14 +237,13 @@ function XBG.Create(configuration)
 		txt:SetEffectGlow({ strength = 1 })
 		wrapper.textType = configuration.showFullText
 		wrapper.text = txt
-		bar.Event.Size = 
-			function()
-				if configuration.largeText then
-					txt:SetFontSize(bar:GetHeight() * 0.9)
-				else
-					txt:SetFontSize(bar:GetHeight() * 0.6)
-				end
+		bar:EventAttach(Event.UI.Layout.Size, function(self, h)
+			if configuration.largeText then
+				txt:SetFontSize(bar:GetHeight() * 0.9)
+			else
+				txt:SetFontSize(bar:GetHeight() * 0.6)
 			end
+		end, "Event.UI.Layout.Size")
 	end
 
 	if configuration.xpType == "XP" then

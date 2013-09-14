@@ -432,11 +432,9 @@ local function CreateUnitFrame(config)
 	 		visibilityBinding="tier",
 	 	})
 	 
-	 	elPortBorder.Event.Size = 
-	 		function()
-	 			elPortBorder:SetWidth(elPortBorder:GetHeight())
-	 		end
-
+	 	elPortBorder:EventAttach(Event.UI.Layout.Size, function(self, h)
+			elPortBorder:SetWidth(elPortBorder:GetHeight())
+		end, "Event.UI.Layout.Size")
 	end
 
 	if config.showRightPortrait then
@@ -502,11 +500,9 @@ local function CreateUnitFrame(config)
 	 		visibilityBinding="tier",
 	 	})
 	 
-	 	elPortBorderR.Event.Size = 
-	 		function()
-	 			elPortBorderR:SetWidth(elPortBorderR:GetHeight())
-	 		end
-
+	 	elPortBorderR:EventAttach(Event.UI.Layout.Size, function(self, h)
+			elPortBorderR:SetWidth(elPortBorderR:GetHeight())
+		end, "Event.UI.Layout.Size")
 	end
 	
 	return uf, options

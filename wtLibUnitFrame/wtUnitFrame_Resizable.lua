@@ -155,8 +155,7 @@ end
 
 function WT.UnitFrame.EnableResizableTemplate(rootFrame, frameWidth, frameHeight, elList)
 	
-	rootFrame.Event.Size = function(frame)
-	
+	rootFrame:EventAttach(Event.UI.Layout.Size, function(self, h)
 		local newWidth = rootFrame:GetWidth()
 		local newHeight = rootFrame:GetHeight()
 	
@@ -174,8 +173,8 @@ function WT.UnitFrame.EnableResizableTemplate(rootFrame, frameWidth, frameHeight
 				end
 			end
 		end
-	end
-	
+	end, "Event.UI.Layout.Size")
+
 	local els = {}
 	els["frame"] = { id="frame", left = 0, top = 0, width = frameWidth, height = frameHeight }
 

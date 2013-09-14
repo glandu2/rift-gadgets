@@ -111,10 +111,9 @@ function WT.Gadget.ShowCreationUI()
 		local typeListScrollbar = UI.CreateFrame("RiftScrollbar", "WTGadgetTypeScroll", frameTypeList)
 		typeListScrollbar:SetPoint("TOPRIGHT", frameTypeList, "TOPRIGHT", -1, 1)
 		typeListScrollbar:SetPoint("BOTTOM", frameTypeList, "BOTTOM", nil, -1)
-		typeListScrollbar.Event.ScrollbarChange = 
-			function()
-				frameScrollAnchor:SetPoint("TOPLEFT", frameTypeList, "TOPLEFT", 0, -typeListScrollbar:GetPosition())
-			end
+		typeListScrollbar:EventAttach(Event.UI.Scrollbar.Change, function(self, h)
+			frameScrollAnchor:SetPoint("TOPLEFT", frameTypeList, "TOPLEFT", 0, -typeListScrollbar:GetPosition())
+		end, "Event.UI.Scrollbar.Change")
 			
 		frameTypeList:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, function() typeListScrollbar:Nudge(-40) end, "WheelForward")
 		frameTypeList:EventAttach(Event.UI.Input.Mouse.Wheel.Back, function() typeListScrollbar:Nudge(40) end, "WheelBack")

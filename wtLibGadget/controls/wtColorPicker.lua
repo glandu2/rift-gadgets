@@ -157,37 +157,35 @@ local function CreateSelector()
 	
 	hexEditor:SetVisible(false)
 	
-	txtHexEditor.Event.KeyDown = 
-		function(ctrl, key)
-			if key == "\r" then
-				txtHexEditor:SetKeyFocus(false)
-				hexEditor:SetVisible(false)
-			end
+	txtHexEditor:EventAttach(Event.UI.Input.Key.Down, function(self, h, key)
+		if key == "Return" then
+			txtHexEditor:SetKeyFocus(false)
+			hexEditor:SetVisible(false)
 		end
+	end, "Event.UI.Input.Key.Down")
 	
-	txtHexEditor.Event.TextfieldChange = 
-		function()
-			local txt = txtHexEditor:GetText():upper()
-			if txt:len() > 8 then
-				txt = txt:sub(1, 8)				
-			end
-			txtHexEditor:SetText(txt)
-			local pattern = "[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]"
-			if txt:match(pattern) then
-				lblValid:SetText("OK")
-				lblValid:SetFontColor(0,1,0,1)
-				txtHex:SetText(txt)
-				local a = tonumber(txt:sub(1,2), 16) / 255
-				local r = tonumber(txt:sub(3,4), 16) / 255
-				local g = tonumber(txt:sub(5,6), 16) / 255
-				local b = tonumber(txt:sub(7,8), 16) / 255
-				SetColor(r,g,b,a)
-				UpdateMarkers()
-			else
-				lblValid:SetText("INVALID")
-				lblValid:SetFontColor(1,0,0,1)
-			end 
+	txtHexEditor:EventAttach(Event.UI.Textfield.Change, function(self, h)
+		local txt = txtHexEditor:GetText():upper()
+		if txt:len() > 8 then
+			txt = txt:sub(1, 8)				
 		end
+		txtHexEditor:SetText(txt)
+		local pattern = "[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]"
+		if txt:match(pattern) then
+			lblValid:SetText("OK")
+			lblValid:SetFontColor(0,1,0,1)
+			txtHex:SetText(txt)
+			local a = tonumber(txt:sub(1,2), 16) / 255
+			local r = tonumber(txt:sub(3,4), 16) / 255
+			local g = tonumber(txt:sub(5,6), 16) / 255
+			local b = tonumber(txt:sub(7,8), 16) / 255
+			SetColor(r,g,b,a)
+			UpdateMarkers()
+		else
+			lblValid:SetText("INVALID")
+			lblValid:SetFontColor(1,0,0,1)
+		end 
+	end, "Event.UI.Textfield.Change")
 	
 	local ctrlWidth = 131
 	

@@ -152,7 +152,9 @@ local function Create(configuration)
 			end
 		end
 	
-	castBar.barCast.Event.Size = castBar.OnResize 
+	castBar.barCast	:EventAttach(Event.UI.Layout.Size, function(self, h)
+		castBar.OnResize()
+	end, "Event.UI.Layout.Size")
 
 	castBar:CreateBinding("castName", castBar, OnCastName, nil)
 

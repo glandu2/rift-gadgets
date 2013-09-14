@@ -99,26 +99,24 @@ function wtImageSet:Construct()
 		unitFrame:CreateBinding(config.nameBinding, self, self.SetName, config.defaultName or "")
 	end
 
-	self.Event.Size = 
-		function()
-			local newWidth = self:GetWidth()
-			local newHeight = self:GetHeight()
-		
-			if newWidth >= 1.0 and newHeight >= 1.0 then
+	self:EventAttach(Event.UI.Layout.Size, function(self, h)
+		local newWidth = self:GetWidth()
+		local newHeight = self:GetHeight()
+	
+		if newWidth >= 1.0 and newHeight >= 1.0 then
 
-				self.totalWidth = newWidth * self.cols
-				self.image:SetWidth(self.totalWidth)
-				self.tileWidth = newWidth
-		
-				self.totalHeight = newHeight * self.rows
-				self.image:SetHeight(self.totalHeight)
-				self.tileHeight = newHeight		
+			self.totalWidth = newWidth * self.cols
+			self.image:SetWidth(self.totalWidth)
+			self.tileWidth = newWidth
+	
+			self.totalHeight = newHeight * self.rows
+			self.image:SetHeight(self.totalHeight)
+			self.tileHeight = newHeight		
 
-			end
-
-			self:Refresh()
 		end
 
+		self:Refresh()
+	end, "Event.UI.Layout.Size")
 end
 
 function wtImageSet:Refresh()

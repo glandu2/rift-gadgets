@@ -94,7 +94,9 @@ function WT.Gadget.ShowSettings()
 		local btnOK = UI.CreateFrame("RiftButton", "btnOK", window)
 		btnOK:SetPoint("TOPLEFT", tabs, "BOTTOMLEFT", 0, 4)
 		btnOK:SetText("Save")
-		btnOK.Event.LeftPress = SaveSettings
+		btnOK:EventAttach(Event.UI.Button.Left.Press, function(self, h)
+			SaveSettings()
+		end, "Event.UI.Button.Left.Press")
 
 		local contentOptions = UI.CreateFrame("Frame", "contentOptions", tabs.tabContent)
 		contentOptions:SetAllPoints(window:GetContent())

@@ -137,7 +137,10 @@ function WT.Gadget.ShowCreationUI()
 		local btnCancel = UI.CreateFrame("RiftButton", "WTGadgetBtnCancel", frameOptions)
 		btnCancel:SetText(TXT.Cancel)
 		btnCancel:SetPoint("BOTTOMRIGHT", frameOptions, "BOTTOMRIGHT", -8, -8)
-		btnCancel.Event.LeftPress = function() window:SetVisible(false); WT.Utility.ClearKeyFocus(window); end
+		btnCancel:EventAttach(Event.UI.Button.Left.Press, function(self, h)
+			window:SetVisible(false)
+			WT.Utility.ClearKeyFocus(window)
+		end, "Event.UI.Button.Left.Press")
 			
 		-- frameOptions will host the dialog provided by the gadget factory assuming one is available
 
@@ -218,8 +221,10 @@ function WT.Gadget.ShowCreationUI()
 		btnModify:SetText(TXT.Modify)
 		btnModify:SetPoint("CENTERRIGHT", btnCancel, "CENTERLEFT", 8, 0)
 		btnModify:SetEnabled(true)
-		btnModify.Event.LeftPress = OnModifyClick
-		
+		btnModify:EventAttach(Event.UI.Button.Left.Press, function(self, h)
+			OnModifyClick()
+		end, "Event.UI.Button.Left.Press")
+
 		-- Setup the OK button
 		
 		local btnOK = UI.CreateFrame("RiftButton", "WTGadgetBtnOK", frameOptions)
@@ -227,42 +232,40 @@ function WT.Gadget.ShowCreationUI()
 		btnOK:SetText(TXT.Create)
 		btnOK:SetPoint("CENTERRIGHT", btnCancel, "CENTERLEFT", 8, 0)
 		btnOK:SetEnabled(false)
-		btnOK.Event.LeftPress = 
-			function()
-			
-				-- Give the creation enough time to run
-				WT.WatchdogSleep()			
-			
-				local gadget = window.selected.gadgetConfig
-				local config = {}
-				if gadget.GetConfiguration then
-				 	config = gadget.GetConfiguration()
-				end
-				
-				config.show_Solo = chkShow_Solo:GetChecked()
-				config.show_Party = chkShow_Party:GetChecked()
-				config.show_Raid10 = chkShow_Raid10:GetChecked()
-				config.show_Raid20 = chkShow_Raid20:GetChecked()
-				config.alpha_IC = sldAlphaIC:GetPosition()
-				config.alpha_OOC = sldAlphaOOC:GetPosition()
-				
-				config.type = gadget.gadgetType
-				-- Generate a unique ID for the gadget
-				local idx = 1
-				while WT.Gadgets[gadget.gadgetType .. idx] do idx = idx + 1 end
-				config.id = gadget.gadgetType .. idx
-				
-				-- WT.Gadget.InitializePropertyConfig(config)
-				
-				local newGadget = WT.Gadget.Create(config)
-				
-				WT.Utility.ClearKeyFocus(window)
-				window:SetVisible(false)
-				
-				WT.Gadget.UnlockAll() -- Always unlock gadgets when adding a new one through the dialog, so it can be moved
-				 
-				return
+		btnOK:EventAttach(Event.UI.Button.Left.Press, function(self, h)
+			-- Give the creation enough time to run
+			WT.WatchdogSleep()			
+		
+			local gadget = window.selected.gadgetConfig
+			local config = {}
+			if gadget.GetConfiguration then
+				config = gadget.GetConfiguration()
 			end
+			
+			config.show_Solo = chkShow_Solo:GetChecked()
+			config.show_Party = chkShow_Party:GetChecked()
+			config.show_Raid10 = chkShow_Raid10:GetChecked()
+			config.show_Raid20 = chkShow_Raid20:GetChecked()
+			config.alpha_IC = sldAlphaIC:GetPosition()
+			config.alpha_OOC = sldAlphaOOC:GetPosition()
+			
+			config.type = gadget.gadgetType
+			-- Generate a unique ID for the gadget
+			local idx = 1
+			while WT.Gadgets[gadget.gadgetType .. idx] do idx = idx + 1 end
+			config.id = gadget.gadgetType .. idx
+			
+			-- WT.Gadget.InitializePropertyConfig(config)
+			
+			local newGadget = WT.Gadget.Create(config)
+			
+			WT.Utility.ClearKeyFocus(window)
+			window:SetVisible(false)
+			
+			WT.Gadget.UnlockAll() -- Always unlock gadgets when adding a new one through the dialog, so it can be moved
+			 
+			return
+		end, "Event.UI.Button.Left.Press")
 		
 		
 		-- Now populate the frameTypeList with all available gadget types.

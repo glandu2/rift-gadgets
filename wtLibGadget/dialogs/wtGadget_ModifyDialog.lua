@@ -79,7 +79,9 @@ function WT.Gadget.ShowModifyUI(id)
 		btnOK:SetText(TXT.Modify)
 		btnOK:SetPoint("CENTERRIGHT", WT.Gadget.ModifyGadgetWindow.btnCancel, "CENTERLEFT", 8, 0)
 		btnOK:SetEnabled(true)
-		btnOK.Event.LeftPress = OnModifyClick 
+		btnOK:EventAttach(Event.UI.Button.Left.Press, function(self, h)
+			OnModifyClick()
+		end, "Event.UI.Button.Left.Press")
 
 --[[ 
 	

@@ -73,7 +73,10 @@ function WT.Control.TexSelect.Create(parent, label, default, mediaTag, onchange)
 	local menu = WT.Control.Menu.Create(parent, listMedia, function(value) tfValue:SetText(value); UpdateTexture(texTexture, value); if onchange then onchange(tostring(value)) end; end, true)
 	menu:SetPoint("TOPRIGHT", dropDownIcon, "BOTTOMCENTER")
 
-	dropDownIcon.Event.LeftClick = function() menu:Toggle() end
+	dropDownIcon:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+		menu:Toggle()
+	end, "Event.UI.Input.Mouse.Left.Click")
+
 
 	control.GetText = function() return tfValue:GetText() end
 	control.SetText = 

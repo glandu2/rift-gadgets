@@ -43,8 +43,9 @@ function WT.Gadget.Message(title, message)
 		local btnOK = UI.CreateFrame("RiftButton", "WTMessageDialog", dialog)
 		btnOK:SetText(TXT.OK)
 		btnOK:SetPoint("TOPCENTER", detail, "BOTTOMCENTER", 0, 3) 
-		btnOK.Event.LeftClick = function() WT.FadeOut(dialog, 0.5) end
-
+		btnOK:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+			WT.FadeOut(dialog, 0.5)
+		end, "Event.UI.Input.Mouse.Left.Click")
 		WT.Gadget.MessageDialog = dialog
 		
 	end

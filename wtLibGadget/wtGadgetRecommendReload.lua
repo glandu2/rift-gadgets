@@ -44,7 +44,7 @@ function WT.Gadget.RecommendReload()
 		btnReload:SetText(TXT.ReloadUI)
 		btnReload:SetPoint("TOPCENTER", detail, "BOTTOMCENTER", 0, 3) 
 		btnReload:SetSecureMode("restricted")
-		btnReload.Event.LeftClick = "reloadui"
+		btnReload:EventMacroSet(Event.UI.Input.Mouse.Left.Click, "reloadui")
 
 		WT.Gadget.ReloadDialog = dialog
 	end

@@ -57,7 +57,9 @@ function WT.Control.Select.Create(parent, label, default, listItems, sort, oncha
 	local menu = WT.Control.Menu.Create(parent, listItems, function(value) tfValue:SetText(value); if onchange then onchange(tostring(value)) end; end, sort)
 	menu:SetPoint("TOPRIGHT", dropDownIcon, "BOTTOMCENTER")
 
-	dropDownIcon.Event.LeftClick = function() menu:Toggle() end
+	dropDownIcon:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+		menu:Toggle()
+	end, "Event.UI.Input.Mouse.Left.Click")
 
 	control.GetText = function() return tfValue:GetText() end
 	control.SetText = 

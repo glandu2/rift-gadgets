@@ -288,7 +288,7 @@ function StandardFrame:Construct(options)
 	self:SetMouseoverUnit(self.UnitSpec)
 	
 	if options.clickToTarget then 
-		self.Event.LeftClick = "target @" .. self.UnitSpec 
+		self:EventMacroSet(Event.UI.Input.Mouse.Left.Click, "target @" .. self.UnitSpec)
 	end
 	
 	if options.contextMenu then 

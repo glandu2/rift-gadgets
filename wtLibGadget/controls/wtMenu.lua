@@ -40,8 +40,12 @@ local catchAllClicks = UI.CreateFrame("Frame", WT.UniqueName("Menu"), ctxMenu)
 catchAllClicks:SetLayer(10000)
 catchAllClicks:SetVisible(false)
 catchAllClicks:SetAllPoints(UIParent)
-catchAllClicks.Event.LeftClick = OnClickOutside
-catchAllClicks.Event.RightClick = OnClickOutside
+catchAllClicks:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+		OnClickOutside()
+	end, "Event.UI.Input.Mouse.Left.Click")
+catchAllClicks:EventAttach(Event.UI.Input.Mouse.Right.Click, function(self, h)
+		OnClickOutside()
+	end, "Event.UI.Input.Mouse.Right.Click")
 
 local function MenuItemClicked(menu, itemIndex)
 	local clicked = menu.items[itemIndex]
@@ -70,7 +74,10 @@ local function LoadItems(control, listItems)
 		
 		if not txtOption then 
 			txtOption = UI.CreateFrame("Text", WT.UniqueName("ComboOption"), control.dropDownBackground) 
-			txtOption.Event.LeftClick = function() MenuItemClicked(control, i) end
+			dropDownIcon:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+				MenuItemClicked(control, i)
+			end, "Event.UI.Input.Mouse.Left.Click")
+
 			table.insert(control.items, txtOption)
 		end
 
@@ -160,7 +167,10 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 		else
 			txtOption:SetPoint("TOPLEFT", last, "BOTTOMLEFT", 0, 2)
 		end
-		txtOption.Event.LeftClick = function() MenuItemClicked(control, i) end
+		txtOption:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+			MenuItemClicked(control,i)
+		end, "Event.UI.Input.Mouse.Left.Click")
+
 		--[[ 
 			function()
 				if type(v) == "table" then

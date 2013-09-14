@@ -196,7 +196,7 @@ function RaidFrame:Construct(options)
 	self:SetMouseoverUnit(self.UnitSpec)
 	self:SetMouseMasking("limited")
 	if options.clickToTarget then
-		self.Event.LeftClick = "target @" .. self.UnitSpec
+		self:EventMacroSet(Event.UI.Input.Mouse.Left.Click, "target @" .. self.UnitSpec)
 	end
 	if options.contextMenu then
 		self.Event.RightClick = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end

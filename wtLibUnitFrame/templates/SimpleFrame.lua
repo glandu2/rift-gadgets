@@ -221,6 +221,6 @@ function SimpleFrame:Construct(options)
 	
 	self:SetSecureMode("restricted")
 	self:SetMouseoverUnit(self.UnitSpec)
-	self.Event.LeftClick = "target @" .. self.UnitSpec
+	self:EventMacroSet(Event.UI.Input.Mouse.Left.Click, "target @" .. self.UnitSpec)
 	self.Event.RightClick = function() if self.UnitId then Command.Unit.Menu(self.UnitId) end end
 end

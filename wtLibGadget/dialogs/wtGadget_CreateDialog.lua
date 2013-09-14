@@ -346,51 +346,54 @@ function WT.Gadget.ShowCreationUI()
 					end 
 				end
 			
-			wrapper.Event.LeftClick = 
-				function()
-					local gadget = wrapper.gadgetConfig
-					if (window.selected) then
-						window.selected:SetBackgroundColor(0, 0, 0, 0)
-					end 
-					wrapper:SetBackgroundColor(0.2, 0.4, 0.6, 0.8)
-					window.selected = wrapper
-					frameOptionsHeading:SetText(gadget.name)
-					gadgetDetails:SetText(TXT.Version .. " " .. gadget.version .. ", " .. TXT.writtenBy .. " " .. gadget.author)
-					
-					if window.dialog then
-						window.dialog:SetVisible(false)
-						window.dialog = nil
+			wrapper.fn_LeftClick()			
+				local gadget = wrapper.gadgetConfig
+				if (window.selected) then
+					window.selected:SetBackgroundColor(0, 0, 0, 0)
+				end 
+				wrapper:SetBackgroundColor(0.2, 0.4, 0.6, 0.8)
+				window.selected = wrapper
+				frameOptionsHeading:SetText(gadget.name)
+				gadgetDetails:SetText(TXT.Version .. " " .. gadget.version .. ", " .. TXT.writtenBy .. " " .. gadget.author)
+				
+				if window.dialog then
+					window.dialog:SetVisible(false)
+					window.dialog = nil
+				end
+				
+				if gadget.ConfigDialog then
+					if not gadget._configDialog then
+						local container = UI.CreateFrame("Frame", WT.UniqueName("gadgetOptionsContainer"), frameOptions)
+						container:SetPoint("TOPLEFT", standardOptions, "BOTTOMLEFT", 0, 8)
+						container:SetPoint("BOTTOMRIGHT", frameOptions, "BOTTOMRIGHT", -8, -8)
+						container:SetLayer(100)
+						container:SetVisible(false)
+						gadget.ConfigDialog(container)
+						gadget._configDialog = container
 					end
+					window.dialog = gadget._configDialog 
+					if window.dialog.Reset then window.dialog.Reset() end
 					
-					if gadget.ConfigDialog then
-						if not gadget._configDialog then
-							local container = UI.CreateFrame("Frame", WT.UniqueName("gadgetOptionsContainer"), frameOptions)
-							container:SetPoint("TOPLEFT", standardOptions, "BOTTOMLEFT", 0, 8)
-							container:SetPoint("BOTTOMRIGHT", frameOptions, "BOTTOMRIGHT", -8, -8)
-							container:SetLayer(100)
-							container:SetVisible(false)
-							gadget.ConfigDialog(container)
-							gadget._configDialog = container
-						end
-						window.dialog = gadget._configDialog 
-						if window.dialog.Reset then window.dialog.Reset() end
-						
-						window.dialog:SetParent(frameOptions)
-						window.dialog:SetPoint("TOPLEFT", standardOptions, "BOTTOMLEFT", 0, 8)
-						window.dialog:SetPoint("BOTTOMRIGHT", frameOptions, "BOTTOMRIGHT", -8, -8)
-						window.dialog:SetVisible(true)
-					end
-					
-					standardOptions:SetVisible(true)
-					chkShow_Solo:SetChecked(true)
-					chkShow_Party:SetChecked(true)
-					chkShow_Raid10:SetChecked(true)
-					chkShow_Raid20:SetChecked(true)
-					sldAlphaIC:SetPosition(100)
-					sldAlphaOOC:SetPosition(100)
-					
-					btnOK:SetEnabled(true)					
-				end			
+					window.dialog:SetParent(frameOptions)
+					window.dialog:SetPoint("TOPLEFT", standardOptions, "BOTTOMLEFT", 0, 8)
+					window.dialog:SetPoint("BOTTOMRIGHT", frameOptions, "BOTTOMRIGHT", -8, -8)
+					window.dialog:SetVisible(true)
+				end
+				
+				standardOptions:SetVisible(true)
+				chkShow_Solo:SetChecked(true)
+				chkShow_Party:SetChecked(true)
+				chkShow_Raid10:SetChecked(true)
+				chkShow_Raid20:SetChecked(true)
+				sldAlphaIC:SetPosition(100)
+				sldAlphaOOC:SetPosition(100)
+				
+				btnOK:SetEnabled(true)
+			end
+			
+			wrapper:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+				wrapper.fn_LeftClick()
+			end, "Event.UI.Input.Mouse.Left.Click")
 
 			-- there are 48 pixels per entry in the list (total height of wrapper + margin)
 			local wrappersHeight = numListItems * 48
@@ -428,7 +431,7 @@ function WT.Gadget.ShowCreationUI()
 	window.frameModifyOverlay:SetVisible(false)
 	window.frameTypeList:SetVisible(true)
 
-	listItems[1].Event.LeftClick()
+	listItems[1].fn_LeftClick()
 
 end
 

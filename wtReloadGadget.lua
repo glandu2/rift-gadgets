@@ -21,7 +21,7 @@ local function Create(configuration)
 	local control = UI.CreateFrame("RiftButton", WT.UniqueName("wtRELOAD"), WT.Context)
 	control:SetText(TXT.ReloadUI)
 	control:SetSecureMode("restricted")
-	control:EventMacroSet(Event.UI.Button.Left.Press, "reloadui")
+	control:EventMacroSet(Event.UI.Input.Mouse.Left.Click, "reloadui")
 	return control
 end
 

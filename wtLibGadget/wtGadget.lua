@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : v0.4.8
-      Project Date (UTC)  : 2013-07-04T23:34:42Z
-      File Modified (UTC) : 2013-06-12T07:29:43Z (Wildtide)
+      Gadgets Framework   : @project-version@
+      Project Date (UTC)  : @project-date-iso@
+      File Modified (UTC) : @file-date-iso@ (@file-author@)
       -----------------------------------------------------------------     
 --]]
 
@@ -262,11 +262,23 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 
 	-- Configure the default (unthemed) movement handle
 	mvHandle:SetVisible(false)
-	mvHandle.Event.MouseMove = function() WT.Gadget.DragMove(mvHandle) end
-	mvHandle.Event.LeftDown = function() WT.Gadget.DragStart(mvHandle) end
-	mvHandle.Event.LeftUp = function() WT.Gadget.DragStop(mvHandle) end
-	mvHandle.Event.LeftUpoutside = function() WT.Gadget.DragStop(mvHandle) end
-	mvHandle.Event.RightClick = function() handleShowMenu(); menuHandle:SetPoint("TOPLEFT", mvHandle, "BOTTOMLEFT"); menuHandleForGadget=gadgetId; end
+	mvHandle:EventAttach(Event.UI.Input.Mouse.Cursor.Move, function(self, h)
+		WT.Gadget.DragMove(mvHandle)
+	end, "Event.UI.Input.Mouse.Cursor.Move")
+	mvHandle:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
+		WT.Gadget.DragStart(mvHandle)
+	end, "Event.UI.Input.Mouse.Left.Down")
+	mvHandle:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
+		WT.Gadget.DragStop(mvHandle)
+	end, "Event.UI.Input.Mouse.Left.Up")
+	mvHandle:EventAttach(Event.UI.Input.Mouse.Left.Upoutside, function(self, h)
+		WT.Gadget.DragStop(mvHandle)
+	end, "Event.UI.Input.Mouse.Left.Upoutside")
+	mvHandle:EventAttach(Event.UI.Input.Mouse.Right.Click, function(self, h)
+		handleShowMenu()
+		menuHandle:SetPoint("TOPLEFT", mvHandle, "BOTTOMLEFT")
+		menuHandleForGadget=gadgetId;
+	end, "Event.UI.Input.Mouse.Right.Click")
 	mvHandle.frame = frame
 	mvHandle.gadgetId = gadgetId
 	mvHandle:SetPoint("TOPLEFT", frame, "TOPLEFT")
@@ -284,10 +296,18 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 		local szHandle = UI.CreateFrame("Texture", frame:GetName() .. "_szHandle", mvHandle) -- child of mvHandle, so will show/hide automatically 
 		szHandle:SetLayer(9999)
 		szHandle:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT")
-		szHandle.Event.MouseMove = function() WT.Gadget.SizeMove(szHandle) end
-		szHandle.Event.LeftDown = function() WT.Gadget.SizeStart(szHandle) end
-		szHandle.Event.LeftUp = function() WT.Gadget.SizeStop(szHandle) end
-		szHandle.Event.LeftUpoutside = function() WT.Gadget.SizeStop(szHandle) end
+		szHandle:EventAttach(Event.UI.Input.Mouse.Cursor.Move, function(self, h)
+			WT.Gadget.SizeMove(szHandle)
+		end, "Event.UI.Input.Mouse.Cursor.Move")
+		szHandle:EventAttach(Event.UI.Input.Mouse.Left.Down, function(self, h)
+			WT.Gadget.SizeStart(szHandle)
+		end, "Event.UI.Input.Mouse.Left.Down")
+		szHandle:EventAttach(Event.UI.Input.Mouse.Left.Up, function(self, h)
+			WT.Gadget.SizeStop(szHandle)
+		end, "Event.UI.Input.Mouse.Left.Up")
+		szHandle:EventAttach(Event.UI.Input.Mouse.Left.Upoutside, function(self, h)
+			WT.Gadget.SizeStop(szHandle)
+		end, "Event.UI.Input.Mouse.Left.Upoutside")
 		szHandle.frame = frame
 		szHandle.gadgetId = gadgetId
 		szHandle.minX, szHandle.minY, szHandle.maxX, szHandle.maxY = unpack(createOptions.resizable)  
@@ -685,7 +705,7 @@ function WT.Gadget.SetGadgetGroupVisible(gadget, groupMode)
 end
 
 
-local function OnGroupModeChanged(groupMode)
+local function OnGroupModeChanged(hEvent, groupMode)
 	for gadgetId, gadget in pairs(WT.Gadgets) do
 		WT.Gadget.SetGadgetGroupVisible(gadget, groupMode)
 	end
@@ -728,6 +748,7 @@ local function Initialize()
 	-- Command.Console.Display("general", true, "<font color='#cccccc'>" .. gadgetList .. "</font> ", true)
 end
 
+
 local function OnSaveVariables(hEvent, saveAddonId)
 	if saveAddonId == AddonId then
 		if not wtxLayouts then wtxLayouts = {} end
@@ -745,11 +766,9 @@ end
 
 -- Register an initializer to handle loading of gadgets
 WT.RegisterInitializer(Initialize)
---Command.Event.Attach(Event.Unit.Detail.Role, RoleChange, "RoleChange")
+
 
 Command.Event.Attach(Event.System.Secure.Enter, WT.Gadget.SecureEnter, "Gadget_SecureEnter")
-Command.Event.Attach(Event.System.Secure.Leave, WT.Gadget.SecureLeave, "Gadget_SecureLeave")	
-
+Command.Event.Attach(Event.System.Secure.Leave, WT.Gadget.SecureLeave, "Gadget_SecureLeave")
 Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, OnSaveVariables, "Gadget_OnSaveVariables")
-
-table.insert(WT.Event.GroupModeChanged, { OnGroupModeChanged, AddonId, AddonId .. "_OnGroupModeChanged" })
+Command.Event.Attach(WT.Event.GroupModeChanged, OnGroupModeChanged, AddonId .. "_OnGroupModeChanged" )

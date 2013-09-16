@@ -68,6 +68,10 @@ function wtBarHealth:Construct()
 	if config.colorBinding then
 		self.UnitFrame:CreateBinding(config.colorBinding, self, self.BindColor, nil)
 	end
+	
+	if config.backgroundColorBinding then
+		self.UnitFrame:CreateBinding(config.backgroundColorBinding, self, self.BindbackgroundColor, nil)
+	end
 
 	if config.color then
 		self:SetBarColor(config.color.r, config.color.g, config.color.b, config.color.a)
@@ -84,7 +88,7 @@ function wtBarHealth:Construct()
         local nameBase = unitFrame:GetName()
 		local parent = unitFrame:GetParent()
 		local unitFrameLayer = unitFrame:GetLayer()
-	    local  width = self.width or 2
+	    local  width = self.width or 1
 	    self.position = "outside"
 		--local width = self.width  	  	
 
@@ -147,6 +151,12 @@ function wtBarHealth:BindPercent(percentage)
 	end
 end
 
+function wtBarHealth:BindbackgroundColor(backgroundColor)
+	if backgroundColor then
+		self:SetBackgroundColor(backgroundColor.r or 0, backgroundColor.g or 0, backgroundColor.b or 0, backgroundColor.a or 0)
+	end
+end
+
 function wtBarHealth:BindColor(color)
 	if color then
 		self:SetBarColor(color.r, color.g, color.b, color.a)
@@ -159,7 +169,6 @@ end
 function wtBarHealth:SetBarColor(r,g,b,a)
 	self.Image:SetBackgroundColor(r or 0, g or 0, b or 0, a or 1)
 end
-
 
 function wtBarHealth:SetBarMedia(mediaId, border)
 	Library.Media.SetTexture(self.Image, mediaId)

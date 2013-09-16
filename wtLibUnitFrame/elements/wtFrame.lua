@@ -24,6 +24,10 @@ function wtFrame:Construct()
 		self:SetBackgroundColor(config.color.r or 0, config.color.g or 0, config.color.b or 0, config.color.a or 1)
 	end
 
+	if config.FrameAlphaBinding then
+		unitFrame:CreateBinding(config.FrameAlphaBinding, self, self.BindFrameAlpha, nil)	
+	end
+	
 	if config.colorBinding then
 		unitFrame:CreateBinding(config.colorBinding, self, self.BindColor, nil)	
 	end
@@ -109,3 +113,8 @@ function wtFrame:BindBorderColor(BorderColor)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------
+function wtFrame:BindFrameAlpha(FrameAlpha)
+    if FrameAlpha then
+		self:SetAlpha(FrameAlpha.alpha or 1)
+	end	
+end

@@ -89,7 +89,7 @@ function wtBuffPanel:Construct()
 	
 	self.config.stackSize = config.stackSize or 0
 	self.config.stackOffsetX = config.stackOffsetX or 0
-	self.config.stackOffsetY = config.stackOffsetY or -5 -----------------------------------------------------------------------------------------------------------------------
+	self.config.stackOffsetY = config.stackOffsetY or -3 -----------------------------------------------------------------------------------------------------------------------
 
 	self.config.sweepOverlay = false -- WT.Utility.ToBoolean(config.sweepOverlay)
 

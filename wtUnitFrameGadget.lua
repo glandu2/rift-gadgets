@@ -116,6 +116,11 @@ local function rf_OnTemplateChange(templateId)
 		rfDialog:GetControl("showHoTPanel"):SetVisible(false)
 	end
 	
+	if templateConfig.SupportsDebuffPanel then
+		rfDialog:GetControl("showDebuffPanel"):SetVisible(true)
+	else
+		rfDialog:GetControl("showDebuffPanel"):SetVisible(false)
+	end
 end
 
 
@@ -169,6 +174,7 @@ local function rfConfigDialog(container)
 		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
 		:Checkbox("showHoTTrackers", "Show HoT Trackers", false)
 		:Checkbox("showHoTPanel", "Show HoTs", false)
+		:Checkbox("showDebuffPanel", "Show Debuffs", false)
 		
 	local templateControl = rfDialog:GetControl("template")
 	local templateId = templateControl.getValue()
@@ -187,6 +193,13 @@ local function rfConfigDialog(container)
 		rfDialog:GetControl("showHoTPanel"):SetVisible(false)
 	end
 
+	local debuffPanel = WT.UnitFrame.Templates[templateId].Configuration.SupportsDebuffPanel
+	if debuffPanel then
+		rfDialog:GetControl("showDebuffPanel"):SetVisible(true)
+	else
+		rfDialog:GetControl("showDebuffPanel"):SetVisible(false)
+	end
+	
 	local macroTabs = UI.CreateFrame("SimpleTabView", "macroTabs", frmMacrosInner)
 	macroTabs:SetTabPosition("left")
 	macroTabs:SetAllPoints(frmMacrosInner)
@@ -299,7 +312,8 @@ local function gfConfigDialog(container)
 		:FieldNote(TXT.ShowBackgroundNote)
 		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
 		:Checkbox("showHoTPanel", "Show HoTs (if template allows)", false)
-
+		:Checkbox("showDebuffPanel", "Show Debuffs (if template allows)", false)
+		
 	local macroTabs = UI.CreateFrame("SimpleTabView", "macroTabs", frmMacrosInner)
 	macroTabs:SetTabPosition("left")
 	macroTabs:SetAllPoints(frmMacrosInner)

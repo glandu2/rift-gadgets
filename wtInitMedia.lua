@@ -52,6 +52,10 @@ Library.Media.AddTexture("CP Squirrel", "Rift", "vfx_ui_mob_tag_squirrel.png.dds
 Library.Media.AddTexture("Vitality_Gray", "Rift", "death_icon_(grey).png.dds", {"vitality"})
 Library.Media.AddTexture("Vitality_Red", "Rift", "death_icon_(red).png.dds", {"vitality"})
 Library.Media.AddTexture("Vitality_Zero", "Rift", "death_icon_(glow).png.dds", {"vitality"})
+-----------------------------------Life-------------------------------------------------------------
+Library.Media.AddTexture("1bar", "Rift", "Bank_110.dds", {"bar"})
+Library.Media.AddTexture("CharacterSheet", "Rift", "CharacterSheet_I2B.dds", {"bar"})
+Library.Media.AddTexture("Merchant", "Rift", "Merchant_I257.dds", {"bar"})
 ----------------------------------Life----------------------------------------------------------
 Library.Media.AddTexture("BantoBar", AddonId, "img/BantoBar.png", {"bar", "colorize"})
 Library.Media.AddTexture("Bumps", AddonId, "img/Bumps.png", {"bar", "colorize"})

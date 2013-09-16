@@ -104,7 +104,10 @@ function WT.Gadget.ShowSettings()
 		local btnOK = UI.CreateFrame("RiftButton", "btnOK", window)
 		btnOK:SetPoint("TOPLEFT", tabs, "BOTTOMLEFT", 0, 4)
 		btnOK:SetText("Save")
-		btnOK.Event.LeftPress = SaveSettings
+		--btnOK.Event.LeftPress = SaveSettings
+		btnOK:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+			SaveSettings()
+		end, "Event.UI.Input.Mouse.Left.Click")
 
 		local contentOptions = UI.CreateFrame("Frame", "contentOptions", tabs.tabContent)
 		contentOptions:SetAllPoints(window:GetContent())
@@ -184,20 +187,23 @@ function WT.Gadget.ShowSettings()
 		btnSaveProfile:SetHeight(20)
 		btnSaveProfile:SetBackgroundColor(0.2,0.4,0.6,1.0)
 		btnSaveProfile:SetPoint("TOPLEFT", txtProfile, "TOPLEFT", 220, 0)	
-		btnSaveProfile.Event.MouseIn = function() btnSaveProfile:SetBackgroundColor(0.4,0.6,0.8,1.0) end
-		btnSaveProfile.Event.MouseOut = function() btnSaveProfile:SetBackgroundColor(0.2,0.4,0.6,1.0) end
-		btnSaveProfile.Event.LeftClick =
-			function ()
-				local layoutName = txtProfile:GetText()
-				if layoutName == nil then
-					print("Please enter profile name.")
-				else
-					wtxLayouts[layoutName] = wtxGadgets
-					print("Profile "..layoutName.." has been saved.")
-					WT.Gadget.RecommendReload()	
+		btnSaveProfile:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
+			btnSaveProfile:SetBackgroundColor(0.4,0.6,0.8,1.0) end
+		end, "Event.UI.Input.Mouse.Cursor.In")
+		btnSaveProfile:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
+			btnSaveProfile:SetBackgroundColor(0.2,0.4,0.6,1.0)
+		end, "Event.UI.Input.Mouse.Cursor.Out")
+		btnSaveProfile:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+			local layoutName = txtProfile:GetText()
+			if layoutName == nil then
+				print("Please enter profile name.")
+			else
+				wtxLayouts[layoutName] = wtxGadgets
+				print("Profile "..layoutName.." has been saved.")
+				WT.Gadget.RecommendReload()	
 
-				end		
-			end
+			end		
+		end, "Event.UI.Input.Mouse.Left.Click")
 			
 		local btnSaveProfileTxt = UI.CreateFrame("Text", "txtbtnSaveProfileTxt", btnSaveProfile)
 		btnSaveProfileTxt:SetText("Save profile")
@@ -222,17 +228,20 @@ function WT.Gadget.ShowSettings()
 		btnDeleteProfile:SetHeight(20)
 		btnDeleteProfile:SetBackgroundColor(0.2,0.4,0.6,1.0)
 		btnDeleteProfile:SetPoint("TOPLEFT", labProfileDelete, "TOPLEFT", 420, 1)	
-		btnDeleteProfile.Event.MouseIn = function() btnDeleteProfile:SetBackgroundColor(0.4,0.6,0.8,1.0) end
-		btnDeleteProfile.Event.MouseOut = function() btnDeleteProfile:SetBackgroundColor(0.2,0.4,0.6,1.0) end
-		btnDeleteProfile.Event.LeftClick = 
-			function ()
-				if layoutNameList:GetSelectedItem()  then
-					local layoutName = layoutNameList:GetSelectedItem()
-					wtxLayouts[layoutName] = nil
-					print("Profile "..layoutName.." has been deleted.")
-					WT.Gadget.RecommendReload()	
-				end
-			end 
+		btnDeleteProfile:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
+			btnDeleteProfile:SetBackgroundColor(0.4,0.6,0.8,1.0)
+		end, "Event.UI.Input.Mouse.Cursor.In")
+		btnDeleteProfile:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
+			btnDeleteProfile:SetBackgroundColor(0.2,0.4,0.6,1.0)
+		end, "Event.UI.Input.Mouse.Cursor.Out")
+		btnDeleteProfile:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+			if layoutNameList:GetSelectedItem()  then
+				local layoutName = layoutNameList:GetSelectedItem()
+				wtxLayouts[layoutName] = nil
+				print("Profile "..layoutName.." has been deleted.")
+				WT.Gadget.RecommendReload()	
+			end
+		end, "Event.UI.Input.Mouse.Left.Click")
 					
 		local btnDeleteProfileTxt = UI.CreateFrame("Text", "txtbtnDeleteProfileTxt", btnDeleteProfile)
 		btnDeleteProfileTxt:SetText("Delete profile")
@@ -248,22 +257,21 @@ function WT.Gadget.ShowSettings()
 		ProfileRoles:SetPoint("TOPLEFT", labProfileRoles, "TOPLEFT", 8, 50)
 		ProfileRoles:SetFontSize(14)
 		ProfileRoles:SetText("Show window Importlayout when you change role")	
-		ProfileRoles.Event.CheckboxChange  = 
-			function ()	
-				if ProfileRoles:GetChecked() == true then
+		ProfileRoles:EventAttach(Event.UI.Checkbox.Change, function(self, h)
+			if ProfileRoles:GetChecked() == true then
 				ProfileRolesOption = true
 				wtxOptions.prRoles = ProfileRolesOption
-				end
-				if ProfileRoles:GetChecked() == false then
+			end
+			if ProfileRoles:GetChecked() == false then
 				ProfileRolesOption = false
 				wtxOptions.prRoles  = ProfileRolesOption
-				end
 			end
-			if wtxOptions.prRoles == true then 
-				ProfileRoles:SetChecked(true) 
-			else  
-				ProfileRoles:SetChecked(false) 
-			end
+		end, "Event.UI.Checkbox.Change")
+		if wtxOptions.prRoles == true then 
+			ProfileRoles:SetChecked(true) 
+		else  
+			ProfileRoles:SetChecked(false) 
+		end
 			
 ------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------

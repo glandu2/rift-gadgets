@@ -52,4 +52,16 @@ Library.Media.AddTexture("CP Squirrel", "Rift", "vfx_ui_mob_tag_squirrel.png.dds
 Library.Media.AddTexture("Vitality_Gray", "Rift", "death_icon_(grey).png.dds", {"vitality"})
 Library.Media.AddTexture("Vitality_Red", "Rift", "death_icon_(red).png.dds", {"vitality"})
 Library.Media.AddTexture("Vitality_Zero", "Rift", "death_icon_(glow).png.dds", {"vitality"})
-
+----------------------------------Life----------------------------------------------------------
+Library.Media.AddTexture("BantoBar", AddonId, "img/BantoBar.png", {"bar", "colorize"})
+Library.Media.AddTexture("Bumps", AddonId, "img/Bumps.png", {"bar", "colorize"})
+Library.Media.AddTexture("Diagonal", AddonId, "img/Diagonal.png", {"bar", "colorize"})
+Library.Media.AddTexture("Frost", AddonId, "img/Frost.png", {"bar", "colorize"})
+Library.Media.AddTexture("Glamour", AddonId, "img/Glamour.png", {"bar", "colorize"})
+Library.Media.AddTexture("Grid", AddonId, "img/Grid.tga", {"bar", "colorize"})
+Library.Media.AddTexture("Healbot", AddonId, "img/Healbot.png", {"bar", "colorize"})
+Library.Media.AddTexture("Ruben", AddonId, "img/Ruben.png", {"bar", "colorize"})
+Library.Media.AddTexture("Runes", AddonId, "img/Runes.png", {"bar", "colorize"})
+Library.Media.AddTexture("Steel", AddonId, "img/Steel.png", {"bar", "colorize"})
+Library.Media.AddTexture("shadow", AddonId, "img/shadow.tga", {"bar"})
+Library.Media.AddTexture("wtGlaze", AddonId, "img/wtGlaze.png", {"bar"})

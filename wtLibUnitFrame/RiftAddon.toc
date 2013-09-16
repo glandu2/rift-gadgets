@@ -28,6 +28,7 @@ RunOnStartup =
   "elements/wtLabel.lua",
   "elements/wtStaticLabel.lua",
   "elements/wtBar.lua",
+  "elements/wtBarHealth.lua",
   "elements/wtImage.lua",
   "elements/wtImageSet.lua",
   "elements/wtMediaSet.lua",

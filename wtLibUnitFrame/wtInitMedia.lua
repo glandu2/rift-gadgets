@@ -19,10 +19,12 @@ Library.Media.AddTexture("wtRanks24", AddonId, "img/wtRanks24.png", {"imgset", "
 Library.Media.AddTexture("wtRanks38", AddonId, "img/wtRanks38.png", {"imgset", "elitestatus"})
 Library.Media.AddTexture("wtSweep", AddonId, "img/Sweep.png", {"imgset", "sweep"})
 
-Library.Media.AddTexture("octanusHeal", AddonId, "img/octanusHeal.png", {"roleHeal"})
-Library.Media.AddTexture("octanusDPS", AddonId, "img/octanusDPS.png", {"roleDPS"})
-Library.Media.AddTexture("octanusTank", AddonId, "img/octanusTank.png", {"roleTank"})
-Library.Media.AddTexture("octanusSupport", AddonId, "img/octanusSupport.png", {"roleSupport"})
+-----------------------------------Life------------------------------------------------------------
+Library.Media.AddTexture("octanusHeal", "Rift", "raid_icon_role_heal.png.dds", {"roleHeal"})
+Library.Media.AddTexture("octanusDPS", "Rift", "raid_icon_role_dps.png.dds", {"roleDPS"})
+Library.Media.AddTexture("octanusTank", "Rift", "raid_icon_role_tank.png.dds", {"roleTank"})
+Library.Media.AddTexture("octanusSupport", "Rift", "raid_icon_role_support.png.dds", {"roleSupport"})
+-----------------------------------Life------------------------------------------------------------
 
 Library.Media.AddTexture("octanusHP", AddonId, "img/octanusHP.png", {"bar", "healthBar"})
 Library.Media.AddTexture("OctanusHP_red", AddonId, "img/octanusHP_red.png", {"bar", "healthBar"})

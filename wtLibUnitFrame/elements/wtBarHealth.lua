@@ -15,9 +15,9 @@
 -- Create the class.
 -- This will be automatically registered as an Element factory with the name "Label"
 -- The base frame type is "Text"
-local wtBar = WT.Element:Subclass("Bar", "Frame")
+local wtBarHealth = WT.Element:Subclass("BarHealth", "Frame")
 
-wtBar.ConfigDefinition = 
+wtBarHealth.ConfigDefinition = 
 {
 	description = "A bar element. This must be bound to a percentage property (returns a number between 0 and 100).",
 	required = 
@@ -40,7 +40,7 @@ wtBar.ConfigDefinition =
 
 -- The Construct method builds the element up. The element (self) is an instance of the relevant
 -- UI.Frame as specified in the Subclass() call above
-function wtBar:Construct()
+function wtBarHealth:Construct()
 
 	local config = self.Configuration
 	local unitFrame = self.UnitFrame
@@ -77,16 +77,16 @@ function wtBar:Construct()
 		self:SetBackgroundColor(config.backgroundColor.r or 0, config.backgroundColor.g or 0, config.backgroundColor.b or 0, config.backgroundColor.a or 1)
 	end
 	
-------------------------Add Border-----------------------------------------------------
+		---------------------------------------
     if config.border then
 	local config = self.Configuration
 	local unitFrame = self.Mask
         local nameBase = unitFrame:GetName()
 		local parent = unitFrame:GetParent()
 		local unitFrameLayer = unitFrame:GetLayer()
-	    self.width = width or 2
+	    local  width = self.width or 2
 	    self.position = "outside"
-		local width = self.width  	  	
+		--local width = self.width  	  	
 
 	  self.top = UI.CreateFrame("Frame", nameBase .."_TopBorder", parent)
 	  self.top:SetLayer(unitFrameLayer)
@@ -123,8 +123,8 @@ function wtBar:Construct()
   -------------------------------------------------------------------------------------------------------
 
 end
---------------------------Border color-----------------------------------------------------------------
-function wtBar:BindBorderColor(BorderColor)
+
+function wtBarHealth:BindBorderColor(BorderColor)
 	if BorderColor then
 	     self.top:SetBackgroundColor(BorderColor.r or 0, BorderColor.g or 0, BorderColor.b or 0, BorderColor.a or 0)
 		 	end
@@ -138,16 +138,16 @@ function wtBar:BindBorderColor(BorderColor)
          self.right:SetBackgroundColor(BorderColor.r or 0, BorderColor.g or 0, BorderColor.b or 0, BorderColor.a or 0)
 	end
 end
------------------------------------------------------------------------------------------------------------------------
-function wtBar:BindPercent(percentage)
+
+function wtBarHealth:BindPercent(percentage)
 	if (self.growthDirection == "up") or (self.growthDirection == "down") then 
-		self.Mask:SetHeight((percentage / 100) * self:GetHeight())
+		self.Mask:SetHeight((1 - percentage / 100) * self:GetHeight())
 	else
-		self.Mask:SetWidth((percentage / 100) * self:GetWidth())
+		self.Mask:SetWidth((1 - percentage / 100) * self:GetWidth())
 	end
 end
 
-function wtBar:BindColor(color)
+function wtBarHealth:BindColor(color)
 	if color then
 		self:SetBarColor(color.r, color.g, color.b, color.a)
 	else
@@ -156,22 +156,22 @@ function wtBar:BindColor(color)
 end
 
 
-function wtBar:SetBarColor(r,g,b,a)
+function wtBarHealth:SetBarColor(r,g,b,a)
 	self.Image:SetBackgroundColor(r or 0, g or 0, b or 0, a or 1)
 end
 
 
-function wtBar:SetBarMedia(mediaId)
+function wtBarHealth:SetBarMedia(mediaId, border)
 	Library.Media.SetTexture(self.Image, mediaId)
 end
 
 
-function wtBar:SetBarTexture(texAddon, texFile)
+function wtBarHealth:SetBarTexture(texAddon, texFile)
 	self.Image:SetTexture(texAddon, texFile)
 end
 
 
-function wtBar:SetGrowthDirection(direction)
+function wtBarHealth:SetGrowthDirection(direction)
 
 	self.growthDirection = direction or "right"
 	self.Mask:ClearAll()

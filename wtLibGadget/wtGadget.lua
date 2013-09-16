@@ -752,9 +752,16 @@ end
 local function OnSaveVariables(hEvent, saveAddonId)
 	if saveAddonId == AddonId then
 		if not wtxLayouts then wtxLayouts = {} end
-		local layoutId = WT.Player.name .. "@" .. Inspect.Shard().name 
-		wtxLayouts[layoutId] = wtxGadgets 
+			local layoutId = WT.Player.name .. "@" .. Inspect.Shard().name 
+			wtxLayouts[layoutId] = wtxGadgets		
+		if layoutName then
+			wtxLayouts[layoutName] = wtxGadgets
+		end
 	end
+	if ProfileRolesOption then
+		--local prRoles = WT.Player.name .. "@" .. Inspect.Shard().name .. "_Role" 
+		wtxOptions.prRoles = ProfileRolesOption or false
+	end	
 end
 
 -- Register an initializer to handle loading of gadgets
@@ -763,7 +770,5 @@ WT.RegisterInitializer(Initialize)
 
 Command.Event.Attach(Event.System.Secure.Enter, WT.Gadget.SecureEnter, "Gadget_SecureEnter")
 Command.Event.Attach(Event.System.Secure.Leave, WT.Gadget.SecureLeave, "Gadget_SecureLeave")
-
 Command.Event.Attach(Event.Addon.SavedVariables.Save.Begin, OnSaveVariables, "Gadget_OnSaveVariables")
-
 Command.Event.Attach(WT.Event.GroupModeChanged, OnGroupModeChanged, AddonId .. "_OnGroupModeChanged" )

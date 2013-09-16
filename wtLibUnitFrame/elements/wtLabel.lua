@@ -75,16 +75,20 @@ function wtLabel:Construct()
 	if self.linkedHeightElement then
 		if not self.linkedHeightElement.linkedElements then self.linkedHeightElement.linkedElements = {} end
 		table.insert(self.linkedHeightElement.linkedElements, self)
-		self.linkedHeightElement:EventAttach(Event.UI.Layout.Size, function(self, h)
-			local newHeight = self.linkedHeightElement:GetHeight()
-			if newHeight ~= self.oldLinkedHeight then
-				for idx, el in ipairs(self.linkedHeightElement.linkedElements) do
-					el:SetFontSize(newHeight * self.linkedHeightScale)
-				end					
-				self.oldLinkedHeight = newHeight
+		self.linkedHeightElement.Event.Size = 
+			function()
+				local newHeight = self.linkedHeightElement:GetHeight()
+				if newHeight ~= self.oldLinkedHeight then
+----------------------------------------------------------------------------------------------------------------
+					--for idx, el in ipairs(self.linkedHeightElement.linkedElements) do
+					--	el:SetFontSize(newHeight * self.linkedHeightScale)
+					--end
+----------------------------------------------------------------------------------------------------------------					
+					self.oldLinkedHeight = newHeight
+				end
 			end
-		end, "Event.UI.Layout.Size")
 	end
+	
 end
 
 function wtLabel:BindColor(color)

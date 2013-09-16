@@ -165,9 +165,9 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		xRows = 5
 		for i = 2,20 do
 			if ((i-1) % 5) ~= 0 then 
-				frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT")
+				frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT", 0, 1)-----------------increase distance between the raid frames-----------------------------
 			else 
-				frames[i]:SetPoint("TOPLEFT", frames[i-5], "TOPRIGHT") 
+				frames[i]:SetPoint("TOPLEFT", frames[i-5], "TOPRIGHT", 1, 0) ------------------increase distance between the raid frames----------------------------
 			end
 		end
 	end

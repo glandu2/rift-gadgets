@@ -85,11 +85,11 @@ function wtBuffPanel:Construct()
 
 	self.config.timerSize = config.timerSize or 0
 	self.config.timerOffsetX = config.timerOffsetX or 0
-	self.config.timerOffsetY = config.timerOffsetY or 0
+	self.config.timerOffsetY = config.timerOffsetY or 7 ------------------------------------------------------------------------------------------------------
 	
 	self.config.stackSize = config.stackSize or 0
 	self.config.stackOffsetX = config.stackOffsetX or 0
-	self.config.stackOffsetY = config.stackOffsetY or 0
+	self.config.stackOffsetY = config.stackOffsetY or -5 -----------------------------------------------------------------------------------------------------------------------
 
 	self.config.sweepOverlay = false -- WT.Utility.ToBoolean(config.sweepOverlay)
 
@@ -157,7 +157,11 @@ function wtBuffPanel:Construct()
 			icon.txtTimer = UI.CreateFrame("Text", WT.UnitFrame.UniqueName(), border)
 			icon.txtTimer:SetLayer(25)
 			icon.txtTimer:SetFontSize(self.config.timerSize)
-			
+			-------------------outline timer text--------------------------------------------------------------------------------------------------------------------
+			 if config.outline then
+		      icon.txtTimer:SetEffectGlow({ strength = 3 })
+	          end
+			-------------------------------------------------------------------------------------------------------------------
 			-- Always place the timer text over the center of the icon, and use offsets to move it to where it needs to be in the template
 			icon.txtTimer:SetPoint("CENTER", icon, "CENTER", self.config.timerOffsetX, self.config.timerOffsetY)
 			
@@ -170,6 +174,12 @@ function wtBuffPanel:Construct()
 			icon.txtStack = UI.CreateFrame("Text", WT.UnitFrame.UniqueName(), border)
 			icon.txtStack:SetLayer(25)
 			icon.txtStack:SetFontSize(self.config.stackSize)
+	-----------------------outline stack size-------------------------------------------------------------------------------------------		
+			icon.txtStack:SetFontColor(1,1,0,1)
+			 if config.outline then
+		      icon.txtStack:SetEffectGlow({ strength = 3 })
+	          end
+	------------------------------------------------------------------------------------------------------------------			  
 			local bgColor = self.config.stackBackgroundColor
 			if bgColor then			
 				icon.txtStack:SetBackgroundColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a or 1.0)
@@ -233,12 +243,8 @@ function wtBuffPanel:Construct()
 			if row == 0 then col = col - 1 end
 		end
 		
-		icon:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
-			ShowTooltip(icon)
-		end, "Event.UI.Input.Mouse.Cursor.In")
-		icon:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
-			HideTooltip(icon)
-		end, "Event.UI.Input.Mouse.Cursor.Out")
+		icon.Event.MouseIn = ShowTooltip
+		icon.Event.MouseOut = HideTooltip
 		icon:SetMouseMasking("limited")
 	end
 
@@ -443,7 +449,9 @@ local function BuffTimerTick(hEvent)
 					if remaining < 0 then
 						txt = "" 
 					elseif remaining < 60 then
-						txt = remaining .. "s"
+-------------------------------delete "s" from timer----------------------------------------------------------------------------------------------
+						--txt = remaining .. "s"
+						txt = remaining .. ""
 					elseif remaining < 3600 then
 						txt = math.floor(remaining / 60) .. "m"
 					end

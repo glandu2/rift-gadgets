@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : v0.4.8
-      Project Date (UTC)  : 2013-07-04T23:34:42Z
-      File Modified (UTC) : 2013-05-20T07:13:55Z (Wildtide)
+      Gadgets Framework   : @project-version@
+      Project Date (UTC)  : @project-date-iso@
+      File Modified (UTC) : @file-date-iso@ (@file-author@)
       -----------------------------------------------------------------     
 --]]
 
@@ -188,7 +188,7 @@ function WT.Gadget.ShowSettings()
 		btnSaveProfile:SetBackgroundColor(0.2,0.4,0.6,1.0)
 		btnSaveProfile:SetPoint("TOPLEFT", txtProfile, "TOPLEFT", 220, 0)	
 		btnSaveProfile:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
-			btnSaveProfile:SetBackgroundColor(0.4,0.6,0.8,1.0) end
+			btnSaveProfile:SetBackgroundColor(0.4,0.6,0.8,1.0)
 		end, "Event.UI.Input.Mouse.Cursor.In")
 		btnSaveProfile:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
 			btnSaveProfile:SetBackgroundColor(0.2,0.4,0.6,1.0)

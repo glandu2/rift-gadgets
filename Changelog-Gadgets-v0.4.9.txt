@@ -1,0 +1,20 @@
+Tag v0.4.9
+
+Author: lifeismystery <lifeismystery@yandex.ru>
+Added possibility save, load and delete your profiles.
+How to save, load and delete your profiles you can see on my video guide http://www.youtube.com/watch?v=Tr7bcidyFv8&
+
+Author: Adelea <adelea@exyles.com>
+Convert frame events: KeyDown, TextfieldChange, ScrollbarChange, Size
+
+Convert all button LeftPress
+Convert all frame UpOutside
+Convert all frame MouseIn MouseOut MouseMove WheelForward WheelBack
+Convert all frame Mouse4Down + Mouse5Down
+Convert all frame RightDown + MiddleDown
+
+Convert all frame RightClick
+Convert all frame LeftUp
+Convert all frame LeftDown
+Convert all frame LeftClick
+

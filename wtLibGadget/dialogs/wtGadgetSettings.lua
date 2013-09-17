@@ -294,9 +294,29 @@ function getlayoutNameList(layoutName)
 	layoutNameList:SetSelectedItem(layoutName, silent)
 end
 
+local CURRENT_ROLE_TYPE = nil
+
+local function Event_Unit_Availability_Full(h,t)
+	for k,v in pairs(t) do
+		if v == "player" then
+			local pd = Inspect.Unit.Detail("player")
+			CURRENT_ROLE_TYPE = pd.role
+			Command.Event.Detach(Event.Unit.Availability.Full, nil, nil, nil, addon.identifier)
+		end
+	end
+end
+
 local function RoleChange(hEvent, unitId)
 	if wtxOptions.prRoles == true then
-		if unit == player then WT.Gadget.ShowImportDialog() end
+		if unit == player then
+			local pd = Inspect.Unit.Detail("player")
+			if pd.role ~= CURRENT_ROLE_TYPE then
+				WT.Gadget.ShowImportDialog()
+				CURRENT_ROLE_TYPE = pd.role
+			end
+		end
 	end
 end	
+
 Command.Event.Attach(Event.Unit.Detail.Role, RoleChange, "RoleChange")
+Command.Event.Attach(Event.Unit.Availability.Full, Event_Unit_Availability_Full, "Event.Unit.Availability.Full")

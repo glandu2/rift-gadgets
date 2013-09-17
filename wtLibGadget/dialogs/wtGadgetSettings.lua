@@ -301,7 +301,7 @@ local function Event_Unit_Availability_Full(h,t)
 		if v == "player" then
 			local pd = Inspect.Unit.Detail("player")
 			CURRENT_ROLE_TYPE = pd.role
-			Command.Event.Detach(Event.Unit.Availability.Full, nil, nil, nil, addon.identifier)
+			Command.Event.Detach(Event.Unit.Availability.Full, nil, nil, nil, AddonId)
 		end
 	end
 end

@@ -810,7 +810,15 @@ local function OnPlayerTargetChange(hEvent, unitId)
 	end
 end
 
-
+local function OnCastbarChange(hEvent, unitsValue)
+		if WT.Units[unitId] then
+			if cbVisible then 
+				WT.Units[unitId].castName = true
+				else 
+				WT.Units[unitId].castName = false
+			end
+		end
+end
 -- Register the event handlers for every changeable property
 
 Command.Event.Attach(Event.Unit.Detail.Absorb,	OnUnitDetailAbsorb, "OnUnitDetailAbsorb")
@@ -856,3 +864,4 @@ Command.Event.Attach(Event.Unit.Detail.Coord, OnUnitDetailCoord, "OnUnitDetailCo
 Command.Event.Attach(Event.System.Update.Begin,	OnSystemUpdateBegin, "DB_OnSystemUpdateBegin")
 
 Command.Event.Attach(Library.LibUnitChange.Register("player.target"), OnPlayerTargetChange, "OnPlayerTargetChange")
+Command.Event.Attach(Library.LibUnitChange.Register("castName"), OnCastbarChange, "OnCastbarChange")

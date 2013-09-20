@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.4.92
+      Project Date (UTC)  : 2013-09-17T18:45:13Z
+      File Modified (UTC) : 2013-09-16T14:06:04Z (Adelea)
       -----------------------------------------------------------------     
 --]]
 
@@ -61,6 +61,8 @@ local function Create(configuration)
 	if configuration.cbColorInt == nil then configuration.cbColorInt = {0,0,1,0.5} end
 	if configuration.cbColorNonInt == nil then configuration.cbColorNonInt = {1,0.75,0.16,0.5} end
 
+	if configuration.TransparentCastBar == true then configuration.backgroundColor={r=0.07,g=0.07,b=0.07, a=0.85} end
+	
 	castBar.mediaInterrupt = Library.Media.GetTexture(configuration.texture)
 	castBar.mediaNoInterrupt = Library.Media.GetTexture(configuration.textureNoInterrupt)
 
@@ -68,6 +70,8 @@ local function Create(configuration)
 	castBar.colorNoInterrupt = configuration.cbColorNonInt
 	
 	castBar.smallTimer = configuration.smallCastTime
+	
+	castBar.largeCastFont = configuration.largeCastFont
 	
 	castBar.barCast = castBar:CreateElement(
 	{
@@ -79,7 +83,7 @@ local function Create(configuration)
 		visibilityBinding="castName",
 		binding="castPercent",
 		media=configuration.texture, --colorBinding="castColor",
-		backgroundColor={r=0, g=0, b=0, a=1}
+		backgroundColor=configuration.backgroundColor or {r=0, g=0, b=0, a=1},
 	})
 
 	castBar.labelCast = castBar:CreateElement(
@@ -87,7 +91,7 @@ local function Create(configuration)
 		id="labelCast", type="Label", parent="frame", layer=26,
 		attach = {{ point="CENTERLEFT", element="barCast", targetPoint="CENTERLEFT", offsetX=6, offsetY=0 }},
 		visibilityBinding="castName",
-		text="{castName}", default="", fontSize=12
+		text="{castName}", default="", fontSize= 12, outline = true
 	})
 
 	if configuration.showCastTime then
@@ -96,7 +100,7 @@ local function Create(configuration)
 			id="labelTime", type="Label", parent="frame", layer=26,
 			attach = {{ point="BOTTOMRIGHT", element="barCast", targetPoint="BOTTOMRIGHT", offsetX=-4, offsetY=-4 }},
 			visibilityBinding="castName",
-			text="{castTime}", default="", fontSize=10
+			text="{castTime}", default="", fontSize= 10, outline = true
 		})
 		if configuration.smallCastTime then
 			castBar.labelTime:ClearAll()
@@ -125,15 +129,30 @@ local function Create(configuration)
 		})
 	end
 	
+    if configuration.Border then
+	castBar.Border = castBar:CreateElement({
+		id="CastbarBorder", type="Frame", parent="frame", layer=10,
+		attach = {
+			{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" },
+			{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT" },
+		},
+			visibilityBinding="castName", 
+			color={r=0,g=0,b=0,a=0},
+			BorderColorBinding="BorderColor3", border=true, BorderColor3 = {r=0,g=0,b=0,a=1},
+	})
+	end
+	
 	castBar.OnResize = 
 		function(frame)
 			local fh = frame:GetHeight()
-			local s = math.floor(fh * 0.4)
+			local lg = 0.4
+			if castBar.largeCastFont then lg = 0.5 end
+			local s = math.floor(fh * lg)
 			if s > 24 then
-				s = 24
+			s = 24
 			end
-			castBar.labelCast:SetFontSize(s)
 			
+			castBar.labelCast:SetFontSize(s)
 			if castBar.labelTime and castBar.smallTimer then
 				local l = math.floor(fh * 0.2)
 				if l < 8 then
@@ -192,6 +211,9 @@ local function ConfigDialog(container)
 		:Checkbox("showCastTime", "Show cast time", true)
 		:Checkbox("smallCastTime", "Small cast time text", false)
 		:Checkbox("showIcon", "Show ability icon", false)
+		:Checkbox("TransparentCastBar", "Transparent cast bar", false)
+		:Checkbox("Border", "Show cast bar border", false)
+		:Checkbox("largeCastFont", "Larger cast font", false)
 end
 
 local function GetConfiguration()
@@ -267,6 +289,22 @@ local function Reconfigure(config)
 		requireRecreate = true
 	end
 
+	if gadgetConfig.TransparentCastBar ~= config.TransparentCastBar then
+		gadgetConfig.TransparentCastBar = config.TransparentCastBar
+		requireRecreate = true
+	end
+	
+	if gadgetConfig.Border ~= config.Border then
+		gadgetConfig.Border = config.Border
+		requireRecreate = true
+	end
+	
+	if gadgetConfig.largeCastFont ~= config.largeCastFont then
+		gadgetConfig.largeCastFont = config.largeCastFont
+		gadget.largeCastFont = config.largeCastFont
+		requireRecreate = true
+	end
+	
 	if requireRecreate then
 		WT.Gadget.Delete(gadgetConfig.id)
 		WT.Gadget.Create(gadgetConfig)
@@ -274,6 +312,15 @@ local function Reconfigure(config)
 	
 end
 
+WT.Unit.CreateVirtualProperty("BorderColor3", { "id", "castName"},
+	function(unit)
+		if unit.id and unit.castName then
+			return  { r=0, g=0, b=0, a=1 }
+		else
+			return { r=0, g=0, b=0, a=0 }
+		end
+	end)
+	
 WT.Gadget.RegisterFactory("CastBar",
 	{
 		name="Castbar",

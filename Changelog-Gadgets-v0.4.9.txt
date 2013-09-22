@@ -1,3 +1,19 @@
+Tag v0.5
+
+Change cast bar:
+Add  
+	:Checkbox("TransparentCastBar", "Transparent cast bar", false) - doing Transparent cast bar
+Add  
+	:Checkbox("Border", "Show cast bar border", false) - it make  visible cast bar border
+Add 
+	:Checkbox("largeCastFont", "Larger cast font", false) - doing Larger cast font
+Add outline font
+
+
+Add new gadget - DataTextBar
+	- This gadget displays DataText bar with FRS, CPU, Planar charge, Soul vitality, Money and button 'ReloadUI'
+
+
 Tag v0.4.9
 
 Author: lifeismystery <lifeismystery@yandex.ru>

@@ -42,6 +42,8 @@ Library.Translate.En(
 	gadgetCPU_name = "CPU Monitor",
 	gadgetFPS_desc = "Displays Frames per Second",
 	gadgetFPS_name = "FPS Monitor",
+	gadgetDataTextBar_name = "Data Text Bar", 
+	gadgetDataTextBar_desc = "Displays Data Text Bar",
 	gadgetGroupFrames_desc = "Group Frames Gadget",
 	gadgetGroupFrames_name = "Group Frames",
 	gadgetPlanarCharge_desc = "Displays Planar Charge",

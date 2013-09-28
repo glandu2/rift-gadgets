@@ -26,6 +26,15 @@ WT.Unit.CreateVirtualProperty("healthPercent", { "health", "healthMax" },
 		end 
 	end)
 
+WT.Unit.CreateVirtualProperty("healthCapPercent", { "healthCap", "healthMax" }, 
+	function(unit)
+		if unit.healthCap and unit.healthMax and unit.healthCap > 0 then
+			return (1 - unit.healthCap / unit.healthMax) * 100 
+		else 
+			return nil
+		end 
+	end)
+	
 WT.Unit.CreateVirtualProperty("chargePercent", { "charge", "chargeMax" }, 
 	function(unit)
 		if unit.charge then

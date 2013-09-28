@@ -79,6 +79,18 @@ function HealFrame:Construct(options)
 				backgroundColor={r=0, g=0, b=0, a=1},
 			},
 			{
+				id="healthCap", type="HealthCap", parent="barHealth", layer=15,
+				attach = {
+					{ point="TOPLEFT", element="barHealth", targetPoint="TOPLEFT" },
+					{ point="BOTTOMRIGHT", element="barHealth", targetPoint="BOTTOMRIGHT" },
+				},
+				growthDirection="left",
+				visibilityBinding="healthCap",
+				binding="healthCapPercent",
+				texAddon="Rift", texFile="raid_healthbar_red.png.dds",
+				color={r=0.5, g=0, b=0, a=0.8},
+			},	
+			{
 				id="barAbsorb", type="Bar", parent="frameBackdrop", layer=11,
 				attach = {
 					{ point="BOTTOMLEFT", element="barHealth", targetPoint="BOTTOMLEFT", offsetX=0, offsetY=0 },

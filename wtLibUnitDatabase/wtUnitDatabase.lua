@@ -479,8 +479,13 @@ local function OnUnitDetailHealth(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "health", value) end
 end
 
-local function OnUnitDetailHealthCap(hEvent, unitsValue)
-	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "healthCap", value) end
+local function OnUnitDetailHealthCap(hEvent, units)
+	local unitsValue = Inspect.Unit.Detail(units)
+	for unitId,value in pairs(unitsValue) do
+		if WT.Units[unitId] then
+			WT.Units[unitId].healthCap = value.healthCap
+		end
+	end
 end
 
 local function OnUnitDetailHealthMax(hEvent, unitsValue)

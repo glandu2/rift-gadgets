@@ -74,10 +74,12 @@ local function LoadItems(control, listItems)
 		
 		if not txtOption then 
 			txtOption = UI.CreateFrame("Text", WT.UniqueName("ComboOption"), control.dropDownBackground) 
-			dropDownIcon:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+			txtOption.Event.LeftClick = function() MenuItemClicked(control, i) end
+----------------Error--------------------------------------------------------------------
+			--[[dropDownIcon:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
 				MenuItemClicked(control, i)
-			end, "Event.UI.Input.Mouse.Left.Click")
-
+			end, "Event.UI.Input.Mouse.Left.Click")]]
+------------------------------------------------------------------------------------
 			table.insert(control.items, txtOption)
 		end
 

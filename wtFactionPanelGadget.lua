@@ -23,34 +23,88 @@ local details = nil
 local function UpdatePanel(panel, showAll)
 
 	local filters = panel.config.filters
-
+    local texture = panel.config.texture
+	local ColorBar = panel.config.ColorBar
+	local backColor = panel.config.backColor
+	
 	if not panel.Categories then panel.Categories = {} end
 	for factionId, detail in pairs(details) do
 	
 		if not panel.Categories[detail.categoryName] then
 			local catText = UI.CreateFrame("Text", "categoryText", panel)
 			catText:SetText(detail.categoryName)
-			catText:SetFontSize(12)
+			catText:SetFontSize(14)
+			catText:SetEffectGlow({ strength = 3 })
+			catText:SetFontColor(.2, .4, .7 )
 			panel.Categories[detail.categoryName] = catText
 		end
 		local catText = panel.Categories[detail.categoryName]
 		if not catText.Factions then catText.Factions = {} end
 		if not catText.Factions[detail.name] then
 		
-			local factionBar = UI.CreateFrame("Frame", "factionBar", catText)
-			factionBar:SetHeight(16)
-			factionBar:SetBackgroundColor(0,0.6,0,0.8)
-		
-			local factionText = UI.CreateFrame("Text", "factionText", factionBar)
+			local factionFrame = UI.CreateFrame("Frame", "factionFrame", catText)
+			factionFrame:SetBackgroundColor(backColor[1],backColor[2],backColor[3],backColor[4])
+			factionFrame:SetHeight(18)
+			factionFrame:SetWidth(280)
+			factionFrame:SetLayer(1)
+
+			catText.Factions[detail.name] = factionFrame
+
+				  top = UI.CreateFrame("Frame", "TopBorder", factionFrame)
+				  top:SetBackgroundColor(0,0,0,1)
+				  top:SetLayer(1)
+				  top:ClearAll()
+				  top:SetPoint("BOTTOMLEFT", factionFrame, "TOPLEFT", -1, 0)
+				  top:SetPoint("BOTTOMRIGHT", factionFrame, "TOPRIGHT", 1, 0)
+				  top:SetHeight(1)
+				  
+				  bottom = UI.CreateFrame("Frame", "BottomBorder", factionFrame)
+				  bottom:SetBackgroundColor(0,0,0,1)
+				  bottom:SetLayer(1)
+				  bottom:ClearAll()
+				  bottom:SetPoint("TOPLEFT", factionFrame, "BOTTOMLEFT", -1, 0)
+				  bottom:SetPoint("TOPRIGHT", factionFrame, "BOTTOMRIGHT",1, 0)
+				  bottom:SetHeight(1)
+				  
+				  left = UI.CreateFrame("Frame", "LeftBorder", factionFrame)
+				  left:SetBackgroundColor(0,0,0,1)
+				  left:SetLayer(1)
+				  left:ClearAll()
+				  left:SetPoint("TOPRIGHT", factionFrame, "TOPLEFT", 0, -1)
+				  left:SetPoint("BOTTOMRIGHT", factionFrame, "BOTTOMLEFT", 0, 1)
+				  left:SetWidth(1)
+				  
+				  right = UI.CreateFrame("Frame", "RightBorder", factionFrame)
+				  right:SetBackgroundColor(0,0,0,1)
+				  right:SetLayer(1)
+				  right:ClearAll()
+				  right:SetPoint("TOPLEFT", factionFrame, "TOPRIGHT", 0, -1)
+				  right:SetPoint("BOTTOMLEFT", factionFrame, "BOTTOMRIGHT", 0, 1)
+				  right:SetWidth(1)
+			
+			local factionBar = UI.CreateFrame("Texture", "factionBar", factionFrame)
+			factionBar:SetHeight(18)
+			Library.Media.SetTexture(factionBar, texture)
+			factionBar:SetBackgroundColor(ColorBar[1],ColorBar[2],ColorBar[3],ColorBar[4])--(0,0.6,0,0.8,1)
+			factionBar:SetLayer(2)	
+			factionBar:SetPoint("TOPLEFT", factionFrame, "TOPLEFT")
+			catText.Factions[detail.name].factionBar = factionBar
+			
+			local factionText = UI.CreateFrame("Text", "factionText", factionFrame)
 			factionText:SetText(detail.name)
-			factionText:SetFontSize(11)
-			factionText:SetPoint("CENTERLEFT", factionBar, "CENTERLEFT", 0, 0)
+			factionText:SetFontSize(13)
+			factionText:SetEffectGlow({ strength = 3 })
+			factionText:SetPoint("CENTERLEFT", factionFrame, "CENTERLEFT", 0, 0)
+			factionText:SetLayer(3)
+			factionText:SetFontColor(0.9, 0.9, 0.2 )
 			
-			catText.Factions[detail.name] = factionBar
 			
-			local notorietyText = UI.CreateFrame("Text", "notorietyText", factionBar)
-			notorietyText:SetFontSize(11)
-			factionBar.NotorietyText = notorietyText
+			local notorietyText = UI.CreateFrame("Text", "notorietyText", factionFrame)
+			notorietyText:SetFontSize(13)
+			notorietyText:SetEffectGlow({ strength = 3 })
+			catText.Factions[detail.name].NotorietyText = notorietyText
+			notorietyText:SetPoint("CENTERRIGHT", factionFrame, "CENTERRIGHT", 0, 0)
+			notorietyText:SetLayer(3)
 		end
 		
 		local notor = detail.notoriety - 23000
@@ -77,11 +131,8 @@ local function UpdatePanel(panel, showAll)
 			percent = 1.0
 		end
 		
-		catText.Factions[detail.name]:SetWidth((panel:GetWidth() - 20) * percent)
-		
-		--notString = tostring(detail.notoriety) 
-		catText.Factions[detail.name].NotorietyText:SetText(notString)		
-			
+		catText.Factions[detail.name].factionBar:SetWidth((panel:GetWidth() - 20) * percent)
+		catText.Factions[detail.name].NotorietyText:SetText(notString)	
 	end
 	
 	local anchor = nil
@@ -97,21 +148,22 @@ local function UpdatePanel(panel, showAll)
 		
 		local include = false
 		for faction in pairs(frame.Factions) do
-			if filters[faction] ~= false then 
+			if filters[faction] == true then 
 				include = true
-				break
+				--break
 			end
 		end
 		
 		if include or showAll then
+
 		
 			frame:SetVisible(true)
 		
 			if not anchor then
-				frame:SetPoint("TOPLEFT", panel, "TOPLEFT", 4, 4)
+				frame:SetPoint("TOPLEFT", panel, "TOPLEFT", 10, 3)
 			else
-				frame:SetPoint("TOP", anchor, "BOTTOM", nil, 4)
-				frame:SetPoint("LEFT", panel, "LEFT", 4, nil)
+				frame:SetPoint("TOP", anchor, "BOTTOM", nil, 3)
+				frame:SetPoint("LEFT", panel, "LEFT", 10, nil)
 			end
 			anchor = frame
 			
@@ -127,9 +179,9 @@ local function UpdatePanel(panel, showAll)
 					factFrame:SetVisible(false)
 				else
 					factFrame:SetVisible(true)
-					factFrame:SetPoint("TOP", anchor, "BOTTOM", nil, 4)
+					factFrame:SetPoint("TOP", anchor, "BOTTOM", nil, 3)
 					factFrame:SetPoint("LEFT", panel, "LEFT", 10, nil)
-					factFrame.NotorietyText:SetPoint("TOP", anchor, "BOTTOM", nil, 4)
+					factFrame.NotorietyText:SetPoint("TOP", anchor, "BOTTOM", nil, 3)
 					factFrame.NotorietyText:SetPoint("RIGHT", panel, "RIGHT", -10, nil)
 					anchor = factFrame
 				end
@@ -151,7 +203,6 @@ local function UpdatePanel(panel, showAll)
 	
 end
 
-
 local function UpdatePanels(showAll)
 	local list = Inspect.Faction.List()
 	if list then
@@ -171,15 +222,30 @@ end
 local function Create(configuration)
 
 	local wrapper = UI.CreateFrame("Frame", WT.UniqueName("wtFaction"), WT.Context)
-	wrapper:SetWidth(270)
+	wrapper:SetWidth(300)
 	wrapper:SetHeight(100)
-	wrapper:SetBackgroundColor(0,0,0,0.4)
 	
 	wrapper.config = configuration
+	
+	if configuration.showBackground == true  then
+	    if configuration.TransparentBar == true then 
+			wrapper:SetBackgroundColor(0.07,0.07,0.07,0.85) 
+		else
+			wrapper:SetBackgroundColor(0,0,0,0.4) 
+		end
+	else
+		wrapper:SetBackgroundColor(0,0,0,0)
+	end
+	
+	if not configuration.texture then configuration.texture = Library.Media.GetTexture(configuration.texture) end
+	if configuration.ColorBar == nil then configuration.ColorBar = {0,0.6,0,0.8} end 
+    if configuration.backColor == nil then configuration.backColor = {0.07,0.07,0.07,0.85} end 
+	
 	if not configuration.filters then 
 		configuration.filters = {} 
 	end
-
+	
+	
 	table.insert(factionGadgets, wrapper)
 
 	UpdatePanels()
@@ -192,8 +258,21 @@ end
 local dialog = false
 
 local function ConfigDialog(container)	
+		
+	local lMedia = Library.Media.FindMedia("bar")
+	local listMedia = {}
+	for mediaId, media in pairs(lMedia) do
+		table.insert(listMedia, { ["text"]=mediaId, ["value"]=mediaId })
+	end
+	
 	dialog = WT.Dialog(container)
 		:Label("The Faction Panel has no additional configuration options")
+		:TexSelect("texture", "Texture", "wtHealbot", "bar")
+		:ColorPicker("ColorBar", "Bar color", 0,0.6,0,0.8)
+		:ColorPicker("backColor", "Background Bar Color", 0.07,0.07,0.07,0.85)
+		:Checkbox("showBackground", "Show Background frame", false)
+		:Checkbox("TransparentBar", "Transparent Background frame", false)
+			
 end
 
 local function GetConfiguration()
@@ -204,16 +283,61 @@ local function SetConfiguration(config)
 	dialog:SetValues(config)
 end
 
+local function Reconfigure(config)
+
+	assert(config.id, "No id provided in reconfiguration details")
+	
+	local gadgetConfig = wtxGadgets[config.id]
+	local gadget = WT.Gadgets[config.id]
+	
+	assert(gadget, "Gadget id does not exist in WT.Gadgets")
+	assert(gadgetConfig, "Gadget id does not exist in wtxGadgets")
+	
+	-- Detect changes to config and apply them to the gadget
+	
+	local requireRecreate = false
+
+	if gadgetConfig.texture ~= config.texture then
+		gadgetConfig.texture = config.texture
+		gadget.media = Library.Media.GetTexture(config.texture)
+	end
+	
+	if gadgetConfig.TransparentBar ~= config.TransparentBar then
+		gadgetConfig.TransparentBar = config.TransparentBar
+		requireRecreate = true
+	end
+	
+	
+	if gadgetConfig.ColorBar ~= config.ColorBar then
+		gadgetConfig.ColorBar = config.ColorBar
+		gadget.ColorBar = config.ColorBar
+		requireRecreate = true
+	end
+	
+	if gadgetConfig.showBackground ~= config.showBackground then
+		gadgetConfig.showBackground = config.showBackground
+		requireRecreate = true
+	end
+	
+	if requireRecreate then
+		WT.Gadget.Delete(gadgetConfig.id)
+		WT.Gadget.Create(gadgetConfig)
+	end		
+	
+end
+
 WT.Gadget.RegisterFactory("FactionPanel",
 	{
 		name="Faction Panel",
 		description="Faction Panel",
 		author="Wildtide",
 		version="1.0.0",
+		texture = "MediaID for the texture, for use with LibMedia",
 		["Create"] = Create,
 		["ConfigDialog"] = ConfigDialog,
 		["GetConfiguration"] = GetConfiguration, 
 		["SetConfiguration"] = SetConfiguration, 
+		["Reconfigure"] = Reconfigure,
 	})
 
 local function OnPlayerAvailable(hEvent)

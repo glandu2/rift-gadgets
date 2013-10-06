@@ -293,6 +293,12 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 		for i = 2,5 do
 			frames[i]:SetPoint("TOPLEFT", frames[i-1], "TOPRIGHT") 
 		end
+	elseif 	layout == "LifeismysteryGroupFrame" then
+		xCols = 1
+		xRows = 5
+		for i = 2,5 do
+			frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT", 0, 10) 
+	end	
 	else
 		xCols = 1
 		xRows = 5

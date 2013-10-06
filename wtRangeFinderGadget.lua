@@ -52,6 +52,7 @@ local function Create(configuration)
 
 	local rangeFinder = WT.UnitFrame:Create(unitSpec)
 	rangeFinder:SetWidth(150)
+	rangeFinder:SetLayer(100)
 
 	local rfBackground = UI.CreateFrame("Frame", "rfBackground", rangeFinder)
 	rfBackground:SetAllPoints(rangeFinder)
@@ -91,7 +92,7 @@ local function Create(configuration)
 	local txtRange = rangeFinder:CreateElement({
 		id="txtRange", type="Label", parent=rfBackground, layer=20,
 		attach = {{ point="TOPCENTER", element=txtHeading, targetPoint="BOTTOMCENTER", offsetX=0, offsetY=-5 }},
-		visibilityBinding="name", text="--", default="", fontSize=24, outline=true,
+		visibilityBinding="name", text="--", default="",  outline=true, fontSize=24,
 		color={ r=0.6, g=1.0, b=0.6, a=1.0 },
 	});
 
@@ -111,7 +112,20 @@ local function Create(configuration)
 		txtHeading:SetHeight(0) 
 		rfHeight = rfHeight - 17
 	end
-
+	
+	if not configuration.smallFont then
+         txtRange:SetFontSize(24)
+		 else
+		 txtRange:SetFontSize(14)
+	end
+	
+	if not configuration.changefontColor then
+         txtRange:SetFontColor(0.6, 1.0, 0.6, 1.0)
+		 else
+		 	local fontColor = configuration.fontColor 
+		 txtRange:SetFontColor(fontColor[1],fontColor[2],fontColor[3],fontColor[4])
+	end
+	
 	rangeFinder.hideWhenNoTarget = configuration.hideWhenNoTarget 
 	rangeFinder:SetHeight(rfHeight)
 	rangeFinder.txtRange = txtRange
@@ -119,7 +133,7 @@ local function Create(configuration)
 	rangeFinder:CreateBinding("name", rangeFinder, OnNameChange, nil)
 	rangeFinder:CreateBinding("range", rangeFinder, OnRangeChange, nil)
 	
-	return rangeFinder
+	return rangeFinder, { resizable={50, 25, 250, 70} }
 end
 
 
@@ -140,6 +154,9 @@ local function ConfigDialog(container)
 				{text="Focus's Target", value="focus.target"},
 				{text="Pet", value="player.pet"},
 			}, false) 
+		:Checkbox("smallFont", TXT.smallFont, false)
+		:Checkbox("changefontColor", "Change range font color", false)	
+		:ColorPicker("fontColor", "Range font color", 0.6, 1.0, 0.6, 1.0)	
 end
 
 local function GetConfiguration()

@@ -192,16 +192,63 @@ function XBG.OnExperience(h, accum, rested, needed)
 	end
 end
 
-
+--"SecondaryBar_ICD.dds"
+--"TextBkgnd.png.dds"
+--"GuildsManager_XP_overlay.png.dds"
+--"expBarFrame.png.dds"
+--"AB_bg_1.png.dds"
 function XBG.Create(configuration)
-	local wrapper = UI.CreateFrame("Texture", WT.UniqueName("wtXP"), WT.Context)
-	wrapper:SetWidth(512)
-	wrapper:SetHeight(15)
-	wrapper:SetTexture("Gadgets", "img/wtXPBar.tga")
 
-	local bar = UI.CreateFrame("Frame", WT.UniqueName("wtXP"), wrapper)
+	local wrapper = UI.CreateFrame("Texture", WT.UniqueName("wtXP"), WT.Context)
+	wrapper:SetWidth(510)
+	wrapper:SetHeight(10)
+	if not configuration.TransparentBackground then
+		wrapper:SetTexture("Gadgets", "img/wtXPBar.tga")
+	else wrapper:SetBackgroundColor(0.07,0.07,0.07,0.85)
+	end
+
+
+				  top = UI.CreateFrame("Frame", "TopBorder", wrapper)
+				  top:SetBackgroundColor(0,0,0,1)
+				  top:SetLayer(1)
+				  top:ClearAll()
+				  top:SetPoint("BOTTOMLEFT", wrapper, "TOPLEFT", -1, 0)
+				  top:SetPoint("BOTTOMRIGHT", wrapper, "TOPRIGHT", 1, 0)
+				  top:SetHeight(1)
+				  
+				  bottom = UI.CreateFrame("Frame", "BottomBorder", wrapper)
+				  bottom:SetBackgroundColor(0,0,0,1)
+				  bottom:SetLayer(1)
+				  bottom:ClearAll()
+				  bottom:SetPoint("TOPLEFT", wrapper, "BOTTOMLEFT", -1, 0)
+				  bottom:SetPoint("TOPRIGHT", wrapper, "BOTTOMRIGHT",1, 0)
+				  bottom:SetHeight(1)
+				  
+				  left = UI.CreateFrame("Frame", "LeftBorder", wrapper)
+				  left:SetBackgroundColor(0,0,0,1)
+				  left:SetLayer(1)
+				  left:ClearAll()
+				  left:SetPoint("TOPRIGHT", wrapper, "TOPLEFT", 0, -1)
+				  left:SetPoint("BOTTOMRIGHT", wrapper, "BOTTOMLEFT", 0, 1)
+				  left:SetWidth(1)
+				  
+				  right = UI.CreateFrame("Frame", "RightBorder", wrapper)
+				  right:SetBackgroundColor(0,0,0,1)
+				  right:SetLayer(1)
+				  right:ClearAll()
+				  right:SetPoint("TOPLEFT", wrapper, "TOPRIGHT", 0, -1)
+				  right:SetPoint("BOTTOMLEFT", wrapper, "BOTTOMRIGHT", 0, 1)
+				  right:SetWidth(1)
+	
+	local bar = UI.CreateFrame("Texture", WT.UniqueName("wtXP"), wrapper)
 	bar:SetPoint("TOPLEFT", wrapper, "TOPLEFT")
 	bar:SetPoint("BOTTOMRIGHT", wrapper, 0.5, 1.0)
+	
+	if configuration.texture == nil then
+		configuration.texture = "wtBantoBar"
+	end
+	
+	Library.Media.SetTexture(bar, configuration.texture)
 	wrapper.bar = bar
 	
 	if configuration.xpType == nil then
@@ -216,7 +263,7 @@ function XBG.Create(configuration)
 
 	if configuration.tintRested then
 		local barRested = UI.CreateFrame("Frame", WT.UniqueName("wtXPRested"), wrapper)
-		barRested:SetPoint("TOPLEFT", bar, "CENTERRIGHT")
+		barRested:SetPoint("TOPLEFT", bar, "CENTERRIGHT", -3, -3)
 		barRested:SetPoint("BOTTOMRIGHT", wrapper, 0.5, 1.0)
 		barRested:SetBackgroundColor(0.0,0.6,0.0,0.2)
 		barRested:SetVisible(false)
@@ -228,6 +275,15 @@ function XBG.Create(configuration)
 	rested:SetTexture(iconRestedAddon, iconRestedFile)
 	rested:SetVisible(false)
 	wrapper.iconRested = rested
+	
+	if configuration.showText == false then
+			local txt = UI.CreateFrame("Text", WT.UniqueName("wtXP"), bar)
+		txt:SetFontColor(unpack(configuration.colBar))
+		txt:SetFontSize(0)
+		txt:SetPoint("CENTER", wrapper, "CENTER")
+		wrapper.textType = configuration.showFullText
+		wrapper.text = txt
+	end
 	
 	if configuration.showText then
 		local txt = UI.CreateFrame("Text", WT.UniqueName("wtXP"), bar)
@@ -256,12 +312,19 @@ function XBG.Create(configuration)
 		table.insert(prGadgets, wrapper)
 	end
 
-	return wrapper, { resizable={100, 8, 1500, 40 } }	
+	return wrapper, { resizable={100, 8, 1500, 40 } } 
 end
 
 local dialog = false
 
 function XBG.ConfigDialog(container)	
+
+	local lMedia = Library.Media.FindMedia("bar")
+	local listMedia = {}
+	for mediaId, media in pairs(lMedia) do
+		table.insert(listMedia, { ["text"]=mediaId, ["value"]=mediaId })
+	end
+	
 	dialog = WT.Dialog(container)
 		:Label("Resizable XP Bar Gadget")
 		:Checkbox("showText", "Show Text", false)
@@ -277,6 +340,8 @@ function XBG.ConfigDialog(container)
 			})
 		:Checkbox("pat3", "Show PA Cap for T3 only", false)
 		:ColorPicker("colBar", "Bar Color", 0, 0.8, 0, 0.4)
+		:TexSelect("texture", "Texture Bar", "wtHealbot", "bar")
+		:Checkbox("TransparentBackground", "Transparent Background", false)
 end
 
 function XBG.GetConfiguration()
@@ -293,6 +358,7 @@ WT.Gadget.RegisterFactory("XPBar",
 		description="XP Bar",
 		author="Wildtide/Adelea",
 		version="1.1.0",
+		texture = "MediaID for the texture, for use with LibMedia",
 		["Create"] = XBG.Create,
 		["ConfigDialog"] = XBG.ConfigDialog,
 		["GetConfiguration"] = XBG.GetConfiguration, 

@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.5.4
+      Project Date (UTC)  : 2013-10-06T09:26:25Z
+      File Modified (UTC) : 2013-09-22T10:03:11Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -19,13 +19,14 @@ Author = "Wildtide"
 Website = "http://www.wildtide.net"
 Email = "wildtide@wildtide.net"
 
-Version = "@project-version@"
+Version = "v0.5.4"
 
 Environment = "2.4"
 
 RunOnStartup = 
 {
   "wtInitMedia.lua",
+  "LifeSharedMedia.lua",
   "wtFPSGadget.lua",
   "wtRangeFinderGadget.lua",
   "wtCPUGadget.lua",
@@ -66,3 +67,7 @@ Dependencies =
 	wtLibCore = {"required", "before"},
 	wtLibUnitFrame = {"required", "before"},
 }
+-- X-Curse-Packaged-Version: v0.5.4
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline

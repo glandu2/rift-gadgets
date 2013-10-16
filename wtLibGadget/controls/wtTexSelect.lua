@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.5.4
+      Project Date (UTC)  : 2013-10-06T09:26:25Z
+      File Modified (UTC) : 2013-09-14T09:22:53Z (Adelea)
       -----------------------------------------------------------------     
 --]]
 
@@ -70,13 +70,17 @@ function WT.Control.TexSelect.Create(parent, label, default, mediaTag, onchange)
 		table.insert(listMedia, { ["text"]=mediaId, ["value"]=mediaId })
 	end
 
-	local menu = WT.Control.Menu.Create(parent, listMedia, function(value) tfValue:SetText(value); UpdateTexture(texTexture, value); if onchange then onchange(tostring(value)) end; end, true)
-	menu:SetPoint("TOPRIGHT", dropDownIcon, "BOTTOMCENTER")
+	local TexMenu = WT.Control.TexMenu.Create(parent, listMedia, 
+	function(value) 
+	tfValue:SetText(value); 
+	UpdateTexture(texTexture, value); 
+	if onchange then onchange(tostring(value)) end; 
+	end, true)
+	TexMenu:SetPoint("TOPRIGHT", parent, "TOPRIGHT", 170, -120)
 
 	dropDownIcon:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
-		menu:Toggle()
+		TexMenu:Toggle()
 	end, "Event.UI.Input.Mouse.Left.Click")
-
 
 	control.GetText = function() return tfValue:GetText() end
 	control.SetText = 

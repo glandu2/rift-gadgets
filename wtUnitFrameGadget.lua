@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.5.4
+      Project Date (UTC)  : 2013-10-06T09:26:25Z
+      File Modified (UTC) : 2013-10-06T09:26:25Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -62,7 +62,7 @@ local function ufConfigDialog(container)
 		:FieldNote(TXT.ExcludeBuffsNote)
 		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
 		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
-		:Checkbox("showBackground", TXT.ShowBackground, true)
+		:Checkbox("showBackground", TXT.ShowBackground, false)
 		:FieldNote(TXT.ShowBackgroundNote)
 		:Checkbox("showAbsorb", TXT.ShowAbsorb, true)
 		:Checkbox("showLeftPortrait", "Fake Portrait on Left", false)
@@ -167,7 +167,7 @@ local function rfConfigDialog(container)
 		:Select("template", TXT.RaidFrameTemplate, "Heal Frame", templateListItems, true, rf_OnTemplateChange)
 		:Select("layout", "Layout", "4 x 5", { "4 x 5", "5 x 4", "2 x 10", "10 x 2", "1 x 20", "20 x 1" }, false)
 		:Checkbox("hideWhenEmpty", "Hide When Raid Is Empty", false)
-		:Checkbox("showBackground", TXT.ShowBackground, true)
+		:Checkbox("showBackground", TXT.ShowBackground, false)
 		:FieldNote(TXT.ShowBackgroundNote)
 		:Checkbox("showAbsorb", TXT.ShowAbsorb, true)
 		:Checkbox("reverseGroups", TXT.ReverseGroups, false)
@@ -307,7 +307,7 @@ local function gfConfigDialog(container)
 		:Checkbox("hideWhenEmpty", "Hide When Group Is Empty", false)
 		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
 		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
-		:Checkbox("showBackground", TXT.ShowBackground, true)
+		:Checkbox("showBackground", TXT.ShowBackground, false)
 		:Checkbox("showAbsorb", TXT.ShowAbsorb, true)
 		:FieldNote(TXT.ShowBackgroundNote)
 		:Checkbox("reverseUnits", TXT.ReverseUnits, false)

@@ -154,3 +154,74 @@ WT.Unit.CreateVirtualProperty("healthAbsorbPercent2", { "health", "healthMax", "
          return nil
       end 
    end)
+
+   -----------------------------------------------------------
+   
+WT.Unit.CreateVirtualProperty("BorderTextureAggroVisible", {"id", "aggro"},
+	function(unit)
+		if not unit.id then
+			return false
+		elseif unit.aggro then
+			return true
+		else 
+			return false
+		end
+    end)
+	
+WT.Unit.CreateVirtualProperty("BorderColor", { "playerTarget", "id", "aggro"},
+	function(unit)			
+		if unit.playerTarget and unit.calling == "mage" then
+			return { r = 0.6, g = 0.0, b = 0.8, a = 1.0 }
+		elseif unit.playerTarget and unit.calling == "cleric" then
+			return { r = 0.0, g = 0.8, b = 0.0, a = 1.0 }
+		elseif unit.playerTarget and unit.calling == "rogue" then
+			return { r = 0.7, g = 0.6, b = 0.0, a = 1.0 }
+		elseif unit.playerTarget and unit.calling == "warrior" then
+			return { r = 0.8, g = 0.0, b = 0.0, a = 1.0 }
+		elseif not unit.playerTarget and unit.id then
+		    if unit.aggro then return { r=1, g=0, b =0, a=1 }
+			else return { r=0, g=0, b=0, a=1 } end
+		else
+			return { r=0, g=0, b=0, a=0 }
+		end
+	end)
+	   
+WT.Unit.CreateVirtualProperty("BorderTextureTargetVisible", {"playerTarget"},
+	function(unit)
+		if unit.playerTarget then
+			return true
+		else 
+			return false
+		end
+    end)
+
+WT.Unit.CreateVirtualProperty("backgroundColorUnit", { "id", "cleansable"},
+	function(unit)
+		if unit.cleansable then
+			return { r=0.2, g=0.15, b=0.4, a=0.8 }
+		else
+			return {r=0.07,g=0.07,b=0.07, a=0.85}
+		end
+	end)
+
+WT.Unit.CreateVirtualProperty("FrameAlpha", { "id", "blockedOrOutOfRange"},
+	function(unit)
+		if unit.blockedOrOutOfRange then
+			return {alpha=0.4}	
+		else	
+			return {alpha=1}
+		end
+	end)
+
+WT.Unit.CreateVirtualProperty("UnitStatus", { "offline", "afk", "health" },
+	function(unit)
+		if unit.offline then
+			return "offline"
+		elseif unit.afk then
+			return "afk"
+		elseif unit.health and unit.health == 0 then
+			return "dead"
+		else
+			return ""
+		end
+	end)	

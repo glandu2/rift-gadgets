@@ -42,9 +42,11 @@ catchAllClicks:SetLayer(10000)
 catchAllClicks:SetVisible(false)
 catchAllClicks:SetAllPoints(UIParent)
 catchAllClicks:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+WT.Utility.ClearKeyFocus(catchAllClicks)
 		OnClickOutside()
 	end, "Event.UI.Input.Mouse.Left.Click")
 catchAllClicks:EventAttach(Event.UI.Input.Mouse.Right.Click, function(self, h)
+WT.Utility.ClearKeyFocus(catchAllClicks)
 		OnClickOutside()
 	end, "Event.UI.Input.Mouse.Right.Click")
 
@@ -191,7 +193,6 @@ function WT.Control.TexMenu.Create(parent, listItems, callback, sort)
 		else
 			txtOption:SetPoint("TOPLEFT", last, "BOTTOMLEFT", 0, 2) 
 		end
-		txtOption:SetKeyFocus(true)
 		
 		function keyDown (self, h, key)
 			if(key == "Down") then
@@ -213,8 +214,7 @@ function WT.Control.TexMenu.Create(parent, listItems, callback, sort)
 		
 		txtOption:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
 				TexMenuItemClicked(control,selected)
-				txtOption:SetKeyFocus(true)
-				--control.items[selected]:SetKeyFocus(true)
+				control.items[selected]:SetKeyFocus(true)
 				control.items[selected]:SetBackgroundColor(0.9, 0, 0.9, 0.2)
 				control.items[notselected]:SetBackgroundColor(0, 0, 0, 0)
 				notselected = i
@@ -284,16 +284,15 @@ function WT.Control.TexMenu.Create(parent, listItems, callback, sort)
 		
 	control.Hide = 
 		function() 
-			catchAllClicks:SetKeyFocus(true)
 			control:SetVisible(false)
-		    catchAllClicks:SetKeyFocus(false)
-			catchAllClicks:SetVisible(false) 
+			catchAllClicks:SetVisible(false)
+			control:SetKeyFocus(true)
+			control:SetKeyFocus(false)		
 			if control == currTexMenu then
 				currTexMenu = false
 			end 
 			WT.FadeOut(control, 0.2) -- fade out
 			if control.OnClose then 
-			control:ClearKeyFocus()
 			control:OnClose() 
 			end
 		end
@@ -311,6 +310,5 @@ function WT.Control.TexMenu.Create(parent, listItems, callback, sort)
 		function(control, itemList)
 			LoadItems(control, itemList)
 		end
-		
 	return control
 end

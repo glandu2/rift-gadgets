@@ -85,9 +85,9 @@ local function Create(configuration)
 		attach = {
 			{ point="BOTTOMLEFT", element="frame", targetPoint="BOTTOMLEFT" },
 		},
-		texAddon="Rift", texFile="zVitality",
-		visibilityBinding="zeroVitality",
-		backgroundColor={r=1, g=1, b=1, a=1},
+		texAddon="Rift", texFile="death_icon_(red).png.dds",
+		visibilityBinding="zVitality",
+		backgroundColor={r=1, g=1, b=1, a=0},
 		width = 40, height = 40,
 	});
 	vitalityMeter:CreateElement(
@@ -273,7 +273,7 @@ Command.Event.Attach(WT.Event.Tick, OnTick, AddonId .. "_OnTick")
 
 WT.Unit.CreateVirtualProperty("zVitality", {"vitality" },
 	function(unit)
-		if unit.vitality and unit.vitality > 0 then
+		if unit.vitality and unit.vitality > 11 then
 			return false
 		else
 			return true

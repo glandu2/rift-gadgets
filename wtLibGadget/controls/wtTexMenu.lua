@@ -213,7 +213,8 @@ function WT.Control.TexMenu.Create(parent, listItems, callback, sort)
 		
 		txtOption:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
 				TexMenuItemClicked(control,selected)
-				control.items[selected]:SetKeyFocus(true)
+				txtOption:SetKeyFocus(true)
+				--control.items[selected]:SetKeyFocus(true)
 				control.items[selected]:SetBackgroundColor(0.9, 0, 0.9, 0.2)
 				control.items[notselected]:SetBackgroundColor(0, 0, 0, 0)
 				notselected = i
@@ -285,14 +286,14 @@ function WT.Control.TexMenu.Create(parent, listItems, callback, sort)
 		function() 
 			catchAllClicks:SetKeyFocus(true)
 			control:SetVisible(false)
-			catchAllClicks:SetVisible(false) 
 		    catchAllClicks:SetKeyFocus(false)
+			catchAllClicks:SetVisible(false) 
 			if control == currTexMenu then
 				currTexMenu = false
 			end 
 			WT.FadeOut(control, 0.2) -- fade out
 			if control.OnClose then 
-			control:SetKeyFocus(false)
+			control:ClearKeyFocus()
 			control:OnClose() 
 			end
 		end

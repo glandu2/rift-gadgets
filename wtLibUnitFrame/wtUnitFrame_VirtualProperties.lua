@@ -17,9 +17,11 @@ WT.Unit.CreateVirtualProperty("resourceMax", { "manaMax", "power", "energyMax" }
 		end 
 	end)
 
-WT.Unit.CreateVirtualProperty("healthPercent", { "health", "healthMax" }, 
+WT.Unit.CreateVirtualProperty("healthPercent", { "health", "healthMax" ,"blocked", "offline"} ,
 	function(unit)
-		if unit.health and unit.healthMax and unit.healthMax > 0 then
+	    if unit.blocked and not unit.health and not unit.healthMax and not unit.offline then
+			return 100
+		elseif unit.health and unit.healthMax and unit.healthMax > 0 then
 			return (unit.health / unit.healthMax) * 100 
 		else 
 			return nil
@@ -93,6 +95,12 @@ WT.Unit.CreateVirtualProperty("rank", { "relation", "tier" },
 		local rel = unit.relation or "neutral"
 		local tier = unit.tier or "normal"
 		return rel .. tier
+	end)
+	
+WT.Unit.CreateVirtualProperty("tier", { "id", "tier" },
+	function(unit)
+		local tier = unit.tier or "normal"
+		return tier
 	end)
 
 WT.Unit.CreateVirtualProperty("hostility", { "id", "relation" },
@@ -171,13 +179,13 @@ WT.Unit.CreateVirtualProperty("BorderTextureAggroVisible", {"id", "aggro"},
 WT.Unit.CreateVirtualProperty("BorderColor", { "playerTarget", "id", "aggro"},
 	function(unit)			
 		if unit.playerTarget and unit.calling == "mage" then
-			return { r = 0.6, g = 0.0, b = 0.8, a = 1.0 }
+			return { r = 0.8, g = 0.36, b = 1.0, a = 1.0 }
 		elseif unit.playerTarget and unit.calling == "cleric" then
-			return { r = 0.0, g = 0.8, b = 0.0, a = 1.0 }
+			return { r = 0.47, g = 0.94, b = 0.0, a = 1.0 }
 		elseif unit.playerTarget and unit.calling == "rogue" then
-			return { r = 0.7, g = 0.6, b = 0.0, a = 1.0 }
+			return { r = 1.0, g = 0.86, b = 0.04, a = 1.0 }
 		elseif unit.playerTarget and unit.calling == "warrior" then
-			return { r = 0.8, g = 0.0, b = 0.0, a = 1.0 }
+			return { r = 1.0, g = 0.15, b = 0.15, a = 1.0 }
 		elseif not unit.playerTarget and unit.id then
 		    if unit.aggro then return { r=1, g=0, b =0, a=1 }
 			else return { r=0, g=0, b=0, a=1 } end
@@ -185,24 +193,47 @@ WT.Unit.CreateVirtualProperty("BorderColor", { "playerTarget", "id", "aggro"},
 			return { r=0, g=0, b=0, a=0 }
 		end
 	end)
+	
+WT.Unit.CreateVirtualProperty("BorderColorUnitFrame", { "id", "aggro" },
+	function(unit)
+		if not unit.id then
+			return { r = 0, g=0, b = 0, a=0 }
+		elseif unit.aggro  then
+			return { r=1, g=0, b =0, a=1 }
+		elseif not unit.aggro and unit.id then
+			return { r = 0, g=0, b = 0, a=1 }
+		end
+	end)	
 	   
 WT.Unit.CreateVirtualProperty("BorderTextureTargetVisible", {"playerTarget"},
 	function(unit)
-		if unit.playerTarget then
+		if unit.playerTarget then	
 			return true
 		else 
 			return false
 		end
     end)
 
-WT.Unit.CreateVirtualProperty("backgroundColorUnit", { "id", "cleansable"},
+WT.Unit.CreateVirtualProperty("backgroundColorUnit", { "id", "cleansable", "playerId"},
+	function(unit)
+		if unit.id == playerId then 
+			if unit.cleansable then
+				return { r=0.2, g=0.15, b=0.4, a=0.85 } 	
+			else
+				return {r=0.07,g=0.07,b=0.07, a=0.85}
+			end
+		else return {r=0.07,g=0.07,b=0.07, a=0.85}
+		end	
+	end)
+	
+WT.Unit.CreateVirtualProperty("backgroundColorRaid", { "id", "cleansable"},
 	function(unit)
 		if unit.cleansable then
-			return { r=0.2, g=0.15, b=0.4, a=0.8 }
-		else
+			return { r=0.2, g=0.15, b=0.4, a=0.85 }
+		elseif unit.id then
 			return {r=0.07,g=0.07,b=0.07, a=0.85}
 		end
-	end)
+	end)	
 
 WT.Unit.CreateVirtualProperty("FrameAlpha", { "id", "blockedOrOutOfRange"},
 	function(unit)
@@ -213,10 +244,12 @@ WT.Unit.CreateVirtualProperty("FrameAlpha", { "id", "blockedOrOutOfRange"},
 		end
 	end)
 
-WT.Unit.CreateVirtualProperty("UnitStatus", { "offline", "afk", "health" },
+WT.Unit.CreateVirtualProperty("UnitStatus", { "offline", "afk", "health", "blocked" },
 	function(unit)
 		if unit.offline then
 			return "offline"
+		elseif unit.blocked and not unit.health and not unit.healthMax then
+			return "-1"
 		elseif unit.afk then
 			return "afk"
 		elseif unit.health and unit.health == 0 then
@@ -224,4 +257,137 @@ WT.Unit.CreateVirtualProperty("UnitStatus", { "offline", "afk", "health" },
 		else
 			return ""
 		end
+	end)
+
+WT.Unit.CreateVirtualProperty("borderWigth", { "id" }, 
+	function(unit)
+		if unit.id then
+			return 100 
+		else 
+			return 100
+		end 
+	end)
+
+WT.Unit.CreateVirtualProperty("healthPercentColor", { "health", "healthMax", "cleansable", "offline", "blocked" }, 
+	function(unit)
+		if unit.blocked and not unit.health and not unit.healthMax and not unit.offline then
+				return { r=0.22,g=0.55,b=0.06, a=0.85 }	
+		elseif unit.offline then
+				return {r=0.07,g=0.07,b=0.09, a=0.85}
+				
+		elseif unit.health and unit.healthMax and unit.healthMax > 0 then
+			local healthcalc = (unit.health / unit.healthMax)
+			local healthcalcInverse = 1.0 - healthcalc
+			
+			if  unit.cleansable then
+				return { r=0.2, g=0.15, b=0.4, a=0.95 }
+			else				
+				return  { r = 1.0 * healthcalcInverse , g = 0.55 * healthcalc, b=0.06, a=0.95}
+			end	
+		end 
 	end)	
+	
+WT.Unit.CreateVirtualProperty("HealthColor", { "id", "cleansable", "health","healthMax" , "offline"},
+	function(unit)
+		if unit.offline then
+			return {r=0.07,g=0.07,b=0.09, a=0.85}
+		elseif unit.cleansable then
+			return { r=0.2, g=0.15, b=0.4, a=0.85 }
+		else
+			return  {r=0.22,g=0.55,b=0.06, a=0.85}
+		end
+	end)
+
+WT.Unit.CreateVirtualProperty("HealthUnitColor", { "id", "cleansable", "playerId" },
+	function(unit)
+		if unit.id == playerId then 
+			if unit.cleansable then
+				return { r=0.2, g=0.15, b=0.4, a=0.85 }
+			else
+				return  {r=0.22,g=0.55,b=0.06, a=0.85}
+			end
+		else
+			return  {r=0.22,g=0.55,b=0.06, a=0.85}
+		end
+	end)	
+
+WT.Unit.CreateVirtualProperty("HealthCallingColor", { "id", "cleansable", "offline", "calling"},
+	function(unit)
+		if unit.offline	then
+				return { r = 0.3, g = 0.3, b = 0.3, a = 1.0 }	
+		elseif unit.cleansable then
+			return { r=0.2, g=0.15, b=0.4, a=1.0 }	
+		elseif unit.calling == "mage" then
+			return { r = 0.8, g = 0.36, b = 1.0, a = 0.85 }
+		elseif  unit.calling == "cleric" then
+			return { r = 0.47, g = 0.94, b = 0.0, a = 0.85 }
+		elseif  unit.calling == "rogue" then
+			return { r = 1.0, g = 0.86, b = 0.04, a = 0.85 }
+		elseif  unit.calling == "warrior" then
+			return { r = 1.0, g = 0.15, b = 0.15, a = 0.85 }
+		end
+	end)	
+
+WT.Unit.CreateVirtualProperty("NameColor", { "id", "calling", "relation", "offline", "health", "healthMax", "blocked", "player"},
+	function(unit)	
+		if unit.blocked and not unit.health and not unit.healthMax and not unit.offline then
+				return { r = 1, g = 1, b = 1, a = 1.0 }	
+		else	
+			if unit.player then
+				if unit.offline	then
+					return { r = 0.3, g = 0.3, b = 0.3, a = 1.0 }
+				elseif unit.calling == "mage" then
+					return { r = 0.8, g = 0.36, b = 1.0, a = 1.0 }
+				elseif  unit.calling == "cleric" then
+					return { r = 0.47, g = 0.94, b = 0.0, a = 1.0 }
+				elseif  unit.calling == "rogue" then
+					return { r = 1.0, g = 0.86, b = 0.04, a = 1.0 }
+				elseif  unit.calling == "warrior" then
+					return { r = 1.0, g = 0.15, b = 0.15, a = 1.0 }
+				end	
+			else
+				if 	unit.relation == "hostile" then
+					return { r = 0.81, g = 0.02, b = 0.04, a = 1.0 }
+				elseif 	unit.relation == "friendly" then
+					return { r = 0.17, g = 1.0, b = 0.01, a = 1.0 }	
+				elseif not unit.relation then
+					return { r = 1.0, g = 0.93, b = 0, a = 1.0 }
+				end
+			end
+		end	
+	end)
+	
+WT.Unit.CreateVirtualProperty("NameColor2", { "id", "calling", "relation", "offline", "health", "healthMax", "blocked", "player"},
+	function(unit)	
+		if unit.blocked and not unit.health and not unit.healthMax and not unit.offline then
+			return { r = 1, g = 1, b = 1, a = 1.0 }	
+		elseif unit.offline	then
+			return { r = 0.3, g = 0.3, b = 0.3, a = 1.0 }
+		else 
+			return { r = 0.9, g = 0.9, b = 0.9, a = 1.0}
+		end		
+	end)	
+	
+WT.Unit.CreateVirtualProperty("lvlColor", { "id", "level", "lvl", "player"},
+	function(unit)	
+		if unit.level then
+		    if lvl == 0 then return {r = 0.9, g = 0.9, b = 0.9, a = 1.0 } end
+			if unit.level == "??" then return {r = 0.9, g = 0, b = 0, a = 1.0 } end
+			local xpLevel = unit.level - lvl
+			if 	xpLevel == 0  and unit.player then 
+				return {r = 1.0, g = 1.0, b = 1.0, a = 1.0 }
+			elseif xpLevel >= 5 then
+				return {r =0.9 , g = 0, b = 0, a = 1.0 }
+			elseif xpLevel > 2 and xpLevel <= 4 then
+				return{r =0.9 , g =0.5 , b = 0, a = 1.0 }
+			elseif xpLevel >= -2 and xpLevel <= 2 then
+				return {r =0.9 , g = 0.9, b = 0, a = 1.0 }
+			elseif xpLevel < -2 and xpLevel >= -5 then
+				return {r = 0, g = 0.9, b = 0, a = 1.0 }
+			else
+				return {r = 0.9, g = 0.9, b = 0.9, a = 1.0 }
+			end
+		end				
+	end)	
+
+	

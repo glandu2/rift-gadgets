@@ -7,7 +7,7 @@ Author = "Wildtide"
 Website = "http://www.wildtide.net"
 Email = "wildtide@wildtide.net"
 
-Version = "@project-version@"
+Version = "v0.5.51"
 
 Environment = "1.10"
 
@@ -29,6 +29,7 @@ RunOnStartup =
   "elements/wtStaticLabel.lua",
   "elements/wtBar.lua",
   "elements/wtBarHealth.lua",
+  "elements/wtBarWithBorder.lua",
   "elements/wtHealthCap.lua",  
   "elements/wtImage.lua",
   "elements/wtImageSet.lua",
@@ -46,6 +47,15 @@ RunOnStartup =
   
   "templates/jnhOrbs.lua",
   "templates/jnhOrbsReversed.lua",
+  "templates/LifeRaidFrame1.lua",
+  "templates/LifeRaidFrame2.lua",
+  "templates/LifeRaidFrameCallingColor.lua",
+  "templates/LifeUnitFrame1.lua",
+  "templates/LifeUnitFrame2.lua",
+  "templates/LifeTargetOfTarget.lua",
+  "templates/LifeGroupFrame.lua",
+  "templates/LifeGroupFrame2.lua",
+  "templates/LifeMageFrame.lua",  
 }
 
 SavedVariables = 
@@ -62,6 +72,10 @@ Dependencies =
 	wtLibGadget = {"required", "before"},	
 }
 -- X-Curse-Packaged-Version: r20120505105758
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline
+-- X-Curse-Packaged-Version: v0.5.51
 -- X-Curse-Project-Name: Gadgets
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline

@@ -100,7 +100,7 @@ function wtBarHealth:Construct()
         local nameBase = unitFrame:GetName()
 		local parent = unitFrame:GetParent()
 		local unitFrameLayer = unitFrame:GetLayer()
-	    local  width = self.width or 1
+	    local  width = self.width or 1.25
 	    --self.position = "outside"  	  	
 
 	  self.top = UI.CreateFrame("Frame", nameBase .."_TopBorder", parent)

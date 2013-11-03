@@ -110,16 +110,6 @@ local function LoadItems(control, listItems)
 	end
 	control:SetHeight(590)
 	control:SetWidth(maxWidth + 20)
-	
-	--[[for idx,item in ipairs(control.items) do
-		item:SetWidth(maxWidth)
-		item:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
-			item:SetBackgroundColor(0.2, 0.4, 0.6, 1.0)
-		end, "Event.UI.Input.Mouse.Cursor.In")
-		item:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
-			item:SetBackgroundColor(0.0, 0.0, 0.0, 0.0)
-		end, "Event.UI.Input.Mouse.Cursor.Out")
-	end]]
 
 end
 			
@@ -199,14 +189,16 @@ function WT.Control.TexMenu.Create(parent, listItems, callback, sort)
 				selected = math.min(selected + 1, #listItems)
 				TexMenuItemClicked(control,selected)
 				typeListScrollbar:NudgeDown()
-				control.items[selected]:SetBackgroundColor(0.9, 0, 0.9, 0.2)
+				control.items[selected]:SetWidth(maxWidth)
 				control.items[selected - 1]:SetBackgroundColor(0, 0, 0, 0)
+				control.items[selected]:SetBackgroundColor(0.9, 0, 0.9, 0.2)
 			elseif(key == "Up") then			
 				selected = math.max(1, selected - 1)
 				TexMenuItemClicked(control,selected)
 				typeListScrollbar:NudgeUp()
-				control.items[selected]:SetBackgroundColor(0.9, 0, 0.9, 0.2)
+				control.items[selected]:SetWidth(maxWidth)
 				control.items[selected + 1]:SetBackgroundColor(0, 0, 0, 0)
+				control.items[selected]:SetBackgroundColor(0.9, 0, 0.9, 0.2)
 			else 
 				return
 			end	
@@ -215,8 +207,9 @@ function WT.Control.TexMenu.Create(parent, listItems, callback, sort)
 		txtOption:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
 				TexMenuItemClicked(control,selected)
 				control.items[selected]:SetKeyFocus(true)
-				control.items[selected]:SetBackgroundColor(0.9, 0, 0.9, 0.2)
+				control.items[selected]:SetWidth(maxWidth)
 				control.items[notselected]:SetBackgroundColor(0, 0, 0, 0)
+				control.items[selected]:SetBackgroundColor(0.9, 0, 0.9, 0.2)
 				notselected = i
 		end, "Event.UI.Input.Mouse.Left.Click")	
 		
@@ -228,14 +221,10 @@ function WT.Control.TexMenu.Create(parent, listItems, callback, sort)
 	end
 
 	
-	for idx,item in ipairs(control.items) do
-		item:SetWidth(maxWidth)
-	end
-	
 	local bottom = last:GetBottom() + 5 
 	control:SetHeight(590)
 	control:SetWidth(maxWidth + 20)
-
+	
 	typeListScrollbar:SetRange(0, bottom - 590)	
 			
 	TopBorder = UI.CreateFrame("Frame", "TopBorder", control)

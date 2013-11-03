@@ -23,9 +23,13 @@ Library.Media.AddTexture("wtSweep", AddonId, "img/Sweep.png", {"imgset", "sweep"
 Library.Media.AddTexture("octanusHeal", "Rift", "raid_icon_role_heal.png.dds", {"roleHeal"})
 Library.Media.AddTexture("octanusDPS", "Rift", "raid_icon_role_dps.png.dds", {"roleDPS"})
 Library.Media.AddTexture("octanusTank", "Rift", "raid_icon_role_tank.png.dds", {"roleTank"})
-Library.Media.AddTexture("octanusSupport", "Rift", "raid_icon_role_support.png.dds", {"roleSupport"})
------------------------------------Life------------------------------------------------------------
+Library.Media.AddTexture("iconRoleSupport", "Rift", "raid_icon_role_support.png.dds", {"roleSupport"})
 
+Library.Media.AddTexture("iconRoleHeal", "Rift", "vfx_ui_mob_tag_heal_mini.png.dds", {"roleHeal"})
+Library.Media.AddTexture("iconRoleDPS", "Rift", "vfx_ui_mob_tag_damage_mini.png.dds", {"roleDPS"})
+Library.Media.AddTexture("iconRoleTank", "Rift", "vfx_ui_mob_tag_tank_mini.png.dds", {"roleTank"})
+Library.Media.AddTexture("iconRoleSupport", "Rift", "vfx_ui_mob_tag_support_mini.png.dds", {"roleSupport"})
+-----------------------------------Life------------------------------------------------------------
 Library.Media.AddTexture("octanusHP", AddonId, "img/octanusHP.png", {"bar", "healthBar"})
 Library.Media.AddTexture("OctanusHP_red", AddonId, "img/octanusHP_red.png", {"bar", "healthBar"})
 Library.Media.AddTexture("octanusMana", AddonId, "img/octanusMana.png", {"bar", "manaBar"})
@@ -97,6 +101,63 @@ Library.Media.AddTexture("Portrait_Calling_Mage", AddonId, "img/Portrait_Calling
 Library.Media.AddTexture("Portrait_Calling_Rogue", AddonId, "img/Portrait_Calling_Rogue.png", {})
 Library.Media.AddTexture("Portrait_Calling_Warrior", AddonId, "img/Portrait_Calling_Warrior.png", {})
 
+Library.Media.AddTexture("Mentoring", "Rift", "TargetPortrait_Mentor.png.dds", {"Mentoring"})
+Library.Media.AddTexture("icon_boss", AddonId, "img/icon_boss.png", {})
+Library.Media.AddTexture("icon_defiant", AddonId, "img/icon_defiant.png", {})
+
+--[[
+"GuildLog_icon_achievements.png.dds"
+"GuildLog_icon_defiant.png.dds" -- м
+"GuildLog_icon_guardian.png.dds" -- м
+"Guild_Defiant_bg.png.dds" -- большие
+"Guild_Guardian_bg.png.dds" -- большие
+"Guild_Icon_Defiant.png.dds" -- средн€€
+"Guild_Icon_Guardian.png.dds"-- средн€€
+
+UpgradableNPC_I18.dds
+
+"CharacterSheet_I1BA.dds" клерик
+"CharacterSheet_I1BB.dds" маг
+"CharacterSheet_I1BD.dds" рога
+"CharacterSheet_I1BF.dds" воин
+"MainMap_I2AC.dds"
+"MainMap_I2AD.dds"
+"MainMap_I2B3.dds"
+"MainMap_I2B2.dds"
+"MainMap_I2C1.dds"
+"MainMap_I2C0.dds"
+"MiniMap_I299.dds" деф
+"MiniMap_I29F.dds"г вардиен
+"MiniMap_I5C.dds" доминион
+"MiniMap_I64.dds" найт
+"MiniMap_I6A.dds"
+"NPCDialog_conquest_dominion.png.dds"
+"NPCDialog_conquest_nightfall.png.dds"
+"NPCDialog_conquest_oathsworn.png.dds"
+
+"RadialBurst_01.png.dds" внутрь
+"TargetPortrait_I114.dds" кастбар босса
+"UpgradableNPC_I1B.dds" под 18
+"CTF_Shield_Bkgnd.png.dds"
+"raid_icon_leader.png.dds"
+"raid_icon_masterlooter.png.dds"
+"charactercreate_darkelf_female.tga"
+]]
+
+Library.Media.AddTexture("Icon_normal", "Rift", "emblem_normal.png.dds", {"normal"})
+Library.Media.AddTexture("Icon_group", "Rift", "emblem_boss.png.dds", {"group"})
+Library.Media.AddTexture("Icon_raid", "Rift", "UpgradableNPC_I18.dds", {"raid"})
+Library.Media.AddTexture("Icon_raid", "Rift", "emblem_elite.png.dds", {"raid"})
+
+Library.Media.AddTexture("Icon_neutral", "Rift", "indicator_hostile_unflagged.png.dds", {"neutral"})
+Library.Media.AddTexture("Icon_hostil", "Rift", "indicator_hostile_flagged.png.dds", {"hostile"})
+Library.Media.AddTexture("Icon_friendly", "Rift", "indicator_friendly_flagged.png.dds", {"friendly"})
+
+
+--Library.Media.AddTexture("", "Rift", "", {""})
+
+Library.Media.AddTexture("RareMob", "Rift", "target_portrait_LootPinata.png.dds", {})
+
 Library.Media.AddFont("ArmWrestler", AddonId, "font/ArmWrestler.ttf")
 Library.Media.AddFont("Bazooka", AddonId, "font/Bazooka.ttf")
 Library.Media.AddFont("BlackChancery", AddonId, "font/BlackChancery.ttf")
@@ -109,8 +170,5 @@ Library.Media.AddFont("Enigma", AddonId, "font/Enigma.ttf")
 Library.Media.AddFont("LiberationSans", AddonId, "font/LiberationSans.ttf")
 Library.Media.AddFont("SFAtarianSystem", AddonId, "font/SFAtarianSystem.ttf")
 
-
 Library.Media.AddTexture("jnhOrb_RED", AddonId, "img/jnhOrb_red.png", {"orb"})
 Library.Media.AddTexture("jnhOrb2_BLEU", AddonId, "img/jnhOrb2_blue.png", {"orb"})
-
----------------------------------------------------------------------------------------------------

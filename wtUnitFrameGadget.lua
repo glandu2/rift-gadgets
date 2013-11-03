@@ -54,7 +54,7 @@ local function ufConfigDialog(container)
 				{text="Focus's Target", value="focus.target"},
 				{text="Pet", value="player.pet"},
 			}, false) 
-		:Select("template", TXT.UnitFrameTemplate, "StandardFrame", templateListItems, true)
+		:Select("template", TXT.UnitFrameTemplate, "LifeUnitFrame1", templateListItems, true)
 		:Checkbox("excludeBuffs", "Hide Buffs on Frame", false)
 		:Checkbox("excludeCasts", "Hide Castbars on Frame", false)
 		:Checkbox("ownBuffs", "Only show my buffs", true)
@@ -70,13 +70,19 @@ local function ufConfigDialog(container)
 
 	ufAppearance = WT.Dialog(frmOverrideInner)
 		:Checkbox("ovHealthTexture", "Override Health Texture?", false)
-		:TexSelect("texHealth", "Health Texture", "wtDiagonal", "bar")
+		:TexSelect("texHealth", "Health Texture", "Texture 39", "bar")
 --		:Checkbox("ovHealthColor", "Override Health Color?", false)
---		:ColorPicker("colHealth", "Health Color", 0, 0.7, 0, 1)
+--		:ColorPicker("colHealth", "Health Color", 0, 0.5, 0, 0.85)
 		:Checkbox("ovResourceTexture", "Override Resource Texture?", false)
-		:TexSelect("texResource", "Resource Texture", "wtBantoBar", "bar")
+		:TexSelect("texResource", "Resource Texture", "Texture 69", "bar")
 --		:Checkbox("ovResourceColor", "Override Resource Color?", false)
 --		:ColorPicker("colResource", "Resource Color", 0.4, 0.6, 0.8, 1)
+--		:Checkbox("ovAbsorbTexture", "Override Absorb Texture?", false)
+--		:TexSelect("texAbsorb", "Absorb Texture", "Texture 69", "bar")
+		:Checkbox("ovCastTexture", "Override Cast bar Texture?", false)
+		:TexSelect("texCast", "Cast bar Texture", "Texture 69", "bar")
+--		:Checkbox("ovHealthBackgroundColor", "Override Health Back color?", false)
+--		:ColorPicker("colHealthBackground", "Health Background Color", 0.07, 0.07, 0.07, 0.85)
 		
 end
 
@@ -173,8 +179,8 @@ local function rfConfigDialog(container)
 		:Checkbox("reverseGroups", TXT.ReverseGroups, false)
 		:Checkbox("reverseUnits", TXT.ReverseUnits, false)
 		:Checkbox("showHoTTrackers", "Show HoT Trackers", false)
-		:Checkbox("showHoTPanel", "Show HoTs", false)
-		:Checkbox("showDebuffPanel", "Show Debuffs", false)
+		:Checkbox("showHoTPanel", "Show HoTs", true)
+		:Checkbox("showDebuffPanel", "Show Debuffs", true)
 		
 	local templateControl = rfDialog:GetControl("template")
 	local templateId = templateControl.getValue()
@@ -206,13 +212,17 @@ local function rfConfigDialog(container)
 
 	rfAppearance = WT.Dialog(frmOverrideInner)
 		:Checkbox("ovHealthTexture", "Override Health Texture?", false)
-		:TexSelect("texHealth", "Health Texture", "wtDiagonal", "bar")
+		:TexSelect("texHealth", "Health Texture", "Texture 68", "bar")
 --		:Checkbox("ovHealthColor", "Override Health Color?", false)
---		:ColorPicker("colHealth", "Health Color", 0, 0.7, 0, 1)
-		:Checkbox("ovResourceTexture", "Override Resource Texture?", false)
-		:TexSelect("texResource", "Resource Texture", "wtBantoBar", "bar")
+--		:ColorPicker("colHealth", "Health Color", 0, 0.5, 0, 0.85)
+--		:Checkbox("ovResourceTexture", "Override Resource Texture?", false)
+--		:TexSelect("texResource", "Resource Texture", "wtBantoBar", "bar")
 --		:Checkbox("ovResourceColor", "Override Resource Color?", false)
 --		:ColorPicker("colResource", "Resource Color", 0.4, 0.6, 0.8, 1)
+--		:Checkbox("ovAbsorbTexture", "Override Absorb Texture?", false)
+--		:TexSelect("texAbsorb", "Absorb Texture", "Texture 69", "bar")
+		:Checkbox("ovHealthBackgroundColor", "Override Health Back color?", false)
+		:ColorPicker("colHealthBackground", "Health Background Color", 0.07, 0.07, 0.07, 0.85)
 	
 	for idx, name in ipairs(macroNames) do
 	
@@ -320,13 +330,17 @@ local function gfConfigDialog(container)
 
 	gfAppearance = WT.Dialog(frmOverrideInner)
 		:Checkbox("ovHealthTexture", "Override Health Texture?", false)
-		:TexSelect("texHealth", "Health Texture", "wtDiagonal", "bar")
+		:TexSelect("texHealth", "Health Texture", "Texture 68", "bar")
 --		:Checkbox("ovHealthColor", "Override Health Color?", false)
---		:ColorPicker("colHealth", "Health Color", 0, 0.7, 0, 1)
+--		:ColorPicker("colHealth", "Health Color", 0, 0.5, 0, 0.85)
 		:Checkbox("ovResourceTexture", "Override Resource Texture?", false)
-		:TexSelect("texResource", "Resource Texture", "wtBantoBar", "bar")
+		:TexSelect("texResource", "Resource Texture", "Texture 19", "bar")
 --		:Checkbox("ovResourceColor", "Override Resource Color?", false)
 --		:ColorPicker("colResource", "Resource Color", 0.4, 0.6, 0.8, 1)
+--		:Checkbox("ovAbsorbTexture", "Override Absorb Texture?", false)
+--		:TexSelect("texAbsorb", "Absorb Texture", "Texture 69", "bar")
+		:Checkbox("ovHealthBackgroundColor", "Override Health Back color?", false)
+		:ColorPicker("colHealthBackground", "Health Background Color", 0.07, 0.07, 0.07, 0.85)
 
 	for idx, name in ipairs(macroNames) do
 	
@@ -399,7 +413,7 @@ local function CreateUnitFrame(config)
 		
 		local elPortBackdrop = uf:CreateElement(		
 		{
-			id="portraitBackdrop", type="MediaSet", parent="portraitBorder", layer=5,
+			id="portraitBackdrop", type="MediaSet", parent="portraitBorder", layer=5, 
 			attach=
 			{
 				{ point="TOPLEFT", element="portraitBorder", targetPoint="TOPLEFT", offsetX=1, offsetY=1 },

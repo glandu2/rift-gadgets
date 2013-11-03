@@ -58,8 +58,8 @@ local function Create(configuration)
 		castBar:SetBackgroundColor(0,0,0,0.4)
 	end
 	
-	if configuration.cbColorInt == nil then configuration.cbColorInt = {0,0,1,0.5} end
-	if configuration.cbColorNonInt == nil then configuration.cbColorNonInt = {1,0.75,0.16,0.5} end
+	if configuration.cbColorInt == nil then configuration.cbColorInt = {0.42,0.69,0.81,1.0} end
+	if configuration.cbColorNonInt == nil then configuration.cbColorNonInt = {0.9,0.7,0.3,1.0} end
 
 	if configuration.TransparentCastBar == true then configuration.backgroundColor={r=0.07,g=0.07,b=0.07, a=0.85} end
 	
@@ -203,17 +203,17 @@ local function ConfigDialog(container)
 				{text="Focus's Target", value="focus.target"},
 				{text="Pet", value="player.pet"},
 			}, false) 
-		:TexSelect("texture", "Texture", "wtCastInterruptable", "bar")
-		:ColorPicker("cbColorInt", "Interruptible color", 0,0,1,0.5)
-		:TexSelect("textureNoInterrupt", "Noninterruptable Texture", "wtCastUninterruptable", "bar")
-		:ColorPicker("cbColorNonInt", "Non-Interruptible color", 1,0.75,0.16,0.5)
+		:TexSelect("texture", "Texture", "Texture 82", "bar")
+		:ColorPicker("cbColorInt", "Interruptible color", 0.42,0.69,0.81,1.0)
+		:TexSelect("textureNoInterrupt", "Noninterruptable Texture", "Texture 87", "bar")
+		:ColorPicker("cbColorNonInt", "Non-Interruptible color", 0.9,0.7,0.3,1.0)
 		:Checkbox("hideNotCasting", "Hide when inactive", true)
 		:Checkbox("showCastTime", "Show cast time", true)
 		:Checkbox("smallCastTime", "Small cast time text", false)
 		:Checkbox("showIcon", "Show ability icon", false)
-		:Checkbox("TransparentCastBar", "Transparent cast bar", false)
-		:Checkbox("Border", "Show cast bar border", false)
-		:Checkbox("largeCastFont", "Larger cast font", false)
+		:Checkbox("TransparentCastBar", "Transparent cast bar", true)
+		:Checkbox("Border", "Show cast bar border", true)
+		:Checkbox("largeCastFont", "Larger cast font", true)
 end
 
 local function GetConfiguration()

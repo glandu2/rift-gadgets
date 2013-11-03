@@ -68,7 +68,11 @@ function wtBar:Construct()
 	if config.colorBinding then
 		self.UnitFrame:CreateBinding(config.colorBinding, self, self.BindColor, nil)
 	end
-
+	
+	if config.backgroundColorBinding then
+		self.UnitFrame:CreateBinding(config.backgroundColorBinding, self, self.BindbackgroundColor, nil)
+	end
+	
 	if config.color then
 		self:SetBarColor(config.color.r, config.color.g, config.color.b, config.color.a)
 	end
@@ -77,16 +81,27 @@ function wtBar:Construct()
 		self:SetBackgroundColor(config.backgroundColor.r or 0, config.backgroundColor.g or 0, config.backgroundColor.b or 0, config.backgroundColor.a or 1)
 	end
 	
-------------------------Add Border-----------------------------------------------------
+	if config.BorderTextureAggroVisibleBinding then
+		  unitFrame:CreateBinding(config.BorderTextureAggroVisibleBinding, self, self.BindBorderTextureAggroVisible, nil)	
+	end
+	  
+	if config.BorderColorBinding then
+		  unitFrame:CreateBinding(config.BorderColorBinding, self, self.BindBorderColor, nil)	
+	end
+	 
+	if config.BorderTextureTargetVisibleBinding then
+		  unitFrame:CreateBinding(config.BorderTextureTargetVisibleBinding, self, self.BindBorderTextureTargetVisible, nil)	
+	end
+	  	
+	--------------------------------------------------------------------------------
     if config.border then
 	local config = self.Configuration
 	local unitFrame = self.Mask
         local nameBase = unitFrame:GetName()
 		local parent = unitFrame:GetParent()
 		local unitFrameLayer = unitFrame:GetLayer()
-	    self.width = width or 2
-	    self.position = "outside"
-		local width = self.width  	  	
+	    local  width = self.width or 1.25
+	    --self.position = "outside"  	  	
 
 	  self.top = UI.CreateFrame("Frame", nameBase .."_TopBorder", parent)
 	  self.top:SetLayer(unitFrameLayer)
@@ -94,7 +109,7 @@ function wtBar:Construct()
       self.top:SetPoint("BOTTOMLEFT", unitFrame, "TOPLEFT", -width, 0)
       self.top:SetPoint("BOTTOMRIGHT", unitFrame, "TOPRIGHT", width, 0)
       self.top:SetHeight(width)
-	  
+
 	  self.bottom = UI.CreateFrame("Frame", nameBase .."_BottomBorder", parent)
 	  self.bottom:SetLayer(unitFrameLayer)
       self.bottom:ClearAll()
@@ -115,13 +130,89 @@ function wtBar:Construct()
       self.right:SetPoint("TOPLEFT", unitFrame, "TOPRIGHT", 0, -width)
       self.right:SetPoint("BOTTOMLEFT", unitFrame, "BOTTOMRIGHT", 0, width)
       self.right:SetWidth(width)
+	  --------------------------------------------TextureTarget----------------------------------------------------------
+			if config.borderTextureTarget then
+			local config = self.Configuration
+			local TextureTargetLayer = unitFrame:GetLayer() + 1	  	
 
-	  end
-	  if config.BorderColorBinding then
-		  unitFrame:CreateBinding(config.BorderColorBinding, self, self.BindBorderColor, nil)	
-	  end
-  -------------------------------------------------------------------------------------------------------
+			  self.topTextureTarget = UI.CreateFrame("Texture", nameBase .."_TopTextureTargetBorder", self.top )
+			  self.topTextureTarget:SetLayer(TextureTargetLayer)
+			  self.topTextureTarget:ClearAll()
+			  self.topTextureTarget:SetPoint("BOTTOMLEFT", self.top, "TOPLEFT", 0, 1)
+			  self.topTextureTarget:SetPoint("BOTTOMRIGHT", self.top, "TOPRIGHT", 0, 1)
+			  self.topTextureTarget:SetHeight(4)
+			  self.topTextureTarget:SetTexture("Gadgets", "img/wb.png")
+			  self.topTextureTarget:SetVisible(false)
 
+			  self.bottomTextureTarget = UI.CreateFrame("Texture", nameBase .."_BottomTextureTargetBorder", self.bottom)
+			  self.bottomTextureTarget:SetLayer(TextureTargetLayer)
+			  self.bottomTextureTarget:ClearAll()
+			  self.bottomTextureTarget:SetPoint("TOPLEFT", self.bottom, "BOTTOMLEFT", 0, -1)
+			  self.bottomTextureTarget:SetPoint("TOPRIGHT", self.bottom, "BOTTOMRIGHT", 0, -1)
+			  self.bottomTextureTarget:SetHeight(4)
+			  self.bottomTextureTarget:SetTexture("Gadgets", "img/wt.png")
+			  self.bottomTextureTarget:SetVisible(false)
+			  
+			  self.leftTextureTarget = UI.CreateFrame("Texture", nameBase .."_LeftTextureTargetBorder", self.left)
+			  self.leftTextureTarget:SetLayer(TextureTargetLayer)
+			  self.leftTextureTarget:ClearAll()
+			  self.leftTextureTarget:SetPoint("TOPRIGHT", self.left, "TOPLEFT", 1, 0)
+			  self.leftTextureTarget:SetPoint("BOTTOMRIGHT", self.left, "BOTTOMLEFT", 1, 0)
+			  self.leftTextureTarget:SetWidth(4)
+			  self.leftTextureTarget:SetTexture("Gadgets", "img/wr.png")
+			  self.leftTextureTarget:SetVisible(false)
+			  
+			  self.rightTextureTarget = UI.CreateFrame("Texture", nameBase .."_RightTextureTargetBorder", self.right)
+			  self.rightTextureTarget:SetLayer(TextureTargetLayer)
+			  self.rightTextureTarget:ClearAll()
+			  self.rightTextureTarget:SetPoint("TOPLEFT", self.right, "TOPRIGHT", -1, 0)
+			  self.rightTextureTarget:SetPoint("BOTTOMLEFT", self.right, "BOTTOMRIGHT", -1, 0)
+			  self.rightTextureTarget:SetWidth(4)
+			  self.rightTextureTarget:SetTexture("Gadgets", "img/wl.png")
+			  self.rightTextureTarget:SetVisible(false)
+			  end
+  --------------------------------------------TextureAggro-----------------------------------------------------------
+			if config.borderTextureAggro then
+			local config = self.Configuration
+			local TextureAggro = unitFrame:GetLayer() + 2 	  	
+
+			  self.topTextureAggro = UI.CreateFrame("Texture", nameBase .."_topTextureAggroBorder", self.top)
+			  self.topTextureAggro:SetLayer(TextureAggro)
+			  self.topTextureAggro:ClearAll()
+			  self.topTextureAggro:SetPoint("BOTTOMLEFT", self.top, "TOPLEFT", 0, 0)
+			  self.topTextureAggro:SetPoint("BOTTOMRIGHT", self.top, "TOPRIGHT", 0, 0)
+			  self.topTextureAggro:SetHeight(5)
+			  self.topTextureAggro:SetTexture("Gadgets", "img/rt.png")
+			  self.topTextureAggro:SetVisible(false)
+
+			  self.bottomTextureAggro = UI.CreateFrame("Texture", nameBase .."_BottomTextureAggroBorder", self.bottom)
+			  self.bottomTextureAggro:SetLayer(TextureAggro)
+			  self.bottomTextureAggro:ClearAll()
+			  self.bottomTextureAggro:SetPoint("TOPLEFT", self.bottom, "BOTTOMLEFT", 0, 0)
+			  self.bottomTextureAggro:SetPoint("TOPRIGHT", self.bottom, "BOTTOMRIGHT", 0, 0)
+			  self.bottomTextureAggro:SetHeight(5)
+			  self.bottomTextureAggro:SetTexture("Gadgets", "img/rb.png")
+			  self.bottomTextureAggro:SetVisible(false)
+			  
+			  self.leftTextureAggro = UI.CreateFrame("Texture", nameBase .."_LeftTextureAggroBorder", self.left)
+			  self.leftTextureAggro:SetLayer(TextureAggro)
+			  self.leftTextureAggro:ClearAll()
+			  self.leftTextureAggro:SetPoint("TOPRIGHT", self.left, "TOPLEFT", 0, 0)
+			  self.leftTextureAggro:SetPoint("BOTTOMRIGHT", self.left, "BOTTOMLEFT", 0, 0)
+			  self.leftTextureAggro:SetWidth(5)
+			  self.leftTextureAggro:SetTexture("Gadgets", "img/rr.png")
+			  self.leftTextureAggro:SetVisible(false)
+			  
+			  self.rightTextureAggro = UI.CreateFrame("Texture", nameBase .."_RightTextureAggroBorder", self.right)
+			  self.rightTextureAggro:SetLayer(TextureAggro)
+			  self.rightTextureAggro:ClearAll()
+			  self.rightTextureAggro:SetPoint("TOPLEFT", self.right, "TOPRIGHT", 0, 0)
+			  self.rightTextureAggro:SetPoint("BOTTOMLEFT", self.right, "BOTTOMRIGHT", 0, 0)
+			  self.rightTextureAggro:SetWidth(5)
+			  self.rightTextureAggro:SetTexture("Gadgets", "img/rl.png")
+			  self.rightTextureAggro:SetVisible(false)
+			  end
+	end
 end
 --------------------------Border color-----------------------------------------------------------------
 function wtBar:BindBorderColor(BorderColor)
@@ -139,11 +230,45 @@ function wtBar:BindBorderColor(BorderColor)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------
+function wtBar:BindBorderTextureAggroVisible(BorderTextureAggroVisible)
+	if BorderTextureAggroVisible == true then
+		  self.topTextureAggro:SetVisible(BorderTextureAggroVisible or true)
+		  self.bottomTextureAggro:SetVisible(BorderTextureAggroVisible or true)
+		  self.leftTextureAggro:SetVisible(BorderTextureAggroVisible or true)
+		  self.rightTextureAggro:SetVisible(BorderTextureAggroVisible or true)
+		else  
+		  self.topTextureAggro:SetVisible(BorderTextureAggroVisible or false)
+		  self.bottomTextureAggro:SetVisible(BorderTextureAggroVisible or false)
+		  self.leftTextureAggro:SetVisible(BorderTextureAggroVisible or false)
+		  self.rightTextureAggro:SetVisible(BorderTextureAggroVisible or false)
+	end
+end
+
+function wtBar:BindBorderTextureTargetVisible(BorderTextureTargetVisible)
+	if BorderTextureTargetVisible == true then
+		  self.topTextureTarget:SetVisible(BorderTextureTargetVisible or true)
+		  self.bottomTextureTarget:SetVisible(BorderTextureTargetVisible or true)
+		  self.leftTextureTarget:SetVisible(BorderTextureTargetVisible or true)
+		  self.rightTextureTarget:SetVisible(BorderTextureTargetVisible or true)
+		else  
+		  self.topTextureTarget:SetVisible(BorderTextureTargetVisible or false)
+		  self.bottomTextureTarget:SetVisible(BorderTextureTargetVisible or false)
+		  self.leftTextureTarget:SetVisible(BorderTextureTargetVisible or false)
+		  self.rightTextureTarget:SetVisible(BorderTextureTargetVisible or false)
+	end
+end
+
 function wtBar:BindPercent(percentage)
 	if (self.growthDirection == "up") or (self.growthDirection == "down") then 
 		self.Mask:SetHeight((percentage / 100) * self:GetHeight())
 	else
 		self.Mask:SetWidth((percentage / 100) * self:GetWidth())
+	end
+end
+
+function wtBar:BindbackgroundColor(backgroundColor)
+	if backgroundColor then
+		self:SetBackgroundColor(backgroundColor.r or 0, backgroundColor.g or 0, backgroundColor.b or 0, backgroundColor.a or 0)
 	end
 end
 

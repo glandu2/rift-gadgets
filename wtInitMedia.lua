@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.5.51
+      Project Date (UTC)  : 2013-10-16T12:02:13Z
+      File Modified (UTC) : 2013-09-16T20:29:23Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -56,16 +56,31 @@ Library.Media.AddTexture("Vitality_Zero", "Rift", "death_icon_(glow).png.dds", {
 Library.Media.AddTexture("1bar", "Rift", "Bank_110.dds", {"bar"})
 Library.Media.AddTexture("CharacterSheet", "Rift", "CharacterSheet_I2B.dds", {"bar"})
 Library.Media.AddTexture("Merchant", "Rift", "Merchant_I257.dds", {"bar"})
+Library.Media.AddTexture("BarBkgnd", "Rift", "BarBkgnd.png.dds", {"bar"})
+Library.Media.AddTexture("ControlPoint_BarGrey", "Rift", "ControlPoint_BarGrey.png.dds", {"bar"})
+Library.Media.AddTexture("castbar_orange", "Rift", "castbar_orange.png.dds", {"bar"})
+Library.Media.AddTexture("ControlPoint_BarBlue", "Rift", "ControlPoint_BarBlue.png.dds", {"bar"})
+Library.Media.AddTexture("ControlPoint_BarRed", "Rift", "ControlPoint_BarRed.png.dds", {"bar"})
+Library.Media.AddTexture("inner_black_subwin_Light", "Rift", "inner_black_subwin_Light.png.dds", {"bar"})
+Library.Media.AddTexture("mini_healthbar", "Rift", "mini_healthbar.png.dds", {"bar"})
+Library.Media.AddTexture("raid_healthbar", "Rift", "raid_healthbar.png.dds", {"bar"})
+Library.Media.AddTexture("raid_healthbar_red", "Rift", "raid_healthbar_red.png.dds", {"bar"})
+Library.Media.AddTexture("bagslot", "Rift", "bagslot.png.dds", {"bar"})
+--"bagslot.png.dds"
+--"raid_icon_leader.png.dds"
+--"target_portrait_LootPinata.png.dds"
+--"charactercreate_darkelf_female.tga"
+--Library.Media.AddTexture("", "Rift", "", {"bar"})
 ----------------------------------Life----------------------------------------------------------
-Library.Media.AddTexture("BantoBar", AddonId, "img/BantoBar.png", {"bar", "colorize"})
-Library.Media.AddTexture("Bumps", AddonId, "img/Bumps.png", {"bar", "colorize"})
-Library.Media.AddTexture("Diagonal", AddonId, "img/Diagonal.png", {"bar", "colorize"})
-Library.Media.AddTexture("Frost", AddonId, "img/Frost.png", {"bar", "colorize"})
-Library.Media.AddTexture("Glamour", AddonId, "img/Glamour.png", {"bar", "colorize"})
-Library.Media.AddTexture("Grid", AddonId, "img/Grid.tga", {"bar", "colorize"})
-Library.Media.AddTexture("Healbot", AddonId, "img/Healbot.png", {"bar", "colorize"})
-Library.Media.AddTexture("Ruben", AddonId, "img/Ruben.png", {"bar", "colorize"})
-Library.Media.AddTexture("Runes", AddonId, "img/Runes.png", {"bar", "colorize"})
-Library.Media.AddTexture("Steel", AddonId, "img/Steel.png", {"bar", "colorize"})
+Library.Media.AddTexture("BantoBar", AddonId, "img/BantoBar.png", {"bar"})
+Library.Media.AddTexture("Bumps", AddonId, "img/Bumps.png", {"bar"})
+Library.Media.AddTexture("Diagonal", AddonId, "img/Diagonal.png", {"bar"})
+Library.Media.AddTexture("Frost", AddonId, "img/Frost.png", {"bar"})
+Library.Media.AddTexture("Glamour", AddonId, "img/Glamour.png", {"bar"})
+Library.Media.AddTexture("Grid", AddonId, "img/Grid.tga", {"bar"})
+Library.Media.AddTexture("Healbot", AddonId, "img/Healbot.png", {"bar"})
+Library.Media.AddTexture("Ruben", AddonId, "img/Ruben.png", {"bar"})
+Library.Media.AddTexture("Runes", AddonId, "img/Runes.png", {"bar"})
+Library.Media.AddTexture("Steel", AddonId, "img/Steel.png", {"bar"})
 Library.Media.AddTexture("shadow", AddonId, "img/shadow.tga", {"bar"})
 Library.Media.AddTexture("wtGlaze", AddonId, "img/wtGlaze.png", {"bar"})

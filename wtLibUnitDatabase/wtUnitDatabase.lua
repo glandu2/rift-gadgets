@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.5.51
+      Project Date (UTC)  : 2013-10-16T12:02:13Z
+      File Modified (UTC) : 2013-09-29T19:33:56Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -67,9 +67,9 @@ WT.Units = {}
 WT.PlayerBuffs = {}
 
 -- Hold a reference to the player
-local playerId = Inspect.Unit.Lookup("player")
+playerId = Inspect.Unit.Lookup("player")
 WT.Player = { id = playerId }
-
+lvl = WT.Player.level or 0
 -- Container for database methods
 WT.UnitDatabase = {}
 WT.UnitDatabase.Casting = {}
@@ -224,8 +224,8 @@ local function OnBuffChange(hEvent, unitId, buffs)
 end
 
 
-local castColorUninterruptable = { r=0.8, g=0.4, b=0, a=1 }
-local castColorInterruptable = { r=0, g=0.7, b=0.7, a=1 }
+local castColorUninterruptable = { r=0.9, g=0.7, b=0.3, a=1 }
+local castColorInterruptable = { r=0.42, g=0.69, b=0.81, a=1 }
 
 local castbarRefresh = {}
 
@@ -339,40 +339,41 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 		if detail["manaMax"] then 
 			unit["resourceName"] = "mana"
 			unit["resourceText"] = TXT.Mana
-			unit["resourceColor"] = { r = 0.1, g = 0.3, b = 1.0, a = 1.0 }
+			unit["resourceColor"] = { r = 0.24, g = 0.49, b = 1.0, a = 1.0 }
 		elseif detail["energyMax"] then 
 			unit["resourceName"] = "energy" 
 			unit["resourceText"] = TXT.Energy
-			unit["resourceColor"] = { r = 1.0, g = 0.0, b = 1.0, a = 1.0 }
+			unit["resourceColor"] = { r = 0.86, g = 0.43, b = 0.88, a = 1.0 }
 		elseif detail["power"] then 
 			unit["resourceName"] = "power"
 			unit["resourceText"] = TXT.Power
-			unit["resourceColor"] = { r = 1.0, g = 1.0, b = 0.0, a = 1.0 }
+			unit["resourceColor"] = { r = 0.81, g = 0.58, b = 0.16, a = 1.0 }
 		else 
 			unit["resourceName"] = "" 
 			unit["resourceText"] = ""
-			unit["resourceColor"] = { r = 1, g = 1, b = 1, a = 1.0 }
+			unit["resourceColor"] = { r = 0.31, g = 0.31, b = 0.31, a = 1.0 }
 		end
 
-		if detail.calling == "mage" then
-			unit.callingColor = { r = 0.6, g = 0.0, b = 0.8, a = 1.0 }
-			unit.callingText = TXT.Mage
-		elseif detail.calling == "cleric" then
-			unit.callingColor = { r = 0.0, g = 0.8, b = 0.0, a = 1.0 }
-			unit.callingText = TXT.Cleric
-		elseif detail.calling == "rogue" then
-			unit.callingColor = { r = 0.7, g = 0.6, b = 0.0, a = 1.0 }
-			unit.callingText = TXT.Rogue
-		elseif detail.calling == "warrior" then
-			unit.callingColor = { r = 0.8, g = 0.0, b = 0.0, a = 1.0 }
-			unit.callingText = TXT.Warrior
-		else
+			if detail.calling == "mage" then
+				unit.callingColor = { r = 0.8, g = 0.36, b = 1.0, a = 1.0 }
+				unit.callingText = TXT.Mage
+			elseif detail.calling == "cleric" then
+				unit.callingColor = { r = 0.47, g = 0.94, b = 0.0, a = 1.0 }
+				unit.callingText = TXT.Cleric
+			elseif detail.calling == "rogue" then
+				unit.callingColor = { r = 1.0, g = 0.86, b = 0.04, a = 1.0 }
+				unit.callingText = TXT.Rogue
+			elseif detail.calling == "warrior" then
+				unit.callingColor = { r = 1.0, g = 0.15, b = 0.15, a = 1.0 }
+				unit.callingText = TXT.Warrior	
+		else	
 			unit.callingColor = { r = 0.2, g = 0.4, b = 0.6, a = 1.0 }
 			unit.callingText = ""
 		end
 
-		if unit.name:len() > 14 then
-			unit.nameShort = unit.name:sub(1, 12) .. "..."
+
+		if unit.name:len() > 20 then
+			unit.nameShort = unit.name:sub(1, 19) .. "..."
 		else
 			unit.nameShort = unit.name
 		end
@@ -386,13 +387,15 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 		-- Fire player available if required
 		if unitId == Inspect.Unit.Lookup("player") then 
 			WT.Player = unit
+			--WT.Player.level = unit.level
+			lvl = WT.Player.level
+			--dump(lvl)
 			if not playerAvailableFired then
 				WT.Event.Trigger.PlayerAvailable()
 				playerAvailableFired = true
-				
 			end 
 		end
-
+		
 		if unitId == Inspect.Unit.Lookup("player.target") then
 			unit.playerTarget = true
 		end 
@@ -628,6 +631,10 @@ local function OnUnitDetailWarfront(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "warfront", value) end
 end
 
+local function OnUnitDetailMentoring(hEvent, unitsValue)
+	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "mentoring", value) end
+end
+
 local function OnUnitDetailZone(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "zone", value) end
 end
@@ -685,12 +692,12 @@ local function CalculateRanges()
 			if not oor and details.outOfRange then
 				details.outOfRange = nil
 			end
-			
-			local blocked = details.blocked or details.outOfRange
-			if not details.blockedOrOutOfRange and blocked then
+			--details.blocked
+			local block = details.outOfRange
+			if not details.blockedOrOutOfRange and block then
 				details.blockedOrOutOfRange = true
 			end
-			if details.blockedOrOutOfRange and not blocked then
+			if details.blockedOrOutOfRange and not block then
 				details.blockedOrOutOfRange = nil
 			end
 			
@@ -859,6 +866,7 @@ Command.Event.Attach(Event.Unit.Detail.TitlePrefixId, OnUnitDetailTitlePrefixId,
 Command.Event.Attach(Event.Unit.Detail.TitleSuffixId, OnUnitDetailTitleSuffixId, "OnUnitDetailTitleSuffixId")
 Command.Event.Attach(Event.Unit.Detail.Vitality, OnUnitDetailVitality, "OnUnitDetailVitality")
 Command.Event.Attach(Event.Unit.Detail.Warfront, OnUnitDetailWarfront, "OnUnitDetailWarfront")
+Command.Event.Attach(Event.Unit.Detail.Mentoring, OnUnitDetailMentoring, "OnUnitDetailMentoring")
 Command.Event.Attach(Event.Buff.Add, OnBuffAdd, "OnBuffAdd")
 Command.Event.Attach(Event.Buff.Change, OnBuffChange, "OnBuffChange")
 Command.Event.Attach(Event.Buff.Remove, OnBuffRemove, "OnBuffRemove")

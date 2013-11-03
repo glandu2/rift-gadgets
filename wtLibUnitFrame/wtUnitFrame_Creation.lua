@@ -165,9 +165,9 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		xRows = 5
 		for i = 2,20 do
 			if ((i-1) % 5) ~= 0 then 
-				frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT", 0, 1)-----------------increase distance between the raid frames-----------------------------
+				frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT", 0, 0)-----------------increase distance between the raid frames-----------------------------
 			else 
-				frames[i]:SetPoint("TOPLEFT", frames[i-5], "TOPRIGHT", 1, 0) ------------------increase distance between the raid frames----------------------------
+				frames[i]:SetPoint("TOPLEFT", frames[i-5], "TOPRIGHT", 0, 0) ------------------increase distance between the raid frames----------------------------
 			end
 		end
 	end
@@ -360,11 +360,11 @@ function WT.UnitFrame.CreateFromTemplate(templateName, unitSpec, options)
 		end
 	end
 
-	if options.ovHealthColor and options.colHealth then
+	--[[if options.ovHealthColor and options.colHealth then
 		if uf.Elements and uf.Elements.barHealth then
-			uf.Elements.barHealth.Image:SetBackgroundColor(unpack(options.colHealth))
+			uf.Elements.barHealth:BindColor(unpack(options.colHealth))
 		end
-	end
+	end]]
 
 	if options.ovResourceTexture and options.texResource then
 		if uf.Elements and uf.Elements.barResource then
@@ -372,8 +372,23 @@ function WT.UnitFrame.CreateFromTemplate(templateName, unitSpec, options)
 		end
 	end
 	
+	if options.ovAbsorbTexture and options.texAbsorb then
+		if uf.Elements and uf.Elements.barAbsorb then
+			Library.Media.SetTexture(uf.Elements.barAbsorb.Image, options.texAbsorb)
+		end
+	end
 	
+	if options.ovCastTexture and options.texCast then
+		if uf.Elements and uf.Elements.barCast then
+			Library.Media.SetTexture(uf.Elements.barCast.Image, options.texCast)
+		end
+	end
 
+	if options.ovHealthBackgroundColor and options.colHealthBackground then
+		if uf.Elements and uf.Elements.barHealth then
+			uf.Elements.barHealth:SetBackgroundColor(unpack(options.colHealthBackground))
+		end
+	end
 	-- Override any existing mouse handling and add our own
 	-- This is a precursor to full macro handling 	
 	uf:SetSecureMode("restricted")

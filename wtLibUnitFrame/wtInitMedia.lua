@@ -23,7 +23,7 @@ Library.Media.AddTexture("wtSweep", AddonId, "img/Sweep.png", {"imgset", "sweep"
 Library.Media.AddTexture("octanusHeal", "Rift", "raid_icon_role_heal.png.dds", {"roleHeal"})
 Library.Media.AddTexture("octanusDPS", "Rift", "raid_icon_role_dps.png.dds", {"roleDPS"})
 Library.Media.AddTexture("octanusTank", "Rift", "raid_icon_role_tank.png.dds", {"roleTank"})
-Library.Media.AddTexture("iconRoleSupport", "Rift", "raid_icon_role_support.png.dds", {"roleSupport"})
+Library.Media.AddTexture("octanusSupport", "Rift", "raid_icon_role_support.png.dds", {"roleSupport"})
 
 Library.Media.AddTexture("iconRoleHeal", "Rift", "vfx_ui_mob_tag_heal_mini.png.dds", {"roleHeal"})
 Library.Media.AddTexture("iconRoleDPS", "Rift", "vfx_ui_mob_tag_damage_mini.png.dds", {"roleDPS"})
@@ -68,6 +68,13 @@ Library.Media.AddTexture("riftMark14", "Rift", "vfx_ui_mob_tag_skull.png.dds", {
 Library.Media.AddTexture("riftMark15", "Rift", "vfx_ui_mob_tag_no.png.dds", {})
 Library.Media.AddTexture("riftMark16", "Rift", "vfx_ui_mob_tag_smile.png.dds", {})
 Library.Media.AddTexture("riftMark17", "Rift", "vfx_ui_mob_tag_squirrel.png.dds", {})
+Library.Media.AddTexture("riftMark18", "Rift", "vfx_ui_mob_tag_crown.png.dds", {})
+Library.Media.AddTexture("riftMark22", "Rift", "vfx_ui_mob_tag_heart.png.dds", {})
+Library.Media.AddTexture("riftMark23", "Rift", "vfx_ui_mob_tag_heart_leftside.png.dds", {})
+Library.Media.AddTexture("riftMark24", "Rift", "vfx_ui_mob_tag_heart_rightside.png.dds", {})
+Library.Media.AddTexture("riftMark25", "Rift", "vfx_ui_mob_tag_radioactive.png.dds", {})
+Library.Media.AddTexture("riftMark26", "Rift", "vfx_ui_mob_tag_sad.png.dds", {})
+Library.Media.AddTexture("riftMark30", "Rift", "vfx_ui_mob_tag_clover.png.dds", {})
 
 Library.Media.AddTexture("riftMark01_mini", "Rift", "vfx_ui_mob_tag_01_mini.png.dds", {})
 Library.Media.AddTexture("riftMark02_mini", "Rift", "vfx_ui_mob_tag_02_mini.png.dds", {})
@@ -86,6 +93,13 @@ Library.Media.AddTexture("riftMark14_mini", "Rift", "vfx_ui_mob_tag_skull_mini.p
 Library.Media.AddTexture("riftMark15_mini", "Rift", "vfx_ui_mob_tag_no_mini.png.dds", {})
 Library.Media.AddTexture("riftMark16_mini", "Rift", "vfx_ui_mob_tag_smile_mini.png.dds", {})
 Library.Media.AddTexture("riftMark17_mini", "Rift", "vfx_ui_mob_tag_squirrel_mini.png.dds", {})
+Library.Media.AddTexture("riftMark18_mini", "Rift", "vfx_ui_mob_tag_crown_mini.png.dds", {})
+Library.Media.AddTexture("riftMark22_mini", "Rift", "vfx_ui_mob_tag_heart_mini.png.dds", {})
+Library.Media.AddTexture("riftMark23_mini", "Rift", "vfx_ui_mob_tag_heart_leftside_mini.png.dds", {})
+Library.Media.AddTexture("riftMark24_mini", "Rift", "vfx_ui_mob_tag_heart_rightside_mini.png.dds", {})
+Library.Media.AddTexture("riftMark25_mini", "Rift", "vfx_ui_mob_tag_radioactive_mini.png.dds", {})
+Library.Media.AddTexture("riftMark26_mini", "Rift", "vfx_ui_mob_tag_sad_mini.png.dds", {})
+Library.Media.AddTexture("riftMark30_mini", "Rift", "vfx_ui_mob_tag_clover_mini.png.dds", {})
 
 Library.Media.AddTexture("FactionDefiant", AddonId, "img/FactionDefiant.dds", {})
 Library.Media.AddTexture("FactionGuardian", AddonId, "img/FactionGuardian.dds", {})
@@ -142,6 +156,10 @@ UpgradableNPC_I18.dds
 "raid_icon_leader.png.dds"
 "raid_icon_masterlooter.png.dds"
 "charactercreate_darkelf_female.tga"
+
+
+"TargetPortrait_IBC.dds" ,босс
+"TargetPortrait_I113.dds" каст босса
 ]]
 
 Library.Media.AddTexture("Icon_normal", "Rift", "emblem_normal.png.dds", {"normal"})

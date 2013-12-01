@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.5.6
+      Project Date (UTC)  : 2013-11-03T06:56:55Z
+      File Modified (UTC) : 2013-06-11T07:10:52Z (Wildtide)
       -----------------------------------------------------------------     
 --]]
 
@@ -20,7 +20,7 @@ local TXT = Library.Translate
 local CDialog = {}
 local CDialog_mt = { __index = CDialog }
 
-function CDialog:add(id, label, control, labelFontSize, stretch, iconFile)
+function CDialog:add(id, label, control, labelFontSize, stretch, iconFile, labelFontOutline, labelFontColor, labelFontColorY)
 
 	local lbl = false
 	local frm = UI.CreateFrame("Frame", "DialogFormRow", self.container)
@@ -49,6 +49,15 @@ function CDialog:add(id, label, control, labelFontSize, stretch, iconFile)
 			lbl:SetFontSize(12)
 		end
 		lbl:SetText(label)
+		if labelFontOutline then
+			lbl:SetEffectGlow({ strength = 3 })
+		end
+		if labelFontColor then
+			lbl:SetFontColor(0.2,0.4,0.7)
+		end
+		if labelFontColorY then
+			lbl:SetFontColor(0.9,0.9,0.3)
+		end
 	end
 	
 	frm.control = control
@@ -56,9 +65,14 @@ function CDialog:add(id, label, control, labelFontSize, stretch, iconFile)
 
 	if #self.fields == 0 then
 		frm:SetPoint("TOPLEFT", self.container, "TOPLEFT")
+	elseif #self.fields == 20 then
+		frm:SetPoint("TOPLEFT", self.fields[1], "BOTTOMRIGHT", -270 , 8)
+	elseif #self.fields > 20 then
+		frm:SetPoint("TOPLEFT", self.fields[#self.fields], "BOTTOMLEFT", 0, 8)
 	else
 		frm:SetPoint("TOPLEFT", self.fields[#self.fields], "BOTTOMLEFT", 0, 8)
 	end
+	
 	frm:SetPoint("RIGHT", self.container, "RIGHT")
 
 	if control then
@@ -77,7 +91,7 @@ function CDialog:add(id, label, control, labelFontSize, stretch, iconFile)
 	end
 
 	table.insert(self.fields, frm)
-
+	
 	return frm
 end
 
@@ -90,6 +104,16 @@ end
 
 function CDialog:Label(label)
 	self:add(nil, label, nil, 12)
+	return self
+end
+
+function CDialog:Title(label)
+	self:add(nil, label, nil, 14, false, false, true, true)
+	return self
+end
+
+function CDialog:TitleY(label)
+	self:add(nil, label, nil, 14, false, false, false, false, true)
 	return self
 end
 

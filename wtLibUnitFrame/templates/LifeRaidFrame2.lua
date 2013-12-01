@@ -190,15 +190,13 @@ function LifeRaidFrame2:Construct(options)
 	}
 	
 	for idx,element in ipairs(template.elements) do
-		if not options.showAbsorb and element.id == "barAbsorb" then 
-			-- showElement = false
-		elseif element.semantic == "HoTTracker" and not options.showHoTTrackers then
-			-- showElement = false	
-		elseif element.semantic == "HoTPanel" and not options.showHoTPanel then
-			-- showElement = false	
-		elseif element.semantic == "DebuffPanel" and not options.showDebuffPanel then
-			-- showElement = false		
-		else 
+		local showElement = true
+		if not options.showAbsorb and element.id == "barAbsorb" then showElement = false end
+		if element.semantic == "HoTTracker" and not options.showHoTTracker then showElement = false	end
+		if element.semantic == "HoTPanel" and not options.showHoTPanel then showElement = false	end
+		if element.semantic == "DebuffPanel" and not options.showDebuffPanel then showElement = false	end
+		if options.growthDirection and element.id == "barHealth" then element.growthDirection = options.growthDirection	end
+		if showElement then
 			self:CreateElement(element)
 		end
 	end

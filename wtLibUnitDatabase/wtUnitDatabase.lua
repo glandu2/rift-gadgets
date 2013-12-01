@@ -74,6 +74,9 @@ lvl = WT.Player.level or 0
 WT.UnitDatabase = {}
 WT.UnitDatabase.Casting = {}
 
+
+
+
 -- Events --------------------------------------------------------------------
 WT.Event.Trigger.UnitAdded, WT.Event.UnitAdded = Utility.Event.Create(AddonId, "UnitAdded")
 WT.Event.Trigger.UnitRemoved, WT.Event.UnitRemoved = Utility.Event.Create(AddonId, "UnitRemoved")
@@ -324,7 +327,7 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 
 	local detail = Inspect.Unit.Detail(unitId)
 	if detail then
-
+	
 		local unit = ((unitObject or WT.Units[unitId]) or WT.Unit:Create(unitId)) 
 			
 		for k,v in pairs(detail) do
@@ -371,25 +374,22 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 			unit.callingText = ""
 		end
 
-
 		if unit.name:len() > 20 then
 			unit.nameShort = unit.name:sub(1, 19) .. "..."
 		else
 			unit.nameShort = unit.name
 		end
-
+		
 		-- remap the coordinate fields into a single table property
 		unit.coord = { detail.coordX or 0, detail.coordY or 0, detail.coordZ or 0 }
 		WT.Units[unitId] = unit
 		
 		if not unit.Buffs then unit.Buffs = {} end
-		
+					
 		-- Fire player available if required
 		if unitId == Inspect.Unit.Lookup("player") then 
-			WT.Player = unit
-			--WT.Player.level = unit.level
+			WT.Player = unit		
 			lvl = WT.Player.level
-			--dump(lvl)
 			if not playerAvailableFired then
 				WT.Event.Trigger.PlayerAvailable()
 				playerAvailableFired = true
@@ -400,12 +400,11 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 			unit.playerTarget = true
 		end 
 		
-		
 		-- Add all buffs currently on the unit
 		if not omitBuffScan then
 			OnBuffRemove(nil, unitId, unit.Buffs)
 			OnBuffAdd(nil, unitId, Inspect.Buff.List(unitId))
-		end
+		end		
 			
 		local needsCleanse = false	
 		for buffId, buffDetail in pairs(unit.Buffs) do	
@@ -414,7 +413,7 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 			end
 		end
 		unit.cleansable = needsCleanse
-				
+							--dump(Inspect.Unit.Detail(unitId))		
 		return unit
 	else
 		return nil
@@ -595,6 +594,14 @@ local function OnUnitDetailRole(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "role", value) end
 end
 
+local function OnUnitDetailRaceName(hEvent, unitsValue)
+	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "raceName", value) end
+end
+
+local function OnUnitDetailRadius(hEvent, unitsValue)
+	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "radius", value) end
+end
+
 local function OnUnitDetailTagged(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "tagged", value) end
 end
@@ -692,12 +699,12 @@ local function CalculateRanges()
 			if not oor and details.outOfRange then
 				details.outOfRange = nil
 			end
-			--details.blocked
-			local block = details.outOfRange
-			if not details.blockedOrOutOfRange and block then
+			
+			local blocked = details.blocked or details.outOfRange
+			if not details.blockedOrOutOfRange and blocked then
 				details.blockedOrOutOfRange = true
 			end
-			if details.blockedOrOutOfRange and not block then
+			if details.blockedOrOutOfRange and not blocked then
 				details.blockedOrOutOfRange = nil
 			end
 			
@@ -861,6 +868,7 @@ Command.Event.Attach(Event.Unit.Detail.PublicSize, OnUnitDetailPublicSize, "OnUn
 Command.Event.Attach(Event.Unit.Detail.Pvp, OnUnitDetailPvp, "OnUnitDetailPvp")
 Command.Event.Attach(Event.Unit.Detail.Ready, OnUnitDetailReady, "OnUnitDetailReady")
 Command.Event.Attach(Event.Unit.Detail.Role, OnUnitDetailRole, "OnUnitDetailRole")
+Command.Event.Attach(Event.Unit.Detail.Radius, OnUnitDetailRadius, "OnUnitDetailRadius")
 Command.Event.Attach(Event.Unit.Detail.Tagged, OnUnitDetailTagged, "OnUnitDetailTagged")
 Command.Event.Attach(Event.Unit.Detail.TitlePrefixId, OnUnitDetailTitlePrefixId, "OnUnitDetailTitlePrefixId")
 Command.Event.Attach(Event.Unit.Detail.TitleSuffixId, OnUnitDetailTitleSuffixId, "OnUnitDetailTitleSuffixId")
@@ -874,7 +882,16 @@ Command.Event.Attach(Event.Unit.Castbar, OnUnitCastbar, "OnUnitCastbar")
 Command.Event.Attach(Event.Unit.Detail.Zone, OnUnitDetailZone, "OnUnitDetailZone")
 Command.Event.Attach(Event.Unit.Detail.Coord, OnUnitDetailCoord, "OnUnitDetailCoord")
 
+local function OnChatNotify(hEvent, unitsValue)
+	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "OnChatNotify", value) end
+--	dump(unitsValue)
+end
+
+
+
 Command.Event.Attach(Event.System.Update.Begin,	OnSystemUpdateBegin, "DB_OnSystemUpdateBegin")
+Command.Event.Attach(Event.Chat.Notify,	OnChatNotify, "OnChatNotify")
+
 
 Command.Event.Attach(Library.LibUnitChange.Register("player.target"), OnPlayerTargetChange, "OnPlayerTargetChange")
 Command.Event.Attach(Library.LibUnitChange.Register("castName"), OnCastbarChange, "OnCastbarChange")

@@ -9,6 +9,8 @@ function WT.UnitFrame.CreateFromConfiguration(configuration)
 	if not template then print("Missing required configuration item: template") return end
 	if not unitSpec then print("Missing required configuration item: unitSpec") return end
 	
+	local shortname = configuration.shortname or false
+	local showRadius = configuration.showRadius or false
 	WT.Log.Debug("Creating UnitFrame from configuration: template=" .. template .. " unitSpec=" .. unitSpec)
 	return WT.UnitFrame.CreateFromTemplate(template, unitSpec, configuration)
 end
@@ -62,6 +64,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 
 	local template = configuration.template
 	local layout = configuration.layout or "4 x 5"
+	local growthDirection = configuration.growthDirection or "right"
 	WT.Log.Debug("Creating RaidFrames from configuration: template=" .. template)
 	
 	local wrapper = UI.CreateFrame("Frame", WT.UniqueName("RaidFrames"), WT.Context)
@@ -165,9 +168,9 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		xRows = 5
 		for i = 2,20 do
 			if ((i-1) % 5) ~= 0 then 
-				frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT", 0, 0)-----------------increase distance between the raid frames-----------------------------
+				frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT")
 			else 
-				frames[i]:SetPoint("TOPLEFT", frames[i-5], "TOPRIGHT", 0, 0) ------------------increase distance between the raid frames----------------------------
+				frames[i]:SetPoint("TOPLEFT", frames[i-5], "TOPRIGHT")
 			end
 		end
 	end

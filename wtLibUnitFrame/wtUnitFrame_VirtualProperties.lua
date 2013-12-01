@@ -259,6 +259,15 @@ WT.Unit.CreateVirtualProperty("UnitStatus", { "offline", "afk", "health", "block
 		end
 	end)
 
+WT.Unit.CreateVirtualProperty("Radius", { "id", "radius" },
+	function(unit)
+		if unit.id and unit.radius then
+			return string.format("%.01f", unit.radius) .. "m"
+		else
+			return ""
+		end
+	end)
+	
 WT.Unit.CreateVirtualProperty("borderWigth", { "id" }, 
 	function(unit)
 		if unit.id then

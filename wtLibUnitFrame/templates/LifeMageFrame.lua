@@ -312,6 +312,11 @@ function LifeMageFrame:Construct(options)
 		if not options.showAbsorb and element.id == "barAbsorb" then showElement = false end
 		if element.semantic == "HoTPanel" and not options.showHoTPanel then showElement = false	end
 		if options.excludeCasts and ((element.id == "barCast") or (element.id == "labelCast") or (element.id == "labelTime")) then showElement = false end
+		if options.shortname == true and element.id == "labelName" then 
+			element.text = "{nameShort}"
+		elseif	options.shortname == false and element.id == "labelName" then 	
+			element.text = "{name}"
+		end		
 		if showElement then
 			self:CreateElement(element)
 		end

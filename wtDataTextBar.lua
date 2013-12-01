@@ -26,15 +26,33 @@ local function Create(configuration)
 	wrapper:SetWidth(570)
 	wrapper:SetHeight(30)
 	wrapper:SetSecureMode("restricted")
-	wrapper:SetBackgroundColor(0.07,0.07,0.07, 0.85)
-	Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
+	
+	if configuration.showBackground == nil then
+		Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
+		wrapper:SetBackgroundColor(0.07,0.07,0.07,0.85)		
+	elseif configuration.showBackground == true then
+			Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
+		if configuration.BackgroundColor == nil then
+			configuration.BackgroundColor = {0.07,0.07,0.07,0.85}
+			wrapper:SetBackgroundColor(configuration.BackgroundColor[1],configuration.BackgroundColor[2],configuration.BackgroundColor[3],configuration.BackgroundColor[4])
+		else 
+			wrapper:SetBackgroundColor(configuration.BackgroundColor[1],configuration.BackgroundColor[2],configuration.BackgroundColor[3],configuration.BackgroundColor[4])
+		end
+	else 	
+		Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 0)
+		wrapper:SetBackgroundColor(0,0,0,0)
+	end
 ------------------------FPS---------------------------------------------------------------
 	local fpsFrame = UI.CreateFrame("Text", WT.UniqueName("wtFPS"), wrapper)
 	fpsFrame:SetText("FPS:" .. "")
 	fpsFrame:SetFontSize(13)
 	fpsFrame:SetEffectGlow({ strength = 3 })
 	--fpsFrame:SetFontColor(0.2,0.4,0.7)
-	fpsFrame:SetPoint("BOTTOMLEFT", wrapper, "BOTTOMLEFT", 10, -5)
+	fpsFrame:SetPoint("CENTERLEFT", wrapper, "CENTERLEFT", 10, 0)
+	if configuration.showFPS == false then
+		fpsFrame:SetVisible(false)	
+		fpsFrame:SetWidth(-10)
+	end
 ----------------------CPU------------------------------------------------------------------
 	local cpuFrame = UI.CreateFrame("Text", WT.UniqueName("wtCPU"), wrapper)
 	cpuFrame:SetText("")
@@ -42,16 +60,20 @@ local function Create(configuration)
 	cpuFrame.currText = ""
 	cpuFrame:SetEffectGlow({ strength = 3 })
 	--cpuFrame:SetFontColor(0.2,0.4,0.7)
-	cpuFrame:SetPoint("BOTTOMLEFT", wrapper, "BOTTOMLEFT", 80, -5)
+	cpuFrame:SetPoint("CENTERLEFT", fpsFrame, "CENTERRIGHT", 10, 0)
+	if configuration.showCPU == false then
+		cpuFrame:SetVisible(false)	
+		cpuFrame:SetWidth(-10)
+	end
 ----------------------PlanarCharge----------------------------------------------------------
 	local chargeMeter = WT.UnitFrame:Create("player")
 	chargeMeter:SetLayer(100)
-	chargeMeter:SetPoint("BOTTOMLEFT", wrapper, "BOTTOMLEFT", 170, -5)
+	chargeMeter:SetPoint("CENTERLEFT", cpuFrame, "CENTERRIGHT", 10, 0)
 	chargeMeter:CreateElement(
 	{
 		id="imgCharge", type="Image", parent="frame", layer=10, alpha=1,
 		attach = {
-			{ point="BOTTOMLEFT", element="frame", targetPoint="BOTTOMLEFT" },
+			{ point="CENTERLEFT", element="frame", targetPoint="CENTERLEFT" },
 		},
 		texAddon="Rift", texFile="chargedstone_on.png.dds",
 		backgroundColor={r=1, g=1, b=1, a=1},
@@ -64,16 +86,20 @@ local function Create(configuration)
 		outline=true,
 		text="{planar}/{planarMax}", fontSize=13,
 	});
+	if configuration.showCharge == false then
+		chargeMeter:SetWidth(-10)
+		chargeMeter:SetVisible(false)
+	end
 ----------------------SoulVitality----------------------------------------------------------
 	local vitalityMeter = WT.UnitFrame:Create("player")
 	vitalityMeter:SetLayer(100)
-	vitalityMeter:SetPoint("BOTTOMLEFT", wrapper, "BOTTOMLEFT", 240, 13)
+	vitalityMeter:SetPoint("CENTERLEFT", chargeMeter, "CENTERRIGHT", 10, 0)
 	
 	vitalityMeter:CreateElement(
 	{
 		id="imgVitality", type="Image", parent="frame", layer=10, alpha=1,
 		attach = {
-			{ point="BOTTOMLEFT", element="frame", targetPoint="BOTTOMLEFT" },
+			{ point="CENTERLEFT", element="frame", targetPoint="CENTERLEFT", offsetX=0, offsetY=7},
 		},
 		texAddon="Rift", texFile="death_icon_(grey).png.dds",
 		backgroundColor={r=1, g=1, b=1, a=1},
@@ -83,7 +109,7 @@ local function Create(configuration)
 	{
 		id="imgZVitality", type="Image", parent="frame", layer=15, alpha=1,
 		attach = {
-			{ point="BOTTOMLEFT", element="frame", targetPoint="BOTTOMLEFT" },
+			{ point="CENTERLEFT", element="frame", targetPoint="CENTERLEFT", offsetX=0, offsetY=7 },
 		},
 		texAddon="Rift", texFile="death_icon_(red).png.dds",
 		visibilityBinding="zVitality",
@@ -96,46 +122,82 @@ local function Create(configuration)
 		attach = {{ point="CENTERLEFT", element="imgVitality", targetPoint="CENTERLEFT", offsetX=30, offsetY=-8 }},
 		text="{vitality}%", fontSize=13, outline=true,
 	});
+	if configuration.showVitality == false then
+		vitalityMeter:SetWidth(-40)
+		vitalityMeter:SetVisible(false)
+	end
+------------------------------ShardName-------------------------------------------------------------------
+	local shard = Inspect.Shard()
+	local shardName = UI.CreateFrame("Text", WT.UniqueName("wtshardName"), wrapper)
+	shardName:SetText("")
+	shardName:SetFontSize(13)
+	shardName:SetEffectGlow({ strength = 3 })
+	shardName:SetPoint("CENTERLEFT", vitalityMeter, "CENTERRIGHT", 40, 0)	
+	
+	if shard["name"] then
+	shardName:SetText(shard["name"])
+	end 
+	
+	if configuration.showShard == false then
+		shardName:SetVisible(false)
+		shardName:SetWidth(-10)	
+	end	
 ----------------------Money----------------------------------------------------------	
+	
 
+	local MoneyPlatIcon = UI.CreateFrame("Texture", WT.UniqueName("wtMoneyPlatIcon "), wrapper)
+	MoneyPlatIcon:SetTexture("Rift", "coins_platinum.png.dds")
+	MoneyPlatIcon:SetPoint("CENTERLEFT", shardName, "CENTERRIGHT", 10, 0)
+	MoneyPlatIcon:SetWidth(15)
+	MoneyPlatIcon:SetHeight(15)	
+	
 	local MoneyPlatFrame = UI.CreateFrame("Text", WT.UniqueName("wtMoneyPlat"), wrapper)
 	MoneyPlatFrame:SetText("")
 	MoneyPlatFrame:SetFontSize(13)
 	MoneyPlatFrame:SetEffectGlow({ strength = 3 })
-	MoneyPlatFrame:SetPoint("BOTTOMLEFT", wrapper, "BOTTOMLEFT", 330, -5)
+	MoneyPlatFrame:SetPoint("CENTERLEFT", MoneyPlatIcon, "CENTERRIGHT", 0, 0)
+	
+	local MoneyGoldIcon = UI.CreateFrame("Texture", WT.UniqueName("wtMoneyGoldIcon "), wrapper)
+	MoneyGoldIcon:SetTexture("Rift", "coins_gold.png.dds")
+	MoneyGoldIcon:SetPoint("CENTERLEFT", MoneyPlatFrame, "CENTERRIGHT", 0, 0)
+	MoneyGoldIcon:SetWidth(15)
+	MoneyGoldIcon:SetHeight(15)
 
-	
-	local MoneyPlatIcon = UI.CreateFrame("Texture", WT.UniqueName("wtMoneyPlatIcon "), wrapper)
-	MoneyPlatIcon:SetTexture("Rift", "coins_platinum.png.dds")
-	MoneyPlatIcon:SetPoint("CENTERLEFT", MoneyPlatFrame, "CENTERLEFT", 30, 0)
-	MoneyPlatIcon:SetWidth(15)
-	MoneyPlatIcon:SetHeight(15)
-	
 	local MoneyGoldFrame = UI.CreateFrame("Text", WT.UniqueName("wtMoneyGold"), wrapper)
 	MoneyGoldFrame:SetText("")
 	MoneyGoldFrame:SetFontSize(13)
 	MoneyGoldFrame:SetEffectGlow({ strength = 3 })
-	MoneyGoldFrame:SetPoint("CENTERLEFT", MoneyPlatIcon, "CENTERLEFT", 15, 0)
-
-	local MoneyGoldIcon = UI.CreateFrame("Texture", WT.UniqueName("wtMoneyGoldIcon "), wrapper)
-	MoneyGoldIcon:SetTexture("Rift", "coins_gold.png.dds")
-	MoneyGoldIcon:SetPoint("CENTERLEFT", MoneyGoldFrame, "CENTERLEFT", 18, 0)
-	MoneyGoldIcon:SetWidth(15)
-	MoneyGoldIcon:SetHeight(15)
+	MoneyGoldFrame:SetPoint("CENTERLEFT", MoneyGoldIcon, "CENTERRIGHT", 0, 0)	
+	
+	local MoneySilverIcon = UI.CreateFrame("Texture", WT.UniqueName("wtMoneySilverIcon "), wrapper)
+	MoneySilverIcon:SetTexture("Rift", "coins_Silver.png.dds")
+	MoneySilverIcon:SetPoint("CENTERLEFT", MoneyGoldFrame, "CENTERRIGHT", 0, 0)
+	MoneySilverIcon:SetWidth(15)
+	MoneySilverIcon:SetHeight(15)
 	
 	local MoneySilverFrame = UI.CreateFrame("Text", WT.UniqueName("wtMoneySilver"), wrapper)
 	MoneySilverFrame:SetText("")
 	MoneySilverFrame:SetFontSize(13)
 	MoneySilverFrame:SetEffectGlow({ strength = 3 })
-	MoneySilverFrame:SetPoint("CENTERLEFT", MoneyGoldIcon, "CENTERLEFT", 15, 0)
+	MoneySilverFrame:SetPoint("CENTERLEFT", MoneySilverIcon, "CENTERRIGHT", 0, 0)
 	
-	local MoneySilverIcon = UI.CreateFrame("Texture", WT.UniqueName("wtMoneySilverIcon "), wrapper)
-	MoneySilverIcon:SetTexture("Rift", "coins_Silver.png.dds")
-	MoneySilverIcon:SetPoint("CENTERLEFT", MoneySilverFrame, "CENTERLEFT", 18, 0)
-	MoneySilverIcon:SetWidth(15)
-	MoneySilverIcon:SetHeight(15)
 	
-		currencyTemp = Inspect.Currency.Detail("coin")
+	if configuration.showMoney == false then
+		MoneyPlatIcon:SetWidth(-25)
+			MoneyPlatIcon:SetVisible(false)
+		MoneyGoldIcon:SetWidth(0)
+			MoneyGoldIcon:SetVisible(false)
+		MoneySilverIcon:SetWidth(0)	
+			MoneySilverIcon:SetVisible(false)
+		MoneyPlatFrame:SetFontSize(0)
+			MoneyPlatFrame:SetVisible(false)
+		MoneyGoldFrame:SetFontSize(0)
+			MoneyGoldFrame:SetVisible(false)
+		MoneySilverFrame:SetFontSize(0)		
+			MoneySilverFrame:SetVisible(false)
+	end
+	
+	currencyTemp = Inspect.Currency.Detail("coin")
 	if currencyTemp.stack ~= nil then	
 	len = string.len(currencyTemp.stack)	
 		if len > 0 then
@@ -180,12 +242,13 @@ function currency (handle, currency)
 		end
 end
 ------------------------------ReloadUI-------------------------------------------------------------------
+
 	local btnReloadUI = UI.CreateFrame("Frame", WT.UniqueName("wtReloadUI"), wrapper)
 	btnReloadUI:SetWidth(90)
 	btnReloadUI:SetHeight(20)
 	btnReloadUI:SetBackgroundColor(0,0,0,0)
 	Library.LibSimpleWidgets.SetBorder("plain", btnReloadUI, 1, 0, 0, 0, 1)
-	btnReloadUI:SetPoint("BOTTOMLEFT", wrapper, "BOTTOMLEFT", 460, -4)	
+	btnReloadUI:SetPoint("CENTERLEFT", MoneySilverFrame, "CENTERRIGHT", 10, 0)	
 	btnReloadUI:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
 		btnReloadUI:SetBackgroundColor(0.5,0.4,0.7, 0.85)
 	end, "Event.UI.Input.Mouse.Cursor.In")
@@ -203,6 +266,11 @@ end
 	txtReloadUI:SetPoint("CENTERLEFT", btnReloadUI, "CENTERLEFT", 15, 0)
 	txtReloadUI:SetLayer(100)
 	
+	if configuration.showReloadUI == false then
+		btnReloadUI:SetVisible(false)
+		btnReloadUI:SetWidth(-10)	
+	end	
+-----------------------------------------------------------------------------------------------------------	
 	
 	table.insert(fpsGadgets, fpsFrame)
 	table.insert(cpuGadgets, cpuFrame)
@@ -211,7 +279,7 @@ end
 	table.insert(MoneyGadgets, MoneySilverFrame)
 	table.insert(Event.Currency,{ currency, AddonId, "_currency" })
 
-	return wrapper, { resizable={570, 30, 3000, 500} }
+	return wrapper, { resizable={70, 30, 3000, 30} }
 	
 end
 
@@ -221,6 +289,17 @@ local dialog = false
 local function ConfigDialog(container)	
 	dialog = WT.Dialog(container)
 		:Label("This gadget displays DataText bar with FRS, CPU, Planar charge, Soul vitality, Money and button 'ReloadUI' ")
+		:Checkbox("showFPS", "Show FPS", true)
+		:Checkbox("showCPU", "Show CPU", true)
+		:Checkbox("showCharge", "Show Planar Charge", true)		
+		:Checkbox("showVitality", "Show Soul Vitality", true)
+		:Checkbox("showShard", "Show Shard Name", true)			
+		:Checkbox("showMoney", "Show Money", true)			
+		:Checkbox("showReloadUI", "Show ReloadUI", true)
+		:TitleY("Gadgets Options")					
+		:Checkbox("showBackground", "Show Background frame", true)
+		:ColorPicker("BackgroundColor", "Background Color", 0.07,0.07,0.07,0.85)
+		
 end
 
 local function GetConfiguration()

@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.5.6
+      Project Date (UTC)  : 2013-11-03T06:56:55Z
+      File Modified (UTC) : 2013-09-23T07:04:27Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -44,6 +44,8 @@ Library.Translate.En(
 	gadgetFPS_name = "FPS Monitor",
 	gadgetDataTextBar_name = "Data Text Bar", 
 	gadgetDataTextBar_desc = "Displays Data Text Bar",
+	gadgetStatTextBar_name = "Stat Text Bar", 
+	gadgetStatTextBar_desc = "Displays player Stats Bar",
 	gadgetGroupFrames_desc = "Group Frames Gadget",
 	gadgetGroupFrames_name = "Group Frames",
 	gadgetPlanarCharge_desc = "Displays Planar Charge",

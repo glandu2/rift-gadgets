@@ -224,9 +224,10 @@ function RaidFrame:Construct(options)
 	}
 
 	for idx,element in ipairs(template.elements) do
-		if not options.showAbsorb and element.id == "barAbsorb" then 
-			-- showElement = false
-		else 
+		local showElement = true
+		if not options.showAbsorb and element.id == "barAbsorb" then showElement = false end
+		if options.growthDirection and element.id == "barHealth" then element.growthDirection = options.growthDirection	end
+		if showElement then
 			self:CreateElement(element)
 		end
 	end

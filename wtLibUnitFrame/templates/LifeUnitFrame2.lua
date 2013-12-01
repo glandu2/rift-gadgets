@@ -198,6 +198,13 @@ function LifeUnitFrame2:Construct(options)
 				text="{UnitStatus}", default="", fontSize=14, outline = true,
 			},
 			{
+				id="labelRadius", type="Label", parent="frameBackdrop", layer=20,
+				attach = {{ point="BOTTOMLEFT", element="barHealth", targetPoint="BOTTOMLEFT", offsetX=0, offsetY=-3 }},
+				visibilityBinding="Radius",
+				color={r = 0.38, g = 0.81, b = 1.0, a = 1.0},
+				text="HitBox:{Radius}", default="", fontSize=12, outline = true,
+			},			
+			{
 			    id="imgMark", type="MediaSet", parent="frameBackdrop", layer=30,
 			    attach = {{ point="TOPCENTER", element="frame", targetPoint="TOPCENTER", offsetX=0, offsetY=10 }},
 			    width = 25, height = 25,
@@ -297,6 +304,12 @@ function LifeUnitFrame2:Construct(options)
 		if not options.showAbsorb and element.id == "barAbsorb" then showElement = false end
 		if element.semantic == "HoTPanel" and not options.showHoTPanel then showElement = false	end
 		if options.excludeCasts and ((element.id == "barCast") or (element.id == "labelCast") or (element.id == "labelTime")) then showElement = false end
+		if options.shortname == true and element.id == "labelName" then 
+			element.text = "{nameShort}"
+		elseif	options.shortname == false and element.id == "labelName" then 	
+			element.text = "{name}"
+		end
+		if not options.showRadius and element.id == "labelRadius" then showElement = false end	
 		if showElement then
 			self:CreateElement(element)
 		end

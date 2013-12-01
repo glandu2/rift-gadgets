@@ -79,7 +79,7 @@ function LifeGroupFrame2:Construct(options)
 				id="barAbsorb", type="BarWithBorder", parent="frameBackdrop", layer=11,
 				attach = {
 					{ point="BOTTOMLEFT", element="barResource", targetPoint="BOTTOMLEFT", offsetX=1, offsetY=-21},
-					{ point="TOPRIGHT", element="barHealth", targetPoint="BOTTOMRIGHT", offsetX=0, offsetY=-24 },
+					{ point="TOPRIGHT", element="barResource", targetPoint="BOTTOMRIGHT", offsetX=0, offsetY=-24 },
 				},
 				visibilityBinding="absorbPercent",
 				growthDirection="right",
@@ -229,7 +229,7 @@ function LifeGroupFrame2:Construct(options)
 			},
 			{
 				id="buffPanelDebuffs", type="BuffPanel", semantic="DebuffPanel", parent="frameBackdrop", layer=30,
-				attach = {{ point="BOTTOMRIGHT", element="barResource", targetPoint="BOTTOMRIGHT", offsetX=-1, offsetY=-6 }},
+				attach = {{ point="BOTTOMRIGHT", element="barHealth", targetPoint="BOTTOMRIGHT", offsetX=-1, offsetY=0 }},
 				rows=1, cols=6, iconSize=16, iconSpacing=1, borderThickness=1,
 				auraType="debuff", 
 				growthDirection = "left_up",

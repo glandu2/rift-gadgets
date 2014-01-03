@@ -388,8 +388,9 @@ WT.Unit.CreateVirtualProperty("visibilityCombo", { "combo", "player"},
 		end		
 	end)
 	
-WT.Unit.CreateVirtualProperty("ComboColor", { "combo", "player"},
+WT.Unit.CreateVirtualProperty("ComboColor", { "combo", "player", "calling"},
 	function(unit)	
+	if unit.calling == "rogue" then
 		if unit.combo == 1 then
 			return { r = 0.72, g = 0.98, b = 0.04, a = 1.0 }	
 		elseif unit.combo == 2	then
@@ -400,7 +401,16 @@ WT.Unit.CreateVirtualProperty("ComboColor", { "combo", "player"},
 			return { r = 0.98, g = 0.5, b = 0.04, a = 1.0 }
 		elseif unit.combo == 5	then
 			return { r = 1.0, g = 0, b = 0, a = 1.0 }		
-		end		
+		end	
+	elseif 	unit.calling == "warrior" then	
+		if unit.combo == 1 then
+			return { r = 1.0, g = 1.0, b = 0, a = 1.0 }
+		elseif unit.combo == 2	then
+			return { r = 0.98, g = 0.5, b = 0.04, a = 1.0 }
+		elseif unit.combo == 3	then
+			return { r = 1.0, g = 0, b = 0, a = 1.0 }
+		end	
+	end
 	end)	
 	
 WT.Unit.CreateVirtualProperty("lvlColor", { "id", "level", "lvl", "player"},

@@ -41,8 +41,10 @@ Library.Media.AddTexture("CP Cupcakes", AddonId, "img/combo/combo_Cupcake.png", 
 Library.Media.AddTexture("CP Lips", AddonId, "img/combo/combo_Lips.png", {"combo"})
 Library.Media.AddTexture("CP Pink Skulls", AddonId, "img/combo/combo_PinkSkull.png", {"combo"})
 Library.Media.AddTexture("CP Target", AddonId, "img/combo/combo_Target.png", {"combo"})
-Library.Media.AddTexture("CP Rogue_xckaux", AddonId, "img/combo/Rogue_xckaux.png", {"combo"})
-Library.Media.AddTexture("CP Warrior_xckaux", AddonId, "img/combo/Warrior_xckaux.png", {"combo"})
+Library.Media.AddTexture("CP Rogue1_ckau", AddonId, "img/combo/Rogue1_ckau.png", {"combo"})
+Library.Media.AddTexture("CP Rogue2_ckau", AddonId, "img/combo/Rogue2_ckau.png", {"combo"})
+Library.Media.AddTexture("CP Warrior1_ckau", AddonId, "img/combo/Warrior1_ckau.png", {"combo"})
+Library.Media.AddTexture("CP Warrior2_ckau", AddonId, "img/combo/Warrior2_ckau.png", {"combo"})
 Library.Media.AddTexture("CP Number", AddonId, "img/combo/combo_number.png", {"combo"})
 
 Library.Media.AddTexture("CP Rogue", "Rift", "target_portrait_roguepoints_on.png.dds", {"combo", "combo_single"})

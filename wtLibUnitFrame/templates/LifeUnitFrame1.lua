@@ -86,7 +86,7 @@ function LifeUnitFrame1:Construct(options)
 				Color={r=0,g=0,b=0, a=1},
 			},
 			{
-				id="barAbsorb", type="BarWithBorder", parent="frameBackdrop", layer=11,
+				id="barAbsorb", type="Bar", parent="frameBackdrop", layer=11,
 				attach = {
 					{ point="BOTTOMLEFT", element="barResource", targetPoint="BOTTOMLEFT", offsetX=1, offsetY=-13},
 					{ point="TOPRIGHT", element="barHealth", targetPoint="BOTTOMRIGHT", offsetX=0, offsetY=-2 },
@@ -198,6 +198,14 @@ function LifeUnitFrame1:Construct(options)
 				visibilityBinding="name",
 				text="{nameShort}", default="", outline=true, fontSize=14,
 				colorBinding="NameColor",
+			},
+			{
+				id="labelCombo", type="Label", parent="frame", layer=20,
+				attach = {{ point="BOTTOMRIGHT", element="frame", targetPoint="TOPRIGHT", offsetX=-5, offsetY=17}},
+				visibilityBinding="visibilityCombo",
+				text="{combo}", default="", outline=true, fontSize=25,
+				colorBinding="ComboColor",
+				font = "ArmWrestler",
 			},
 			{
 				id="labelStatus", type="Label", parent="frame", layer=20,
@@ -313,6 +321,7 @@ function LifeUnitFrame1:Construct(options)
 		if not options.showAbsorb and element.id == "barAbsorb" then showElement = false end
 		if element.semantic == "HoTPanel" and not options.showHoTPanel then showElement = false	end
 		if options.excludeCasts and ((element.id == "barCast") or (element.id == "labelCast") or (element.id == "labelTime")) then showElement = false end
+		if not options.showCombo and element.id == "labelCombo" then showElement = false end
 		if options.shortname == true and element.id == "labelName" then 
 			element.text = "{nameShort}"
 		elseif	options.shortname == false and element.id == "labelName" then 	

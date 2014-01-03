@@ -41,6 +41,9 @@ Library.Media.AddTexture("CP Cupcakes", AddonId, "img/combo/combo_Cupcake.png", 
 Library.Media.AddTexture("CP Lips", AddonId, "img/combo/combo_Lips.png", {"combo"})
 Library.Media.AddTexture("CP Pink Skulls", AddonId, "img/combo/combo_PinkSkull.png", {"combo"})
 Library.Media.AddTexture("CP Target", AddonId, "img/combo/combo_Target.png", {"combo"})
+Library.Media.AddTexture("CP Rogue_xckaux", AddonId, "img/combo/Rogue_xckaux.png", {"combo"})
+Library.Media.AddTexture("CP Warrior_xckaux", AddonId, "img/combo/Warrior_xckaux.png", {"combo"})
+Library.Media.AddTexture("CP Number", AddonId, "img/combo/combo_number.png", {"combo"})
 
 Library.Media.AddTexture("CP Rogue", "Rift", "target_portrait_roguepoints_on.png.dds", {"combo", "combo_single"})
 Library.Media.AddTexture("CP Warrior", "Rift", "target_portrait_warrior_hp.png.dds", {"combo", "combo_single"})
@@ -48,6 +51,15 @@ Library.Media.AddTexture("CP Skull", "Rift", "vfx_ui_mob_tag_skull.png.dds", {"c
 Library.Media.AddTexture("CP Twitter", "Rift", "twitter.png.dds", {"combo", "combo_single"})
 Library.Media.AddTexture("CP Red Sword", "Rift", "vfx_ui_mob_tag_damage.png.dds", {"combo", "combo_single"})
 Library.Media.AddTexture("CP Squirrel", "Rift", "vfx_ui_mob_tag_squirrel.png.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP Red", "Rift", "ControlPoint_Respawn_Red_XtraLarge.png.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP Blue", "Rift", "ControlPoint_Respawn_Blue_XtraLarge.png.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP 1", "Rift", "MainMap_I100.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP 2", "Rift", "MainMap_I123.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP 3", "Rift", "MainMap_I107.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP 4", "Rift", "MainMap_I10E.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP 5", "Rift", "MainMap_I11C.dds", {"combo", "combo_single"})
+Library.Media.AddTexture("CP 6", "Rift", "icon_menu_achievements.png.dds", {"combo", "combo_single"})
+
 
 Library.Media.AddTexture("Vitality_Gray", "Rift", "death_icon_(grey).png.dds", {"vitality"})
 Library.Media.AddTexture("Vitality_Red", "Rift", "death_icon_(red).png.dds", {"vitality"})
@@ -69,8 +81,8 @@ Library.Media.AddTexture("bagslot", "Rift", "bagslot.png.dds", {"bar"})
 --"bagslot.png.dds"
 --"raid_icon_leader.png.dds"
 --"target_portrait_LootPinata.png.dds"
---"charactercreate_darkelf_female.tga"
 --Library.Media.AddTexture("", "Rift", "", {"bar"})
+Library.Media.AddTexture("coins_credits", AddonId, "img/coins_credits.png.dds", {"credits"})
 ----------------------------------Life----------------------------------------------------------
 Library.Media.AddTexture("BantoBar", AddonId, "img/BantoBar.png", {"bar"})
 Library.Media.AddTexture("Bumps", AddonId, "img/Bumps.png", {"bar"})

@@ -5,12 +5,14 @@ local AddonId = toc.identifier
 function WT.UnitFrame.CreateFromConfiguration(configuration)
 	local template = configuration.template
 	local unitSpec = configuration.unitSpec
-	
+
+		--dump(Inspect.Unit.Detail(Inspect.Unit.Lookup("group01")))
 	if not template then print("Missing required configuration item: template") return end
 	if not unitSpec then print("Missing required configuration item: unitSpec") return end
 	
 	local shortname = configuration.shortname or false
 	local showRadius = configuration.showRadius or false
+	local showCombo = configuration.showCombo or false
 	WT.Log.Debug("Creating UnitFrame from configuration: template=" .. template .. " unitSpec=" .. unitSpec)
 	return WT.UnitFrame.CreateFromTemplate(template, unitSpec, configuration)
 end
@@ -83,9 +85,19 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	local frames = {}
 	
 	local _debug = false
+
 	
-	
-	if not _debug then
+	--[[for i = 1,20 do
+		local unitId = Inspect.Unit.Lookup(sequence[i]) 
+		if unitId ~= nil then
+		dump(Inspect.Unit.Detail(unitId))
+		end
+	end]]
+
+
+	if WT.GetGroupMode() == "solo" and configuration.show_Solo == true then
+		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
+	elseif not _debug then
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, sequence[1], configuration)
 	else
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
@@ -269,7 +281,13 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 	
 	local _debug = false
 	
-	if not _debug then
+	--[[if Inspect.Unit.Lookup("player") then
+
+	end]]
+	
+	if WT.GetGroupMode() == "solo" and configuration.show_Solo == true then
+		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
+	elseif not _debug then
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, sequence[1], configuration)
 	else
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player.target", configuration)

@@ -19,6 +19,8 @@ local gadgetIndex = 0
 local fpsGadgets = {}
 local cpuGadgets = {}
 local MoneyGadgets = {}
+local shardName=nil
+local lastQueried=0
 
 local function Create(configuration)	
 
@@ -26,6 +28,7 @@ local function Create(configuration)
 	wrapper:SetWidth(570)
 	wrapper:SetHeight(30)
 	wrapper:SetSecureMode("restricted")
+	wrapper:SetLayer(1000)
 	
 	if configuration.showBackground == nil then
 		Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
@@ -44,11 +47,17 @@ local function Create(configuration)
 	end
 ------------------------FPS---------------------------------------------------------------
 	local fpsFrame = UI.CreateFrame("Text", WT.UniqueName("wtFPS"), wrapper)
-	fpsFrame:SetText("FPS:" .. "")
-	fpsFrame:SetFontSize(13)
-	fpsFrame:SetEffectGlow({ strength = 3 })
-	--fpsFrame:SetFontColor(0.2,0.4,0.7)
+	fpsFrame:SetText("")
+	fpsFrame:SetFontSize(14)
+	fpsFrame:SetFontColor(1,0.97,0.84,1)
 	fpsFrame:SetPoint("CENTERLEFT", wrapper, "CENTERLEFT", 10, 0)
+	
+	if 	configuration.outlineTextBlack == true then
+		fpsFrame:SetEffectGlow({ strength = 3 })
+	elseif configuration.outlineTextLight == true then
+		fpsFrame:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	end
+	
 	if configuration.showFPS == false then
 		fpsFrame:SetVisible(false)	
 		fpsFrame:SetWidth(-10)
@@ -56,18 +65,25 @@ local function Create(configuration)
 ----------------------CPU------------------------------------------------------------------
 	local cpuFrame = UI.CreateFrame("Text", WT.UniqueName("wtCPU"), wrapper)
 	cpuFrame:SetText("")
-	cpuFrame:SetFontSize(13)
+	cpuFrame:SetFontSize(14)
 	cpuFrame.currText = ""
+	cpuFrame:SetFontColor(1,0.97,0.84,1)
 	cpuFrame:SetEffectGlow({ strength = 3 })
-	--cpuFrame:SetFontColor(0.2,0.4,0.7)
 	cpuFrame:SetPoint("CENTERLEFT", fpsFrame, "CENTERRIGHT", 10, 0)
+	
+	if 	configuration.outlineTextBlack == true then
+		cpuFrame:SetEffectGlow({ strength = 3 })
+	elseif configuration.outlineTextLight == true then
+		cpuFrame:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	end	
+	
 	if configuration.showCPU == false then
 		cpuFrame:SetVisible(false)	
 		cpuFrame:SetWidth(-10)
 	end
 ----------------------PlanarCharge----------------------------------------------------------
 	local chargeMeter = WT.UnitFrame:Create("player")
-	chargeMeter:SetLayer(100)
+	chargeMeter:SetLayer(1001)
 	chargeMeter:SetPoint("CENTERLEFT", cpuFrame, "CENTERRIGHT", 10, 0)
 	chargeMeter:CreateElement(
 	{
@@ -84,16 +100,19 @@ local function Create(configuration)
 		id="chargeLabel", type="Label", parent="frame", layer=20,
 		attach = {{ point="CENTERLEFT", element="imgCharge", targetPoint="CENTERLEFT", offsetX=20, offsetY=0}},
 		outline=true,
-		text="{planar}/{planarMax}", fontSize=13,
+		text="{planar}/{planarMax}", fontSize=14, color={r=1, g=0.97, b=0.84, a=1}
 	});
+
 	if configuration.showCharge == false then
+		chargeMeter.Elements.imgCharge:SetWidth(0)
+		chargeMeter.Elements.chargeLabel:SetWidth(-30)
 		chargeMeter:SetWidth(-10)
 		chargeMeter:SetVisible(false)
 	end
 ----------------------SoulVitality----------------------------------------------------------
 	local vitalityMeter = WT.UnitFrame:Create("player")
-	vitalityMeter:SetLayer(100)
-	vitalityMeter:SetPoint("CENTERLEFT", chargeMeter, "CENTERRIGHT", 10, 0)
+	vitalityMeter:SetLayer(1001)
+	vitalityMeter:SetPoint("CENTERLEFT", chargeMeter.Elements.chargeLabel, "CENTERRIGHT", 10, 0)
 	
 	vitalityMeter:CreateElement(
 	{
@@ -120,41 +139,117 @@ local function Create(configuration)
 	{
 		id="txtVitality", type="Label", parent="frame", layer=20,
 		attach = {{ point="CENTERLEFT", element="imgVitality", targetPoint="CENTERLEFT", offsetX=30, offsetY=-8 }},
-		text="{vitality}%", fontSize=13, outline=true,
+		text="{vitality}%", fontSize=14, outline=true, color={r=1, g=0.97, b=0.84, a=1}
 	});
 	if configuration.showVitality == false then
-		vitalityMeter:SetWidth(-40)
+		vitalityMeter.Elements.imgVitality:SetWidth(0)
+		vitalityMeter.Elements.imgZVitality:SetWidth(0)
+		vitalityMeter.Elements.txtVitality:SetWidth(-40)
+		vitalityMeter.Elements.txtVitality:SetText("")
+		vitalityMeter:SetWidth(-10)
 		vitalityMeter:SetVisible(false)
 	end
 ------------------------------ShardName-------------------------------------------------------------------
-	local shard = Inspect.Shard()
-	local shardName = UI.CreateFrame("Text", WT.UniqueName("wtshardName"), wrapper)
-	shardName:SetText("")
-	shardName:SetFontSize(13)
-	shardName:SetEffectGlow({ strength = 3 })
-	shardName:SetPoint("CENTERLEFT", vitalityMeter, "CENTERRIGHT", 40, 0)	
-	
-	if shard["name"] then
-	shardName:SetText(shard["name"])
-	end 
+
+	local shardNameText = UI.CreateFrame("Text", WT.UniqueName("wtshardName"), wrapper)
+	shardNameText:SetText("")
+	shardNameText:SetFontSize(14)
+	shardNameText:SetFontColor(1,0.97,0.84,1)
+	shardNameText:SetPoint("CENTERLEFT", vitalityMeter.Elements.txtVitality, "CENTERRIGHT", 10, 0)		
+		
+	if 	configuration.outlineTextBlack == true then
+		shardNameText:SetEffectGlow({ strength = 3 })
+	elseif configuration.outlineTextLight == true then
+		shardNameText:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	end	
 	
 	if configuration.showShard == false then
-		shardName:SetVisible(false)
-		shardName:SetWidth(-10)	
+		shardNameText:SetVisible(false)
+		shardNameText:SetWidth(-10)	
+	end
+	
+local function systemUpdate(handle, systemUpdate)
+	local now=Inspect.Time.Server()
+	if shardName==nil or now > lastQueried+5 then
+		lastQueried=now
+		local player=Inspect.Unit.Detail("player")
+		if not player.zone then return end
+		local zone=Inspect.Zone.Detail(player.zone)
+		if not zone.name then return end
+
+		local newShardName
+		local consoles=Inspect.Console.List()
+		for cid, flag in pairs(consoles) do
+			local console=Inspect.Console.Detail(cid)
+			if console.channel then
+				for cname, flag in pairs(console.channel) do
+					if cname == zone.name then
+						local shard=Inspect.Shard()
+						newShardName=shard and shard.name
+					elseif (cname:sub(1, zone.name:len()+1) == zone.name.."@") then
+						newShardName=cname:sub(zone.name:len()+2)
+					end
+				end
+			end
+		end
+		if newShardName and newShardName ~= shardName then
+			shardName=newShardName
+			shardNameText:SetText(shardName)
+		end
+		return
+	end
+end
+
+if newShardName == nil then 
+	local shardTemp=Inspect.Shard()
+	shardNameText:SetText(shardTemp.name)
+end
+----------------------Bag_slot----------------------------------------------------------	
+	BagSlotText = UI.CreateFrame("Text", WT.UniqueName("wtBagSlotText"), wrapper)
+	BagSlotText:SetText("")
+	BagSlotText:SetFontSize(14)
+	BagSlotText:SetFontColor(1,0.97,0.84,1)
+	BagSlotText:SetPoint("CENTERLEFT", shardNameText, "CENTERRIGHT", 10, 0)		
+		
+	if 	configuration.outlineTextBlack == true then
+		BagSlotText:SetEffectGlow({ strength = 3 })
+	elseif configuration.outlineTextLight == true then
+		BagSlotText:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
 	end	
-----------------------Money----------------------------------------------------------	
+
+	--[[local BagSlotsAll = 0
+	local bagsizes={}
+	for i=1,7 do
+		if Inspect.Item.Detail(Utility.Item.Slot.Inventory("bag",i)) then
+			BagSlotsAll= BagSlotsAll + Inspect.Item.Detail(Utility.Item.Slot.Inventory("bag",i))["slots"]			
+		end
+
+	end
+
+	BagSlots_empty = 0
+	
+	BagSlotText_String = string.format("B: %d/%d", BagSlots_empty, BagSlotsAll)
+	BagSlotText:SetText(BagSlotText_String)]]
 	
 
+
+	if configuration.showBagSlot == false then
+		BagSlotText:SetVisible(false)
+		BagSlotText:SetWidth(-10)	
+	end
+	--table.insert(Event.Item.Slot, { BagSlotsList, AddonId, "BagSlotsList" })
+----------------------Money----------------------------------------------------------	
+	
 	local MoneyPlatIcon = UI.CreateFrame("Texture", WT.UniqueName("wtMoneyPlatIcon "), wrapper)
 	MoneyPlatIcon:SetTexture("Rift", "coins_platinum.png.dds")
-	MoneyPlatIcon:SetPoint("CENTERLEFT", shardName, "CENTERRIGHT", 10, 0)
+	MoneyPlatIcon:SetPoint("CENTERLEFT", BagSlotText, "CENTERRIGHT", 10, 0)
 	MoneyPlatIcon:SetWidth(15)
 	MoneyPlatIcon:SetHeight(15)	
 	
 	local MoneyPlatFrame = UI.CreateFrame("Text", WT.UniqueName("wtMoneyPlat"), wrapper)
 	MoneyPlatFrame:SetText("")
-	MoneyPlatFrame:SetFontSize(13)
-	MoneyPlatFrame:SetEffectGlow({ strength = 3 })
+	MoneyPlatFrame:SetFontSize(14)
+	MoneyPlatFrame:SetFontColor(1,0.97,0.84,1)
 	MoneyPlatFrame:SetPoint("CENTERLEFT", MoneyPlatIcon, "CENTERRIGHT", 0, 0)
 	
 	local MoneyGoldIcon = UI.CreateFrame("Texture", WT.UniqueName("wtMoneyGoldIcon "), wrapper)
@@ -165,8 +260,8 @@ local function Create(configuration)
 
 	local MoneyGoldFrame = UI.CreateFrame("Text", WT.UniqueName("wtMoneyGold"), wrapper)
 	MoneyGoldFrame:SetText("")
-	MoneyGoldFrame:SetFontSize(13)
-	MoneyGoldFrame:SetEffectGlow({ strength = 3 })
+	MoneyGoldFrame:SetFontSize(14)
+	MoneyGoldFrame:SetFontColor(1,0.97,0.84,1)
 	MoneyGoldFrame:SetPoint("CENTERLEFT", MoneyGoldIcon, "CENTERRIGHT", 0, 0)	
 	
 	local MoneySilverIcon = UI.CreateFrame("Texture", WT.UniqueName("wtMoneySilverIcon "), wrapper)
@@ -177,10 +272,19 @@ local function Create(configuration)
 	
 	local MoneySilverFrame = UI.CreateFrame("Text", WT.UniqueName("wtMoneySilver"), wrapper)
 	MoneySilverFrame:SetText("")
-	MoneySilverFrame:SetFontSize(13)
-	MoneySilverFrame:SetEffectGlow({ strength = 3 })
+	MoneySilverFrame:SetFontSize(14)
+	MoneySilverFrame:SetFontColor(1,0.97,0.84,1)
 	MoneySilverFrame:SetPoint("CENTERLEFT", MoneySilverIcon, "CENTERRIGHT", 0, 0)
 	
+	if 	configuration.outlineTextBlack == true then
+		MoneyPlatFrame:SetEffectGlow({ strength = 3 })
+		MoneyGoldFrame:SetEffectGlow({ strength = 3 })
+		MoneySilverFrame:SetEffectGlow({ strength = 3 })
+	elseif configuration.outlineTextLight == true then
+		MoneyPlatFrame:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+		MoneyGoldFrame:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+		MoneySilverFrame:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	end		
 	
 	if configuration.showMoney == false then
 		MoneyPlatIcon:SetWidth(-25)
@@ -260,11 +364,17 @@ end
 	
 	local txtReloadUI = UI.CreateFrame("Text", WT.UniqueName("wttxtReloadUI"), btnReloadUI)
 	txtReloadUI:SetText("Reload UI")
-	txtReloadUI:SetFontSize(13)
+	txtReloadUI:SetFontSize(14)
 	txtReloadUI.currText = ""
-	txtReloadUI:SetEffectGlow({ strength = 3 })
+	txtReloadUI:SetFontColor(1,0.97,0.84,1)
 	txtReloadUI:SetPoint("CENTERLEFT", btnReloadUI, "CENTERLEFT", 15, 0)
 	txtReloadUI:SetLayer(100)
+	
+	if 	configuration.outlineTextBlack == true then
+		txtReloadUI:SetEffectGlow({ strength = 3 })
+	elseif configuration.outlineTextLight == true then
+		txtReloadUI:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	end	
 	
 	if configuration.showReloadUI == false then
 		btnReloadUI:SetVisible(false)
@@ -278,11 +388,11 @@ end
 	table.insert(MoneyGadgets, MoneyGoldFrame)
 	table.insert(MoneyGadgets, MoneySilverFrame)
 	table.insert(Event.Currency,{ currency, AddonId, "_currency" })
+	table.insert(Event.System.Update.Begin,{ systemUpdate, AddonId, "_systemUpdate" })
 
 	return wrapper, { resizable={70, 30, 3000, 30} }
 	
 end
-
 	
 local dialog = false
 
@@ -293,13 +403,15 @@ local function ConfigDialog(container)
 		:Checkbox("showCPU", "Show CPU", true)
 		:Checkbox("showCharge", "Show Planar Charge", true)		
 		:Checkbox("showVitality", "Show Soul Vitality", true)
-		:Checkbox("showShard", "Show Shard Name", true)			
+		:Checkbox("showShard", "Show Shard Name", true)	
+		:Checkbox("showBagSlot", "Show Bag Slot", false)			
 		:Checkbox("showMoney", "Show Money", true)			
 		:Checkbox("showReloadUI", "Show ReloadUI", true)
 		:TitleY("Gadgets Options")					
 		:Checkbox("showBackground", "Show Background frame", true)
 		:ColorPicker("BackgroundColor", "Background Color", 0.07,0.07,0.07,0.85)
-		
+		:Checkbox("outlineTextBlack", "Show outline(black) text", true)	
+		:Checkbox("outlineTextLight", "Show outline(light) text", false)			
 end
 
 local function GetConfiguration()
@@ -347,6 +459,7 @@ local function OnTick(hEvent, frameDeltaTime, frameIndex)
 		end
 	end
 end
+
 
 Command.Event.Attach(WT.Event.Tick, OnTick, AddonId .. "_OnTick")
 

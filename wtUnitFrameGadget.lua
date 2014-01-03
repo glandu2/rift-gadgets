@@ -59,16 +59,15 @@ local function ufConfigDialog(container)
 		:Checkbox("excludeCasts", "Hide Castbars on Frame", false)
 		:Checkbox("ownBuffs", "Only show my buffs", true)
 		:Checkbox("ownDebuffs", "Only show my debuffs", false)
-		:FieldNote(TXT.ExcludeBuffsNote)
 		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
 		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
 		:Checkbox("showBackground", TXT.ShowBackground, false)
-		:FieldNote(TXT.ShowBackgroundNote)
 		:Checkbox("showAbsorb", TXT.ShowAbsorb, true)
 		:Checkbox("showLeftPortrait", "Fake Portrait on Left", false)
 		:Checkbox("showRightPortrait", "Fake Portrait on Right", false)
 		:Checkbox("shortname", "Short name", true)
 		:Checkbox("showRadius", "Show HitBox", false)
+		:Checkbox("showCombo", "Show Combo points", true)
 
 	ufAppearance = WT.Dialog(frmOverrideInner)
 		:Checkbox("ovHealthTexture", "Override Health Texture?", false)
@@ -133,7 +132,7 @@ end
 
 
 local function rfConfigDialog(container)
-
+	
 	container.Reset = function()
 		for idx, editor in ipairs(rfEditors) do editor:SetText("") end
 		rfEditors[1]:SetText("target @unit")

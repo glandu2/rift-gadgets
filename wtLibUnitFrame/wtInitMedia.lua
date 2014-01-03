@@ -103,9 +103,9 @@ Library.Media.AddTexture("riftMark30_mini", "Rift", "vfx_ui_mob_tag_clover_mini.
 
 Library.Media.AddTexture("FactionDefiant", AddonId, "img/FactionDefiant.dds", {})
 Library.Media.AddTexture("FactionGuardian", AddonId, "img/FactionGuardian.dds", {})
-Library.Media.AddTexture("FactionDominion", "Rift", "Icon_Dominion_sm.png.dds", {})
-Library.Media.AddTexture("FactionNightfall", "Rift", "Icon_Nightfall_sm.png.dds", {})
-Library.Media.AddTexture("FactionOathsworn", "Rift", "Icon_Oathsworn_sm.png.dds", {})
+Library.Media.AddTexture("FactionDominion", "Rift", "Icon_Dominion_sm.png.dds", {}) --"NPCDialog_conquest_dominion.png.dds"
+Library.Media.AddTexture("FactionNightfall", "Rift", "Icon_Nightfall_sm.png.dds", {}) --"NPCDialog_conquest_nightfall.png.dds"
+Library.Media.AddTexture("FactionOathsworn", "Rift", "Icon_Oathsworn_sm.png.dds", {}) --"NPCDialog_conquest_oathsworn.png.dds"
 
 Library.Media.AddTexture("Portrait_BG_Friendly", AddonId, "img/Portrait_BG_Friendly.png", {})
 Library.Media.AddTexture("Portrait_BG_Hostile", AddonId, "img/Portrait_BG_Hostile.png", {})
@@ -148,34 +148,25 @@ Library.Media.AddTexture("jnhOrb2_BLEU", AddonId, "img/jnhOrb2_blue.png", {"orb"
 
 --[[
 Library.Media.AddTexture("", "Rift", "", {""})
-"GuildLog_icon_achievements.png.dds"
-"GuildLog_icon_defiant.png.dds" -- м
-"GuildLog_icon_guardian.png.dds" -- м
 "Guild_Defiant_bg.png.dds" -- большие
 "Guild_Guardian_bg.png.dds" -- большие
 "Guild_Icon_Defiant.png.dds" -- средн€€
 "Guild_Icon_Guardian.png.dds"-- средн€€
 
-UpgradableNPC_I18.dds
+"RiftMeter_bg_ConquestDominion.png.dds" желтый
+"RiftMeter_bg_ConquestNightfall.png.dds" птицы
+"RiftMeter_bg_ConquestDominion.png.dds" баран
 
+UpgradableNPC_I18.dds
 "RadialBurst_01.png.dds" внутрь
 "TargetPortrait_I114.dds" кастбар босса
 "UpgradableNPC_I1B.dds" под 18
 "CTF_Shield_Bkgnd.png.dds"
 
-"charactercreate_darkelf_female.tga"
-"charactercreate_bahmi_female.tga"
-"charactercreate_ethian_female.tga"
-"charactercreate_female_dwarf.tga"
-"charactercreate_mathosian_male.tga"
 
 "TargetPortrait_I113.dds" каст босса
 "BarberShop_I50.dds"
 "Lightning_04.png.dds"-кст
-"RiftMeter_I103.dds" зеленый круг
-"RiftMeter_I17.dds" синий
-"RiftMeter_IF4.dds"черный
-"RiftMeter_IFA.dds" голубой
 "TargetPortrait_IBA.dds" - босс
 ]]
 

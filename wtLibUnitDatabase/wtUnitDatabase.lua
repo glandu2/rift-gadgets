@@ -327,7 +327,6 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 
 	local detail = Inspect.Unit.Detail(unitId)
 	if detail then
-	
 		local unit = ((unitObject or WT.Units[unitId]) or WT.Unit:Create(unitId)) 
 			
 		for k,v in pairs(detail) do
@@ -413,7 +412,8 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 			end
 		end
 		unit.cleansable = needsCleanse
-							--dump(Inspect.Unit.Detail(unitId))		
+							--dump(Inspect.Unit.Detail(unitId).role)	
+		
 		return unit
 	else
 		return nil
@@ -817,7 +817,6 @@ function WT.GetGroupMode()
 	return groupMode
 end
 
-
 local playerTargetId = nil
 local function OnPlayerTargetChange(hEvent, unitId)
 	if playerTargetId and WT.Units[playerTargetId] then
@@ -838,6 +837,8 @@ local function OnCastbarChange(hEvent, unitsValue)
 			end
 		end
 end
+
+
 -- Register the event handlers for every changeable property
 
 Command.Event.Attach(Event.Unit.Detail.Absorb,	OnUnitDetailAbsorb, "OnUnitDetailAbsorb")
@@ -882,9 +883,9 @@ Command.Event.Attach(Event.Unit.Castbar, OnUnitCastbar, "OnUnitCastbar")
 Command.Event.Attach(Event.Unit.Detail.Zone, OnUnitDetailZone, "OnUnitDetailZone")
 Command.Event.Attach(Event.Unit.Detail.Coord, OnUnitDetailCoord, "OnUnitDetailCoord")
 
+
 local function OnChatNotify(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "OnChatNotify", value) end
---	dump(unitsValue)
 end
 
 

@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.5.7
+      Project Date (UTC)  : 2013-12-01T08:25:42Z
+      File Modified (UTC) : 2013-09-17T18:45:13Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -27,7 +27,7 @@ local txtBlackList = nil
 local radFormatShort = nil
 local radFormatLong = nil
 local radFormatNone = nil
-
+local ProfileRoles = nil
 local ufDialog = false
 
 local function OnWindowClosed()
@@ -53,12 +53,12 @@ local function SaveSettings()
 		wtxOptions.numberFormat = "short"
 	end
 	
-	if wtxOptions.prRoles == true then
-		ProfileRolesOption = true
-	else
-	    ProfileRolesOption = false
-	end
-	
+	if ProfileRoles:GetChecked() == true then
+		wtxOptions.prRoles = true
+	else  
+		wtxOptions.prRoles = false 
+	end	
+
 	OnWindowClosed()
 	window:SetVisible(false)
 	
@@ -89,7 +89,6 @@ function WT.Gadget.ShowSettings()
 		window:SetCloseButtonVisible(true)		
 		window:SetTitle(TXT.Settings)
 		window:SetPoint("CENTER", UIParent, "CENTER")
-	--	window:SetLayer(10010)
 		window:SetWidth(800)
 		window:SetHeight(650)
 		
@@ -253,18 +252,16 @@ function WT.Gadget.ShowSettings()
 		labProfileRoles:SetFontSize(18)
 		labProfileRoles:SetPoint("TOPLEFT", contentProfileSettings, "TOPLEFT", 8, 70)
 		
-		local ProfileRoles = UI.CreateFrame("SimpleCheckbox", "ProfileRoles", contentProfileSettings)
+		ProfileRoles = UI.CreateFrame("SimpleCheckbox", "ProfileRoles", contentProfileSettings)
 		ProfileRoles:SetPoint("TOPLEFT", labProfileRoles, "TOPLEFT", 8, 50)
 		ProfileRoles:SetFontSize(14)
 		ProfileRoles:SetText("Show window Importlayout when you change role")	
 		ProfileRoles:EventAttach(Event.UI.Checkbox.Change, function(self, h)
 			if ProfileRoles:GetChecked() == true then
-				ProfileRolesOption = true
-				wtxOptions.prRoles = ProfileRolesOption
+				wtxOptions.prRoles = true
 			end
 			if ProfileRoles:GetChecked() == false then
-				ProfileRolesOption = false
-				wtxOptions.prRoles  = ProfileRolesOption
+				wtxOptions.prRoles  = false
 			end
 		end, "Event.UI.Checkbox.Change")
 		if wtxOptions.prRoles == true then 

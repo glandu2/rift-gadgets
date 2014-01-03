@@ -60,6 +60,20 @@ function wtLabel:Construct()
 		self:SetEffectGlow({ strength = 3 })
 	end
 	
+	if config.outline2 then
+		self:SetEffectGlow({
+		blurX = 4,			--Controls how much blurring exists along the X axis. Defaults to 2.
+		blurY = 4,			--Controls how much blurring exists along the Y axis. Defaults to 2.
+		colorR = 0,		--Controls the red channel of the glow effect. Defaults to 0.
+		colorG = 0,		--Controls the green channel of the glow effect. Defaults to 0.
+		colorB = 0,		--Controls the blue channel of the glow effect. Defaults to 0.
+		colorA = 1,			--Controls the alpha channel of the glow effect. Defaults to 1.
+		offsetX = 0,		--Controls the glow offset along the X axis. Defaults to 0.
+		offsetY = 0,		--Controls the glow offset along the Y axis. Defaults to 0.
+		strength = 3,		--Controls the strength of the glow. Defaults to 1. 
+		})
+	end
+	
 	self.SetLabelText = 
 		function(frame, text)
 			self:SetText(text)

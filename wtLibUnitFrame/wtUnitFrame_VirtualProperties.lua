@@ -425,11 +425,11 @@ WT.Unit.CreateVirtualProperty("lvlColor", { "id", "level", "lvl", "player"},
 		end				
 	end)	
 
---[[WT.Unit.CreateVirtualProperty("Tanks", { "id", "role"},
+WT.Unit.CreateVirtualProperty("Tanks", { "id", "role"},
 	function(unit)		
 		if unit.role == "tank" then
 			return true
 		else	
 			return false
 		end	
-	end)]]
+	end)

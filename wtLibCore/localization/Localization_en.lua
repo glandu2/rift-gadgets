@@ -46,6 +46,8 @@ Library.Translate.En(
 	gadgetDataTextBar_desc = "Displays Data Text Bar",
 	gadgetStatTextBar_name = "Stat Text Bar", 
 	gadgetStatTextBar_desc = "Displays player Stats Bar",
+	gadgetCurrenciesTextBar_name = "Currencies Text Bar", 
+	gadgetCurrenciesTextBar_desc = "Displays player Currencies Bar",	
 	gadgetGroupFrames_desc = "Group Frames Gadget",
 	gadgetGroupFrames_name = "Group Frames",
 	gadgetPlanarCharge_desc = "Displays Planar Charge",

@@ -412,8 +412,7 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 			end
 		end
 		unit.cleansable = needsCleanse
-							--dump(Inspect.Unit.Detail(unitId).role)	
-		
+
 		return unit
 	else
 		return nil
@@ -656,6 +655,10 @@ local function OnUnitDetailCoord(hEvent, xValues, yValues, zValues)
 	end
 end
 
+local function OnUnitDetailRelation(hEvent, unitsValue)
+	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "relation", value) end
+end
+
 local lastRangeCalc = nil
 local rangeThrottle = 0.1
 
@@ -685,7 +688,8 @@ local function CalculateRanges()
 			local uz = details.coord[3]
 
 			local radiusDiff = (WT.Player.radius or 0.5) + (details.radius or 0.5)	
-		
+			--dump(radiusDiff)
+
 			local dx = px - ux  			
 			local dy = py - uy 			
 			local dz = pz - uz			
@@ -711,9 +715,12 @@ local function CalculateRanges()
 			local rng = math.sqrt(rangeSqr) - radiusDiff
 			if rng < 0 then rng = 0 end
 			
+			local rngCenter = math.sqrt(rangeSqr) - (WT.Player.radius or 0.5)
+			if rngCenter < 0 then rngCenter = 0 end
+			
 			details.rangeSqr = rangeSqr
 			details.range = rng
-			
+			details.rangeCenter = rngCenter
 		end
 	end
 end
@@ -882,6 +889,7 @@ Command.Event.Attach(Event.Buff.Remove, OnBuffRemove, "OnBuffRemove")
 Command.Event.Attach(Event.Unit.Castbar, OnUnitCastbar, "OnUnitCastbar")
 Command.Event.Attach(Event.Unit.Detail.Zone, OnUnitDetailZone, "OnUnitDetailZone")
 Command.Event.Attach(Event.Unit.Detail.Coord, OnUnitDetailCoord, "OnUnitDetailCoord")
+--Command.Event.Attach(Event.Unit.Detail.Relation, OnUnitDetailRelation, "OnUnitDetailRelation")
 
 
 local function OnChatNotify(hEvent, unitsValue)

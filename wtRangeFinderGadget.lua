@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.5.91
+      Project Date (UTC)  : 2014-01-03T16:42:26Z
+      File Modified (UTC) : 2013-10-06T09:26:25Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -38,6 +38,14 @@ end
 local function OnRangeChange(rangeFinder, range)
 	if range then
 		rangeFinder.txtRange:SetLabelText(string.format("%.01f", range) .. "m")
+	else
+		rangeFinder.txtRange:SetLabelText("--")
+	end
+end
+
+local function OnRangeCenterChange(rangeFinder, rangeCenter)
+	if rangeCenter then
+		rangeFinder.txtRange:SetLabelText(string.format("%.01f", rangeCenter) .. "m")
 	else
 		rangeFinder.txtRange:SetLabelText("--")
 	end
@@ -122,7 +130,7 @@ local function Create(configuration)
 	if not configuration.changefontColor then
          txtRange:SetFontColor(0.6, 1.0, 0.6, 1.0)
 		 else
-		 	local fontColor = configuration.fontColor 
+		 local fontColor = configuration.fontColor 
 		 txtRange:SetFontColor(fontColor[1],fontColor[2],fontColor[3],fontColor[4])
 	end
 	
@@ -131,7 +139,11 @@ local function Create(configuration)
 	rangeFinder.txtRange = txtRange
 	
 	rangeFinder:CreateBinding("name", rangeFinder, OnNameChange, nil)
-	rangeFinder:CreateBinding("range", rangeFinder, OnRangeChange, nil)
+	if not configuration.showRangeCenter then
+		rangeFinder:CreateBinding("range", rangeFinder, OnRangeChange, nil)
+	elseif configuration.showRangeCenter == true then
+		rangeFinder:CreateBinding("rangeCenter", rangeFinder, OnRangeCenterChange, nil)
+	end
 	
 	return rangeFinder, { resizable={50, 25, 250, 70} }
 end
@@ -142,6 +154,7 @@ local dialog = false
 local function ConfigDialog(container)	
 	dialog = WT.Dialog(container)
 		:Label("The Range Finder dispays the distance, in meters, between you and your target. It reports the distance from the center of your character to the center of the target. An option will be added in future to take the radius of the characters into account.")
+		:Checkbox("showRangeCenter", "Range to center of target/focus", false)
 		:Checkbox("showTitle", TXT.ShowTitle, true)
 		:Checkbox("showTargetName", TXT.ShowTargetName, true)
 		:Checkbox("hideWhenNoTarget", TXT.HideWhenNoTarget, false)

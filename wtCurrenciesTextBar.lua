@@ -122,19 +122,24 @@ local function ConfigDialog(container)
 	frmCurrencies:SetPoint("TOPLEFT", container, "TOPLEFT")
 	frmCurrencies:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -20)
 	
+	local frmEvents = UI.CreateFrame("Frame", "frmEvents", tabs.tabContent)
+	frmEvents:SetPoint("TOPLEFT", container, "TOPLEFT")
+	frmEvents:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -20)
+	
 	local frmOptions = UI.CreateFrame("Frame", "frmOptions", tabs.tabContent)
 	frmOptions:SetPoint("TOPLEFT", container, "TOPLEFT")
 	frmOptions:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -20)
 	
 	tabs:SetTabPosition("top")
 	tabs:AddTab("Currencies", frmCurrencies)
+	tabs:AddTab("Events", frmEvents)
 	tabs:AddTab("Options", frmOptions)
 	
 	local CoinText = UI.CreateFrame("Text", "CoinText", frmCurrencies)
 	CoinText:SetText("Coin")
 	CoinText:SetFontColor(0.2,0.4,0.7)
 	CoinText:SetEffectGlow({ strength = 3 })
-	CoinText:SetFontSize(14)
+	CoinText:SetFontSize(12)
 	CoinText:SetPoint("TOPLEFT", frmCurrencies, "TOPLEFT", 10, 4)
 	
 	lastName = CoinText
@@ -152,7 +157,7 @@ local function ConfigDialog(container)
 	SourcestoneText:SetText("Sourcestone")
 	SourcestoneText:SetFontColor(0.2,0.4,0.7)
 	SourcestoneText:SetEffectGlow({ strength = 3 })
-	SourcestoneText:SetFontSize(14)
+	SourcestoneText:SetFontSize(12)
 	SourcestoneText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 
 	lastName = SourcestoneText
@@ -170,7 +175,7 @@ local function ConfigDialog(container)
 	PvPText:SetText("PvP")
 	PvPText:SetFontColor(0.2,0.4,0.7)
 	PvPText:SetEffectGlow({ strength = 3 })
-	PvPText:SetFontSize(14)
+	PvPText:SetFontSize(12)
 	PvPText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 	
 	lastName = PvPText
@@ -178,7 +183,7 @@ local function ConfigDialog(container)
 	for i,v in pairs(MoneyGadgets.Currencies.PvP) do
 		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "PvP", frmCurrencies)
 		MoneyGadgets.curName[i]:SetText(i.."")
-		MoneyGadgets.curName[i]:SetChecked(true)
+		MoneyGadgets.curName[i]:SetChecked(false)
 		MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
 		lastName = MoneyGadgets.curName[i]
 	end
@@ -188,7 +193,7 @@ local function ConfigDialog(container)
 	DungeonsText:SetText("Dungeons")
 	DungeonsText:SetFontColor(0.2,0.4,0.7)
 	DungeonsText:SetEffectGlow({ strength = 3 })
-	DungeonsText:SetFontSize(14)
+	DungeonsText:SetFontSize(12)
 	DungeonsText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 
 	lastName = DungeonsText
@@ -196,7 +201,7 @@ local function ConfigDialog(container)
 	for i,v in pairs(MoneyGadgets.Currencies.Dungeons) do
 		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Dungeons", frmCurrencies)
 		MoneyGadgets.curName[i]:SetText(i.."")
-		MoneyGadgets.curName[i]:SetChecked(true)
+		MoneyGadgets.curName[i]:SetChecked(false)
 		MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
 		lastName = MoneyGadgets.curName[i]
 	end
@@ -206,7 +211,7 @@ local function ConfigDialog(container)
 	RaidsText:SetText("Raids")
 	RaidsText:SetFontColor(0.2,0.4,0.7)
 	RaidsText:SetEffectGlow({ strength = 3 })
-	RaidsText:SetFontSize(14)
+	RaidsText:SetFontSize(12)
 	RaidsText:SetPoint("CENTERLEFT", CoinText, "CENTERRIGHT", 200, 0)
 	
 	lastName = RaidsText	
@@ -214,7 +219,7 @@ local function ConfigDialog(container)
 	for i,v in pairs(MoneyGadgets.Currencies.Raids) do
 		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Raids", frmCurrencies)
 		MoneyGadgets.curName[i]:SetText(i.."")
-		MoneyGadgets.curName[i]:SetChecked(true)
+		MoneyGadgets.curName[i]:SetChecked(false)
 		MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
 		lastName = MoneyGadgets.curName[i]
 	end
@@ -224,7 +229,7 @@ local function ConfigDialog(container)
 	CraftingText:SetText("Crafting")
 	CraftingText:SetFontColor(0.2,0.4,0.7)
 	CraftingText:SetEffectGlow({ strength = 3 })
-	CraftingText:SetFontSize(14)
+	CraftingText:SetFontSize(12)
 	CraftingText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 	
 	lastName = CraftingText
@@ -242,7 +247,7 @@ local function ConfigDialog(container)
 	ArtifactsText:SetText("Artifacts")
 	ArtifactsText:SetFontColor(0.2,0.4,0.7)
 	ArtifactsText:SetEffectGlow({ strength = 3 })
-	ArtifactsText:SetFontSize(14)
+	ArtifactsText:SetFontSize(12)
 	ArtifactsText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 
 	lastName = ArtifactsText	
@@ -256,23 +261,42 @@ local function ConfigDialog(container)
 	end
 	end
 	
-	EventsText = UI.CreateFrame("Text", "TEventsext", frmCurrencies)
-	EventsText:SetText("Events")
-	EventsText:SetFontColor(0.2,0.4,0.7)
-	EventsText:SetEffectGlow({ strength = 3 })
-	EventsText:SetFontSize(14)
-	EventsText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)	
+	PromotionsText = UI.CreateFrame("Text", "TPromotionsText", frmCurrencies)
+	PromotionsText:SetText("Promotions")
+	PromotionsText:SetFontColor(0.2,0.4,0.7)
+	PromotionsText:SetEffectGlow({ strength = 3 })
+	PromotionsText:SetFontSize(12)
+	PromotionsText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)	
 
-	lastName = EventsText	
-	if MoneyGadgets.Currencies.Events then
-		for i,v in pairs(MoneyGadgets.Currencies.Events) do
-			MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Events", frmCurrencies)
+	lastName = PromotionsText	
+	if MoneyGadgets.Currencies.Promotions then
+		for i,v in pairs(MoneyGadgets.Currencies.Promotions) do
+			MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Promotions", frmCurrencies)
 			MoneyGadgets.curName[i]:SetText(i.."")
 			MoneyGadgets.curName[i]:SetChecked(false)
 			MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
 			lastName = MoneyGadgets.curName[i]
 		end
 	end
+	
+	EventsText = UI.CreateFrame("Text", "TEventsext", frmEvents)
+	EventsText:SetText("Events")
+	EventsText:SetFontColor(0.2,0.4,0.7)
+	EventsText:SetEffectGlow({ strength = 3 })
+	EventsText:SetFontSize(12)
+	EventsText:SetPoint("TOPLEFT", frmEvents, "TOPLEFT", 10, 4)	
+
+	lastName = EventsText	
+	if MoneyGadgets.Currencies.Events then
+		for i,v in pairs(MoneyGadgets.Currencies.Events) do
+			MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Events", frmEvents)
+			MoneyGadgets.curName[i]:SetText(i.."")
+			MoneyGadgets.curName[i]:SetChecked(false)
+			MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
+			lastName = MoneyGadgets.curName[i]
+		end
+	end
+	
 --------------------------------------------------------------------------------------------
 
 	local GadgetsOptions = UI.CreateFrame("Text", "GadgetsOptions", frmOptions)
@@ -299,7 +323,7 @@ local function GetConfiguration()
 	}
 	
 	for k, v in pairs(MoneyGadgets.Currencies) do
-		for ik, iv in pairs(v) do	
+		for ik, iv in pairs(v) do
 			config[ik] = MoneyGadgets.curName[ik]:GetChecked()
 		end
 	end

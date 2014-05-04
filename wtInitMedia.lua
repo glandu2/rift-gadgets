@@ -46,8 +46,8 @@ Library.Media.AddTexture("CP Rogue2_ckau", AddonId, "img/combo/Rogue2_ckau.png",
 Library.Media.AddTexture("CP Warrior1_ckau", AddonId, "img/combo/Warrior1_ckau.png", {"combo"})
 Library.Media.AddTexture("CP Warrior2_ckau", AddonId, "img/combo/Warrior2_ckau.png", {"combo"})
 Library.Media.AddTexture("CP Number", AddonId, "img/combo/combo_number.png", {"combo"})
-Library.Media.AddTexture("Warrior_CkauD3", AddonId, "img/combo/Warrior_CkauD3", {"combo"})
-Library.Media.AddTexture("Rogue_CkauD3", AddonId, "img/combo/Rogue_CkauD3", {"combo"})
+Library.Media.AddTexture("Warrior_CkauD3", AddonId, "img/combo/Warrior_CkauD3.png", {"combo"})
+Library.Media.AddTexture("Rogue_CkauD3", AddonId, "img/combo/Rogue_CkauD3.png", {"combo"})
 
 Library.Media.AddTexture("CP Rogue", "Rift", "target_portrait_roguepoints_on.png.dds", {"combo", "combo_single"})
 Library.Media.AddTexture("CP Warrior", "Rift", "target_portrait_warrior_hp.png.dds", {"combo", "combo_single"})

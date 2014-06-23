@@ -97,7 +97,7 @@ local function OnDamage(hEvent, info)
 	end
 	
 	lastDamageTime = currTime
-	damage = damage + info.damage
+	damage = damage + info.damage  + (info.damageAbsorbed or 0)
 
 	local encounterDuration = currTime - encounterStart
 	if encounterDuration > 0 then

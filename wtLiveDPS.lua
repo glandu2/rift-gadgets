@@ -109,11 +109,11 @@ local function OnDamage(hEvent, info)
 	if not info.damage then return end
 	
 	if info.caster == WT.Player.id then
-		dmgAccum = dmgAccum + info.damage
+		dmgAccum = dmgAccum + info.damage + (info.damageAbsorbed or 0)
 	else
 		local playerPet = Inspect.Unit.Lookup("player.pet")
 		if playerPet and info.caster == playerPet then
-			dmgAccum = dmgAccum + info.damage
+			dmgAccum = dmgAccum + info.damage + (info.damageAbsorbed or 0)
 		end
 	end
 	

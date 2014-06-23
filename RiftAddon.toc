@@ -69,15 +69,3 @@ Dependencies =
 	wtLibCore = {"required", "before"},
 	wtLibUnitFrame = {"required", "before"},
 }
--- X-Curse-Packaged-Version: v0.5.4
--- X-Curse-Project-Name: Gadgets
--- X-Curse-Project-ID: gadgets
--- X-Curse-Repository-ID: rift/gadgets/mainline
--- X-Curse-Packaged-Version: v0.5.6
--- X-Curse-Project-Name: Gadgets
--- X-Curse-Project-ID: gadgets
--- X-Curse-Repository-ID: rift/gadgets/mainline
--- X-Curse-Packaged-Version: v0.5.7
--- X-Curse-Project-Name: Gadgets
--- X-Curse-Project-ID: gadgets
--- X-Curse-Repository-ID: rift/gadgets/mainline

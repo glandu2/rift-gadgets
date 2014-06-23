@@ -9,7 +9,7 @@ function WT.UnitFrame.CreateFromConfiguration(configuration)
 		--dump(Inspect.Unit.Detail(Inspect.Unit.Lookup("group01")))
 	if not template then print("Missing required configuration item: template") return end
 	if not unitSpec then print("Missing required configuration item: unitSpec") return end
-	
+
 	local shortname = configuration.shortname or false
 	local showRadius = configuration.showRadius or false
 	local showCombo = configuration.showCombo or false
@@ -22,7 +22,7 @@ local raidFrameGadgets = {}
 -- Gadget Factory Function for grid of 20 UnitFrames
 function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 
-	local sequenceDefault = 
+	local sequenceDefault =
 	{
 		"group01","group02","group03","group04","group05",
 		"group06","group07","group08","group09","group10",
@@ -30,7 +30,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		"group16","group17","group18","group19","group20",
 	}
 
-	local sequenceReverse = 
+	local sequenceReverse =
 	{
 		"group20","group19","group18","group17","group16",
 		"group15","group14","group13","group12","group11",
@@ -38,7 +38,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		"group05","group04","group03","group02","group01",
 	}
 
-	local sequenceInnerGroupReverse = 
+	local sequenceInnerGroupReverse =
 	{
 		"group05","group04","group03","group02","group01",
 		"group10","group09","group08","group07","group06",
@@ -46,7 +46,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		"group20","group19","group18","group17","group16",
 	}
 
-	local sequenceGroupReverse = 
+	local sequenceGroupReverse =
 	{
 		"group16","group17","group18","group19","group20",
 		"group11","group12","group13","group14","group15",
@@ -55,7 +55,7 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	}
 
 	local sequence = sequenceDefault
-	
+
 	if configuration.reverseGroups and configuration.reverseUnits then
 		sequence = sequenceReverse
 	elseif configuration.reverseGroups then
@@ -68,27 +68,27 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 	local layout = configuration.layout or "4 x 5"
 	local growthDirection = configuration.growthDirection or "right"
 	WT.Log.Debug("Creating RaidFrames from configuration: template=" .. template)
-	
+
 	local wrapper = UI.CreateFrame("Frame", WT.UniqueName("RaidFrames"), WT.Context)
-	
+
 	if configuration.showBackground then
 		wrapper:SetBackgroundColor(0,0,0,0.2)
 	end
-	
+
 	wrapper.hideWhenEmpty = configuration.hideWhenEmpty or false
-	
+
 	wrapper:SetSecureMode("restricted")
 	-- Pass through our clickToTarget preference to the template to allow it to set itself up appropriately
 	--if not configuration.templateOptions then configuration.templateOptions = {} end
-	--configuration.templateOptions.clickToTarget = configuration.clickToTarget 
-	
+	--configuration.templateOptions.clickToTarget = configuration.clickToTarget
+
 	local frames = {}
-	
+
 	local _debug = false
 
-	
+
 	--[[for i = 1,20 do
-		local unitId = Inspect.Unit.Lookup(sequence[i]) 
+		local unitId = Inspect.Unit.Lookup(sequence[i])
 		if unitId ~= nil then
 		dump(Inspect.Unit.Detail(unitId))
 		end
@@ -106,11 +106,11 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		--debugDesc:SetLayer(500)
 		--debugDesc:SetPoint("BOTTOMLEFT", frames[1], "BOTTOMLEFT")
 	end
-	
+
 	frames[1]:SetPoint("TOPLEFT", wrapper, "TOPLEFT")
 	frames[1]:SetParent(wrapper)
 	frames[1]:SetLayer(1)
-	
+
 	for i = 2,20 do
 		if not _debug then
 			frames[i] = WT.UnitFrame.CreateFromTemplate(template, sequence[i], configuration)
@@ -128,39 +128,41 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		frames[i]:SetParent(wrapper)
 		frames[i]:SetLayer(i)
 	end
-	
+
+	wrapper.frame01Unit = sequence[1]
+
 	local xCols = 4
 	local xRows = 5
-	
+
 	-- Layout the frames appropriately
 	if layout == "5 x 4" then
 		xCols = 5
 		xRows = 4
 		for i = 2,20 do
-			if ((i-1) % 5) ~= 0 then 
+			if ((i-1) % 5) ~= 0 then
 				frames[i]:SetPoint("TOPLEFT", frames[i-1], "TOPRIGHT")
-			else 
-				frames[i]:SetPoint("TOPLEFT", frames[i-5], "BOTTOMLEFT") 
+			else
+				frames[i]:SetPoint("TOPLEFT", frames[i-5], "BOTTOMLEFT")
 			end
 		end
 	elseif layout == "2 x 10" then
 		xCols = 2
 		xRows = 10
 		for i = 2,20 do
-			if ((i-1) % 10) ~= 0 then 
+			if ((i-1) % 10) ~= 0 then
 				frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT")
-			else 
-				frames[i]:SetPoint("TOPLEFT", frames[i-10], "TOPRIGHT") 
+			else
+				frames[i]:SetPoint("TOPLEFT", frames[i-10], "TOPRIGHT")
 			end
 		end
 	elseif layout == "10 x 2" then
 		xCols = 10
 		xRows = 2
 		for i = 2,20 do
-			if ((i-1) % 10) ~= 0 then 
+			if ((i-1) % 10) ~= 0 then
 				frames[i]:SetPoint("TOPLEFT", frames[i-1], "TOPRIGHT")
-			else 
-				frames[i]:SetPoint("TOPLEFT", frames[i-10], "BOTTOMLEFT") 
+			else
+				frames[i]:SetPoint("TOPLEFT", frames[i-10], "BOTTOMLEFT")
 			end
 		end
 	elseif layout == "1 x 20" then
@@ -179,23 +181,23 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		xCols = 4
 		xRows = 5
 		for i = 2,20 do
-			if ((i-1) % 5) ~= 0 then 
+			if ((i-1) % 5) ~= 0 then
 				frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT")
-			else 
+			else
 				frames[i]:SetPoint("TOPLEFT", frames[i-5], "TOPRIGHT")
 			end
 		end
 	end
-	
+
 	local left = frames[1]:GetLeft()
 	local top = frames[1]:GetTop()
 	local right = frames[20]:GetRight()
 	local bottom = frames[20]:GetBottom()
-		
-	wrapper:SetWidth(right - left + 1)	
-	wrapper:SetHeight(bottom - top + 1)	
-	
-	wrapper.OnResize = 
+
+	wrapper:SetWidth(right - left + 1)
+	wrapper:SetHeight(bottom - top + 1)
+
+	wrapper.OnResize =
 		function(frame, width,height)
 			local frmWidth = math.ceil(width / xCols)
 			local frmHeight = math.ceil(height / xRows)
@@ -209,9 +211,9 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 		end
 
 	if configuration.macros then
-		for i = 1,20 do 
-			frames[i]:SetMacros(configuration.macros) 
-		end 
+		for i = 1,20 do
+			frames[i]:SetMacros(configuration.macros)
+		end
 	end
 
 	if wrapper.hideWhenEmpty then
@@ -219,9 +221,11 @@ function WT.UnitFrame.CreateRaidFramesFromConfiguration(configuration)
 			WT.HideSecureFrame(wrapper)
 		end
 	end
-	
+
+	wrapper.frames = frames
+	wrapper.macros = configuration.macros
 	raidFrameGadgets[wrapper] = true
-	
+
 	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 4, (bottom - top + 1) * 4,  } }
 end
 
@@ -238,11 +242,11 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 		group = 3
 	elseif configuration.group == "Group 4" then
 		group = 4
-	end	
-	
+	end
+
 	local firstId = ((group - 1) * 5) + 1
 	local sequence = {}
-	
+
 	if configuration.reverseUnits then
 		sequence[1] = "group" .. string.format("%02d", firstId+4)
 		sequence[2] = "group" .. string.format("%02d", firstId+3)
@@ -256,35 +260,35 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 		sequence[4] = "group" .. string.format("%02d", firstId+3)
 		sequence[5] = "group" .. string.format("%02d", firstId+4)
 	end
-	
+
 	local xCols = 1
 	local xRows = 5
-	
+
 	local template = configuration.template
 	local layout = configuration.layout or "Vertical"
 	WT.Log.Debug("Creating GroupFrames from configuration: template=" .. template)
-	
+
 	local wrapper = UI.CreateFrame("Frame", WT.UniqueName("GroupFrames"), WT.Context)
-	
+
 	if configuration.showBackground then
 		wrapper:SetBackgroundColor(0,0,0,0.2)
 	end
-	
+
 	wrapper.hideWhenEmpty = configuration.hideWhenEmpty or false
-	
+
 	wrapper:SetSecureMode("restricted")
 	-- Pass through our clickToTarget preference to the template to allow it to set itself up appropriately
 	--if not configuration.templateOptions then configuration.templateOptions = {} end
-	--configuration.templateOptions.clickToTarget = configuration.clickToTarget 
-	
+	--configuration.templateOptions.clickToTarget = configuration.clickToTarget
+
 	local frames = {}
-	
+
 	local _debug = false
-	
+
 	--[[if Inspect.Unit.Lookup("player") then
 
 	end]]
-	
+
 	if WT.GetGroupMode() == "solo" and configuration.show_Solo == true then
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player", configuration)
 	elseif not _debug then
@@ -292,11 +296,11 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 	else
 		frames[1] = WT.UnitFrame.CreateFromTemplate(template, "player.target", configuration)
 	end
-	
+
 	frames[1]:SetPoint("TOPLEFT", wrapper, "TOPLEFT")
 	frames[1]:SetParent(wrapper)
 	frames[1]:SetLayer(1)
-	
+
 	for i = 2,5 do
 		if not _debug then
 			frames[i] = WT.UnitFrame.CreateFromTemplate(template, sequence[i], configuration)
@@ -306,37 +310,37 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 		frames[i]:SetParent(wrapper)
 		frames[i]:SetLayer(i)
 	end
-	
+
 	-- Layout the frames appropriately
 	if layout == "Horizontal" then
 		xCols = 5
 		xRows = 1
 		for i = 2,5 do
-			frames[i]:SetPoint("TOPLEFT", frames[i-1], "TOPRIGHT") 
+			frames[i]:SetPoint("TOPLEFT", frames[i-1], "TOPRIGHT")
 		end
 	elseif 	layout == "LifeismysteryGroupFrame" then
 		xCols = 1
 		xRows = 5
 		for i = 2,5 do
-			frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT", 0, 10) 
-	end	
+			frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT", 0, 10)
+	end
 	else
 		xCols = 1
 		xRows = 5
 		for i = 2,5 do
-			frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT") 
+			frames[i]:SetPoint("TOPLEFT", frames[i-1], "BOTTOMLEFT")
 		end
 	end
-	
+
 	local left = frames[1]:GetLeft()
 	local top = frames[1]:GetTop()
 	local right = frames[5]:GetRight()
 	local bottom = frames[5]:GetBottom()
-		
-	wrapper:SetWidth(right - left + 1)	
-	wrapper:SetHeight(bottom - top + 1)	
-	
-	wrapper.OnResize = 
+
+	wrapper:SetWidth(right - left + 1)
+	wrapper:SetHeight(bottom - top + 1)
+
+	wrapper.OnResize =
 		function(frame, width,height)
 			local frmWidth = math.ceil(width / xCols)
 			local frmHeight = math.ceil(height / xRows)
@@ -348,11 +352,11 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 				frames[i]:OnResize(frmWidth, frmHeight)
 			end
 		end
-	
+
 	if configuration.macros then
-		for i = 1,5 do frames[i]:SetMacros(configuration.macros) end 
+		for i = 1,5 do frames[i]:SetMacros(configuration.macros) end
 	end
-		
+
 	-- Store a reference to the gadget, to use in the hide/show events
 	groupFrameGadgets[wrapper] = true
 	wrapper.groupId = group
@@ -362,7 +366,7 @@ function WT.UnitFrame.CreateGroupFramesFromConfiguration(configuration)
 			WT.HideSecureFrame(wrapper)
 		end
 	end
-		
+
 	return wrapper, { resizable = { right - left + 1, bottom - top + 1, (right - left + 1) * 2, (bottom - top + 1) * 2,  }, caption=configuration.group }
 end
 
@@ -374,7 +378,7 @@ function WT.UnitFrame.CreateFromTemplate(templateName, unitSpec, options)
 	local template = WT.UnitFrame.Templates[templateName]
 	if not template then return nil end
 	local uf, createOptions = template:Create(unitSpec, options)
-	
+
 	if options.ovHealthTexture and options.texHealth then
 		if uf.Elements and uf.Elements.barHealth then
 			Library.Media.SetTexture(uf.Elements.barHealth.Image, options.texHealth)
@@ -392,13 +396,13 @@ function WT.UnitFrame.CreateFromTemplate(templateName, unitSpec, options)
 			Library.Media.SetTexture(uf.Elements.barResource.Image, options.texResource)
 		end
 	end
-	
+
 	if options.ovAbsorbTexture and options.texAbsorb then
 		if uf.Elements and uf.Elements.barAbsorb then
 			Library.Media.SetTexture(uf.Elements.barAbsorb.Image, options.texAbsorb)
 		end
 	end
-	
+
 	if options.ovCastTexture and options.texCast then
 		if uf.Elements and uf.Elements.barCast then
 			Library.Media.SetTexture(uf.Elements.barCast.Image, options.texCast)
@@ -411,10 +415,10 @@ function WT.UnitFrame.CreateFromTemplate(templateName, unitSpec, options)
 		end
 	end
 	-- Override any existing mouse handling and add our own
-	-- This is a precursor to full macro handling 	
+	-- This is a precursor to full macro handling
 	uf:SetSecureMode("restricted")
 	uf:SetMouseoverUnit(uf.UnitSpec)
-	
+
 	return uf, createOptions
 end
 
@@ -440,6 +444,19 @@ local function ApplyRaidFrameVisibility()
 			WT.HideSecureFrame(raidFrame)
 		else
 			WT.ShowSecureFrame(raidFrame)
+		end
+		if WT.GetGroupMode() == "solo" then
+		    WT.SecureFunction(
+		        function() 
+		            raidFrame.frames[1]:TrackUnit("player")
+		            if (raidFrame.macros) then raidFrame.frames[1]:SetMacros(raidFrame.macros) end 
+		        end)			
+		else
+		    WT.SecureFunction(
+		        function() 
+		            raidFrame.frames[1]:TrackUnit(raidFrame.frame01Unit)
+		            if (raidFrame.macros) then raidFrame.frames[1]:SetMacros(raidFrame.macros) end 		             
+		        end)			
 		end
 	end
 end

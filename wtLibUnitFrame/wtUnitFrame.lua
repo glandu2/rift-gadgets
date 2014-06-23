@@ -214,7 +214,7 @@ function WT.UnitFrame:TrackUnit(unitSpec)
 	self.UnitSpec = unitSpec
 	local unitId = Inspect.Unit.Lookup(unitSpec)
 	self:PopulateUnit(unitId)
-	self:RebuildMacros()
+	WT.SecureFunction(function() self:RebuildMacros() end)
 
 end
 

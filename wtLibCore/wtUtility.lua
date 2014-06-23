@@ -132,6 +132,7 @@ function string.wtTrim(s)
 end
 
 local pendingVisibility = {}
+local pendingFunctions = {}
 
 function WT.ShowSecureFrame(frame)
 
@@ -148,6 +149,7 @@ function WT.ShowSecureFrame(frame)
 	end
 end
 
+
 function WT.HideSecureFrame(frame)
 
 	if not frame:GetSecureMode() then
@@ -163,6 +165,18 @@ function WT.HideSecureFrame(frame)
 	end
 end
 
+
+function WT.SecureFunction(fn)
+    
+    if not Inspect.System.Secure() then
+        fn()
+    else
+        table.insert(pendingFunctions, fn)
+    end
+    
+end
+
+
 local function OnSecureEnter(hEvent)
 end
 
@@ -176,6 +190,11 @@ local function OnSecureLeave(hEvent)
 		end
 		pendingVisibility[frame] = nil
 	end
+	
+	for _, fn in ipairs(pendingFunctions) do
+	    fn()
+	end
+	pendingFunctions = {}
 end 
 
 Command.Event.Attach(Event.System.Secure.Enter, OnSecureEnter, "OnSecureEnter")

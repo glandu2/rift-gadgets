@@ -22,9 +22,9 @@ RunOnStartup =
   "wtUnitFrame_Macros.lua",
   "wtUnitFrame_Resizable.lua",
   "wtUnitFrame_Animation.lua",
-  "wtUnitFrame_Alert.lua",
   "wtElement.lua",
   "wtTemplate.lua",
+  "GJK.lua",
   "elements/wtFrame.lua",
   "elements/wtLabel.lua",
   "elements/wtStaticLabel.lua",
@@ -86,6 +86,10 @@ Dependencies =
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline
 -- X-Curse-Packaged-Version: v0.6.0
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline
+-- X-Curse-Packaged-Version: v0.6.3
 -- X-Curse-Project-Name: Gadgets
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline

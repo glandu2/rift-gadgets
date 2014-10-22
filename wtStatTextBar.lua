@@ -152,13 +152,13 @@ local function Create(configuration)
 	StatBlock:SetEffectGlow({ strength = 3 })
 	StatBlock:SetPoint("CENTERLEFT", StatHit, "CENTERRIGHT", 10, 0)	
 	
-------------------------------Stat_Parry-------------------------------------------------------------------
-	local StatParry = UI.CreateFrame("Text", WT.UniqueName("wtStatParry"), wrapper)
-	StatParry:SetText("")
-	StatParry:SetFontSize(13)
-	StatParry:SetFontColor(1,0.97,0.84,1)
-	StatParry:SetEffectGlow({ strength = 3 })
-	StatParry:SetPoint("CENTERLEFT", StatBlock, "CENTERRIGHT", 10, 0)	
+------------------------------Stat_Guard-------------------------------------------------------------------
+	--[[local StatGuard = UI.CreateFrame("Text", WT.UniqueName("wtStatGuard"), wrapper)
+	StatGuard:SetText("")
+	StatGuard:SetFontSize(13)
+	StatGuard:SetFontColor(1,0.97,0.84,1)
+	StatGuard:SetEffectGlow({ strength = 3 })
+	StatGuard:SetPoint("CENTERLEFT", StatBlock, "CENTERRIGHT", 10, 0)]]
 		
 ------------------------------Stat_Dodge-------------------------------------------------------------------
 	local StatDodge = UI.CreateFrame("Text", WT.UniqueName("wtStatDodge"), wrapper)
@@ -166,15 +166,15 @@ local function Create(configuration)
 	StatDodge:SetFontSize(13)
 	StatDodge:SetFontColor(1,0.97,0.84,1)
 	StatDodge:SetEffectGlow({ strength = 3 })
-	StatDodge:SetPoint("CENTERLEFT", StatParry, "CENTERRIGHT", 10, 0)	
+	StatDodge:SetPoint("CENTERLEFT", StatHit, "CENTERRIGHT", 10, 0)	--3.0
 		
 ------------------------------Stat_Toughness-------------------------------------------------------------------
-	local StatToughness = UI.CreateFrame("Text", WT.UniqueName("wtStatToughness"), wrapper)
+	--[[local StatToughness = UI.CreateFrame("Text", WT.UniqueName("wtStatToughness"), wrapper)
 	StatToughness:SetText("")
 	StatToughness:SetFontSize(13)
 	StatToughness:SetFontColor(1,0.97,0.84,1)
 	StatToughness:SetEffectGlow({ strength = 3 })
-	StatToughness:SetPoint("CENTERLEFT", StatDodge, "CENTERRIGHT", 10, 0)	
+	StatToughness:SetPoint("CENTERLEFT", StatDodge, "CENTERRIGHT", 10, 0)	]]   -- 3.0
 		
 -----------------------------------------------------------------------------------------------------------
 ------------------------------RESISTENCE_STAT--------------------------------------------------------------
@@ -185,7 +185,7 @@ local function Create(configuration)
 	StatResistLife:SetFontSize(13)
 	StatResistLife:SetFontColor(1,0.97,0.84,1)
 	StatResistLife:SetEffectGlow({ strength = 3 })
-	StatResistLife:SetPoint("CENTERLEFT", StatToughness, "CENTERRIGHT", 10, 0)			
+	StatResistLife:SetPoint("CENTERLEFT", StatDodge, "CENTERRIGHT", 10, 0)			
 	
 ------------------------------Stat_ResistDeath-------------------------------------------------------------------
 	local StatResistDeath = UI.CreateFrame("Text", WT.UniqueName("wtStatResistDeath"), wrapper)
@@ -231,32 +231,32 @@ local function Create(configuration)
 ------------------------------PLAYER_VERSUS_PLAYER_STAT----------------------------------------------------
 -----------------------------------------------------------------------------------------------------------	
 ------------------------------Stat_Vengeance-------------------------------------------------------------------
-	local StatVengeance = UI.CreateFrame("Text", WT.UniqueName("wtStatVengeance"), wrapper)
+	--[[local StatVengeance = UI.CreateFrame("Text", WT.UniqueName("wtStatVengeance"), wrapper)
 	StatVengeance:SetText("")
 	StatVengeance:SetFontSize(13)
 	StatVengeance:SetFontColor(1,0.97,0.84,1)
 	StatVengeance:SetEffectGlow({ strength = 3 })
-	StatVengeance:SetPoint("CENTERLEFT", StatResistAir, "CENTERRIGHT", 10, 0)	
+	StatVengeance:SetPoint("CENTERLEFT", StatResistAir, "CENTERRIGHT", 10, 0)	]]
 			
 			 
 ------------------------------Stat_Valor-------------------------------------------------------------------
-	local StatValor = UI.CreateFrame("Text", WT.UniqueName("wtStatValor"), wrapper)
+	--[[local StatValor = UI.CreateFrame("Text", WT.UniqueName("wtStatValor"), wrapper)
 	StatValor:SetText("")
 	StatValor:SetFontSize(13)
 	StatValor:SetFontColor(1,0.97,0.84,1)
 	StatValor:SetEffectGlow({ strength = 3 })
-	StatValor:SetPoint("CENTERLEFT", StatVengeance, "CENTERRIGHT", 10, 0)	
+	StatValor:SetPoint("CENTERLEFT", StatResistEarth, "CENTERRIGHT", 10, 0)	]]
 	
 -----------------------------------------------------------------------------------------------------------
 ------------------------------Deflect??_STAT----------------------------------------------------
 -----------------------------------------------------------------------------------------------------------		 
 ------------------------------Stat_Deflect-------------------------------------------------------------------
-	local StatDeflect = UI.CreateFrame("Text", WT.UniqueName("wtStatDeflect"), wrapper)
+	--[[local StatDeflect = UI.CreateFrame("Text", WT.UniqueName("wtStatDeflect"), wrapper)
 	StatDeflect:SetText("")
 	StatDeflect:SetFontSize(13)
 	StatDeflect:SetFontColor(1,0.97,0.84,1)
 	StatDeflect:SetEffectGlow({ strength = 3 })
-	StatDeflect:SetPoint("CENTERLEFT", StatValor, "CENTERRIGHT", 10, 0)	
+	StatDeflect:SetPoint("CENTERLEFT", StatValor, "CENTERRIGHT", 10, 0)]]-- 3.0
 					
 ----------------------------------------------------------------------------------------------------------------
 	if configuration.showStrength == false then
@@ -324,20 +324,20 @@ local function Create(configuration)
 		StatBlock:SetWidth(-10)
 	end	
 	
-	if configuration.showParry == false then
-	    StatParry:SetVisible(false)
-		StatParry:SetWidth(-10)
-	end		
+	--[[if configuration.showGuard == false then
+	    StatGuard:SetVisible(false)
+		StatGuard:SetWidth(-10)
+	end]]
 	
 	if configuration.showDodge == false then
 	    StatDodge:SetVisible(false)
 		StatDodge:SetWidth(-10)
 	end	
 	
-	if configuration.showToughness == false then
+	--[[if configuration.showToughness == false then
 	    StatToughness:SetVisible(false)
 		StatToughness:SetWidth(-10)
-	end	
+	end	]]   -- 3.0
 	
 	if configuration.showResistLife == false then
 	    StatResistLife:SetVisible(false)
@@ -369,20 +369,20 @@ local function Create(configuration)
 		StatResistAir:SetWidth(-10)
 	end	
 	
-	if configuration.showVengeance == false then
+	--[[if configuration.showVengeance == false then
 	    StatVengeance:SetVisible(false)
 		StatVengeance:SetWidth(-10)
-	end
+	end]]
 	
-	if configuration.showValor == false then
+	--[[if configuration.showValor == false then
 	    StatValor:SetVisible(false)
 		StatValor:SetWidth(-10)
-	end		
+	end	]]	
 	
-	if configuration.showDeflect == false then
+	--[[if configuration.showDeflect == false then
 	    StatDeflect:SetVisible(false)
 		StatDeflect:SetWidth(-10)
-	end
+	end]]-- 3.0
 
 	Stats = Inspect.Stat()
 	if Stats ~= nil then	
@@ -399,18 +399,18 @@ local function Create(configuration)
 			CritPower = Inspect.Stat("critPower")
 			Hit = Inspect.Stat("hit")
 			Block = Inspect.Stat("block")
-			Parry = Inspect.Stat("parry")
+			--Guard = Inspect.Stat("guard")
 			Dodge = Inspect.Stat("dodge")
-			Toughness = Inspect.Stat("toughness")
+			--Toughness = Inspect.Stat("toughness")   -- 3.0
 			ResistLife = Inspect.Stat("resistLife")
 			ResistDeath = Inspect.Stat("resistDeath")
 			ResistFire = Inspect.Stat("resistLife")
 			ResistWater = Inspect.Stat("resistWater")
 			ResistEarth = Inspect.Stat("resistEarth")
 			ResistAir = Inspect.Stat("resistAir")
-			Vengeance = Inspect.Stat("vengeance")
-			Valor = Inspect.Stat("valor")
-			Deflect = Inspect.Stat("deflect")
+			--Vengeance = Inspect.Stat("vengeance")
+			--Valor = Inspect.Stat("valor")
+			--Deflect = Inspect.Stat("deflect") -- 3.0
 		
 			if configuration.showStrength == true then
 				StatStrength:SetText("Strength:" .. " " .. Strength)
@@ -451,15 +451,15 @@ local function Create(configuration)
 			if configuration.showBlock == true then
 				StatBlock:SetText("Block:" .. " " .. Armor)
 			end
-			if configuration.showParry == true then
-				StatParry:SetText("Parry:" .. " " .. Parry)
-			end
+			--[[if configuration.showGuard == true then
+				StatGuard:SetText("Guard:" .. " " .. Guard)
+			end]]
 			if configuration.showDodge == true then
 				StatDodge:SetText("Dodge:" .. " " .. Dodge)
 			end
-			if configuration.showToughness == true then
+			--[[if configuration.showToughness == true then
 				StatToughness:SetText("Toughness:" .. " " .. Toughness)
-			end
+			end]]   -- 3.0
 			if configuration.showResistLife == true then
 				StatResistLife:SetText("Life Resist:" .. " " .. ResistLife)
 			end
@@ -478,15 +478,15 @@ local function Create(configuration)
 			if configuration.showResistAir == true then
 				StatResistAir:SetText("Air Resist:" .. " " .. ResistAir)
 			end
-			if configuration.showVengeance == true then
+			--[[if configuration.showVengeance == true then
 				StatVengeance:SetText("Vengeance:" .. " " .. Vengeance)
-			end
-			if configuration.showValor == true then
+			end]]
+			--[[if configuration.showValor == true then
 				StatValor:SetText("Valor:" .. " " .. Valor)
-			end
-			if configuration.showDeflect == true then
+			end]]
+			--[[if configuration.showDeflect == true then
 				StatDeflect:SetText("Deflect:" .. " " .. Deflect)
-			end
+			end]]-- 3.0
 			local width = 10
 			width = width + StatStrength:GetWidth()	+ 10
 			width = width + StatDexterity:GetWidth() + 10
@@ -501,18 +501,18 @@ local function Create(configuration)
 			width = width + StatCritPower:GetWidth() + 10
 			width = width + StatHit:GetWidth() + 10
 			width = width + StatBlock:GetWidth() + 10
-			width = width + StatParry:GetWidth() + 10
+			--width = width + StatGuard:GetWidth() + 10
 			width = width + StatDodge:GetWidth() + 10
-			width = width + StatToughness:GetWidth() + 10
+			--width = width + StatToughness:GetWidth() + 10
 			width = width + StatResistLife:GetWidth() + 10
 			width = width + StatResistDeath:GetWidth() + 10	
 			width = width + StatResistFire:GetWidth() + 10
 			width = width + StatResistWater:GetWidth() + 10
 			width = width + StatResistEarth:GetWidth() + 10	
 			width = width + StatResistAir:GetWidth() + 10
-			width = width + StatVengeance:GetWidth() + 10
-			width = width + StatValor:GetWidth() + 10
-			width = width + StatDeflect:GetWidth() + 10	
+			--width = width + StatVengeance:GetWidth() + 10
+			--width = width + StatValor:GetWidth() + 10
+			--width = width + StatDeflect:GetWidth() + 10	 -- 3.0
 
 		if not  configuration.width then	
 			configuration.width = width 	
@@ -538,18 +538,18 @@ function stat (handle, stat)
 			CritPower = Inspect.Stat("critPower")
 			Hit = Inspect.Stat("hit")
 			Block = Inspect.Stat("block")
-			Parry = Inspect.Stat("parry")
+			--Guard = Inspect.Stat("guard")
 			Dodge = Inspect.Stat("dodge")
-			Toughness = Inspect.Stat("toughness")
+			--Toughness = Inspect.Stat("toughness") --3.0
 			ResistLife = Inspect.Stat("resistLife")
 			ResistDeath = Inspect.Stat("resistDeath")
 			ResistFire = Inspect.Stat("resistLife")
 			ResistWater = Inspect.Stat("resistWater")
 			ResistEarth = Inspect.Stat("resistEarth")
 			ResistAir = Inspect.Stat("resistAir")
-			Vengeance = Inspect.Stat("vengeance")
-			Valor = Inspect.Stat("valor")
-			Deflect = Inspect.Stat("deflect")
+			--Vengeance = Inspect.Stat("vengeance")
+			--Valor = Inspect.Stat("valor")
+			--Deflect = Inspect.Stat("deflect")   -- 3.0
 			
 			if configuration.showStrength == true then
 				StatStrength:SetText("Strength:" .. " " .. Strength)
@@ -590,15 +590,15 @@ function stat (handle, stat)
 			if configuration.showBlock == true then
 				StatBlock:SetText("Block:" .. " " .. Armor)
 			end
-			if configuration.showParry == true then
-				StatParry:SetText("Parry:" .. " " .. Parry)
-			end
+			--[[if configuration.showGuard == true then
+				StatGuard:SetText("Guard:" .. " " .. Guard)
+			end]]
 			if configuration.showDodge == true then
 				StatDodge:SetText("Dodge:" .. " " .. Dodge)
 			end
-			if configuration.showToughness == true then
+			--[[if configuration.showToughness == true then
 				StatToughness:SetText("Toughness:" .. " " .. Toughness)
-			end
+			end]]   -- 3.0
 			if configuration.showResistLife == true then
 				StatResistLife:SetText("Life Resist:" .. " " .. ResistLife)
 			end
@@ -617,15 +617,15 @@ function stat (handle, stat)
 			if configuration.showResistAir == true then
 				StatResistAir:SetText("Air Resist:" .. " " .. ResistAir)
 			end
-			if configuration.showVengeance == true then
+			--[[if configuration.showVengeance == true then
 				StatVengeance:SetText("Vengeance:" .. " " .. Vengeance)
-			end
-			if configuration.showValor == true then
+			end]]
+			--[[if configuration.showValor == true then
 				StatValor:SetText("Valor:" .. " " .. Valor)
-			end
-			if configuration.showDeflect == true then
+			end]]
+			--[[if configuration.showDeflect == true then
 				StatDeflect:SetText("Deflect:" .. " " .. Deflect)
-			end
+			end]]-- 3.0
 	end		
 end	
 	
@@ -660,9 +660,9 @@ local function ConfigDialog(container)
 		:Checkbox("showHit", "Show hit", true)
 		:Title("DEFENSE")			
 		:Checkbox("showBlock", "Show block", false)
-		:Checkbox("showParry", "Show parry", false)
+		--:Checkbox("showGuard", "Show Guard", false)
 		:Checkbox("showDodge", "Show dodge", false)
-		:Checkbox("showToughness", "Show toughness", false)
+		--:Checkbox("showToughness", "Show toughness", false)
 		:Title("RESISTENCE")			
 		:Checkbox("showResistLife", "Show Life resist", false)		
 		:Checkbox("showResistDeath", "Show Death resist", false)		
@@ -671,10 +671,10 @@ local function ConfigDialog(container)
 		:Checkbox("showResistEarth", "Show Earth resist", false)
 		:Checkbox("showResistAir", "Show Air resist", false)
 		:Title("PLAYER VERSUS PLAYER")			
-		:Checkbox("showVengeance", "Show vengeance", false)
-		:Checkbox("showValor", "Show valor", false)
-		:Title("Deflect")			
-		:Checkbox("showDeflect", "Show deflect", false)
+		--:Checkbox("showVengeance", "Show vengeance", false)
+		--:Checkbox("showValor", "Show valor", false)
+		--:Title("Deflect")			
+		--:Checkbox("showDeflect", "Show deflect", false) -- 3.0
 		:TitleY("Gadgets Options")					
 		:Checkbox("showBackground", "Show Background frame", true)
 		:ColorPicker("BackgroundColor", "Background Color", 0.07,0.07,0.07,0.85)

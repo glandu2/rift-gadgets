@@ -153,12 +153,12 @@ local function Create(configuration)
 	StatBlock:SetPoint("CENTERLEFT", StatHit, "CENTERRIGHT", 10, 0)	
 	
 ------------------------------Stat_Guard-------------------------------------------------------------------
-	--[[local StatGuard = UI.CreateFrame("Text", WT.UniqueName("wtStatGuard"), wrapper)
+	local StatGuard = UI.CreateFrame("Text", WT.UniqueName("wtStatGuard"), wrapper)
 	StatGuard:SetText("")
 	StatGuard:SetFontSize(13)
 	StatGuard:SetFontColor(1,0.97,0.84,1)
 	StatGuard:SetEffectGlow({ strength = 3 })
-	StatGuard:SetPoint("CENTERLEFT", StatBlock, "CENTERRIGHT", 10, 0)]]
+	StatGuard:SetPoint("CENTERLEFT", StatBlock, "CENTERRIGHT", 10, 0)
 		
 ------------------------------Stat_Dodge-------------------------------------------------------------------
 	local StatDodge = UI.CreateFrame("Text", WT.UniqueName("wtStatDodge"), wrapper)
@@ -324,10 +324,10 @@ local function Create(configuration)
 		StatBlock:SetWidth(-10)
 	end	
 	
-	--[[if configuration.showGuard == false then
+	if configuration.showGuard == false then
 	    StatGuard:SetVisible(false)
 		StatGuard:SetWidth(-10)
-	end]]
+	end
 	
 	if configuration.showDodge == false then
 	    StatDodge:SetVisible(false)
@@ -399,7 +399,7 @@ local function Create(configuration)
 			CritPower = Inspect.Stat("critPower")
 			Hit = Inspect.Stat("hit")
 			Block = Inspect.Stat("block")
-			--Guard = Inspect.Stat("guard")
+			Guard = Inspect.Stat("guard")
 			Dodge = Inspect.Stat("dodge")
 			--Toughness = Inspect.Stat("toughness")   -- 3.0
 			ResistLife = Inspect.Stat("resistLife")
@@ -451,9 +451,9 @@ local function Create(configuration)
 			if configuration.showBlock == true then
 				StatBlock:SetText("Block:" .. " " .. Armor)
 			end
-			--[[if configuration.showGuard == true then
+			if configuration.showGuard == true then
 				StatGuard:SetText("Guard:" .. " " .. Guard)
-			end]]
+			end
 			if configuration.showDodge == true then
 				StatDodge:SetText("Dodge:" .. " " .. Dodge)
 			end
@@ -501,7 +501,7 @@ local function Create(configuration)
 			width = width + StatCritPower:GetWidth() + 10
 			width = width + StatHit:GetWidth() + 10
 			width = width + StatBlock:GetWidth() + 10
-			--width = width + StatGuard:GetWidth() + 10
+			width = width + StatGuard:GetWidth() + 10
 			width = width + StatDodge:GetWidth() + 10
 			--width = width + StatToughness:GetWidth() + 10
 			width = width + StatResistLife:GetWidth() + 10
@@ -538,7 +538,7 @@ function stat (handle, stat)
 			CritPower = Inspect.Stat("critPower")
 			Hit = Inspect.Stat("hit")
 			Block = Inspect.Stat("block")
-			--Guard = Inspect.Stat("guard")
+			Guard = Inspect.Stat("guard")
 			Dodge = Inspect.Stat("dodge")
 			--Toughness = Inspect.Stat("toughness") --3.0
 			ResistLife = Inspect.Stat("resistLife")
@@ -590,9 +590,9 @@ function stat (handle, stat)
 			if configuration.showBlock == true then
 				StatBlock:SetText("Block:" .. " " .. Armor)
 			end
-			--[[if configuration.showGuard == true then
+			if configuration.showGuard == true then
 				StatGuard:SetText("Guard:" .. " " .. Guard)
-			end]]
+			end
 			if configuration.showDodge == true then
 				StatDodge:SetText("Dodge:" .. " " .. Dodge)
 			end
@@ -657,10 +657,10 @@ local function ConfigDialog(container)
 		:Checkbox("showPowerSpell", "Show Spell Power", true)
 		:Checkbox("showCritSpell", "Show Spell Crit", false)
 		:Checkbox("showCritPower", "Show Crit Power", true)
-		:Checkbox("showHit", "Show hit", true)
+		:Checkbox("showHit", "Show Hit", true)
 		:Title("DEFENSE")			
-		:Checkbox("showBlock", "Show block", false)
-		--:Checkbox("showGuard", "Show Guard", false)
+		:Checkbox("showBlock", "Show Block", false)
+		:Checkbox("showGuard", "Show Guard", false)
 		:Checkbox("showDodge", "Show dodge", false)
 		--:Checkbox("showToughness", "Show toughness", false)
 		:Title("RESISTENCE")			

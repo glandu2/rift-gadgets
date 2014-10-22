@@ -28,7 +28,7 @@ local paDetails = nil
 local iconRestedAddon = "Rift"
 local iconRestedFile = "indicator_friendlyNPC.png.dds"
 
-local MAX_CH_LEVEL = 60
+local MAX_CH_LEVEL = 65
 
 local PA_T2_CAP = 628
 local PA_T3_CAP = 1079

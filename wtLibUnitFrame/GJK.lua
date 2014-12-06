@@ -14,6 +14,12 @@ GJK.AbilityNames = {
 	["Tides of Insanity"] = true,
 	["Infernal Tether"] = true,
 	["Pulsar"] = true,
+	["Toxin"] = true,
+	["Sapping Cold"] = true,
+	["The Contained Depths"] = true,
+	["Unbounded Consciousness"] = true,	
+	["Absolute Zero"] = true,	
+	
 --	,
 }
 
@@ -30,6 +36,20 @@ WT.Unit.CreateVirtualProperty("alertHealthColor", { "id", "cleansable", "buffAle
 		else
 			return { r=0.07, g=0.07, b=0.07, a=0.85}
 		end	
+	end
+)
+
+WT.Unit.CreateVirtualProperty("alertHealthColor2", { "id", "cleansable", "buffAlert" },
+	function(unit)
+		if unit.offline then
+			return {r=0.07,g=0.07,b=0.09, a=0.85}
+		elseif unit.buffAlert then
+			return { r=0.5, g=0.5, b=0, a=1 }
+		elseif unit.cleansable then
+			return { r=0.2, g=0.15, b=0.4, a=0.85 }
+		else
+			return  {r=0.22,g=0.55,b=0.06, a=0.85}
+		end
 	end
 )
 

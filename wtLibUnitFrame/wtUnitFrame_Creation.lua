@@ -13,6 +13,7 @@ function WT.UnitFrame.CreateFromConfiguration(configuration)
 	local shortname = configuration.shortname or false
 	local showRadius = configuration.showRadius or false
 	local showCombo = configuration.showCombo or false
+	local showRankIcon = configuration.showRankIcon or false
 	WT.Log.Debug("Creating UnitFrame from configuration: template=" .. template .. " unitSpec=" .. unitSpec)
 	return WT.UnitFrame.CreateFromTemplate(template, unitSpec, configuration)
 end

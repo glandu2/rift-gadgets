@@ -68,6 +68,7 @@ local function ufConfigDialog(container)
 		:Checkbox("shortname", "Short name", true)
 		:Checkbox("showRadius", "Show HitBox", false)
 		:Checkbox("showCombo", "Show Combo points", true)
+		:Checkbox("showRankIcon", "Show Rank Icon", false)
 
 	ufAppearance = WT.Dialog(frmOverrideInner)
 		:Checkbox("ovHealthTexture", "Override Health Texture?", false)

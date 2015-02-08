@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.7.2
+      Project Date (UTC)  : 2014-12-06T23:42:32Z
+      File Modified (UTC) : 2013-10-01T20:23:06Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -30,83 +30,6 @@ local function UpdatePanel(panel, showAll)
 	if not panel.Categories then panel.Categories = {} end
 	for factionId, detail in pairs(details) do
 	
-		if not panel.Categories[detail.categoryName] then
-			local catText = UI.CreateFrame("Text", "categoryText", panel)
-			catText:SetText(detail.categoryName)
-			catText:SetFontSize(14)
-			catText:SetEffectGlow({ strength = 3 })
-			catText:SetFontColor(.2, .4, .7 )
-			panel.Categories[detail.categoryName] = catText
-		end
-		local catText = panel.Categories[detail.categoryName]
-		if not catText.Factions then catText.Factions = {} end
-		if not catText.Factions[detail.name] then
-		
-			local factionFrame = UI.CreateFrame("Frame", "factionFrame", catText)
-			factionFrame:SetBackgroundColor(backColor[1],backColor[2],backColor[3],backColor[4])
-			factionFrame:SetHeight(18)
-			factionFrame:SetWidth(280)
-			factionFrame:SetLayer(1)
-
-			catText.Factions[detail.name] = factionFrame
-
-				  top = UI.CreateFrame("Frame", "TopBorder", factionFrame)
-				  top:SetBackgroundColor(0,0,0,1)
-				  top:SetLayer(1)
-				  top:ClearAll()
-				  top:SetPoint("BOTTOMLEFT", factionFrame, "TOPLEFT", -1, 0)
-				  top:SetPoint("BOTTOMRIGHT", factionFrame, "TOPRIGHT", 1, 0)
-				  top:SetHeight(1)
-				  
-				  bottom = UI.CreateFrame("Frame", "BottomBorder", factionFrame)
-				  bottom:SetBackgroundColor(0,0,0,1)
-				  bottom:SetLayer(1)
-				  bottom:ClearAll()
-				  bottom:SetPoint("TOPLEFT", factionFrame, "BOTTOMLEFT", -1, 0)
-				  bottom:SetPoint("TOPRIGHT", factionFrame, "BOTTOMRIGHT",1, 0)
-				  bottom:SetHeight(1)
-				  
-				  left = UI.CreateFrame("Frame", "LeftBorder", factionFrame)
-				  left:SetBackgroundColor(0,0,0,1)
-				  left:SetLayer(1)
-				  left:ClearAll()
-				  left:SetPoint("TOPRIGHT", factionFrame, "TOPLEFT", 0, -1)
-				  left:SetPoint("BOTTOMRIGHT", factionFrame, "BOTTOMLEFT", 0, 1)
-				  left:SetWidth(1)
-				  
-				  right = UI.CreateFrame("Frame", "RightBorder", factionFrame)
-				  right:SetBackgroundColor(0,0,0,1)
-				  right:SetLayer(1)
-				  right:ClearAll()
-				  right:SetPoint("TOPLEFT", factionFrame, "TOPRIGHT", 0, -1)
-				  right:SetPoint("BOTTOMLEFT", factionFrame, "BOTTOMRIGHT", 0, 1)
-				  right:SetWidth(1)
-			
-			local factionBar = UI.CreateFrame("Texture", "factionBar", factionFrame)
-			factionBar:SetHeight(18)
-			Library.Media.SetTexture(factionBar, texture)
-			factionBar:SetBackgroundColor(ColorBar[1],ColorBar[2],ColorBar[3],ColorBar[4])--(0,0.6,0,0.8,1)
-			factionBar:SetLayer(2)	
-			factionBar:SetPoint("TOPLEFT", factionFrame, "TOPLEFT")
-			catText.Factions[detail.name].factionBar = factionBar
-			
-			local factionText = UI.CreateFrame("Text", "factionText", factionFrame)
-			factionText:SetText(detail.name)
-			factionText:SetFontSize(13)
-			factionText:SetEffectGlow({ strength = 3 })
-			factionText:SetPoint("CENTERLEFT", factionFrame, "CENTERLEFT", 0, 0)
-			factionText:SetLayer(3)
-			factionText:SetFontColor(0.9, 0.9, 0.2 )
-			
-			
-			local notorietyText = UI.CreateFrame("Text", "notorietyText", factionFrame)
-			notorietyText:SetFontSize(13)
-			notorietyText:SetEffectGlow({ strength = 3 })
-			catText.Factions[detail.name].NotorietyText = notorietyText
-			notorietyText:SetPoint("CENTERRIGHT", factionFrame, "CENTERRIGHT", 0, 0)
-			notorietyText:SetLayer(3)
-		end
-		
 		local notor = detail.notoriety - 23000
 		
 		local notorNames = { "Neutral", "Friendly", "Decorated", "Honored", "Revered", "Glorified", "Venerated" }
@@ -115,7 +38,7 @@ local function UpdatePanel(panel, showAll)
 		local notorIdx = 0
 		for idx, name in ipairs(notorNames) do
 			local points = notorPoints[idx]
-			if notor < points then
+			if notor < points then	
 				notorIdx = idx
 				break
 			else
@@ -123,18 +46,102 @@ local function UpdatePanel(panel, showAll)
 			end
 		end
 		
-		
 		local notString = notorNames[notorIdx] .. " " .. tostring(notor) .. "/" .. notorPoints[notorIdx]
-		local percent = notor / notorPoints[notorIdx]
-		if notor == 0 then
-			notString = notorNames[notorIdx]
-			percent = 1.0
+
+		detail.percent = notor / notorPoints[notorIdx]
+			if notor == 0 then
+				notString = notorNames[notorIdx]
+				detail.percent = 1.0
+			end
+			panel.percent = detail.percent
+			
+		if not panel.Categories[detail.categoryName] then
+			local catText = UI.CreateFrame("Text", "categoryText", panel)
+			catText:SetText(detail.categoryName)
+			catText:SetFontSize(14)
+			catText:SetEffectGlow({ strength = 3 })
+			catText:SetFontColor(.2, .4, .7 )
+			panel.Categories[detail.categoryName] = catText
 		end
-		
-		catText.Factions[detail.name].factionBar:SetWidth((panel:GetWidth() - 20) * percent)
-		catText.Factions[detail.name].NotorietyText:SetText(notString)	
-	end
 	
+		local catText = panel.Categories[detail.categoryName]
+		if not catText.Factions then catText.Factions = {} end
+	
+	if detail.percent == 1 then
+--
+	else		
+		if not catText.Factions[detail.name] then		
+			local factionFrame = UI.CreateFrame("Frame", "factionFrame", catText)
+			factionFrame:SetBackgroundColor(backColor[1],backColor[2],backColor[3],backColor[4])
+			factionFrame:SetHeight(18)
+			factionFrame:SetWidth(280)
+			factionFrame:SetLayer(1)
+
+			catText.Factions[detail.name] = factionFrame
+
+			top = UI.CreateFrame("Frame", "TopBorder", factionFrame)
+			top:SetBackgroundColor(0,0,0,1)
+			top:SetLayer(1)
+			top:ClearAll()
+			top:SetPoint("BOTTOMLEFT", factionFrame, "TOPLEFT", -1, 0)
+			top:SetPoint("BOTTOMRIGHT", factionFrame, "TOPRIGHT", 1, 0)
+			top:SetHeight(1)
+					  
+			bottom = UI.CreateFrame("Frame", "BottomBorder", factionFrame)
+			bottom:SetBackgroundColor(0,0,0,1)
+			bottom:SetLayer(1)
+			bottom:ClearAll()
+			bottom:SetPoint("TOPLEFT", factionFrame, "BOTTOMLEFT", -1, 0)
+			bottom:SetPoint("TOPRIGHT", factionFrame, "BOTTOMRIGHT",1, 0)
+			bottom:SetHeight(1)
+					  
+			left = UI.CreateFrame("Frame", "LeftBorder", factionFrame)
+			left:SetBackgroundColor(0,0,0,1)
+			left:SetLayer(1)
+			left:ClearAll()
+			left:SetPoint("TOPRIGHT", factionFrame, "TOPLEFT", 0, -1)
+			left:SetPoint("BOTTOMRIGHT", factionFrame, "BOTTOMLEFT", 0, 1)
+			left:SetWidth(1)
+					  
+			right = UI.CreateFrame("Frame", "RightBorder", factionFrame)
+			right:SetBackgroundColor(0,0,0,1)
+			right:SetLayer(1)
+			right:ClearAll()
+			right:SetPoint("TOPLEFT", factionFrame, "TOPRIGHT", 0, -1)
+			right:SetPoint("BOTTOMLEFT", factionFrame, "BOTTOMRIGHT", 0, 1)
+			right:SetWidth(1)
+				
+			local factionBar = UI.CreateFrame("Texture", "factionBar", factionFrame)
+			factionBar:SetHeight(18)
+			Library.Media.SetTexture(factionBar, texture)
+			factionBar:SetBackgroundColor(ColorBar[1],ColorBar[2],ColorBar[3],ColorBar[4])--(0,0.6,0,0.8,1)
+			factionBar:SetLayer(2)	
+			factionBar:SetPoint("TOPLEFT", factionFrame, "TOPLEFT")
+			catText.Factions[detail.name].factionBar = factionBar
+				
+			local factionText = UI.CreateFrame("Text", "factionText", factionFrame)
+			factionText:SetText(detail.name)
+			factionText:SetFontSize(13)
+			factionText:SetEffectGlow({ strength = 3 })
+			factionText:SetPoint("CENTERLEFT", factionFrame, "CENTERLEFT", 0, 0)
+			factionText:SetLayer(3)
+			factionText:SetFontColor(0.9, 0.9, 0.2 )
+				
+				
+			local notorietyText = UI.CreateFrame("Text", "notorietyText", factionFrame)
+			notorietyText:SetFontSize(13)
+			notorietyText:SetEffectGlow({ strength = 3 })
+			catText.Factions[detail.name].NotorietyText = notorietyText
+			notorietyText:SetPoint("CENTERRIGHT", factionFrame, "CENTERRIGHT", 0, 0)
+			notorietyText:SetLayer(3)
+			
+			catText.Factions[detail.name].factionBar:SetWidth((panel:GetWidth() - 20) * detail.percent)
+			catText.Factions[detail.name].NotorietyText:SetText(notString)	
+		end
+			
+	end	
+
+	end
 	local anchor = nil
 	
 	local sortedCats = {}
@@ -144,21 +151,22 @@ local function UpdatePanel(panel, showAll)
 	table.sort(sortedCats)
 	
 	for _, category, frame in ipairs(sortedCats) do	
-		local frame = panel.Categories[category]
-		
-		local include = false
-		for faction in pairs(frame.Factions) do
-			if filters[faction] == true then 
-				include = true
-				--break
-			end
-		end
-		
-		if include or showAll then
+		local frame = panel.Categories[category]		
+		local include = false	
+			for faction in pairs(frame.Factions) do
+				for _, k, v in pairs(details) do
+				if k.name == faction then		
+					if k.percent == 1 then
+						filters[faction] = false
+					elseif filters[faction] == true then
+						include = true
+					end
 
-		
-			frame:SetVisible(true)
-		
+				end
+				end
+			end
+		if include or showAll then --or showAll
+			frame:SetVisible(true)		
 			if not anchor then
 				frame:SetPoint("TOPLEFT", panel, "TOPLEFT", 10, 3)
 			else
@@ -172,7 +180,7 @@ local function UpdatePanel(panel, showAll)
 				table.insert(sortedFacts, faction)
 			end
 			table.sort(sortedFacts)
-			
+
 			for _, faction in ipairs(sortedFacts) do			
 				factFrame = frame.Factions[faction]
 				if (filters[faction] == false) and (not showAll) then
@@ -189,7 +197,7 @@ local function UpdatePanel(panel, showAll)
 
 		else
 		
-			frame:SetVisible(false)		
+		frame:SetVisible(false)		
 			
 		end
 		

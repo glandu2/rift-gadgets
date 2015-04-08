@@ -5,6 +5,7 @@ local AddonId = toc.identifier
 local HealFrame = WT.UnitFrame:Template("Heal Frame")
 HealFrame.Configuration.Name = "Heal Frame"
 HealFrame.Configuration.RaidSuitable = true
+HealFrame.Configuration.UnitSuitable = false
 HealFrame.Configuration.FrameType = "Frame"
 HealFrame.Configuration.Width = 90
 HealFrame.Configuration.Height = 40

@@ -85,29 +85,59 @@ local function Create(configuration)
 		media=configuration.texture, --colorBinding="castColor",
 		backgroundColor=configuration.backgroundColor or {r=0, g=0, b=0, a=1},
 	})
-
-	castBar.labelCast = castBar:CreateElement(
-	{
-		id="labelCast", type="Label", parent="frame", layer=26,
-		attach = {{ point="CENTERLEFT", element="barCast", targetPoint="CENTERLEFT", offsetX=6, offsetY=0 }},
-		visibilityBinding="castName",
-		text="{castName}", default="", fontSize= 12, outline = true
-	})
-
+	if configuration.showCastName or configuration.showCastName == nil then
+		if not configuration.CastNameAbove or configuration.CastNameAbove == nil then
+			castBar.labelCast = castBar:CreateElement(
+			{
+				id="labelCast", type="Label", parent="frame", layer=26,
+				attach = {{ point="CENTERLEFT", element="barCast", targetPoint="CENTERLEFT", offsetX=6, offsetY=0 }},
+				visibilityBinding="castName",
+				text="{castName}", default="", fontSize= 12, outline = true
+			})
+			else
+			castBar.labelCast = castBar:CreateElement(
+			{
+				id="labelCast", type="Label", parent="frame", layer=26,
+				attach = {{ point="BOTTOMLEFT", element="frame", targetPoint="TOPLEFT", offsetX=0, offsetY=0 }},
+				visibilityBinding="castName",
+				text="{castName}", default="", fontSize= 16, outline = true, font = "Enigma",
+			})
+			end
+	else
+				castBar.labelCast = castBar:CreateElement(
+			{
+				id="labelCast", type="Label", parent="frame", layer=26,
+				attach = {{ point="CENTERLEFT", element="barCast", targetPoint="CENTERLEFT", offsetX=6, offsetY=0 }},
+				visibilityBinding="castName",
+				text="", default="", fontSize= 0
+			})	
+	end
+	
 	if configuration.showCastTime then
-		castBar.labelTime = castBar:CreateElement(
-		{
-			id="labelTime", type="Label", parent="frame", layer=26,
-			attach = {{ point="BOTTOMRIGHT", element="barCast", targetPoint="BOTTOMRIGHT", offsetX=-4, offsetY=-4 }},
-			visibilityBinding="castName",
-			text="{castTime}", default="", fontSize= 10, outline = true
-		})
-		if configuration.smallCastTime then
-			castBar.labelTime:ClearAll()
-			castBar.labelTime:SetPoint("BOTTOMRIGHT", castBar.barCast, "BOTTOMRIGHT", -4, -4)
+		if not configuration.CastNameAbove or configuration.CastNameAbove == nil then	
+			castBar.labelTime = castBar:CreateElement(
+			{
+				id="labelTime", type="Label", parent="frame", layer=26,
+				attach = {{ point="BOTTOMRIGHT", element="frame", targetPoint="TOPRIGHT", offsetX=-4, offsetY=-4 }},
+				visibilityBinding="castName",
+				text="{castTime}", default="", fontSize= 14, outline = true, font = "Enigma",
+			})
+			
+			if configuration.smallCastTime then
+				castBar.labelTime:ClearAll()
+				castBar.labelTime:SetPoint("BOTTOMRIGHT", castBar.barCast, "BOTTOMRIGHT", -4, -4)
+			else
+				castBar.labelTime:ClearAll()
+				castBar.labelTime:SetPoint("CENTERRIGHT", castBar.barCast, "CENTERRIGHT", -4, 0)
+			end
 		else
-			castBar.labelTime:ClearAll()
-			castBar.labelTime:SetPoint("CENTERRIGHT", castBar.barCast, "CENTERRIGHT", -4, 0)
+			castBar.labelTime = castBar:CreateElement(
+			{
+				id="labelTime", type="Label", parent="frame", layer=26,
+				attach = {{ point="BOTTOMRIGHT", element="barCast", targetPoint="BOTTOMRIGHT", offsetX=-4, offsetY=-4 }},
+				visibilityBinding="castName",
+				text="{castTime}", default="", fontSize= 16, outline = true
+			})
 		end
 		
 		-- Mask out the label so it doesn't crash into the timer
@@ -117,7 +147,7 @@ local function Create(configuration)
 		castBar.labelMask:SetPoint("BOTTOM", castBar.barCast, "BOTTOM")
 		castBar.labelMask:SetPoint("RIGHT", castBar.labelTime, "LEFT", -8, nil)
 		
-		castBar.labelCast:SetParent(castBar.labelMask)
+		--castBar.labelCast:SetParent(castBar.labelMask)
 		
 	end
 
@@ -144,7 +174,7 @@ local function Create(configuration)
 	
 	castBar.OnResize = 
 		function(frame)
-			local fh = frame:GetHeight()
+			--[[local fh = frame:GetHeight()
 			local lg = 0.4
 			if castBar.largeCastFont then lg = 0.5 end
 			local s = math.floor(fh * lg)
@@ -152,18 +182,18 @@ local function Create(configuration)
 			s = 24
 			end
 			
-			castBar.labelCast:SetFontSize(s)
+			--castBar.labelCast:SetFontSize(s)
 			if castBar.labelTime and castBar.smallTimer then
-				local l = math.floor(fh * 0.2)
-				if l < 8 then
-					l = 8
+				local l = math.floor(fh * 0.4)
+				if l < 12 then
+					l = 12
 				end			
 				castBar.labelTime:SetFontSize(l)
 			end
 			
 			if castBar.labelTime and not castBar.smallTimer then
 				castBar.labelTime:SetFontSize(frame:GetHeight() * 0.4)
-			end
+			end]]
 			
 			if configuration.showIcon then
 				castBar.icon:SetHeight(fh)
@@ -179,7 +209,7 @@ local function Create(configuration)
 
 	castBar.barCast:SetVisible(false)
 
-	return castBar, { resizable = { 140, 15, 1000, 300 } }
+	return castBar, { resizable = { 140, 3, 1000, 300 } }
 end
 
 local dialog = false
@@ -209,6 +239,8 @@ local function ConfigDialog(container)
 		:ColorPicker("cbColorNonInt", "Non-Interruptible color", 0.9,0.7,0.3,1.0)
 		:Checkbox("hideNotCasting", "Hide when inactive", true)
 		:Checkbox("showCastTime", "Show cast time", true)
+		:Checkbox("showCastName", "Show cast name", true)
+		:Checkbox("CastNameAbove", "Cast name above cast bar", false)
 		:Checkbox("smallCastTime", "Small cast time text", false)
 		:Checkbox("showIcon", "Show ability icon", false)
 		:Checkbox("TransparentCastBar", "Transparent cast bar", true)
@@ -277,6 +309,16 @@ local function Reconfigure(config)
 		gadgetConfig.showCastTime = config.showCastTime
 		requireRecreate = true
 	end
+	
+	if gadgetConfig.showCastName ~= config.showCastName then
+		gadgetConfig.showCastName = config.showCastName
+		requireRecreate = true
+	end
+
+	if gadgetConfig.CastNameAbove ~= config.CastNameAbove then
+		gadgetConfig.CastNameAbove = config.CastNameAbove
+		requireRecreate = true
+	end	
 
 	if gadgetConfig.smallCastTime ~= config.smallCastTime then
 		gadgetConfig.smallCastTime = config.smallCastTime

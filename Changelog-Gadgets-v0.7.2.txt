@@ -1,0 +1,11 @@
+tag v0.7.2
+bbe718727160e702cbed6eb002abbf05379656ca
+lifeismystery <lifeismystery@yandex.ru>
+2014-12-07 02:43:28 +0300
+
+
+
+--------------------
+
+lifeismystery:
+	- * Add tier icon to LifeUnitFrame temple * Add option to add specific debuff for LifeRaidFrame tamplate, yellow color

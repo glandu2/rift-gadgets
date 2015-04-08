@@ -19,11 +19,67 @@ local controls = {}
 
 local ufDialog = false
 local ufAppearance = false
+
+local function uf_OnTemplateChange(templateId)
+	if ufDialog == false then return end
+	local templateConfig = WT.UnitFrame.Templates[templateId].Configuration
+	if templateConfig.SupportsOwnBuffsPanel then
+		ufDialog:GetControl("ownBuffs"):SetVisible(true)
+	else
+		ufDialog:GetControl("ownBuffs"):SetVisible(false)
+	end
+	
+	local templateConfig = WT.UnitFrame.Templates[templateId].Configuration
+	if templateConfig.SupportsOwnDebuffsPanel then
+		ufDialog:GetControl("ownDebuffs"):SetVisible(true)
+	else
+		ufDialog:GetControl("ownDebuffs"):SetVisible(false)
+	end	
+	
+	local templateConfig = WT.UnitFrame.Templates[templateId].Configuration
+	if templateConfig.SupportsExcludeBuffsPanel then
+		ufDialog:GetControl("excludeBuffs"):SetVisible(true)
+	else
+		ufDialog:GetControl("excludeBuffs"):SetVisible(false)
+	end	
+	
+	local templateConfig = WT.UnitFrame.Templates[templateId].Configuration
+	if templateConfig.SupportsExcludeCastsPanel then
+		ufDialog:GetControl("excludeCasts"):SetVisible(true)
+	else
+		ufDialog:GetControl("excludeCasts"):SetVisible(false)
+	end	
+	
+	local templateConfig = WT.UnitFrame.Templates[templateId].Configuration
+	if templateConfig.SupportsShowRadius then
+		ufDialog:GetControl("showRadius"):SetVisible(true)
+	else
+		ufDialog:GetControl("showRadius"):SetVisible(false)
+	end	
+	
+	local templateConfig = WT.UnitFrame.Templates[templateId].Configuration
+	if templateConfig.SupportsShowCombo then
+		ufDialog:GetControl("showCombo"):SetVisible(true)
+	else
+		ufDialog:GetControl("showCombo"):SetVisible(false)
+	end	
+	
+	
+	local templateConfig = WT.UnitFrame.Templates[templateId].Configuration
+	if templateConfig.SupportsShowRankIconPanel then
+		ufDialog:GetControl("showRankIcon"):SetVisible(true)
+	else
+		ufDialog:GetControl("showRankIcon"):SetVisible(false)
+	end
+end
+
 local function ufConfigDialog(container)
 
 	local templateListItems = {}
 	for templateId, template in pairs(WT.UnitFrame.Templates) do
+		if template.Configuration.UnitSuitable then
 		table.insert(templateListItems, { text=templateId .. " (" .. template.Configuration.Name .. ")", value=templateId } )
+		end
 	end
 
 	local ufTabs = UI.CreateFrame("SimpleTabView", "ufTabs", container)
@@ -54,22 +110,56 @@ local function ufConfigDialog(container)
 				{text="Focus's Target", value="focus.target"},
 				{text="Pet", value="player.pet"},
 			}, false) 
-		:Select("template", TXT.UnitFrameTemplate, "LifeUnitFrame1", templateListItems, true)
-		:Checkbox("excludeBuffs", "Hide Buffs on Frame", false)
-		:Checkbox("excludeCasts", "Hide Castbars on Frame", false)
-		:Checkbox("ownBuffs", "Only show my buffs", true)
-		:Checkbox("ownDebuffs", "Only show my debuffs", false)
+		:Select("template", TXT.UnitFrameTemplate, "LifeUnitFrame1", templateListItems, true, uf_OnTemplateChange)
+		:Checkbox("showLeftPortrait", "Fake Portrait on Left", false)
+		:Checkbox("showRightPortrait", "Fake Portrait on Right", false)
 		:Checkbox("clickToTarget", TXT.EnableClickToTarget, true)
 		:Checkbox("contextMenu", TXT.EnableContextMenu, true)
 		:Checkbox("showBackground", TXT.ShowBackground, false)
 		:Checkbox("showAbsorb", TXT.ShowAbsorb, true)
-		:Checkbox("showLeftPortrait", "Fake Portrait on Left", false)
-		:Checkbox("showRightPortrait", "Fake Portrait on Right", false)
 		:Checkbox("shortname", "Short name", true)
+		:Checkbox("showname", "Show name", true)
 		:Checkbox("showRadius", "Show HitBox", false)
 		:Checkbox("showCombo", "Show Combo points", true)
 		:Checkbox("showRankIcon", "Show Rank Icon", false)
+		:Checkbox("excludeBuffs", "Hide Buffs on Frame", false)
+		:Checkbox("excludeCasts", "Hide Castbars on Frame", false)
+		:Checkbox("ownBuffs", "Only show my buffs", true)
+		:Checkbox("ownDebuffs", "Only show my debuffs", false)		
 
+		
+		local templateControl = ufDialog:GetControl("template")
+		local templateId = templateControl.getValue()
+
+		local OwnBuffsPanel = WT.UnitFrame.Templates[templateId].Configuration.SupportsOwnBuffsPanel
+		if OwnBuffsPanel then ufDialog:GetControl("ownBuffs"):SetVisible(true)
+		else ufDialog:GetControl("ownBuffs"):SetVisible(false)
+		end
+		local OwnDebuffsPanel = WT.UnitFrame.Templates[templateId].Configuration.SupportsOwnDebuffsPanel
+		if OwnDebuffsPanel then ufDialog:GetControl("ownDebuffs"):SetVisible(true)
+		else ufDialog:GetControl("ownDebuffs"):SetVisible(false)
+		end
+		local excludeBuffsPanel = WT.UnitFrame.Templates[templateId].Configuration.SupportsExcludeBuffsPanel
+		if excludeBuffsPanel then ufDialog:GetControl("excludeBuffs"):SetVisible(true)
+		else ufDialog:GetControl("excludeBuffs"):SetVisible(false)
+		end
+		local excludeCastsPanel = WT.UnitFrame.Templates[templateId].Configuration.SupportsExcludeCastsPanel
+		if excludeCastsPanel then ufDialog:GetControl("excludeCasts"):SetVisible(true)
+		else ufDialog:GetControl("excludeCasts"):SetVisible(false)
+		end
+		local showRadiusPanel = WT.UnitFrame.Templates[templateId].Configuration.SupportsShowRadius
+		if showRadiusPanel then ufDialog:GetControl("showRadius"):SetVisible(true)
+		else ufDialog:GetControl("showRadius"):SetVisible(false)
+		end
+		local showComboPanel = WT.UnitFrame.Templates[templateId].Configuration.SupportsShowCombo
+		if showComboPanel then ufDialog:GetControl("showCombo"):SetVisible(true)
+		else ufDialog:GetControl("showCombo"):SetVisible(false)
+		end	
+		local showRankIconPanel = WT.UnitFrame.Templates[templateId].Configuration.SupportsShowRankIconPanel
+		if showRankIconPanel then ufDialog:GetControl("showRankIcon"):SetVisible(true)
+		else ufDialog:GetControl("showRankIcon"):SetVisible(false)
+		end	
+		
 	ufAppearance = WT.Dialog(frmOverrideInner)
 		:Checkbox("ovHealthTexture", "Override Health Texture?", false)
 		:TexSelect("texHealth", "Health Texture", "Texture 39", "bar")
@@ -101,6 +191,7 @@ local function ufSetConfiguration(config)
 	ufDialog:SetValues(config)
 	ufAppearance:SetValues(config)
 end
+
 
 local rfEditors = {}
 local macroTypes = { "Left", "Middle", "Right", "Mouse4", "Mouse5", "WheelForward", "WheelBack" } 

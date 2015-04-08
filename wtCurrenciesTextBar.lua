@@ -312,6 +312,8 @@ local function ConfigDialog(container)
 	showBackground:SetPoint("TOPLEFT", CoinText, "BOTTOMLEFT", 0, 4)
 
 	BackgroundColor = WT.CreateColourPicker(frmOptions,  0.07,0.07,0.07,0.85)
+	--BackgroundColor = WT.Control.ColorPicker.Create(frmOptions, "Label", 0.07,0.07,0.07,0.85)
+
 	BackgroundColor:SetPoint("CENTERLEFT", showBackground, "CENTERRIGHT", 0, 0)
 
 end

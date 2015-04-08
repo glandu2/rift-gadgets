@@ -153,6 +153,7 @@ local function OnBuffAdd(hEvent, unitId, buffs)
 	if not WT.Units[unitId] then return end
 
 	local bdesc = Inspect.Buff.Detail(unitId, buffs)
+	--dump(Inspect.Buff.Detail(unitId, buffs))
 	local changes = { add = {} }
 	
 	for buffId, buff in pairs(bdesc) do
@@ -397,6 +398,16 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 		
 		if unitId == Inspect.Unit.Lookup("player.target") then
 			unit.playerTarget = true
+			
+			
+		--[[local targets = Inspect.Unit.Detail(Inspect.Unit.List()).name)
+		for k,v in pairs(targets) do
+			unit[k] = v
+		end]]
+			
+			
+		
+			--dump(Inspect.Unit.Detail(Inspect.Unit.List()).name)
 		end 
 		
 		-- Add all buffs currently on the unit
@@ -404,9 +415,10 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 			OnBuffRemove(nil, unitId, unit.Buffs)
 			OnBuffAdd(nil, unitId, Inspect.Buff.List(unitId))
 		end		
-			
+
 		local needsCleanse = false	
 		for buffId, buffDetail in pairs(unit.Buffs) do	
+		--dump(buffDetail)
 			if buffDetail.curse or buffDetail.disease or buffDetail.poison then
 				needsCleanse = true
 			end

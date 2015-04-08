@@ -13,6 +13,7 @@ local raidFrameHeight = raidFrameTopBarHeight + raidFrameBottomBarHeight
 local RaidFrame = WT.UnitFrame:Template("OctanusRaidFrame")
 RaidFrame.Configuration.Name = "Octanus Raid Frame"
 RaidFrame.Configuration.RaidSuitable = true
+RaidFrame.Configuration.UnitSuitable = false
 RaidFrame.Configuration.FrameType = "Frame"
 RaidFrame.Configuration.Width = raidFrameWidth + 2
 RaidFrame.Configuration.Height = raidFrameHeight + 2

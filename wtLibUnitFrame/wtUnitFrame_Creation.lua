@@ -11,9 +11,11 @@ function WT.UnitFrame.CreateFromConfiguration(configuration)
 	if not unitSpec then print("Missing required configuration item: unitSpec") return end
 
 	local shortname = configuration.shortname or false
+	local showname = configuration.showname or false
 	local showRadius = configuration.showRadius or false
 	local showCombo = configuration.showCombo or false
 	local showRankIcon = configuration.showRankIcon or false
+
 	WT.Log.Debug("Creating UnitFrame from configuration: template=" .. template .. " unitSpec=" .. unitSpec)
 	return WT.UnitFrame.CreateFromTemplate(template, unitSpec, configuration)
 end

@@ -5,6 +5,7 @@ local AddonId = toc.identifier
 local LifeRaidFrame1 = WT.UnitFrame:Template("LifeRaidFrame1")
 LifeRaidFrame1.Configuration.Name = "Life Raid Frame 1"
 LifeRaidFrame1.Configuration.RaidSuitable = true
+LifeRaidFrame1.Configuration.UnitSuitable = false
 LifeRaidFrame1.Configuration.FrameType = "Frame"
 LifeRaidFrame1.Configuration.Width = 50
 LifeRaidFrame1.Configuration.Height = 20

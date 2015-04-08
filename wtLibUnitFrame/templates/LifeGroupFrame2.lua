@@ -4,7 +4,8 @@ local AddonId = toc.identifier
 -- Frame Configuration Options --------------------------------------------------
 local LifeGroupFrame2 = WT.UnitFrame:Template("LifeGroupFrame2")
 LifeGroupFrame2.Configuration.Name = "Life Group Frame2(big resource bar)"
-LifeGroupFrame2.Configuration.RaidSuitable = true
+LifeGroupFrame2.Configuration.RaidSuitable = false
+LifeGroupFrame2.Configuration.UnitSuitable = false
 LifeGroupFrame2.Configuration.FrameType = "Frame"
 LifeGroupFrame2.Configuration.Width = 200
 LifeGroupFrame2.Configuration.Height = 45

@@ -204,6 +204,15 @@ WT.Unit.CreateVirtualProperty("BorderColorUnitFrame", { "id", "aggro" },
 			return { r = 0, g=0, b = 0, a=1 }
 		end
 	end)	
+	
+WT.Unit.CreateVirtualProperty("BorderColorUnitFrame2", { "id", "aggro" },
+	function(unit)
+		if not unit.id then
+			return { r = 0, g=0, b = 0, a=0 }
+		elseif unit.id then
+			return { r = 0, g=0, b = 0, a=1 }
+		end
+	end)	
 	   
 WT.Unit.CreateVirtualProperty("BorderTextureTargetVisible", {"playerTarget"},
 	function(unit)
@@ -320,21 +329,31 @@ WT.Unit.CreateVirtualProperty("HealthUnitColor", { "id", "cleansable", "playerId
 		end
 	end)	
 
-WT.Unit.CreateVirtualProperty("HealthCallingColor", { "id", "cleansable", "offline", "calling"},
+WT.Unit.CreateVirtualProperty("HealthCallingColor", { "id", "cleansable", "offline", "calling", "relation", "player"},
 	function(unit)
-		if unit.offline	then
-				return { r = 0.3, g = 0.3, b = 0.3, a = 1.0 }	
-		elseif unit.cleansable then
-			return { r=0.2, g=0.15, b=0.4, a=1.0 }	
-		elseif unit.calling == "mage" then
-			return { r = 0.8, g = 0.36, b = 1.0, a = 0.85 }
-		elseif  unit.calling == "cleric" then
-			return { r = 0.47, g = 0.94, b = 0.0, a = 0.85 }
-		elseif  unit.calling == "rogue" then
-			return { r = 1.0, g = 0.86, b = 0.04, a = 0.85 }
-		elseif  unit.calling == "warrior" then
-			return { r = 1.0, g = 0.15, b = 0.15, a = 0.85 }
-		end
+		if unit.player then
+				if unit.offline	then
+					return { r = 0.3, g = 0.3, b = 0.3, a = 1.0 }
+				elseif unit.cleansable then
+					return { r=0.2, g=0.15, b=0.4, a=1.0 }	
+				elseif unit.calling == "mage" then
+					return { r = 0.7, g = 0.26, b = 0.9, a = 0.85}
+				elseif  unit.calling == "cleric" then
+					return { r = 0.37, g = 0.24, b = 0.0, a = 0.85 }
+				elseif  unit.calling == "rogue" then
+					return { r = 0.9, g = 0.76, b = 0.04, a = 0.85 }
+				elseif  unit.calling == "warrior" then
+					return { r = 0.9, g = 0.05, b = 0.05, a = 0.85}
+				end	
+			else
+				if 	unit.relation == "hostile" then
+					return { r = 0.81, g = 0.02, b = 0.04, a = 0.85 }
+				elseif 	unit.relation == "friendly" then
+					return { r = 0.17, g = 1.0, b = 0.01, a = 0.85 }	
+				elseif not unit.relation then
+					return { r = 1.0, g = 0.93, b = 0, a = 0.85 }
+				end
+			end
 	end)	
 
 WT.Unit.CreateVirtualProperty("NameColor", { "id", "calling", "relation", "offline", "health", "healthMax", "blocked", "player"},
@@ -442,4 +461,22 @@ WT.Unit.CreateVirtualProperty("Tanks", { "id", "role"},
 		else	
 			return false
 		end	
+	end)
+	
+WT.Unit.CreateVirtualProperty("UnitHealthColorMini", { "id"},
+	function(unit)
+		if unit.id then
+			return { r=1, g=1, b=1, a=1 }
+		else
+			return {r=0,g=0,b=0, a=0}
+		end
+end)
+
+WT.Unit.CreateVirtualProperty("inCombat", { "id", "combat" },
+	function(unit)
+		if unit.combat then
+			return true
+		else
+			return false
+		end
 	end)

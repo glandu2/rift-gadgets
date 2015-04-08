@@ -89,6 +89,7 @@ function wtHealthCap:Construct()
 	    self.position = "inside"
 		local width = self.width 	  	
   
+  if not config.rightBorder == true then
 	  self.left = UI.CreateFrame("Texture", nameBase .."_LeftBorder", parent)
       self.left:SetLayer(100)
       self.left:ClearAll()
@@ -97,6 +98,16 @@ function wtHealthCap:Construct()
 	  self.left:SetTexture("Rift","raid_healthbar_debuffmarker.png.dds")
 	  self.left:SetVisible(true)
 	  self.left:SetParent(self.Mask)
+	 else
+	  self.right = UI.CreateFrame("Texture", nameBase .."_RightBorder", parent)
+      self.right:SetLayer(100)
+      self.right:ClearAll()
+	  self.right:SetPoint("TOPLEFT", unitFrame2, "TOPRIGHT", 0, -a)
+      self.right:SetPoint("BOTTOMLEFT", unitFrame2, "BOTTOMRIGHT", -8, a)
+	  self.right:SetTexture("Rift","raid_healthbar_debuffmarker.png.dds")
+	  self.right:SetVisible(true)
+	  self.right:SetParent(self.Mask)
+	end	 
   -------------------------------------------------------------------------------------------------------
 end
 

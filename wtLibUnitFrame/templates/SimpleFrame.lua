@@ -13,6 +13,7 @@ local simpleFrameHeight = simpleFrameTopBarHeight + simpleFrameBottomBarHeight
 local SimpleFrame = WT.UnitFrame:Template("SimpleFrame")
 SimpleFrame.Configuration.Name = "Simple Unit Frame"
 SimpleFrame.Configuration.RaidSuitable = true
+SimpleFrame.Configuration.UnitSuitable = true
 SimpleFrame.Configuration.FrameType = "Frame"
 SimpleFrame.Configuration.Width = simpleFrameWidth + 2
 SimpleFrame.Configuration.Height = simpleFrameHeight + 2

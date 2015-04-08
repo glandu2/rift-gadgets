@@ -100,7 +100,7 @@ local function Create(configuration)
 	local txtRange = rangeFinder:CreateElement({
 		id="txtRange", type="Label", parent=rfBackground, layer=20,
 		attach = {{ point="TOPCENTER", element=txtHeading, targetPoint="BOTTOMCENTER", offsetX=0, offsetY=-5 }},
-		visibilityBinding="name", text="--", default="",  outline=true, fontSize=24,
+		visibilityBinding="name", text="--", default="",  outline=true, fontSize=24, font = "Enigma",
 		color={ r=0.6, g=1.0, b=0.6, a=1.0 },
 	});
 
@@ -124,7 +124,7 @@ local function Create(configuration)
 	if not configuration.smallFont then
          txtRange:SetFontSize(24)
 		 else
-		 txtRange:SetFontSize(14)
+		 txtRange:SetFontSize(16)
 	end
 	
 	if not configuration.changefontColor then

@@ -109,6 +109,12 @@ local function Create(configuration)
 		chargeMeter:SetWidth(-10)
 		chargeMeter:SetVisible(false)
 	end
+	
+	if 	configuration.outlineTextBlack == true then
+		chargeMeter.Elements.chargeLabel:SetEffectGlow({ strength = 3 })
+	elseif configuration.outlineTextLight == true then
+		chargeMeter.Elements.chargeLabel:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	end
 ----------------------SoulVitality----------------------------------------------------------
 	local vitalityMeter = WT.UnitFrame:Create("player")
 	vitalityMeter:SetLayer(1001)
@@ -141,6 +147,13 @@ local function Create(configuration)
 		attach = {{ point="CENTERLEFT", element="imgVitality", targetPoint="CENTERLEFT", offsetX=30, offsetY=-8 }},
 		text="{vitality}%", fontSize=14, outline=true, color={r=1, g=0.97, b=0.84, a=1}
 	});
+	
+	if 	configuration.outlineTextBlack == true then
+		vitalityMeter.Elements.txtVitality:SetEffectGlow({ strength = 3 })
+	elseif configuration.outlineTextLight == true then
+		vitalityMeter.Elements.txtVitality:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	end
+	
 	if configuration.showVitality == false then
 		vitalityMeter.Elements.imgVitality:SetWidth(0)
 		vitalityMeter.Elements.imgZVitality:SetWidth(0)
@@ -351,14 +364,24 @@ end
 	btnReloadUI:SetWidth(90)
 	btnReloadUI:SetHeight(20)
 	btnReloadUI:SetBackgroundColor(0,0,0,0)
-	Library.LibSimpleWidgets.SetBorder("plain", btnReloadUI, 1, 0, 0, 0, 1)
+	
+	if configuration.showBackground == nil then
+		Library.LibSimpleWidgets.SetBorder("plain", btnReloadUI, 1, 0, 0, 0, 1)	
+	elseif configuration.showBackground == true then
+			Library.LibSimpleWidgets.SetBorder("plain", btnReloadUI, 1, 0, 0, 0, 1)
+	else 	
+		Library.LibSimpleWidgets.SetBorder("plain", btnReloadUI, 1, 0, 0, 0, 0)
+	end
+
 	btnReloadUI:SetPoint("CENTERLEFT", MoneySilverFrame, "CENTERRIGHT", 10, 0)	
+	if configuration.showBackground == true or configuration.showBackground == nil then
 	btnReloadUI:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
 		btnReloadUI:SetBackgroundColor(0.5,0.4,0.7, 0.85)
 	end, "Event.UI.Input.Mouse.Cursor.In")
 	btnReloadUI:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
 		btnReloadUI:SetBackgroundColor(0,0,0,0)
 	end, "Event.UI.Input.Mouse.Cursor.Out")
+	end
 	btnReloadUI:SetSecureMode("restricted")
 	btnReloadUI:EventMacroSet(Event.UI.Input.Mouse.Left.Click, "reloadui")
 	

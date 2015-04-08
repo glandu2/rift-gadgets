@@ -13,6 +13,7 @@ local standardFrameHeight = standardFrameTopBarHeight + standardFrameBottomBarHe
 local StandardFrame = WT.UnitFrame:Template("StandardFrameUpsideDown")
 StandardFrame.Configuration.Name = "Default Unit Frame Upside Down"
 StandardFrame.Configuration.RaidSuitable = false
+StandardFrame.Configuration.UnitSuitable = true
 StandardFrame.Configuration.FrameType = "Frame"
 StandardFrame.Configuration.Width = standardFrameWidth + 2
 StandardFrame.Configuration.Height = standardFrameHeight

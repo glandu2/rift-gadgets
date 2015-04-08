@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.7.2
+      Project Date (UTC)  : 2014-12-06T23:42:32Z
+      File Modified (UTC) : 2013-01-04T22:17:01Z (Wildtide)
       -----------------------------------------------------------------     
 --]]
 
@@ -24,7 +24,10 @@ local function Create(configuration)
 	chargeMeter:SetWidth(170)
 	chargeMeter:SetHeight(30)
 	chargeMeter:SetBackgroundColor(0,0,0,0.4)
-
+	
+	chargeMeter.mediaInterrupt = Library.Media.GetTexture(configuration.texture)
+	
+	if not configuration.insertBar == true then
 	chargeMeter:CreateElement(
 	{
 		-- Generic Element Configuration
@@ -34,27 +37,69 @@ local function Create(configuration)
 			{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT", offsetX=-1, offsetY=-1 },
 		},
 		binding="chargePercent", color={r=0,g=0.8,b=0.8,a=0.8},
-		texAddon="wtLibUnitFrame", texFile="img/Glaze2.png",
+		--texAddon="wtLibUnitFrame", texFile="img/Glaze2.png",
+		media=configuration.texture,
 		backgroundColor={r=0, g=0, b=0, a=0.4}
 	});
+	else
+		chargeMeter:CreateElement(
+	{
+		-- Generic Element Configuration
+		id="barCharge", type="BarHealth", parent="frame", layer=10,
+		attach = {
+			{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT", offsetX=1, offsetY=1 },
+			{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT", offsetX=-1, offsetY=-1 },
+		},
+		binding="chargePercent", color={r=0,g=0.8,b=0.8,a=0.8},
+		--texAddon="wtLibUnitFrame", texFile="img/Glaze2.png",
+		media=configuration.texture,
+		growthDirection="left",
+		backgroundColor={r=0, g=0, b=0, a=0.4}
+		});
+	end
+	
+	if configuration.chargeLabel == true or configuration.chargeLabel == nil then	
 	chargeMeter:CreateElement(
 	{
 		-- Generic Element Configuration
 		id="chargeLabel", type="Label", parent="frame", layer=20,
 		attach = {{ point="CENTER", element="barCharge", targetPoint="CENTER", offsetX=0, offsetY=0 }},
-		text="{chargePercent}% CHARGE", fontSize=10,
+		text="{chargePercent}%", fontSize=14, font = "blank-Bold", outline=true,
 	});
-
-	return chargeMeter, { resizable = { 140, 12, 300, 50 } }
+end
+	return chargeMeter, { resizable = { 140, 5, 500, 50 } }
 end
 
+local function Reconfigure(config)
+
+	assert(config.id, "No id provided in reconfiguration details")
+	
+	local gadgetConfig = wtxGadgets[config.id]
+	local gadget = WT.Gadgets[config.id]
+	
+	assert(gadget, "Gadget id does not exist in WT.Gadgets")
+	assert(gadgetConfig, "Gadget id does not exist in wtxGadgets")
+	assert(gadgetConfig.type == "CastBar", "Reconfigure Gadget is not a castbar")
+	
+	-- Detect changes to config and apply them to the gadget
+	
+	local requireRecreate = false
+
+	if gadgetConfig.texture ~= config.texture then
+		gadgetConfig.texture = config.texture
+		gadget.mediaInterrupt = Library.Media.GetTexture(config.texture)
+	end	
+end
 
 local dialog = false
 
 local function ConfigDialog(container)	
 	dialog = WT.Dialog(container)
 		:Label("The Charge Meter displays the current charge. Only useful for mages, this gadget exists so that a standard Unit Frame doesn't have to handle the extra bar within it's layout.")
-end
+		:Checkbox("chargeLabel", "Show charge text?", true)
+		:Checkbox("insertBar", "Insert Bar?", false)
+		:TexSelect("texture", "Texture", "Texture 82", "bar")
+		end
 
 local function GetConfiguration()
 	return dialog:GetValues()

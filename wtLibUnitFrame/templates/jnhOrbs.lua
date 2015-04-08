@@ -11,6 +11,7 @@ local jnhOrbHeight = 214 * scale
 local jnhOrb = WT.UnitFrame:Template("jnhOrb")
 jnhOrb.Configuration.Name = "Health+Mana+lvl Orb Unit Frame"
 jnhOrb.Configuration.RaidSuitable = false
+jnhOrb.Configuration.UnitSuitable = true
 jnhOrb.Configuration.FrameType = "Frame"
 jnhOrb.Configuration.Width = jnhOrbWidth
 jnhOrb.Configuration.Height = jnhOrbHeight

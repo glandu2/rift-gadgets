@@ -4,7 +4,8 @@ local AddonId = toc.identifier
 -- Frame Configuration Options --------------------------------------------------
 local LifeGroupFrame = WT.UnitFrame:Template("LifeGroupFrame")
 LifeGroupFrame.Configuration.Name = "Life Group Frame(Green health)"
-LifeGroupFrame.Configuration.RaidSuitable = true
+LifeGroupFrame.Configuration.RaidSuitable = false
+LifeGroupFrame.Configuration.UnitSuitable = false
 LifeGroupFrame.Configuration.FrameType = "Frame"
 LifeGroupFrame.Configuration.Width = 200
 LifeGroupFrame.Configuration.Height = 45

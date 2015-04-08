@@ -11,6 +11,7 @@ local LifeOrbHeight = 256 * scale
 local LifeOrb = WT.UnitFrame:Template("LifeOrb")
 LifeOrb.Configuration.Name = "Health+Mana+lvl Orb Unit Frame"
 LifeOrb.Configuration.RaidSuitable = false
+LifeOrb.Configuration.UnitSuitable = true
 LifeOrb.Configuration.FrameType = "Frame"
 LifeOrb.Configuration.Width = LifeOrbWidth
 LifeOrb.Configuration.Height = LifeOrbHeight
@@ -60,26 +61,7 @@ function LifeOrb:Construct(options)
 				--media="orb_red.tga", 
 				height=149, width=149,		
 			},
-			-- ORB filling BG
-			-- ORB filling BG
-			--"RiftMeter_I54.dds" задний план
-			--"CTF_Shield_Bkgnd.png.dds"
-			--"RiftMeter_I100.dds" зеленый
-			--"RiftMeter_I103.dds"
-			--"RiftMeter_I27.dds" absorb
-			--"RiftMeter_IF4.dds"
-			--"RiftMeter_IFD.dds" ораньжевый
-			--"RiftMeter_IF7.dds"
-			--"RiftMeter_IFA.dds" голубой
-			--"TargetPortrait_I146.dds" aggro
-			--"PlayerPortrait_IF1.dds" agro
-			--"UpgradableNPC_I1B.dds"
-			--"player_portrait_bg_defiant.png.dds" 256*128
-			--"player_portrait_bg_guardian.png.dds"
-			--"portrait_bg.png.dds"
-			---"round_progbar.png.dds" absorb
-			--"round_yellow_base.png.dds"
-			--"circle_bg.png.dds"
+
 			{
 				id="orbHealpCap", type="Bar", parent="frame", layer=12, alpha=1,
 				attach = 

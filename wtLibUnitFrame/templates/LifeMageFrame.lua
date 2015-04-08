@@ -10,6 +10,13 @@ LifeMageFrame.Configuration.FrameType = "Frame"
 LifeMageFrame.Configuration.Width = 250
 LifeMageFrame.Configuration.Height = 40
 LifeMageFrame.Configuration.Resizable = { 10, 10, 500, 100 }
+LifeMageFrame.Configuration.SupportsOwnBuffsPanel = false
+LifeMageFrame.Configuration.SupportsOwnDebuffsPanel = false
+LifeMageFrame.Configuration.SupportsExcludeBuffsPanel = false
+LifeMageFrame.Configuration.SupportsExcludeCastsPanel = false
+LifeMageFrame.Configuration.SupportsShowRadius = true
+LifeMageFrame.Configuration.SupportsShowCombo = true
+LifeMageFrame.Configuration.SupportsShowRankIconPanel = true
 
 --------------------------------------------------------------
 function LifeMageFrame:Construct(options)

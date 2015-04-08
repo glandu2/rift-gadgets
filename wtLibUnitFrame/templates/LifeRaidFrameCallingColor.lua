@@ -5,6 +5,7 @@ local AddonId = toc.identifier
 local LifeRaidFrameCallingColor = WT.UnitFrame:Template("LifeRaidFrameCallingColor")
 LifeRaidFrameCallingColor.Configuration.Name = "Life Raid Frame Calling Color"
 LifeRaidFrameCallingColor.Configuration.RaidSuitable = true
+LifeRaidFrameCallingColor.Configuration.UnitSuitable = false
 LifeRaidFrameCallingColor.Configuration.FrameType = "Frame"
 LifeRaidFrameCallingColor.Configuration.Width = 50
 LifeRaidFrameCallingColor.Configuration.Height = 20
@@ -38,7 +39,7 @@ function LifeRaidFrameCallingColor:Construct(options)
 				},
 				growthDirection="right",
 				binding="healthPercent",					
-				healthPercentColor={r=0.22,g=0.55,b=0.06, a=0.85},
+				HealthCallingColor={r=0.22,g=0.55,b=0.06, a=0.85},
 				colorBinding="HealthCallingColor",	
 				media="Texture 70",
 				backgroundColor={r=0.07, g=0.07, b=0.07, a=0.85},				
@@ -211,7 +212,7 @@ function LifeRaidFrameCallingColor:Construct(options)
 			local fracMin = math.min(fracWidth, fracHeight)
 			local fracMax = math.max(fracWidth, fracHeight)
 			local labName = self.Elements.labelName
-			labName:SetFontSize(13)
+			labName:SetFontSize(14)
 		end,
 		"LayoutSize")
 	

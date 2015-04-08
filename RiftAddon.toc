@@ -4,7 +4,7 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : v0.5.4
+      Gadgets Framework   : v0.7.2
       Project Date (UTC)  : 2013-10-06T09:26:25Z
       File Modified (UTC) : 2013-09-22T10:03:11Z (lifeismystery)
       -----------------------------------------------------------------     
@@ -19,9 +19,9 @@ Author = "Wildtide"
 Website = "http://www.wildtide.net"
 Email = "wildtide@wildtide.net"
 
-Version = "v0.5.4"
+Version = "v0.7.2"
 
-Environment = "2.4"
+Environment = "3.1"
 
 RunOnStartup = 
 {

@@ -11,6 +11,7 @@ local healthOrbHeight = 256 * scale
 local HealthOrb = WT.UnitFrame:Template("HealthOrb")
 HealthOrb.Configuration.Name = "Health Orb Unit Frame"
 HealthOrb.Configuration.RaidSuitable = false
+HealthOrb.Configuration.UnitSuitable = true
 HealthOrb.Configuration.FrameType = "Frame"
 HealthOrb.Configuration.Width = healthOrbWidth
 HealthOrb.Configuration.Height = healthOrbHeight

@@ -10,6 +10,13 @@ LifeUnitFrame1.Configuration.FrameType = "Frame"
 LifeUnitFrame1.Configuration.Width = 250
 LifeUnitFrame1.Configuration.Height = 40
 LifeUnitFrame1.Configuration.Resizable = { 10, 10, 500, 100 }
+LifeUnitFrame1.Configuration.SupportsOwnBuffsPanel = false
+LifeUnitFrame1.Configuration.SupportsOwnDebuffsPanel = false
+LifeUnitFrame1.Configuration.SupportsExcludeBuffsPanel = false
+LifeUnitFrame1.Configuration.SupportsExcludeCastsPanel = false
+LifeUnitFrame1.Configuration.SupportsShowRadius = true
+LifeUnitFrame1.Configuration.SupportsShowCombo = true
+LifeUnitFrame1.Configuration.SupportsShowRankIconPanel = true
 
 --------------------------------------------------------------
 function LifeUnitFrame1:Construct(options)

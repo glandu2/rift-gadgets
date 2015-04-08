@@ -11,6 +11,7 @@ local manaOrbHeight = 256 * scale
 local ManaOrb = WT.UnitFrame:Template("ManaOrb")
 ManaOrb.Configuration.Name = "Mana Orb Unit Frame"
 ManaOrb.Configuration.RaidSuitable = false
+ManaOrb.Configuration.UnitSuitable = true
 ManaOrb.Configuration.FrameType = "Frame"
 ManaOrb.Configuration.Width = manaOrbWidth
 ManaOrb.Configuration.Height = manaOrbHeight

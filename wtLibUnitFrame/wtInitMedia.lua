@@ -142,6 +142,9 @@ Library.Media.AddFont("DroidSansBold", AddonId, "font/DroidSansBold.ttf")
 Library.Media.AddFont("Enigma", AddonId, "font/Enigma.ttf")
 Library.Media.AddFont("LiberationSans", AddonId, "font/LiberationSans.ttf")
 Library.Media.AddFont("SFAtarianSystem", AddonId, "font/SFAtarianSystem.ttf")
+Library.Media.AddFont("pixel_numbers", AddonId, "font/pixel_numbers.ttf")
+Library.Media.AddFont("blank-Bold", AddonId, "font/blank-Bold.ttf")
+
 
 Library.Media.AddTexture("jnhOrb_RED", AddonId, "img/jnhOrb_red.png", {"orb"})
 Library.Media.AddTexture("jnhOrb2_BLEU", AddonId, "img/jnhOrb2_blue.png", {"orb"})

@@ -10,6 +10,13 @@ LifeTargetOfTarget.Configuration.FrameType = "Frame"
 LifeTargetOfTarget.Configuration.Width = 250
 LifeTargetOfTarget.Configuration.Height = 40
 LifeTargetOfTarget.Configuration.Resizable = { 10, 10, 500, 100 }
+LifeTargetOfTarget.Configuration.SupportsOwnBuffsPanel = false
+LifeTargetOfTarget.Configuration.SupportsOwnDebuffsPanel = false
+LifeTargetOfTarget.Configuration.SupportsExcludeBuffsPanel = false
+LifeTargetOfTarget.Configuration.SupportsExcludeCastsPanel = false
+LifeTargetOfTarget.Configuration.SupportsShowRadius = false
+LifeTargetOfTarget.Configuration.SupportsShowCombo = false
+LifeTargetOfTarget.Configuration.SupportsShowRankIconPanel = false
 
 --------------------------------------------------------------
 function LifeTargetOfTarget:Construct(options)

@@ -45,7 +45,6 @@ RunOnStartup =
   "templates/ManaOrb.lua",
   "templates/OctanusRaidFrame.lua",
   "templates/HealFrame.lua",
-  
   "templates/jnhOrbs.lua",
   "templates/jnhOrbsReversed.lua",
   "templates/LifeRaidFrame1.lua",
@@ -57,7 +56,9 @@ RunOnStartup =
   "templates/LifeGroupFrame.lua",
   "templates/LifeGroupFrame2.lua",
   "templates/LifeMageFrame.lua",  
-   "templates/LifeOrbs.lua",
+  "templates/LifeOrbs.lua", 
+  "templates/HPframe.lua",
+  "templates/Manaframe.lua", 
 }
 
 SavedVariables = 
@@ -90,6 +91,10 @@ Dependencies =
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline
 -- X-Curse-Packaged-Version: v0.6.3
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline
+-- X-Curse-Packaged-Version: v0.7.2
 -- X-Curse-Project-Name: Gadgets
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline

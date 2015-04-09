@@ -176,6 +176,13 @@ local function Create(configuration)
 	
 	castBar.OnResize = 
 		function(frame)		
+		local fh = frame:GetHeight()
+			local lg = 0.4
+			if castBar.largeCastFont then lg = 0.5 end
+			local s = math.floor(fh * lg)
+			if s > 24 then
+			s = 24
+			end
 			if configuration.showIcon then
 				castBar.icon:SetHeight(fh)
 				castBar.icon:SetWidth(fh)

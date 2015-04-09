@@ -136,7 +136,7 @@ local function Create(configuration)
 			castBar.labelTime = castBar:CreateElement(
 			{
 				id="labelTime", type="Label", parent="frame", layer=26,
-				attach = {{ point="CENTERRIGHT", element="barCast", targetPoint="CENTERRIGHT", offsetX=-4, offsetY=0 }},
+				attach = {{ point="BOTTOMRIGHT", element="barCast", targetPoint="TOPRIGHT", offsetX=-4, offsetY=0 }},
 				visibilityBinding="castName",
 				text="{castTime}", default="", fontSize= configuration.fontSize, outline = true, font = configuration.font,
 			})

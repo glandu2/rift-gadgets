@@ -57,17 +57,23 @@ local function Create(configuration)
 	local rfHeight = 70
 
 	local unitSpec = configuration.unitSpec or "player.target"
-
+	
+	
 	local rangeFinder = WT.UnitFrame:Create(unitSpec)
 	rangeFinder:SetWidth(150)
 	rangeFinder:SetLayer(100)
 
+	
 	local rfBackground = UI.CreateFrame("Frame", "rfBackground", rangeFinder)
 	rfBackground:SetAllPoints(rangeFinder)
 	if configuration.showBackground then
 		rfBackground:SetBackgroundColor(0,0,0,0.4)
 	end
-
+	
+	rangeFinder.font = Library.Media.GetFont(configuration.font)
+	rangeFinder.textFontSize = configuration.fontSize
+	local fontEntry = rangeFinder.font or Library.Media.GetFont("#Default")
+	
 	rangeFinder.background = rfBackground
 
 	local txtHeading = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rfBackground)
@@ -94,20 +100,22 @@ local function Create(configuration)
 	txtHeading:SetText("RANGE TO " .. desc)
 
 	txtHeading:SetPoint("TOPCENTER", rangeFinder, "TOPCENTER", 0, 6)
-	txtHeading:SetFontSize(10)
+	txtHeading:SetFontSize(configuration.fontSize or 14)
+	txtHeading:SetFont(fontEntry.addonId, fontEntry.filename)
 	txtHeading:SetFontColor(0.6, 1.0, 0.6, 1.0)
 		
 	local txtRange = rangeFinder:CreateElement({
 		id="txtRange", type="Label", parent=rfBackground, layer=20,
 		attach = {{ point="TOPCENTER", element=txtHeading, targetPoint="BOTTOMCENTER", offsetX=0, offsetY=-5 }},
-		visibilityBinding="name", text="--", default="",  outline=true, fontSize=24, font = "Enigma",
+		visibilityBinding="name", text="--", default="",  outline=true, fontSize=configuration.fontSize or 24, font = configuration.font or "#Default",
 		color={ r=0.6, g=1.0, b=0.6, a=1.0 },
 	});
 
 	local txtName = UI.CreateFrame("Text", WT.UniqueName("RangeFinder"), rfBackground)
 	txtName:SetText("")
 	txtName:SetPoint("TOPCENTER", txtRange, "BOTTOMCENTER", 0, -5)
-	txtName:SetFontSize(10)
+	txtName:SetFontSize(configuration.fontSize or 14)
+	txtName:SetFont(fontEntry.addonId, fontEntry.filename)
 	txtName:SetFontColor(0.6, 1.0, 0.6, 1.0)
 	rangeFinder.txtName = txtName
 
@@ -121,11 +129,11 @@ local function Create(configuration)
 		rfHeight = rfHeight - 17
 	end
 	
-	if not configuration.smallFont then
+	--[[if not configuration.smallFont then
          txtRange:SetFontSize(24)
 		 else
 		 txtRange:SetFontSize(16)
-	end
+	end]]
 	
 	if not configuration.changefontColor then
          txtRange:SetFontColor(0.6, 1.0, 0.6, 1.0)
@@ -152,6 +160,13 @@ end
 local dialog = false
 
 local function ConfigDialog(container)	
+
+	local lfont = Library.Media.GetFontIds("font")
+	local listfont = {}
+	for v, k in pairs(lfont) do
+		table.insert(listfont, { value=k })
+	end
+	
 	dialog = WT.Dialog(container)
 		:Label("The Range Finder dispays the distance, in meters, between you and your target. It reports the distance from the center of your character to the center of the target. An option will be added in future to take the radius of the characters into account.")
 		:Checkbox("showRangeCenter", "Range to center of target/focus", false)
@@ -167,9 +182,11 @@ local function ConfigDialog(container)
 				{text="Focus's Target", value="focus.target"},
 				{text="Pet", value="player.pet"},
 			}, false) 
-		:Checkbox("smallFont", TXT.smallFont, false)
+		--:Checkbox("smallFont", TXT.smallFont, false)
 		:Checkbox("changefontColor", "Change range font color", false)	
 		:ColorPicker("fontColor", "Range font color", 0.6, 1.0, 0.6, 1.0)	
+		:Select("font", "Font", "#Default", lfont, true)
+		:Slider("fontSize", "Font Size", 14, true)
 end
 
 local function GetConfiguration()

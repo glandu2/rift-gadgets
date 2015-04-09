@@ -27,6 +27,9 @@ local function Create(configuration)
 	
 	chargeMeter.mediaInterrupt = Library.Media.GetTexture(configuration.texture)
 	
+	chargeMeter.font = Library.Media.GetFont(configuration.font)
+	chargeMeter.textFontSize = configuration.fontSize
+	
 	if not configuration.insertBar == true then
 	chargeMeter:CreateElement(
 	{
@@ -64,7 +67,7 @@ local function Create(configuration)
 		-- Generic Element Configuration
 		id="chargeLabel", type="Label", parent="frame", layer=20,
 		attach = {{ point="CENTER", element="barCharge", targetPoint="CENTER", offsetX=0, offsetY=0 }},
-		text="{chargePercent}%", fontSize=14, font = "blank-Bold", outline=true,
+		text="{chargePercent}%", fontSize=configuration.fontSize , font = configuration.font, outline=true,
 	});
 end
 	return chargeMeter, { resizable = { 140, 5, 500, 50 } }
@@ -89,16 +92,30 @@ local function Reconfigure(config)
 		gadgetConfig.texture = config.texture
 		gadget.mediaInterrupt = Library.Media.GetTexture(config.texture)
 	end	
+	
+	if gadgetConfig.fontSize ~= config.fontSize then
+		gadgetConfig.fontSize = config.fontSize
+		gadget.textFontSize = config.fontSize
+	end
 end
 
 local dialog = false
 
-local function ConfigDialog(container)	
+local function ConfigDialog(container)
+
+	local lfont = Library.Media.GetFontIds("font")
+	local listfont = {}
+	for v, k in pairs(lfont) do
+		table.insert(listfont, { value=k })
+	end	
+	
 	dialog = WT.Dialog(container)
 		:Label("The Charge Meter displays the current charge. Only useful for mages, this gadget exists so that a standard Unit Frame doesn't have to handle the extra bar within it's layout.")
 		:Checkbox("chargeLabel", "Show charge text?", true)
 		:Checkbox("insertBar", "Insert Bar?", false)
 		:TexSelect("texture", "Texture", "Texture 82", "bar")
+		:Select("font", "Font", "#Default", lfont, true)
+		:Slider("fontSize", "Font Size", 14, true)
 		end
 
 local function GetConfiguration()

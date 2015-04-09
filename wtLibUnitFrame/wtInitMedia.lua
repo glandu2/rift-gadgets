@@ -131,47 +131,8 @@ Library.Media.AddTexture("Icon_friendly", "Rift", "indicator_friendly_flagged.pn
 
 Library.Media.AddTexture("RareMob", "Rift", "target_portrait_LootPinata.png.dds", {})
 
-Library.Media.AddFont("ArmWrestler", AddonId, "font/ArmWrestler.ttf")
-Library.Media.AddFont("Bazooka", AddonId, "font/Bazooka.ttf")
-Library.Media.AddFont("BlackChancery", AddonId, "font/BlackChancery.ttf")
-Library.Media.AddFont("Collegia", AddonId, "font/Collegia.ttf")
-Library.Media.AddFont("Disko", AddonId, "font/Disko.ttf")
-Library.Media.AddFont("DorisPP", AddonId, "font/DorisPP.ttf")
-Library.Media.AddFont("DroidSans", AddonId, "font/DroidSans.ttf")
-Library.Media.AddFont("DroidSansBold", AddonId, "font/DroidSansBold.ttf")
-Library.Media.AddFont("Enigma", AddonId, "font/Enigma.ttf")
-Library.Media.AddFont("LiberationSans", AddonId, "font/LiberationSans.ttf")
-Library.Media.AddFont("SFAtarianSystem", AddonId, "font/SFAtarianSystem.ttf")
-Library.Media.AddFont("pixel_numbers", AddonId, "font/pixel_numbers.ttf")
-Library.Media.AddFont("blank-Bold", AddonId, "font/blank-Bold.ttf")
-
-
 Library.Media.AddTexture("jnhOrb_RED", AddonId, "img/jnhOrb_red.png", {"orb"})
 Library.Media.AddTexture("jnhOrb2_BLEU", AddonId, "img/jnhOrb2_blue.png", {"orb"})
-
---[[
-Library.Media.AddTexture("", "Rift", "", {""})
-"Guild_Defiant_bg.png.dds" -- большие
-"Guild_Guardian_bg.png.dds" -- большие
-"Guild_Icon_Defiant.png.dds" -- средн€€
-"Guild_Icon_Guardian.png.dds"-- средн€€
-
-"RiftMeter_bg_ConquestDominion.png.dds" желтый
-"RiftMeter_bg_ConquestNightfall.png.dds" птицы
-"RiftMeter_bg_ConquestDominion.png.dds" баран
-
-UpgradableNPC_I18.dds
-"RadialBurst_01.png.dds" внутрь
-"TargetPortrait_I114.dds" кастбар босса
-"UpgradableNPC_I1B.dds" под 18
-"CTF_Shield_Bkgnd.png.dds"
-
-
-"TargetPortrait_I113.dds" каст босса
-"BarberShop_I50.dds"
-"Lightning_04.png.dds"-кст
-"TargetPortrait_IBA.dds" - босс
-]]
 
 Library.Media.AddTexture("borderPortrait", "Rift", "BarberShop_I50.dds", {""})
 

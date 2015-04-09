@@ -23,6 +23,7 @@ RunOnStartup =
   "controls/wtColorPicker.lua",
   "controls/wtDialog.lua",
   "controls/wtTexMenu.lua",
+  "controls/wtSlider.lua",
 
   "wtGadget.lua",
   "wtGadgetMessage.lua",
@@ -61,6 +62,10 @@ Dependencies =
 	wtLibUnitDatabase = {"required", "before"},	
 }
 -- X-Curse-Packaged-Version: v0.5.4
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline
+-- X-Curse-Packaged-Version: v0.8.0
 -- X-Curse-Project-Name: Gadgets
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline

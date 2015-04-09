@@ -165,6 +165,17 @@ function CDialog:Select(id, label, default, listItems, sort, onchange)
 	return self
 end
 
+function CDialog:Slider(id, label, default)
+	
+	local control = WT.Control.Slider.Create(self.container, id, label, default, onchange)
+	--control:SetText(default)
+	local frm = self:add(id, label, control)
+	frm.getValue = control.GetPosition
+	frm.setValue = control.SetPosition
+	return self
+	
+end
+
 function CDialog:MacroSet(id, label)
 	local control = WT.Control.MacroSet.Create(self.container, label)
 	local frm = self:add(id, "Mouse Macros", control)

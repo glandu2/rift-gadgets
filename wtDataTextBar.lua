@@ -30,6 +30,10 @@ local function Create(configuration)
 	wrapper:SetSecureMode("restricted")
 	wrapper:SetLayer(1000)
 	
+	wrapper.font = Library.Media.GetFont(configuration.font)
+	wrapper.textFontSize = configuration.fontSize
+	local fontEntry = wrapper.font or Library.Media.GetFont("#Default")
+	
 	if configuration.showBackground == nil then
 		Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
 		wrapper:SetBackgroundColor(0.07,0.07,0.07,0.85)		
@@ -48,7 +52,8 @@ local function Create(configuration)
 ------------------------FPS---------------------------------------------------------------
 	local fpsFrame = UI.CreateFrame("Text", WT.UniqueName("wtFPS"), wrapper)
 	fpsFrame:SetText("")
-	fpsFrame:SetFontSize(14)
+	fpsFrame:SetFontSize(configuration.fontSize or 14)
+	fpsFrame:SetFont(fontEntry.addonId, fontEntry.filename)
 	fpsFrame:SetFontColor(1,0.97,0.84,1)
 	fpsFrame:SetPoint("CENTERLEFT", wrapper, "CENTERLEFT", 10, 0)
 	
@@ -65,7 +70,8 @@ local function Create(configuration)
 ----------------------CPU------------------------------------------------------------------
 	local cpuFrame = UI.CreateFrame("Text", WT.UniqueName("wtCPU"), wrapper)
 	cpuFrame:SetText("")
-	cpuFrame:SetFontSize(14)
+	cpuFrame:SetFontSize(configuration.fontSize or 14)
+	cpuFrame:SetFont(fontEntry.addonId, fontEntry.filename)
 	cpuFrame.currText = ""
 	cpuFrame:SetFontColor(1,0.97,0.84,1)
 	cpuFrame:SetEffectGlow({ strength = 3 })
@@ -100,7 +106,8 @@ local function Create(configuration)
 		id="chargeLabel", type="Label", parent="frame", layer=20,
 		attach = {{ point="CENTERLEFT", element="imgCharge", targetPoint="CENTERLEFT", offsetX=20, offsetY=0}},
 		outline=true,
-		text="{planar}/{planarMax}", fontSize=14, color={r=1, g=0.97, b=0.84, a=1}
+		text="{planar}/{planarMax}", fontSize=configuration.fontSize or 14, color={r=1, g=0.97, b=0.84, a=1},
+		font = configuration.font or "#Default",
 	});
 
 	if configuration.showCharge == false then
@@ -145,7 +152,8 @@ local function Create(configuration)
 	{
 		id="txtVitality", type="Label", parent="frame", layer=20,
 		attach = {{ point="CENTERLEFT", element="imgVitality", targetPoint="CENTERLEFT", offsetX=30, offsetY=-8 }},
-		text="{vitality}%", fontSize=14, outline=true, color={r=1, g=0.97, b=0.84, a=1}
+		text="{vitality}%", fontSize=configuration.fontSize or 14, outline=true, color={r=1, g=0.97, b=0.84, a=1},
+		font = configuration.font or "#Default",
 	});
 	
 	if 	configuration.outlineTextBlack == true then
@@ -166,7 +174,8 @@ local function Create(configuration)
 
 	local shardNameText = UI.CreateFrame("Text", WT.UniqueName("wtshardName"), wrapper)
 	shardNameText:SetText("")
-	shardNameText:SetFontSize(14)
+	shardNameText:SetFontSize(configuration.fontSize or 14)
+	shardNameText:SetFont(fontEntry.addonId, fontEntry.filename)
 	shardNameText:SetFontColor(1,0.97,0.84,1)
 	shardNameText:SetPoint("CENTERLEFT", vitalityMeter.Elements.txtVitality, "CENTERRIGHT", 10, 0)		
 		
@@ -220,7 +229,8 @@ end
 ----------------------Bag_slot----------------------------------------------------------	
 	BagSlotText = UI.CreateFrame("Text", WT.UniqueName("wtBagSlotText"), wrapper)
 	BagSlotText:SetText("")
-	BagSlotText:SetFontSize(14)
+	BagSlotText:SetFontSize(configuration.fontSize or 14)
+	BagSlotText:SetFont(fontEntry.addonId, fontEntry.filename)
 	BagSlotText:SetFontColor(1,0.97,0.84,1)
 	BagSlotText:SetPoint("CENTERLEFT", shardNameText, "CENTERRIGHT", 10, 0)		
 		
@@ -261,7 +271,8 @@ end
 	
 	local MoneyPlatFrame = UI.CreateFrame("Text", WT.UniqueName("wtMoneyPlat"), wrapper)
 	MoneyPlatFrame:SetText("")
-	MoneyPlatFrame:SetFontSize(14)
+	MoneyPlatFrame:SetFontSize(configuration.fontSize or 14)
+	MoneyPlatFrame:SetFont(fontEntry.addonId, fontEntry.filename)
 	MoneyPlatFrame:SetFontColor(1,0.97,0.84,1)
 	MoneyPlatFrame:SetPoint("CENTERLEFT", MoneyPlatIcon, "CENTERRIGHT", 0, 0)
 	
@@ -273,7 +284,8 @@ end
 
 	local MoneyGoldFrame = UI.CreateFrame("Text", WT.UniqueName("wtMoneyGold"), wrapper)
 	MoneyGoldFrame:SetText("")
-	MoneyGoldFrame:SetFontSize(14)
+	MoneyGoldFrame:SetFontSize(configuration.fontSize or 14)
+	MoneyGoldFrame:SetFont(fontEntry.addonId, fontEntry.filename)
 	MoneyGoldFrame:SetFontColor(1,0.97,0.84,1)
 	MoneyGoldFrame:SetPoint("CENTERLEFT", MoneyGoldIcon, "CENTERRIGHT", 0, 0)	
 	
@@ -285,7 +297,8 @@ end
 	
 	local MoneySilverFrame = UI.CreateFrame("Text", WT.UniqueName("wtMoneySilver"), wrapper)
 	MoneySilverFrame:SetText("")
-	MoneySilverFrame:SetFontSize(14)
+	MoneySilverFrame:SetFontSize(configuration.fontSize or 14)
+	MoneySilverFrame:SetFont(fontEntry.addonId, fontEntry.filename)
 	MoneySilverFrame:SetFontColor(1,0.97,0.84,1)
 	MoneySilverFrame:SetPoint("CENTERLEFT", MoneySilverIcon, "CENTERRIGHT", 0, 0)
 	
@@ -387,7 +400,8 @@ end
 	
 	local txtReloadUI = UI.CreateFrame("Text", WT.UniqueName("wttxtReloadUI"), btnReloadUI)
 	txtReloadUI:SetText("Reload UI")
-	txtReloadUI:SetFontSize(14)
+	txtReloadUI:SetFontSize(configuration.fontSize or 14)
+	txtReloadUI:SetFont(fontEntry.addonId, fontEntry.filename)
 	txtReloadUI.currText = ""
 	txtReloadUI:SetFontColor(1,0.97,0.84,1)
 	txtReloadUI:SetPoint("CENTERLEFT", btnReloadUI, "CENTERLEFT", 15, 0)
@@ -420,6 +434,12 @@ end
 local dialog = false
 
 local function ConfigDialog(container)	
+	local lfont = Library.Media.GetFontIds("font")
+	local listfont = {}
+	for v, k in pairs(lfont) do
+		table.insert(listfont, { value=k })
+	end
+	
 	dialog = WT.Dialog(container)
 		:Label("This gadget displays DataText bar with FRS, CPU, Planar charge, Soul vitality, Money and button 'ReloadUI' ")
 		:Checkbox("showFPS", "Show FPS", true)
@@ -434,7 +454,9 @@ local function ConfigDialog(container)
 		:Checkbox("showBackground", "Show Background frame", true)
 		:ColorPicker("BackgroundColor", "Background Color", 0.07,0.07,0.07,0.85)
 		:Checkbox("outlineTextBlack", "Show outline(black) text", true)	
-		:Checkbox("outlineTextLight", "Show outline(light) text", false)			
+		:Checkbox("outlineTextLight", "Show outline(light) text", false)
+		:Select("font", "Font", "#Default", lfont, true)
+		:Slider("fontSize", "Font Size", 14, true)		
 end
 
 local function GetConfiguration()

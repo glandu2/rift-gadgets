@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : v0.4.92
+      Gadgets Framework   : v0.8.1
       Project Date (UTC)  : 2013-09-17T18:45:13Z
-      File Modified (UTC) : 2013-09-16T14:06:04Z (Adelea)
+      File Modified (UTC) : 2013-09-16T14:06:04Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -15,8 +15,7 @@ local AddonId = toc.identifier
 
 local PHICON = "Data/\\UI\\texture\\global\\placeholder_icon.dds"
 
--- wtCastBar provides a simple bar for the player's charge
--- Only useful for mages, and it only exists because I didn't want to add a charge bar to the standard frame
+-- wtCastBar provides a simple bar for the player's cast bar
 
 local function OnCastName(unitFrame, castname)
 	if castname then
@@ -69,6 +68,9 @@ local function Create(configuration)
 	castBar.colorInterrupt = configuration.cbColorInt
 	castBar.colorNoInterrupt = configuration.cbColorNonInt
 	
+	castBar.font = Library.Media.GetFont(configuration.font)
+	castBar.textFontSize = configuration.fontSize
+
 	castBar.smallTimer = configuration.smallCastTime
 	
 	castBar.largeCastFont = configuration.largeCastFont
@@ -92,7 +94,7 @@ local function Create(configuration)
 				id="labelCast", type="Label", parent="frame", layer=26,
 				attach = {{ point="CENTERLEFT", element="barCast", targetPoint="CENTERLEFT", offsetX=6, offsetY=0 }},
 				visibilityBinding="castName",
-				text="{castName}", default="", fontSize= 12, outline = true
+				text="{castName}", default="", fontSize= configuration.fontSize, outline = true, font = configuration.font,
 			})
 			else
 			castBar.labelCast = castBar:CreateElement(
@@ -100,7 +102,7 @@ local function Create(configuration)
 				id="labelCast", type="Label", parent="frame", layer=26,
 				attach = {{ point="BOTTOMLEFT", element="frame", targetPoint="TOPLEFT", offsetX=0, offsetY=0 }},
 				visibilityBinding="castName",
-				text="{castName}", default="", fontSize= 16, outline = true, font = "Enigma",
+				text="{castName}", default="", fontSize= configuration.fontSize, outline = true, font = configuration.font,
 			})
 			end
 	else
@@ -109,7 +111,7 @@ local function Create(configuration)
 				id="labelCast", type="Label", parent="frame", layer=26,
 				attach = {{ point="CENTERLEFT", element="barCast", targetPoint="CENTERLEFT", offsetX=6, offsetY=0 }},
 				visibilityBinding="castName",
-				text="", default="", fontSize= 0
+				text="", default="", fontSize= 0, font = configuration.font
 			})	
 	end
 	
@@ -118,14 +120,14 @@ local function Create(configuration)
 			castBar.labelTime = castBar:CreateElement(
 			{
 				id="labelTime", type="Label", parent="frame", layer=26,
-				attach = {{ point="BOTTOMRIGHT", element="frame", targetPoint="TOPRIGHT", offsetX=-4, offsetY=-4 }},
+				attach = {{ point="CENTERRIGHT", element="frame", targetPoint="CENTERRIGHT", offsetX=-4, offsetY=0 }},
 				visibilityBinding="castName",
-				text="{castTime}", default="", fontSize= 14, outline = true, font = "Enigma",
+				text="{castTime}", default="", fontSize= configuration.fontSize, outline = true, font = configuration.font,
 			})
 			
 			if configuration.smallCastTime then
 				castBar.labelTime:ClearAll()
-				castBar.labelTime:SetPoint("BOTTOMRIGHT", castBar.barCast, "BOTTOMRIGHT", -4, -4)
+				castBar.labelTime:SetPoint("CENTERRIGHT", castBar.barCast, "CENTERRIGHT", -4, 0)
 			else
 				castBar.labelTime:ClearAll()
 				castBar.labelTime:SetPoint("CENTERRIGHT", castBar.barCast, "CENTERRIGHT", -4, 0)
@@ -134,9 +136,9 @@ local function Create(configuration)
 			castBar.labelTime = castBar:CreateElement(
 			{
 				id="labelTime", type="Label", parent="frame", layer=26,
-				attach = {{ point="BOTTOMRIGHT", element="barCast", targetPoint="BOTTOMRIGHT", offsetX=-4, offsetY=-4 }},
+				attach = {{ point="CENTERRIGHT", element="barCast", targetPoint="CENTERRIGHT", offsetX=-4, offsetY=0 }},
 				visibilityBinding="castName",
-				text="{castTime}", default="", fontSize= 16, outline = true
+				text="{castTime}", default="", fontSize= configuration.fontSize, outline = true, font = configuration.font,
 			})
 		end
 		
@@ -173,28 +175,7 @@ local function Create(configuration)
 	end
 	
 	castBar.OnResize = 
-		function(frame)
-			--[[local fh = frame:GetHeight()
-			local lg = 0.4
-			if castBar.largeCastFont then lg = 0.5 end
-			local s = math.floor(fh * lg)
-			if s > 24 then
-			s = 24
-			end
-			
-			--castBar.labelCast:SetFontSize(s)
-			if castBar.labelTime and castBar.smallTimer then
-				local l = math.floor(fh * 0.4)
-				if l < 12 then
-					l = 12
-				end			
-				castBar.labelTime:SetFontSize(l)
-			end
-			
-			if castBar.labelTime and not castBar.smallTimer then
-				castBar.labelTime:SetFontSize(frame:GetHeight() * 0.4)
-			end]]
-			
+		function(frame)		
 			if configuration.showIcon then
 				castBar.icon:SetHeight(fh)
 				castBar.icon:SetWidth(fh)
@@ -222,6 +203,12 @@ local function ConfigDialog(container)
 		table.insert(listMedia, { ["text"]=mediaId, ["value"]=mediaId })
 	end
 	
+	local lfont = Library.Media.GetFontIds("font")
+	local listfont = {}
+	for v, k in pairs(lfont) do
+		table.insert(listfont, { value=k })
+	end
+	
 	dialog = WT.Dialog(container)
 		:Label("The cast bar gadget shows a cast bar for the unit selected.")
 		:Combobox("unitSpec", "Unit to track", "player",
@@ -232,11 +219,13 @@ local function ConfigDialog(container)
 				{text="Focus", value="focus"},
 				{text="Focus's Target", value="focus.target"},
 				{text="Pet", value="player.pet"},
-			}, false) 
+			}, false)		
 		:TexSelect("texture", "Texture", "Texture 82", "bar")
 		:ColorPicker("cbColorInt", "Interruptible color", 0.42,0.69,0.81,1.0)
 		:TexSelect("textureNoInterrupt", "Noninterruptable Texture", "Texture 87", "bar")
 		:ColorPicker("cbColorNonInt", "Non-Interruptible color", 0.9,0.7,0.3,1.0)
+		:Select("font", "Font", "#Default", lfont, true)
+		:Slider("fontSize", "Font Size", 14, true)
 		:Checkbox("hideNotCasting", "Hide when inactive", true)
 		:Checkbox("showCastTime", "Show cast time", true)
 		:Checkbox("showCastName", "Show cast name", true)
@@ -246,6 +235,7 @@ local function ConfigDialog(container)
 		:Checkbox("TransparentCastBar", "Transparent cast bar", true)
 		:Checkbox("Border", "Show cast bar border", true)
 		:Checkbox("largeCastFont", "Larger cast font", true)
+		
 end
 
 local function GetConfiguration()
@@ -284,6 +274,11 @@ local function Reconfigure(config)
 	if gadgetConfig.textureNoInterrupt ~= config.textureNoInterrupt then
 		gadgetConfig.textureNoInterrupt = config.textureNoInterrupt
 		gadget.mediaNoInterrupt = Library.Media.GetTexture(config.textureNoInterrupt)
+	end
+
+	if gadgetConfig.fontSize ~= config.fontSize then
+		gadgetConfig.fontSize = config.fontSize
+		gadget.textFontSize = config.fontSize
 	end
 	
 	if gadgetConfig.hideNotCasting ~= config.hideNotCasting then

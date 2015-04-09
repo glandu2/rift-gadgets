@@ -263,7 +263,7 @@ local function rfConfigDialog(container)
 	rfTabs:AddTab("Appearance", frmOverride)	
 
 	rfDialog = WT.Dialog(frmConfigInner)
-		:Select("template", TXT.RaidFrameTemplate, "Heal Frame", templateListItems, true, rf_OnTemplateChange)
+		:Select("template", TXT.RaidFrameTemplate, "LifeRaidFrame1", templateListItems, true, rf_OnTemplateChange)
 		:Select("layout", "Layout", "4 x 5", { "4 x 5", "5 x 4", "2 x 10", "10 x 2", "1 x 20", "20 x 1" }, false)
 		:Select("growthDirection", "Growth direction", "right", { "right", "left", "up", "down" }, false)
 		:Checkbox("hideWhenEmpty", "Hide When Raid Is Empty", false)

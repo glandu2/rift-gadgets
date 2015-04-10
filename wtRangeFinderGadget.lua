@@ -72,6 +72,8 @@ local function Create(configuration)
 	
 	rangeFinder.font = Library.Media.GetFont(configuration.font)
 	rangeFinder.textFontSize = configuration.fontSize
+	rangeFinder.textfontSizeRange = configuration.fontSizeRange
+	
 	local fontEntry = rangeFinder.font or Library.Media.GetFont("#Default")
 	
 	rangeFinder.background = rfBackground
@@ -107,7 +109,7 @@ local function Create(configuration)
 	local txtRange = rangeFinder:CreateElement({
 		id="txtRange", type="Label", parent=rfBackground, layer=20,
 		attach = {{ point="TOPCENTER", element=txtHeading, targetPoint="BOTTOMCENTER", offsetX=0, offsetY=-5 }},
-		visibilityBinding="name", text="--", default="",  outline=true, fontSize=configuration.fontSize or 24, font = configuration.font or "#Default",
+		visibilityBinding="name", text="--", default="",  outline=true, fontSize=configuration.fontSizeRange or 24, font = configuration.font or "#Default",
 		color={ r=0.6, g=1.0, b=0.6, a=1.0 },
 	});
 
@@ -128,12 +130,6 @@ local function Create(configuration)
 		txtHeading:SetHeight(0) 
 		rfHeight = rfHeight - 17
 	end
-	
-	--[[if not configuration.smallFont then
-         txtRange:SetFontSize(24)
-		 else
-		 txtRange:SetFontSize(16)
-	end]]
 	
 	if not configuration.changefontColor then
          txtRange:SetFontColor(0.6, 1.0, 0.6, 1.0)
@@ -187,6 +183,7 @@ local function ConfigDialog(container)
 		:ColorPicker("fontColor", "Range font color", 0.6, 1.0, 0.6, 1.0)	
 		:Select("font", "Font", "#Default", lfont, true)
 		:Slider("fontSize", "Font Size", 14, true)
+		:Slider("fontSizeRange", "Font Size for Range text", 18, true)
 end
 
 local function GetConfiguration()

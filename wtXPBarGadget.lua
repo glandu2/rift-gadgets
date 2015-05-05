@@ -204,10 +204,12 @@ function XBG.Create(configuration)
 	wrapper:SetHeight(10)
 	if not configuration.TransparentBackground then
 		wrapper:SetTexture("Gadgets", "img/wtXPBar.tga")
-	else wrapper:SetBackgroundColor(0.07,0.07,0.07,0.85)
+	else 
+		wrapper:SetBackgroundColor(0.07,0.07,0.07,0.85)
 	end
-
-
+	wrapper.font = Library.Media.GetFont(configuration.font)
+	wrapper.textFontSize = configuration.fontSize
+	
 				  top = UI.CreateFrame("Frame", "TopBorder", wrapper)
 				  top:SetBackgroundColor(0,0,0,1)
 				  top:SetLayer(1)
@@ -288,18 +290,25 @@ function XBG.Create(configuration)
 	if configuration.showText then
 		local txt = UI.CreateFrame("Text", WT.UniqueName("wtXP"), bar)
 		txt:SetFontColor(1,1,1,1)
-		txt:SetPoint("CENTER", wrapper, "CENTER")
 		txt:SetText("-/- (0%)")
+		if not configuration.outlineTextLight then
 		txt:SetEffectGlow({ strength = 1 })
+		elseif configuration.outlineTextLight == true then
+		txt:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+		end
+		txt:SetFontSize(configuration.fontSize or 14)
+		if configuration.font == "#Default" or configuration.font == nil then
+		txt:SetFont("Rift", "$Flareserif_medium")
+		else
+		Library.Media.SetFont(txt, configuration.font)
+		end
+		if configuration.aboveBar == true then
+			txt:SetPoint("TOPCENTER", wrapper, "TOPCENTER", 0, -15)
+		else
+			txt:SetPoint("CENTER", wrapper, "CENTER")
+		end
 		wrapper.textType = configuration.showFullText
 		wrapper.text = txt
-		bar:EventAttach(Event.UI.Layout.Size, function(self, h)
-			if configuration.largeText then
-				txt:SetFontSize(bar:GetHeight() * 0.9)
-			else
-				txt:SetFontSize(bar:GetHeight() * 0.6)
-			end
-		end, "Event.UI.Layout.Size")
 	end
 
 	if configuration.xpType == "XP" then
@@ -325,10 +334,16 @@ function XBG.ConfigDialog(container)
 		table.insert(listMedia, { ["text"]=mediaId, ["value"]=mediaId })
 	end
 	
+	local lfont = Library.Media.GetFontIds("font")
+	local listfont = {}
+	for v, k in pairs(lfont) do
+		table.insert(listfont, { value=k })
+	end
+	
 	dialog = WT.Dialog(container)
 		:Label("Resizable XP Bar Gadget")
 		:Checkbox("showText", "Show Text", false)
-		:Checkbox("largeText", "Large Text", false)
+		--:Checkbox("largeText", "Large Text", false)
 		:Checkbox("showFullText", "Show Full XP Values", false)
 		:Checkbox("tintRested", "Tint Rested XP on Bar", false)
 		:Combobox("xpType", "XP Type", "XP",
@@ -342,6 +357,10 @@ function XBG.ConfigDialog(container)
 		:ColorPicker("colBar", "Bar Color", 0, 0.8, 0, 0.4)
 		:TexSelect("texture", "Texture Bar", "wtHealbot", "bar")
 		:Checkbox("TransparentBackground", "Transparent Background", false)
+		:Checkbox("outlineTextLight", "Show outline(light) text", false)
+		:Select("font", "Font", "#Default", lfont, true)
+		:Slider("fontSize", "Font Size", 14, true)	
+		:Checkbox("aboveBar", "Text above bar", false)
 end
 
 function XBG.GetConfiguration()

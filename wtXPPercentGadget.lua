@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.8.2
+      Project Date (UTC)  : 2015-04-09T12:07:39Z
+      File Modified (UTC) : 2013-09-14T08:23:02Z (Adelea)
       -----------------------------------------------------------------     
 --]]
 
@@ -40,26 +40,54 @@ local function Create(configuration)
 	local wrapper = UI.CreateFrame("Frame", WT.UniqueName("wtXP"), WT.Context)
 	wrapper:SetWidth(150)
 	wrapper:SetHeight(64)
-	wrapper:SetBackgroundColor(0,0,0,0.4)
+	if configuration.showBackground == nil or configuration.showBackground == true then
+		wrapper:SetBackgroundColor(0,0,0,0.4)
+	else 
+		wrapper:SetBackgroundColor(0,0,0,0)
+	end
 
 	local xpHeading = UI.CreateFrame("Text", WT.UniqueName("wtXP"), wrapper)
 	xpHeading:SetText("EXPERIENCE")
-	xpHeading:SetFontSize(10)
+	if configuration.showTextEXPERIENCE == true or configuration.showTextEXPERIENCE == nil then	
+		xpHeading:SetFontSize(configuration.fontSize or 10)
+	else	
+		xpHeading:SetFontSize(0)
+	end 
 
 	local xpFrame = UI.CreateFrame("Text", WT.UniqueName("wtXP"), wrapper)
 	xpFrame:SetText("")
-	xpFrame:SetFontSize(24)
+	xpFrame:SetFontSize(configuration.fontSizeProcent or 24)
 	xpFrame.currText = ""
 
 	local txtDetail = UI.CreateFrame("Text", WT.UniqueName("wtXP"), wrapper)
 	txtDetail:SetText("")
-	txtDetail:SetFontSize(10)
+	txtDetail:SetFontSize(configuration.fontSize or 10)
 	xpFrame.detail = txtDetail
 
 	xpHeading:SetPoint("TOPCENTER", wrapper, "TOPCENTER", 0, 5)
 	xpFrame:SetPoint("TOPCENTER", xpHeading, "BOTTOMCENTER", 0, -5)
 	txtDetail:SetPoint("TOPCENTER", xpFrame, "BOTTOMCENTER", 0, -6)
 
+	if configuration.font == nil or configuration.font == "#Default" then
+		xpHeading:SetFont("Rift", "$Flareserif_medium")
+		xpFrame:SetFont("Rift", "$Flareserif_medium")
+		txtDetail:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(xpHeading, configuration.font)
+		Library.Media.SetFont(xpFrame, configuration.font)
+		Library.Media.SetFont(txtDetail, configuration.font)
+	end
+
+	if configuration.outlineTextLight == true then
+		xpHeading:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+		xpFrame:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+		txtDetail:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else 
+		xpHeading:SetEffectGlow({ strength = 1 })
+		xpFrame:SetEffectGlow({ strength = 1 })
+		txtDetail:SetEffectGlow({ strength = 1 })
+	end	
+	
 	table.insert(xpGadgets, xpFrame)
 
 	OnExperience(0,Inspect.TEMPORARY.Experience())	
@@ -72,8 +100,21 @@ end
 local dialog = false
 
 local function ConfigDialog(container)	
+
+	local lfont = Library.Media.GetFontIds("font")
+	local listfont = {}
+	for v, k in pairs(lfont) do
+		table.insert(listfont, { value=k })
+	end
+	
 	dialog = WT.Dialog(container)
-		:Label("The XP Percent gadget has no additional configuration options")
+		:Label("The XP Percent gadget has no additional configuration options")	
+		:Checkbox("showBackground", "Show Background", true)
+		:Checkbox("showTextEXPERIENCE", "Show text 'EXPERIENCE'", true)
+		:Checkbox("outlineTextLight", "Show outline(light) text", false)
+		:Select("font", "Font", "#Default", lfont, true)
+		:Slider("fontSize", "Font Size", 10, true)	
+		:Slider("fontSizeProcent", "Font Size %", 24, true)	
 end
 
 local function GetConfiguration()

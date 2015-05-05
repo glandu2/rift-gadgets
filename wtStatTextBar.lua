@@ -45,219 +45,348 @@ local function Create(configuration)
 ------------------------------Stat_Strength-------------------------------------------------------------------
 	local StatStrength = UI.CreateFrame("Text", WT.UniqueName("wtStatStrength"), wrapper)
 	StatStrength:SetText("")
-	StatStrength:SetFontSize(13)
+	StatStrength:SetFontSize(configuration.fontSize or 13)
 	StatStrength:SetFontColor(1,0.97,0.84,1)
-	StatStrength:SetEffectGlow({ strength = 3 })
 	StatStrength:SetPoint("CENTERLEFT", wrapper, "CENTERLEFT", 10, 0)	
-	
+	if configuration.outlineTextLight == true then
+		StatStrength:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatStrength:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatStrength:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatStrength, configuration.font)
+	end
 ------------------------------Stat_Dexterity-------------------------------------------------------------------
 	local StatDexterity = UI.CreateFrame("Text", WT.UniqueName("wtStatDexterity"), wrapper)
 	StatDexterity:SetText("")
-	StatDexterity:SetFontSize(13)
+	StatDexterity:SetFontSize(configuration.fontSize or 13)
 	StatDexterity:SetFontColor(1,0.97,0.84,1)
-	StatDexterity:SetEffectGlow({ strength = 3 })
 	StatDexterity:SetPoint("CENTERLEFT", StatStrength , "CENTERRIGHT", 10, 0)	
-		    
+	if configuration.outlineTextLight == true then
+		StatDexterity:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatDexterity:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatDexterity:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatDexterity, configuration.font)
+	end		    
 ------------------------------Stat_Intelligence-------------------------------------------------------------------
 	local StatIntelligence = UI.CreateFrame("Text", WT.UniqueName("wtStatIntelligence"), wrapper)
 	StatIntelligence:SetText("")
-	StatIntelligence:SetFontSize(13)
+	StatIntelligence:SetFontSize(configuration.fontSize or 13)
 	StatIntelligence:SetFontColor(1,0.97,0.84,1)
-	StatIntelligence:SetEffectGlow({ strength = 3 })
 	StatIntelligence:SetPoint("CENTERLEFT", StatDexterity , "CENTERRIGHT", 10, 0)	
-	 		
+	if configuration.outlineTextLight == true then
+		StatIntelligence:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatIntelligence:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatIntelligence:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatIntelligence, configuration.font)
+	end	 		
 ------------------------------Stat_Wisdom,-------------------------------------------------------------------
 	local StatWisdom = UI.CreateFrame("Text", WT.UniqueName("wtStatWisdom"), wrapper)
 	StatWisdom:SetText("")
-	StatWisdom:SetFontSize(13)
-	StatIntelligence:SetFontColor(1,0.97,0.84,1)
-	StatWisdom:SetEffectGlow({ strength = 3 })
+	StatWisdom:SetFontSize(configuration.fontSize or 13)
+	StatWisdom:SetFontColor(1,0.97,0.84,1)
 	StatWisdom:SetPoint("CENTERLEFT", StatIntelligence , "CENTERRIGHT", 10, 0)	
-	 	
+	if configuration.outlineTextLight == true then
+		StatWisdom:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatWisdom:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatWisdom:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatWisdom, configuration.font)
+	end	 	
 ------------------------------Stat_Endurance-------------------------------------------------------------------
 	local StatEndurance = UI.CreateFrame("Text", WT.UniqueName("wtStatEndurance"), wrapper)
 	StatEndurance:SetText("")
-	StatEndurance:SetFontSize(13)
+	StatEndurance:SetFontSize(configuration.fontSize or 13)
 	StatEndurance:SetFontColor(1,0.97,0.84,1)
-	StatEndurance:SetEffectGlow({ strength = 3 })
 	StatEndurance:SetPoint("CENTERLEFT", StatWisdom , "CENTERRIGHT", 10, 0)	
-	 	
+	if configuration.outlineTextLight == true then
+		StatEndurance:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatEndurance:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatEndurance:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatEndurance, configuration.font)
+	end	 	
 ------------------------------Stat_Armor-------------------------------------------------------------------
 	local StatArmor = UI.CreateFrame("Text", WT.UniqueName("wtStatArmor"), wrapper)
 	StatArmor:SetText("")
-	StatArmor:SetFontSize(13)
+	StatArmor:SetFontSize(configuration.fontSize or 13)
 	StatArmor:SetFontColor(1,0.97,0.84,1)
-	StatArmor:SetEffectGlow({ strength = 3 })
 	StatArmor:SetPoint("CENTERLEFT", StatEndurance , "CENTERRIGHT", 10, 0)
-	 				
+	if configuration.outlineTextLight == true then
+		StatArmor:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatArmor:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatArmor:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatArmor, configuration.font)
+	end	 				
 -----------------------------------------------------------------------------------------------------------
 ------------------------------OFFINSE_STAT--------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------		
 ------------------------------Stat_PowerAttack-------------------------------------------------------------------
 	local StatPowerAttack = UI.CreateFrame("Text", WT.UniqueName("wtStatPowerAttack"), wrapper)
 	StatPowerAttack:SetText("")
-	StatPowerAttack:SetFontSize(13)
+	StatPowerAttack:SetFontSize(configuration.fontSize or 13)
 	StatPowerAttack:SetFontColor(1,0.97,0.84,1)
-	StatPowerAttack:SetEffectGlow({ strength = 3 })
 	StatPowerAttack:SetPoint("CENTERLEFT", StatArmor, "CENTERRIGHT", 10, 0)	
-
+	if configuration.outlineTextLight == true then
+		StatPowerAttack:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatPowerAttack:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatPowerAttack:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatPowerAttack, configuration.font)
+	end
 ------------------------------Stat_CritAttack-------------------------------------------------------------------
 	local StatCritAttack = UI.CreateFrame("Text", WT.UniqueName("wtStatCritAttack"), wrapper)
 	StatCritAttack:SetText("")
-	StatCritAttack:SetFontSize(13)
+	StatCritAttack:SetFontSize(configuration.fontSize or 13)
 	StatCritAttack:SetFontColor(1,0.97,0.84,1)
-	StatCritAttack:SetEffectGlow({ strength = 3 })
 	StatCritAttack:SetPoint("CENTERLEFT", StatPowerAttack, "CENTERRIGHT", 10, 0)		
-
+	if configuration.outlineTextLight == true then
+		StatCritAttack:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatCritAttack:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatCritAttack:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatCritAttack, configuration.font)
+	end
 ------------------------------Stat_PowerSpell-------------------------------------------------------------------
 	local StatPowerSpell = UI.CreateFrame("Text", WT.UniqueName("wtStatPowerSpell"), wrapper)
 	StatPowerSpell:SetText("")
-	StatPowerSpell:SetFontSize(13)
+	StatPowerSpell:SetFontSize(configuration.fontSize or 13)
 	StatPowerSpell:SetFontColor(1,0.97,0.84,1)
-	StatPowerSpell:SetEffectGlow({ strength = 3 })
 	StatPowerSpell:SetPoint("CENTERLEFT", StatCritAttack, "CENTERRIGHT", 10, 0)		
-			
+	if configuration.outlineTextLight == true then
+		StatPowerSpell:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatPowerSpell:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatPowerSpell:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatPowerSpell, configuration.font)
+	end			
 ------------------------------Stat_CritSpell-------------------------------------------------------------------
 	local StatCritSpell = UI.CreateFrame("Text", WT.UniqueName("wtStatCritSpell"), wrapper)
 	StatCritSpell:SetText("")
-	StatCritSpell:SetFontSize(13)
+	StatCritSpell:SetFontSize(configuration.fontSize or 13)
 	StatCritSpell:SetFontColor(1,0.97,0.84,1)
-	StatCritSpell:SetEffectGlow({ strength = 3 })
 	StatCritSpell:SetPoint("CENTERLEFT", StatPowerSpell, "CENTERRIGHT", 10, 0)	
-			
+	if configuration.outlineTextLight == true then
+		StatCritSpell:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatCritSpell:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatCritSpell:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatCritSpell, configuration.font)
+	end			
 ------------------------------Stat_CritPower-------------------------------------------------------------------
 	local StatCritPower = UI.CreateFrame("Text", WT.UniqueName("wtStatCritPower"), wrapper)
 	StatCritPower:SetText("")
-	StatCritPower:SetFontSize(13)
+	StatCritPower:SetFontSize(configuration.fontSize or 13)
 	StatCritPower:SetFontColor(1,0.97,0.84,1)
-	StatCritPower:SetEffectGlow({ strength = 3 })
 	StatCritPower:SetPoint("CENTERLEFT", StatCritSpell, "CENTERRIGHT", 10, 0)	
-		
+	if configuration.outlineTextLight == true then
+		StatCritPower:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatCritPower:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatCritPower:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatCritPower, configuration.font)
+	end		
 ------------------------------Stat_Hit-------------------------------------------------------------------
 	local StatHit = UI.CreateFrame("Text", WT.UniqueName("wtStatHit"), wrapper)
 	StatHit:SetText("")
-	StatHit:SetFontSize(13)
+	StatHit:SetFontSize(configuration.fontSize or 13)
 	StatHit:SetFontColor(1,0.97,0.84,1)
-	StatHit:SetEffectGlow({ strength = 3 })
 	StatHit:SetPoint("CENTERLEFT", StatCritPower, "CENTERRIGHT", 10, 0)	
-		
+	if configuration.outlineTextLight == true then
+		StatHit:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatHit:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatHit:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatHit, configuration.font)
+	end		
 -----------------------------------------------------------------------------------------------------------
 ------------------------------DEFENSE_STAT--------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------	
 ------------------------------Stat_Block-------------------------------------------------------------------
 	local StatBlock = UI.CreateFrame("Text", WT.UniqueName("wtStatBlock"), wrapper)
 	StatBlock:SetText("")
-	StatBlock:SetFontSize(13)
+	StatBlock:SetFontSize(configuration.fontSize or 13)
 	StatBlock:SetFontColor(1,0.97,0.84,1)
-	StatBlock:SetEffectGlow({ strength = 3 })
 	StatBlock:SetPoint("CENTERLEFT", StatHit, "CENTERRIGHT", 10, 0)	
-	
+	if configuration.outlineTextLight == true then
+		StatBlock:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatBlock:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatBlock:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatBlock, configuration.font)
+	end	
 ------------------------------Stat_Guard-------------------------------------------------------------------
 	local StatGuard = UI.CreateFrame("Text", WT.UniqueName("wtStatGuard"), wrapper)
 	StatGuard:SetText("")
-	StatGuard:SetFontSize(13)
+	StatGuard:SetFontSize(configuration.fontSize or 13)
 	StatGuard:SetFontColor(1,0.97,0.84,1)
-	StatGuard:SetEffectGlow({ strength = 3 })
 	StatGuard:SetPoint("CENTERLEFT", StatBlock, "CENTERRIGHT", 10, 0)
-		
+	if configuration.outlineTextLight == true then
+		StatGuard:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatGuard:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatGuard:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatGuard, configuration.font)
+	end		
 ------------------------------Stat_Dodge-------------------------------------------------------------------
 	local StatDodge = UI.CreateFrame("Text", WT.UniqueName("wtStatDodge"), wrapper)
 	StatDodge:SetText("")
-	StatDodge:SetFontSize(13)
+	StatDodge:SetFontSize(configuration.fontSize or 13)
 	StatDodge:SetFontColor(1,0.97,0.84,1)
-	StatDodge:SetEffectGlow({ strength = 3 })
 	StatDodge:SetPoint("CENTERLEFT", StatHit, "CENTERRIGHT", 10, 0)	--3.0
-		
-------------------------------Stat_Toughness-------------------------------------------------------------------
-	--[[local StatToughness = UI.CreateFrame("Text", WT.UniqueName("wtStatToughness"), wrapper)
-	StatToughness:SetText("")
-	StatToughness:SetFontSize(13)
-	StatToughness:SetFontColor(1,0.97,0.84,1)
-	StatToughness:SetEffectGlow({ strength = 3 })
-	StatToughness:SetPoint("CENTERLEFT", StatDodge, "CENTERRIGHT", 10, 0)	]]   -- 3.0
-		
+	if configuration.outlineTextLight == true then
+		StatDodge:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatDodge:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatDodge:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatDodge, configuration.font)
+	end	
 -----------------------------------------------------------------------------------------------------------
 ------------------------------RESISTENCE_STAT--------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------		
 ------------------------------Stat_ResistLife-------------------------------------------------------------------
 	local StatResistLife = UI.CreateFrame("Text", WT.UniqueName("wtStatResistLife"), wrapper)
 	StatResistLife:SetText("")
-	StatResistLife:SetFontSize(13)
+	StatResistLife:SetFontSize(configuration.fontSize or 13)
 	StatResistLife:SetFontColor(1,0.97,0.84,1)
-	StatResistLife:SetEffectGlow({ strength = 3 })
 	StatResistLife:SetPoint("CENTERLEFT", StatDodge, "CENTERRIGHT", 10, 0)			
-	
+	if configuration.outlineTextLight == true then
+		StatResistLife:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatResistLife:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatResistLife:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatResistLife, configuration.font)
+	end
 ------------------------------Stat_ResistDeath-------------------------------------------------------------------
 	local StatResistDeath = UI.CreateFrame("Text", WT.UniqueName("wtStatResistDeath"), wrapper)
 	StatResistDeath:SetText("")
-	StatResistDeath:SetFontSize(13)
+	StatResistDeath:SetFontSize(configuration.fontSize or 13)
 	StatResistDeath:SetFontColor(1,0.97,0.84,1)
-	StatResistDeath:SetEffectGlow({ strength = 3 })
 	StatResistDeath:SetPoint("CENTERLEFT", StatResistLife, "CENTERRIGHT", 10, 0)			
-	
+	if configuration.outlineTextLight == true then
+		StatResistDeath:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatResistDeath:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatResistDeath:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatResistDeath, configuration.font)
+	end	
 ------------------------------Stat_ResistFire-------------------------------------------------------------------
 	local StatResistFire = UI.CreateFrame("Text", WT.UniqueName("wtStatResistFire"), wrapper)
 	StatResistFire:SetText("")
-	StatResistFire:SetFontSize(13)
+	StatResistFire:SetFontSize(configuration.fontSize or 13)
 	StatResistFire:SetFontColor(1,0.97,0.84,1)
-	StatResistFire:SetEffectGlow({ strength = 3 })
 	StatResistFire:SetPoint("CENTERLEFT", StatResistDeath, "CENTERRIGHT", 10, 0)			
-	
+	if configuration.outlineTextLight == true then
+		StatResistFire:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatResistFire:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatResistFire:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatResistFire, configuration.font)
+	end	
 ------------------------------Stat_ResistWater-------------------------------------------------------------------
 	local StatResistWater = UI.CreateFrame("Text", WT.UniqueName("wtStatResistWater"), wrapper)
 	StatResistWater:SetText("")
-	StatResistWater:SetFontSize(13)
+	StatResistWater:SetFontSize(configuration.fontSize or 13)
 	StatResistWater:SetFontColor(1,0.97,0.84,1)
-	StatResistWater:SetEffectGlow({ strength = 3 })
 	StatResistWater:SetPoint("CENTERLEFT", StatResistFire, "CENTERRIGHT", 10, 0)				
-	
+	if configuration.outlineTextLight == true then
+		StatResistWater:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatResistWater:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatResistWater:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatResistWater, configuration.font)
+	end	
 ------------------------------Stat_ResistEarth-------------------------------------------------------------------
 	local StatResistEarth = UI.CreateFrame("Text", WT.UniqueName("wtStatResistEarth"), wrapper)
 	StatResistEarth:SetText("")
-	StatResistEarth:SetFontSize(13)
+	StatResistEarth:SetFontSize(configuration.fontSize or 13)
 	StatResistEarth:SetFontColor(1,0.97,0.84,1)
-	StatResistEarth:SetEffectGlow({ strength = 3 })
 	StatResistEarth:SetPoint("CENTERLEFT", StatResistWater, "CENTERRIGHT", 10, 0)		
-	
+	if configuration.outlineTextLight == true then
+		StatResistEarth:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatResistEarth:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatResistEarth:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatResistEarth, configuration.font)
+	end	
 ------------------------------Stat_ResistAir-------------------------------------------------------------------
 	local StatResistAir = UI.CreateFrame("Text", WT.UniqueName("wtStatResistAir"), wrapper)
 	StatResistAir:SetText("")
-	StatResistAir:SetFontSize(13)
+	StatResistAir:SetFontSize(configuration.fontSize or 13)
 	StatResistAir:SetFontColor(1,0.97,0.84,1)
-	StatResistAir:SetEffectGlow({ strength = 3 })
-	StatResistAir:SetPoint("CENTERLEFT", StatResistEarth, "CENTERRIGHT", 10, 0)			
-		
------------------------------------------------------------------------------------------------------------
-------------------------------PLAYER_VERSUS_PLAYER_STAT----------------------------------------------------
------------------------------------------------------------------------------------------------------------	
-------------------------------Stat_Vengeance-------------------------------------------------------------------
-	--[[local StatVengeance = UI.CreateFrame("Text", WT.UniqueName("wtStatVengeance"), wrapper)
-	StatVengeance:SetText("")
-	StatVengeance:SetFontSize(13)
-	StatVengeance:SetFontColor(1,0.97,0.84,1)
-	StatVengeance:SetEffectGlow({ strength = 3 })
-	StatVengeance:SetPoint("CENTERLEFT", StatResistAir, "CENTERRIGHT", 10, 0)	]]
-			
-			 
-------------------------------Stat_Valor-------------------------------------------------------------------
-	--[[local StatValor = UI.CreateFrame("Text", WT.UniqueName("wtStatValor"), wrapper)
-	StatValor:SetText("")
-	StatValor:SetFontSize(13)
-	StatValor:SetFontColor(1,0.97,0.84,1)
-	StatValor:SetEffectGlow({ strength = 3 })
-	StatValor:SetPoint("CENTERLEFT", StatResistEarth, "CENTERRIGHT", 10, 0)	]]
-	
------------------------------------------------------------------------------------------------------------
-------------------------------Deflect??_STAT----------------------------------------------------
------------------------------------------------------------------------------------------------------------		 
-------------------------------Stat_Deflect-------------------------------------------------------------------
-	--[[local StatDeflect = UI.CreateFrame("Text", WT.UniqueName("wtStatDeflect"), wrapper)
-	StatDeflect:SetText("")
-	StatDeflect:SetFontSize(13)
-	StatDeflect:SetFontColor(1,0.97,0.84,1)
-	StatDeflect:SetEffectGlow({ strength = 3 })
-	StatDeflect:SetPoint("CENTERLEFT", StatValor, "CENTERRIGHT", 10, 0)]]-- 3.0
-					
+	StatResistAir:SetPoint("CENTERLEFT", StatResistEarth, "CENTERRIGHT", 10, 0)		
+	if configuration.outlineTextLight == true then
+		StatResistAir:SetEffectGlow({ colorR = 0.48, colorG = 0.34, colorB = 0.17, strength = 3, })
+	else
+		StatResistAir:SetEffectGlow({ strength = 3 })
+	end
+	if configuration.font == nil or configuration.font == "#Default" then
+		StatResistAir:SetFont("Rift", "$Flareserif_medium")
+	else
+		Library.Media.SetFont(StatResistAir, configuration.font)
+	end	
 ----------------------------------------------------------------------------------------------------------------
 	if configuration.showStrength == false then
 	    StatStrength:SetVisible(false)	
@@ -640,10 +769,31 @@ end
 local dialog = false
 
 local function ConfigDialog(container)	
+
+	local lfont = Library.Media.GetFontIds("font")
+	local listfont = {}
+	for v, k in pairs(lfont) do
+		table.insert(listfont, { value=k })
+	end
+	local statTabs = UI.CreateFrame("SimpleTabView", "statTabs", container)
+	statTabs:SetPoint("TOPLEFT", container, "TOPLEFT")
+	statTabs:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -32)
 	
-	dialog = WT.Dialog(container)
-		:Label("This gadget displays StatText bar with all player stats ")
-		
+	local frmStats = UI.CreateFrame("Frame", "StatsDialog", statTabs.tabContent)
+	local frmStatsInner = UI.CreateFrame("Frame", "ufConfigInner", frmStats)
+	frmStatsInner:SetPoint("TOPLEFT", frmStats, "TOPLEFT", 12, 12)
+	frmStatsInner:SetPoint("BOTTOMRIGHT", frmStats, "BOTTOMRIGHT", -12, -12)
+	
+	local frmOptions = UI.CreateFrame("Frame", "frmOptions", statTabs.tabContent)
+	local frmOptionsInner = UI.CreateFrame("Frame", "frmOverrideInner", frmOptions)
+	frmOptionsInner:SetPoint("TOPLEFT", frmOptions, "TOPLEFT", 4, 4)
+	frmOptionsInner:SetPoint("BOTTOMRIGHT", frmOptions, "BOTTOMRIGHT", -4, -4)
+
+	statTabs:SetTabPosition("top")
+	statTabs:AddTab("Stats", frmStats)
+	statTabs:AddTab("Options", frmOptions)	
+	
+	StatsDialog = WT.Dialog(frmStatsInner, 150)
 		:Title("MANE ")	
 		:Checkbox("showStrength", "Show strength", true)
 		:Checkbox("showDexterity", "Show dexterity", true)		
@@ -658,11 +808,16 @@ local function ConfigDialog(container)
 		:Checkbox("showCritSpell", "Show Spell Crit", false)
 		:Checkbox("showCritPower", "Show Crit Power", true)
 		:Checkbox("showHit", "Show Hit", true)
+		:Title("")
+		:Title("")
+		:Title("")
+		:Title("")
+		:Title("")
+		:Title("")
 		:Title("DEFENSE")			
 		:Checkbox("showBlock", "Show Block", false)
 		:Checkbox("showGuard", "Show Guard", false)
 		:Checkbox("showDodge", "Show dodge", false)
-		--:Checkbox("showToughness", "Show toughness", false)
 		:Title("RESISTENCE")			
 		:Checkbox("showResistLife", "Show Life resist", false)		
 		:Checkbox("showResistDeath", "Show Death resist", false)		
@@ -670,23 +825,29 @@ local function ConfigDialog(container)
 		:Checkbox("showResistWater", "Show Water resist", false)
 		:Checkbox("showResistEarth", "Show Earth resist", false)
 		:Checkbox("showResistAir", "Show Air resist", false)
-		:Title("PLAYER VERSUS PLAYER")			
-		--:Checkbox("showVengeance", "Show vengeance", false)
-		--:Checkbox("showValor", "Show valor", false)
-		--:Title("Deflect")			
-		--:Checkbox("showDeflect", "Show deflect", false) -- 3.0
+
+	StatsOption = WT.Dialog(frmOptionsInner)	
 		:TitleY("Gadgets Options")					
 		:Checkbox("showBackground", "Show Background frame", true)
 		:ColorPicker("BackgroundColor", "Background Color", 0.07,0.07,0.07,0.85)
+		:Checkbox("outlineTextLight", "Show outline(light) text", false)
+		:Select("font", "Font", "#Default", lfont, true)
+		:Slider("fontSize", "Font Size", 14, true)
 
 end
 
 local function GetConfiguration()
-	return dialog:GetValues()
+	local config = StatsDialog:GetValues()
+	local config2 = StatsOption:GetValues()
+	for k,v in pairs(config2) do
+		config[k] = v
+	end
+	return config
 end
 
 local function SetConfiguration(config)
-	dialog:SetValues(config)
+	StatsDialog:SetValues(config)
+	StatsOption:SetValues(config)
 end
 
 	

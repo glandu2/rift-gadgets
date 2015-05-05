@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.8.2
+      Project Date (UTC)  : 2015-04-09T12:07:39Z
+      File Modified (UTC) : 2013-09-14T08:23:02Z (Adelea)
       -----------------------------------------------------------------     
 --]]
 
@@ -52,6 +52,7 @@ local function Setup(unitFrame, configuration)
 		img = "img/wtComboRed.png"
 	end
 	
+	if configuration.showTxt == false or nil then
 	if configuration.texture then
 		local media = Library.Media.GetTexture(configuration.texture)
 		if media then
@@ -133,6 +134,18 @@ local function Setup(unitFrame, configuration)
 	
 	end
 
+	else
+			unitFrame:CreateElement(
+		{
+				id="labelCombo", type="Label", parent="frame", layer=20,
+				attach = {{ point="CENTER", element="frame", targetPoint="CENTER", offsetX=0, offsetY=0}},
+				visibilityBinding="visibilityCombo",
+				text="{combo}", default="", outline=true, fontSize=configuration.fontSize or 25,
+				colorBinding="ComboColor",
+				font = configuration.font or "ArmWrestler",
+		});
+	end
+	
 	unitFrame:ApplyBindings()
 	
 end
@@ -158,8 +171,18 @@ end
 local dialog = false
 
 local function ConfigDialog(container)	
+
+	local lfont = Library.Media.GetFontIds("font")
+	local listfont = {}
+	for v, k in pairs(lfont) do
+		table.insert(listfont, { value=k })
+	end
+	
 	dialog = WT.Dialog(container)
 		:Label("The Combo Points gadget displays current combo (Rogue) or attack (Warrior) points for the player.")
+		:Checkbox("showTxt", "Show combo point by text", false)
+		:Select("font", "Font", "#Default", lfont, true)
+		:Slider("fontSize", "Font Size", 25, true)	
 		:ImgSelect("texture", "Texture", "wtComboBlue", "combo")
 
 end

@@ -18,6 +18,7 @@ StandardFrame.Configuration.FrameType = "Frame"
 StandardFrame.Configuration.Width = standardFrameWidth + 2
 StandardFrame.Configuration.Height = standardFrameHeight
 StandardFrame.Configuration.Resizable = { 140, 40, 300, 70 }
+StandardFrame.Configuration.SupportsExcludeBuffsPanel = true
 ---------------------------------------------------------------------------------
 
 -- Override the buff filter to hide some buffs ----------------------------------

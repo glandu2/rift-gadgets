@@ -35,10 +35,10 @@ local function Create(configuration)
 	local fontEntry = wrapper.font or Library.Media.GetFont("#Default")
 	
 	if configuration.showBackground == nil then
-		Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
+		Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
 		wrapper:SetBackgroundColor(0.07,0.07,0.07,0.85)		
 	elseif configuration.showBackground == true then
-			Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
+			Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
 		if configuration.BackgroundColor == nil then
 			configuration.BackgroundColor = {0.07,0.07,0.07,0.85}
 			wrapper:SetBackgroundColor(configuration.BackgroundColor[1],configuration.BackgroundColor[2],configuration.BackgroundColor[3],configuration.BackgroundColor[4])
@@ -46,7 +46,7 @@ local function Create(configuration)
 			wrapper:SetBackgroundColor(configuration.BackgroundColor[1],configuration.BackgroundColor[2],configuration.BackgroundColor[3],configuration.BackgroundColor[4])
 		end
 	else 	
-		Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 0)
+		Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", wrapper, 1, 0, 0, 0, 0)
 		wrapper:SetBackgroundColor(0,0,0,0)
 	end
 ------------------------FPS---------------------------------------------------------------
@@ -379,11 +379,11 @@ end
 	btnReloadUI:SetBackgroundColor(0,0,0,0)
 	
 	if configuration.showBackground == nil then
-		Library.LibSimpleWidgets.SetBorder("plain", btnReloadUI, 1, 0, 0, 0, 1)	
+		Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", btnReloadUI, 1, 0, 0, 0, 1)	
 	elseif configuration.showBackground == true then
-			Library.LibSimpleWidgets.SetBorder("plain", btnReloadUI, 1, 0, 0, 0, 1)
+			Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", btnReloadUI, 1, 0, 0, 0, 1)
 	else 	
-		Library.LibSimpleWidgets.SetBorder("plain", btnReloadUI, 1, 0, 0, 0, 0)
+		Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", btnReloadUI, 1, 0, 0, 0, 0)
 	end
 
 	btnReloadUI:SetPoint("CENTERLEFT", MoneySilverFrame, "CENTERRIGHT", 10, 0)	

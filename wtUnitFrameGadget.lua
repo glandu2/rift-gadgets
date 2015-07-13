@@ -82,7 +82,7 @@ local function ufConfigDialog(container)
 		end
 	end
 
-	local ufTabs = UI.CreateFrame("SimpleTabView", "ufTabs", container)
+	local ufTabs = UI.CreateFrame("SimpleLifeTabView", "ufTabs", container)
 	ufTabs:SetPoint("TOPLEFT", container, "TOPLEFT")
 	ufTabs:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -32)
 	
@@ -238,7 +238,7 @@ local function rfConfigDialog(container)
 		end
 	end
 
-	local rfTabs = UI.CreateFrame("SimpleTabView", "rfTabs", container)
+	local rfTabs = UI.CreateFrame("SimpleLifeTabView", "rfTabs", container)
 	rfTabs:SetPoint("TOPLEFT", container, "TOPLEFT")
 	rfTabs:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -32)
 	
@@ -300,7 +300,7 @@ local function rfConfigDialog(container)
 		rfDialog:GetControl("showDebuffPanel"):SetVisible(false)
 	end
 	
-	local macroTabs = UI.CreateFrame("SimpleTabView", "macroTabs", frmMacrosInner)
+	local macroTabs = UI.CreateFrame("SimpleLifeTabView", "macroTabs", frmMacrosInner)
 	macroTabs:SetTabPosition("left")
 	macroTabs:SetAllPoints(frmMacrosInner)
 
@@ -323,7 +323,7 @@ local function rfConfigDialog(container)
 		local tabContent = UI.CreateFrame("Frame", "content", macroTabs.tabContent)
 		macroTabs:AddTab(name, tabContent)
 	
-		local txt = UI.CreateFrame("SimpleTextArea", "text", tabContent)
+		local txt = UI.CreateFrame("SimpleLifeTextArea", "text", tabContent)
 		txt:SetPoint("TOPLEFT", tabContent, "TOPLEFT", 16, 16)
 		txt:SetPoint("BOTTOMRIGHT", tabContent, "BOTTOMRIGHT", -16, -16)
 		txt:SetText("")
@@ -380,7 +380,7 @@ local function gfConfigDialog(container)
 		end
 	end
 
-	local ufTabs = UI.CreateFrame("SimpleTabView", "gfTabs", container)
+	local ufTabs = UI.CreateFrame("SimpleLifeTabView", "gfTabs", container)
 	ufTabs:SetPoint("TOPLEFT", container, "TOPLEFT")
 	ufTabs:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -32)
 	
@@ -418,7 +418,7 @@ local function gfConfigDialog(container)
 		:Checkbox("showHoTPanel", "Show HoTs (if template allows)", false)
 		:Checkbox("showDebuffPanel", "Show Debuffs (if template allows)", false)
 		
-	local macroTabs = UI.CreateFrame("SimpleTabView", "macroTabs", frmMacrosInner)
+	local macroTabs = UI.CreateFrame("SimpleLifeTabView", "macroTabs", frmMacrosInner)
 	macroTabs:SetTabPosition("left")
 	macroTabs:SetAllPoints(frmMacrosInner)
 
@@ -441,7 +441,7 @@ local function gfConfigDialog(container)
 		local tabContent = UI.CreateFrame("Frame", "content", macroTabs.tabContent)
 		macroTabs:AddTab(name, tabContent)
 	
-		local txt = UI.CreateFrame("SimpleTextArea", "text", tabContent)
+		local txt = UI.CreateFrame("SimpleLifeTextArea", "text", tabContent)
 		txt:SetPoint("TOPLEFT", tabContent, "TOPLEFT", 16, 16)
 		txt:SetPoint("BOTTOMRIGHT", tabContent, "BOTTOMRIGHT", -16, -16)
 		txt:SetText("")

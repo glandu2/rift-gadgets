@@ -57,7 +57,7 @@ Embed =
 
 Dependencies = 
 {
-	LibSimpleWidgets = {"required", "before"},
+	LibSimpleWidgetsLifeEdition = {"required", "before"},
 	wtLibCore = {"required", "before"},	
 	wtLibUnitDatabase = {"required", "before"},	
 }
@@ -66,6 +66,10 @@ Dependencies =
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline
 -- X-Curse-Packaged-Version: v0.8.0
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline
+-- X-Curse-Packaged-Version: v0.9.4-beta
 -- X-Curse-Project-Name: Gadgets
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline

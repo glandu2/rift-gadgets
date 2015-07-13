@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.9.4-beta
+      Project Date (UTC)  : 2015-07-13T16:47:34Z
+      File Modified (UTC) : 2015-07-13T11:42:28Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -44,24 +44,24 @@ function data.CreateBuffFilterPanel(parent)
 
 	panel.frmConfigInner = UI.CreateFrame("Frame", "buffFilterPanel", parent)
 
-	panel.chkShowMyBuffs = UI.CreateFrame("SimpleCheckbox", "chkShowMyBuffs", panel.frmConfigInner)
-	panel.chkShowUnitBuffs = UI.CreateFrame("SimpleCheckbox", "chkShowUnitBuffs", panel.frmConfigInner)
-	panel.chkShowOtherBuffs = UI.CreateFrame("SimpleCheckbox", "chkShowOtherBuffs", panel.frmConfigInner)
-	panel.chkShowPermanentBuffs = UI.CreateFrame("SimpleCheckbox", "chkShowPermanentBuffs", panel.frmConfigInner)
-	panel.chkShowMyDebuffs = UI.CreateFrame("SimpleCheckbox", "chkShowMyDebuffs", panel.frmConfigInner)
-	panel.chkShowUnitDebuffs = UI.CreateFrame("SimpleCheckbox", "chkShowUnitDebuffs", panel.frmConfigInner)
-	panel.chkShowOtherDebuffs = UI.CreateFrame("SimpleCheckbox", "chkShowOtherDebuffs", panel.frmConfigInner)
-	panel.chkShowDebuffCurse = UI.CreateFrame("SimpleCheckbox", "chkShowDebuffCurse", panel.frmConfigInner)
-	panel.chkShowDebuffDisease = UI.CreateFrame("SimpleCheckbox", "chkShowdebuffDisease", panel.frmConfigInner)
-	panel.chkShowDebuffPoison = UI.CreateFrame("SimpleCheckbox", "chkShowDebuffPoison", panel.frmConfigInner)
-	panel.chkShowDebuffOther = UI.CreateFrame("SimpleCheckbox", "chkShowDebuffOther", panel.frmConfigInner)
-	panel.radInclude = UI.CreateFrame("SimpleRadioButton", "radInclude", panel.frmConfigInner)
-	panel.radExclude = UI.CreateFrame("SimpleRadioButton", "radExclude", panel.frmConfigInner)
-	panel.txtFilters = UI.CreateFrame("SimpleTextArea", "txtFilters", panel.frmConfigInner)
-	panel.chkRemaining = UI.CreateFrame("SimpleCheckbox", "chkRemaining", panel.frmConfigInner)
+	panel.chkShowMyBuffs = UI.CreateFrame("SimpleLifeCheckbox", "chkShowMyBuffs", panel.frmConfigInner)
+	panel.chkShowUnitBuffs = UI.CreateFrame("SimpleLifeCheckbox", "chkShowUnitBuffs", panel.frmConfigInner)
+	panel.chkShowOtherBuffs = UI.CreateFrame("SimpleLifeCheckbox", "chkShowOtherBuffs", panel.frmConfigInner)
+	panel.chkShowPermanentBuffs = UI.CreateFrame("SimpleLifeCheckbox", "chkShowPermanentBuffs", panel.frmConfigInner)
+	panel.chkShowMyDebuffs = UI.CreateFrame("SimpleLifeCheckbox", "chkShowMyDebuffs", panel.frmConfigInner)
+	panel.chkShowUnitDebuffs = UI.CreateFrame("SimpleLifeCheckbox", "chkShowUnitDebuffs", panel.frmConfigInner)
+	panel.chkShowOtherDebuffs = UI.CreateFrame("SimpleLifeCheckbox", "chkShowOtherDebuffs", panel.frmConfigInner)
+	panel.chkShowDebuffCurse = UI.CreateFrame("SimpleLifeCheckbox", "chkShowDebuffCurse", panel.frmConfigInner)
+	panel.chkShowDebuffDisease = UI.CreateFrame("SimpleLifeCheckbox", "chkShowdebuffDisease", panel.frmConfigInner)
+	panel.chkShowDebuffPoison = UI.CreateFrame("SimpleLifeCheckbox", "chkShowDebuffPoison", panel.frmConfigInner)
+	panel.chkShowDebuffOther = UI.CreateFrame("SimpleLifeCheckbox", "chkShowDebuffOther", panel.frmConfigInner)
+	panel.radInclude = UI.CreateFrame("SimpleLifeRadioButton", "radInclude", panel.frmConfigInner)
+	panel.radExclude = UI.CreateFrame("SimpleLifeRadioButton", "radExclude", panel.frmConfigInner)
+	panel.txtFilters = UI.CreateFrame("SimpleLifeTextArea", "txtFilters", panel.frmConfigInner)
+	panel.chkRemaining = UI.CreateFrame("SimpleLifeCheckbox", "chkRemaining", panel.frmConfigInner)
 	panel.txtRemaining = UI.CreateFrame("RiftTextfield", "txtRemaining", panel.frmConfigInner)
 	
-	panel.radGroupFilters = Library.LibSimpleWidgets.RadioButtonGroup("radGroupInclude")
+	panel.radGroupFilters = Library.LibSimpleWidgetsLifeEdition.RadioButtonGroup("radGroupInclude")
 	panel.radGroupFilters:AddRadioButton(panel.radInclude)
 	panel.radGroupFilters:AddRadioButton(panel.radExclude)
 

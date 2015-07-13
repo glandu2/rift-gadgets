@@ -70,7 +70,8 @@ Embed =
 	wtLibUnitDatabase = true,
 	wtLibGadget = true,
 	wtLibUnitFrame = true,
-	["Lib/LibSimpleWidgets_LifeEdition"] = true,
+	["Lib/LibSimpleWidgetsLifeEdition"] = true,
+	["Lib/LibSimpleWidgets"] = true,
 	["Lib/LibUnitChange"] = true,
 	["Lib/LibDraggable"] = true,
 }
@@ -81,6 +82,10 @@ Dependencies =
 	wtLibUnitFrame = {"required", "before"},
 }
 -- X-Curse-Packaged-Version: v0.8.2
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline
+-- X-Curse-Packaged-Version: v0.9.4-beta
 -- X-Curse-Project-Name: Gadgets
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline

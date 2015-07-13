@@ -57,10 +57,10 @@ local function Create(configuration)
 	MoneyGadgets.wrapper:SetSecureMode("restricted")
 	
 	if configuration.showBackground == nil then
-		Library.LibSimpleWidgets.SetBorder("plain", MoneyGadgets.wrapper, 1, 0, 0, 0, 1)
+		Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", MoneyGadgets.wrapper, 1, 0, 0, 0, 1)
 		MoneyGadgets.wrapper:SetBackgroundColor(0.07,0.07,0.07,0.85)		
 	elseif configuration.showBackground == true then
-			Library.LibSimpleWidgets.SetBorder("plain", MoneyGadgets.wrapper, 1, 0, 0, 0, 1)
+			Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", MoneyGadgets.wrapper, 1, 0, 0, 0, 1)
 		if configuration.BackgroundColor == nil then
 			configuration.BackgroundColor = {0.07,0.07,0.07,0.85}
 			MoneyGadgets.wrapper:SetBackgroundColor(configuration.BackgroundColor[1],configuration.BackgroundColor[2],configuration.BackgroundColor[3],configuration.BackgroundColor[4])
@@ -68,7 +68,7 @@ local function Create(configuration)
 			MoneyGadgets.wrapper:SetBackgroundColor(configuration.BackgroundColor[1],configuration.BackgroundColor[2],configuration.BackgroundColor[3],configuration.BackgroundColor[4])
 		end
 	else 	
-		Library.LibSimpleWidgets.SetBorder("plain", MoneyGadgets.wrapper, 1, 0, 0, 0, 0)
+		Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", MoneyGadgets.wrapper, 1, 0, 0, 0, 0)
 		MoneyGadgets.wrapper:SetBackgroundColor(0,0,0,0)
 	end
 
@@ -114,7 +114,7 @@ end
 local function ConfigDialog(container)	
 	MoneyGadgets.ScanCurrencies()		
 
-	local tabs = UI.CreateFrame("SimpleTabView", "tabs", container)
+	local tabs = UI.CreateFrame("SimpleLifeTabView", "tabs", container)
 	tabs:SetPoint("TOPLEFT", container, "TOPLEFT")
 	tabs:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -20)
 	
@@ -146,7 +146,7 @@ local function ConfigDialog(container)
 	lastName = CoinText
 	if MoneyGadgets.Currencies.Coin then
 	for i,v in pairs(MoneyGadgets.Currencies.Coin) do
-		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Coin", frmCurrencies)
+		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleLifeCheckbox", "Coin", frmCurrencies)
 		MoneyGadgets.curName[i]:SetText(i.."")
 		MoneyGadgets.curName[i]:SetChecked(true)
 		MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
@@ -165,7 +165,7 @@ local function ConfigDialog(container)
 	lastName = SourcestoneText
 	if MoneyGadgets.Currencies.Sourcestone then
 	for i,v in pairs(MoneyGadgets.Currencies.Sourcestone) do
-		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Sourcestone", frmCurrencies)
+		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleLifeCheckbox", "Sourcestone", frmCurrencies)
 		MoneyGadgets.curName[i]:SetText(i.."")
 		MoneyGadgets.curName[i]:SetChecked(true)
 		MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
@@ -184,7 +184,7 @@ local function ConfigDialog(container)
 	lastName = PvPText
 	if MoneyGadgets.Currencies.PvP then
 	for i,v in pairs(MoneyGadgets.Currencies.PvP) do
-		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "PvP", frmCurrencies)
+		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleLifeCheckbox", "PvP", frmCurrencies)
 		MoneyGadgets.curName[i]:SetText(i.."")
 		MoneyGadgets.curName[i]:SetChecked(false)
 		MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
@@ -203,7 +203,7 @@ local function ConfigDialog(container)
 	lastName = DungeonsText
 	if MoneyGadgets.Currencies.Dungeons then
 	for i,v in pairs(MoneyGadgets.Currencies.Dungeons) do
-		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Dungeons", frmCurrencies)
+		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleLifeCheckbox", "Dungeons", frmCurrencies)
 		MoneyGadgets.curName[i]:SetText(i.."")
 		MoneyGadgets.curName[i]:SetChecked(false)
 		MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
@@ -222,7 +222,7 @@ local function ConfigDialog(container)
 	lastName = RaidsText	
 	if MoneyGadgets.Currencies.Raids then
 	for i,v in pairs(MoneyGadgets.Currencies.Raids) do
-		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Raids", frmCurrencies)
+		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleLifeCheckbox", "Raids", frmCurrencies)
 		MoneyGadgets.curName[i]:SetText(i.."")
 		MoneyGadgets.curName[i]:SetChecked(false)
 		MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
@@ -241,7 +241,7 @@ local function ConfigDialog(container)
 	lastName = CraftingText
 	if MoneyGadgets.Currencies.Crafting then
 	for i,v in pairs(MoneyGadgets.Currencies.Crafting) do
-		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Crafting", frmCurrencies)
+		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleLifeCheckbox", "Crafting", frmCurrencies)
 		MoneyGadgets.curName[i]:SetText(i.."")
 		MoneyGadgets.curName[i]:SetChecked(false)
 		MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
@@ -260,7 +260,7 @@ local function ConfigDialog(container)
 	lastName = ArtifactsText	
 	if MoneyGadgets.Currencies.Artifacts then
 	for i,v in pairs(MoneyGadgets.Currencies.Artifacts) do
-		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Artifacts", frmCurrencies)
+		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleLifeCheckbox", "Artifacts", frmCurrencies)
 		MoneyGadgets.curName[i]:SetText(i.."")
 		MoneyGadgets.curName[i]:SetChecked(false)
 		MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
@@ -279,7 +279,7 @@ local function ConfigDialog(container)
 	lastName = PromotionsText	
 	if MoneyGadgets.Currencies.Promotions then
 		for i,v in pairs(MoneyGadgets.Currencies.Promotions) do
-			MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Promotions", frmCurrencies)
+			MoneyGadgets.curName[i] = UI.CreateFrame("SimpleLifeCheckbox", "Promotions", frmCurrencies)
 			MoneyGadgets.curName[i]:SetText(i.."")
 			MoneyGadgets.curName[i]:SetChecked(false)
 			MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
@@ -298,7 +298,7 @@ local function ConfigDialog(container)
 	lastName = EventsText	
 	if MoneyGadgets.Currencies.Events then
 		for i,v in pairs(MoneyGadgets.Currencies.Events) do
-			MoneyGadgets.curName[i] = UI.CreateFrame("SimpleCheckbox", "Events", frmEvents)
+			MoneyGadgets.curName[i] = UI.CreateFrame("SimpleLifeCheckbox", "Events", frmEvents)
 			MoneyGadgets.curName[i]:SetText(i.."")
 			MoneyGadgets.curName[i]:SetChecked(false)
 			MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
@@ -316,7 +316,7 @@ local function ConfigDialog(container)
 	GadgetsOptions:SetFont(AddonId, "blank-Bold")
 	GadgetsOptions:SetPoint("TOPLEFT", frmOptions, "TOPLEFT", 10, 4)
 	
-	showBackground = UI.CreateFrame("SimpleCheckbox", "showBackground", frmOptions)
+	showBackground = UI.CreateFrame("SimpleLifeCheckbox", "showBackground", frmOptions)
 	showBackground:SetText("Show Background frame")
 	showBackground:SetChecked(true)
 	showBackground:SetPoint("TOPLEFT", CoinText, "BOTTOMLEFT", 0, 4)

@@ -7,7 +7,7 @@ Author = "Wildtide"
 Website = "http://www.wildtide.net"
 Email = "wildtide@wildtide.net"
 
-Version = "@project-version@"
+Version = "v0.9.4-beta"
 
 Environment = "1.10"
 
@@ -30,3 +30,7 @@ Dependencies =
 	LibUnitChange = {"required", "before"},
 	wtLibCore = {"required", "before"},	
 }
+-- X-Curse-Packaged-Version: v0.9.4-beta
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline

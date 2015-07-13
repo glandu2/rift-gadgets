@@ -1,17 +1,17 @@
 local frameConstructors = {
-  SimpleCheckbox    = Library.LibSimpleWidgets.Checkbox,
-  SimpleGrid        = Library.LibSimpleWidgets.Grid,
-  SimpleList        = Library.LibSimpleWidgets.List,
-  SimpleRadioButton = Library.LibSimpleWidgets.RadioButton,
-  SimpleScrollList  = Library.LibSimpleWidgets.ScrollList,
-  SimpleScrollView  = Library.LibSimpleWidgets.ScrollView,
-  SimpleSelect      = Library.LibSimpleWidgets.Select,
-  SimpleSlider      = Library.LibSimpleWidgets.Slider,
-  SimpleTabView     = Library.LibSimpleWidgets.TabView,
-  SimpleTextArea    = Library.LibSimpleWidgets.TextArea,
-  SimpleTooltip     = Library.LibSimpleWidgets.Tooltip,
-  SimpleWindow      = Library.LibSimpleWidgets.Window,
-  SimpleLifeWindow  = Library.LibSimpleWidgets.LifeWindow,
+  SimpleLifeCheckbox    = Library.LibSimpleWidgets.Checkbox, --SimpleLife
+  SimpleLifeGrid        = Library.LibSimpleWidgets.Grid,
+  SimpleLifeList        = Library.LibSimpleWidgets.List,
+  SimpleLifeRadioButton = Library.LibSimpleWidgets.RadioButton,
+  SimpleLifeScrollList  = Library.LibSimpleWidgets.ScrollList,
+  SimpleLifeScrollView  = Library.LibSimpleWidgets.ScrollView,
+  SimpleLifeSelect      = Library.LibSimpleWidgets.Select,
+  SimpleLifeSlider      = Library.LibSimpleWidgets.Slider,
+  SimpleLifeTabView     = Library.LibSimpleWidgets.TabView,
+  SimpleLifeTextArea    = Library.LibSimpleWidgets.TextArea,
+  SimpleLifeTooltip     = Library.LibSimpleWidgets.Tooltip,
+  SimpleLifeWindow      = Library.LibSimpleWidgets.Window,
+  SimpleLifeLifeWindow  = Library.LibSimpleWidgets.LifeWindow,
 }
 
 local oldUICreateFrame = UI.CreateFrame

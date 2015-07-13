@@ -29,7 +29,7 @@ WT.Control.Slider_mt =
 
 function WT.Control.Slider.Create(parent, id, label, default, onchange)
 
-	local control = UI.CreateFrame("SimpleSlider", WT.UniqueName("Control"), parent)
+	local control = UI.CreateFrame("SimpleLifeSlider", WT.UniqueName("Control"), parent)
 	control.frameIndex = getmetatable(control).__index
 	setmetatable(control, WT.Control.Slider_mt) 
 

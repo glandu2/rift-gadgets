@@ -25,10 +25,10 @@ local function Create(configuration)
 	wrapper:SetSecureMode("restricted")
 	
 	if configuration.showBackground == nil then
-		Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
+		Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
 		wrapper:SetBackgroundColor(0.07,0.07,0.07,0.85)		
 	elseif configuration.showBackground == true then
-			Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
+			Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", wrapper, 1, 0, 0, 0, 1)
 		if configuration.BackgroundColor == nil then
 			configuration.BackgroundColor = {0.07,0.07,0.07,0.85}
 			wrapper:SetBackgroundColor(configuration.BackgroundColor[1],configuration.BackgroundColor[2],configuration.BackgroundColor[3],configuration.BackgroundColor[4])
@@ -36,7 +36,7 @@ local function Create(configuration)
 			wrapper:SetBackgroundColor(configuration.BackgroundColor[1],configuration.BackgroundColor[2],configuration.BackgroundColor[3],configuration.BackgroundColor[4])
 		end
 	else 	
-		Library.LibSimpleWidgets.SetBorder("plain", wrapper, 1, 0, 0, 0, 0)
+		Library.LibSimpleWidgetsLifeEdition.SetBorder("plain", wrapper, 1, 0, 0, 0, 0)
 		wrapper:SetBackgroundColor(0,0,0,0)
 	end
 --------------------------------------------------------------------------------------------------------------
@@ -775,7 +775,7 @@ local function ConfigDialog(container)
 	for v, k in pairs(lfont) do
 		table.insert(listfont, { value=k })
 	end
-	local statTabs = UI.CreateFrame("SimpleTabView", "statTabs", container)
+	local statTabs = UI.CreateFrame("SimpleLifeTabView", "statTabs", container)
 	statTabs:SetPoint("TOPLEFT", container, "TOPLEFT")
 	statTabs:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -32)
 	

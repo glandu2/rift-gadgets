@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.9.4-beta
+      Project Date (UTC)  : 2015-07-13T16:47:34Z
+      File Modified (UTC) : 2015-07-13T16:47:34Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -216,7 +216,7 @@ function WT.Gadget.ShowCreationUI()
 		labVisibility:SetFontSize(14)
 		labVisibility:SetPoint("TOPLEFT", standardOptions, "TOPLEFT", 4, 2)
 		
-		local chkShow_Solo = UI.CreateFrame("SimpleCheckbox", "chkShow_Solo", standardOptions)
+		local chkShow_Solo = UI.CreateFrame("SimpleLifeCheckbox", "chkShow_Solo", standardOptions)
 		chkShow_Solo:SetText("Solo")
 		--chkShow_Solo:SetEffectGlow(2, 2, 1, 0, 0, 0, false, 0, 0, false,3)
 		--chkShow_Solo:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
@@ -225,7 +225,7 @@ function WT.Gadget.ShowCreationUI()
 		chkShow_Solo:SetFont(AddonId, "blank-Bold")
 		chkShow_Solo:SetPoint("TOPLEFT", labVisibility, "TOPLEFT", 130, 0)
 
-		local chkShow_Party = UI.CreateFrame("SimpleCheckbox", "chkShow_Party", standardOptions)
+		local chkShow_Party = UI.CreateFrame("SimpleLifeCheckbox", "chkShow_Party", standardOptions)
 		chkShow_Party:SetText("Party")
 		chkShow_Party:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		chkShow_Party:SetFontColor(1,0.97,0.84,1)
@@ -233,7 +233,7 @@ function WT.Gadget.ShowCreationUI()
 		chkShow_Party:SetFont(AddonId, "blank-Bold")
 		chkShow_Party:SetPoint("TOPLEFT", labVisibility, "TOPLEFT", 210, 0)
 
-		local chkShow_Raid10 = UI.CreateFrame("SimpleCheckbox", "chkShow_Raid10", standardOptions)
+		local chkShow_Raid10 = UI.CreateFrame("SimpleLifeCheckbox", "chkShow_Raid10", standardOptions)
 		chkShow_Raid10:SetText("Raid (10)")
 		chkShow_Raid10:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		chkShow_Raid10:SetFontColor(1,0.97,0.84,1)
@@ -241,7 +241,7 @@ function WT.Gadget.ShowCreationUI()
 		chkShow_Raid10:SetFont(AddonId, "blank-Bold")
 		chkShow_Raid10:SetPoint("TOPLEFT", labVisibility, "TOPLEFT", 290, 0)
 
-		local chkShow_Raid20 = UI.CreateFrame("SimpleCheckbox", "chkShow_Raid20", standardOptions)
+		local chkShow_Raid20 = UI.CreateFrame("SimpleLifeCheckbox", "chkShow_Raid20", standardOptions)
 		chkShow_Raid20:SetText("Raid (20)")
 		chkShow_Raid20:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		chkShow_Raid20:SetFontColor(1,0.97,0.84,1)
@@ -265,12 +265,12 @@ function WT.Gadget.ShowCreationUI()
 		labAlphaOOC:SetFontSize(14)
 		labAlphaOOC:SetFont(AddonId, "blank-Bold")
 		
-		local sldAlphaIC = UI.CreateFrame("SimpleSlider", "sldAlphaIC", standardOptions)
+		local sldAlphaIC = UI.CreateFrame("SimpleLifeSlider", "sldAlphaIC", standardOptions)
 		sldAlphaIC:SetRange(0, 100)
 		sldAlphaIC:SetWidth(200)
 		sldAlphaIC:SetPoint("TOPLEFT", labAlphaIC, "TOPLEFT", 150, 0)
 
-		local sldAlphaOOC = UI.CreateFrame("SimpleSlider", "sldAlphaOOC", standardOptions)
+		local sldAlphaOOC = UI.CreateFrame("SimpleLifeSlider", "sldAlphaOOC", standardOptions)
 		sldAlphaOOC:SetRange(0, 100)
 		sldAlphaOOC:SetWidth(200)
 		sldAlphaOOC:SetPoint("TOPLEFT", labAlphaOOC, "TOPLEFT", 150, 0)

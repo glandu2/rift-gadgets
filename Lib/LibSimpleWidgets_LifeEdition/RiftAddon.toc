@@ -1,10 +1,10 @@
-Identifier = "LibSimpleWidgets"
+Identifier = "LibSimpleWidgetsLifeEdition"
 
 Name = {
-  English = "Simple Widgets Library",
+  English = "Simple Widgets Library Life Edition",
 }
 
-NameShort = "LSW"
+NameShort = "LSWLD"
 
 Description = {
   English = "Library of simple GUI widgets for use by other addons.",
@@ -12,9 +12,9 @@ Description = {
 
 Author = "Gordon Tyler"
 Website = "http://www.riftui.com/downloads/info108-LibSimpleWidgets.html"
-Version = "1.14.2"
-Email = "gordon@doxxx.net"
-Environment = "2.5"
+Version = "1.0.1"
+Email = "lifeismystery@yandex.ru"
+Environment = "3.0"
 
 RunOnStartup = {
   "main.lua",
@@ -37,6 +37,10 @@ RunOnStartup = {
   "layout.lua",
 }
 -- X-Curse-Packaged-Version: v1.14.2
--- X-Curse-Project-Name: LibSimpleWidgets
--- X-Curse-Project-ID: libsimplewidgets
+-- X-Curse-Project-Name: LibSimpleWidgetsLifeEdition
+-- X-Curse-Project-ID: libsimplewidgetsLifeEdition
 -- X-Curse-Repository-ID: rift/libsimplewidgets/mainline
+-- X-Curse-Packaged-Version: v0.9.4-beta
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline

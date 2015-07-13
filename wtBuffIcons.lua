@@ -323,7 +323,7 @@ local function CreateSlider(parent, placeUnder, text, minRange, maxRange, defaul
 	label:SetFontSize(14)
 	label:SetFont(AddonId, "blank-Bold")
 	
-	local slider = UI.CreateFrame("SimpleSlider", "sldSlider", parent)
+	local slider = UI.CreateFrame("SimpleLifeSlider", "sldSlider", parent)
 	slider:SetRange(minRange, maxRange)
 	slider:SetPosition(default)
 	slider:SetPoint("TOPLEFT", label, "TOPLEFT", 96, 0)
@@ -339,7 +339,7 @@ end
 
 local function ConfigDialog(container)
 
-	local tabs = UI.CreateFrame("SimpleTabView", "rfTabs", container)
+	local tabs = UI.CreateFrame("SimpleLifeTabView", "rfTabs", container)
 	tabs:SetPoint("TOPLEFT", container, "TOPLEFT")
 	tabs:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -32)
 	
@@ -380,14 +380,14 @@ local function ConfigDialog(container)
 		{text = "Pet's Target", value = "player.pet.target"}, 
 	})
 		
-	chkTooltips = UI.CreateFrame("SimpleCheckbox", "chkTooltips", frmConfig)
-	chkCancel = UI.CreateFrame("SimpleCheckbox", "chkCancel", frmConfig)
+	chkTooltips = UI.CreateFrame("SimpleLifeCheckbox", "chkTooltips", frmConfig)
+	chkCancel = UI.CreateFrame("SimpleLifeCheckbox", "chkCancel", frmConfig)
 	chkTooltips:SetText("Show Tooltips");
 	chkCancel:SetText("Right Click to Cancel");
 	
-	radSortUp = UI.CreateFrame("SimpleRadioButton", "radSortUp", frmConfigInner)
-	radSortDown = UI.CreateFrame("SimpleRadioButton", "radSortDown", frmConfigInner)
-	radGroupSort = Library.LibSimpleWidgets.RadioButtonGroup("radGroupSort")
+	radSortUp = UI.CreateFrame("SimpleLifeRadioButton", "radSortUp", frmConfigInner)
+	radSortDown = UI.CreateFrame("SimpleLifeRadioButton", "radSortDown", frmConfigInner)
+	radGroupSort = Library.LibSimpleWidgetsLifeEdition.RadioButtonGroup("radGroupSort")
 	radGroupSort:AddRadioButton(radSortUp)
 	radGroupSort:AddRadioButton(radSortDown)
 	radSortUp:SetText("Ascending")
@@ -488,25 +488,25 @@ local function ConfigDialog(container)
 	sldStackX = CreateSlider(frmAppearanceInner, sldTimerY.Label, "Stack X:", -128, 128, 0)
 	sldStackY = CreateSlider(frmAppearanceInner, sldStackX.Label, "Stack Y:", -128, 128, 3)
 
-	chkShowTimer = UI.CreateFrame("SimpleCheckbox", "chkShowTimer", frmAppearanceInner)
+	chkShowTimer = UI.CreateFrame("SimpleLifeCheckbox", "chkShowTimer", frmAppearanceInner)
 	chkShowTimer:SetText("Show Timer")
 	chkShowTimer:SetChecked(true)
 	chkShowTimer:SetPoint("CENTERLEFT", sldTimerSize, "CENTERRIGHT", 20, 0)
 	chkShowTimer.Event.CheckboxChange = UpdatePreview
 
-	chkShowStack = UI.CreateFrame("SimpleCheckbox", "chkShowStack", frmAppearanceInner)
+	chkShowStack = UI.CreateFrame("SimpleLifeCheckbox", "chkShowStack", frmAppearanceInner)
 	chkShowStack:SetText("Show Stacks")
 	chkShowStack:SetChecked(true)
 	chkShowStack:SetPoint("CENTERLEFT", sldStackSize, "CENTERRIGHT", 20, 0)
 	chkShowStack.Event.CheckboxChange = UpdatePreview
 
-	chkTextOutline = UI.CreateFrame("SimpleCheckbox", "chkShowTimer", frmAppearanceInner)
+	chkTextOutline = UI.CreateFrame("SimpleLifeCheckbox", "chkShowTimer", frmAppearanceInner)
 	chkTextOutline:SetText("Outline Text")
 	chkTextOutline:SetChecked(true)
 	chkTextOutline:SetPoint("CENTERLEFT", sldBorderWidth, "CENTERRIGHT", 20, 0)
 	chkTextOutline.Event.CheckboxChange = UpdatePreview
 	
-	chkEnableFlashing = UI.CreateFrame("SimpleCheckbox", "chkEnableFlashing", frmAppearanceInner)
+	chkEnableFlashing = UI.CreateFrame("SimpleLifeCheckbox", "chkEnableFlashing", frmAppearanceInner)
 	chkEnableFlashing:SetText("Flash when close to expiry")
 	chkEnableFlashing:SetChecked(false)
 	chkEnableFlashing:SetPoint("CENTERLEFT", sldIconSize, "CENTERRIGHT", 20, 0)
@@ -531,17 +531,17 @@ local function ConfigDialog(container)
 	labFillFrom:SetFontSize(14)
 	labFillFrom:SetFont(AddonId, "blank-Bold")
 
-	radFillFromTopLeft = UI.CreateFrame("SimpleRadioButton", "radFillFrom", frmLayoutInner)
-	radFillFromTopRight = UI.CreateFrame("SimpleRadioButton", "radFillFrom", frmLayoutInner)
-	radFillFromBottomLeft = UI.CreateFrame("SimpleRadioButton", "radFillFrom", frmLayoutInner)
-	radFillFromBottomRight = UI.CreateFrame("SimpleRadioButton", "radFillFrom", frmLayoutInner)
+	radFillFromTopLeft = UI.CreateFrame("SimpleLifeRadioButton", "radFillFrom", frmLayoutInner)
+	radFillFromTopRight = UI.CreateFrame("SimpleLifeRadioButton", "radFillFrom", frmLayoutInner)
+	radFillFromBottomLeft = UI.CreateFrame("SimpleLifeRadioButton", "radFillFrom", frmLayoutInner)
+	radFillFromBottomRight = UI.CreateFrame("SimpleLifeRadioButton", "radFillFrom", frmLayoutInner)
 
 	radFillFromTopLeft:SetText("Top Left")
 	radFillFromTopRight:SetText("Top Right")
 	radFillFromBottomLeft:SetText("Bottom Left")
 	radFillFromBottomRight:SetText("Bottom Right")
 
-	radGroupFillFrom = Library.LibSimpleWidgets.RadioButtonGroup("radGroupFillFrom")
+	radGroupFillFrom = Library.LibSimpleWidgetsLifeEdition.RadioButtonGroup("radGroupFillFrom")
 	radGroupFillFrom:AddRadioButton(radFillFromTopLeft)
 	radGroupFillFrom:AddRadioButton(radFillFromTopRight)
 	radGroupFillFrom:AddRadioButton(radFillFromBottomLeft)
@@ -554,14 +554,14 @@ local function ConfigDialog(container)
 	
 	radFillFromTopLeft:SetSelected(true)
 
-	chkSplitDebuffs = UI.CreateFrame("SimpleCheckbox", "chkEnableFlashing", frmLayoutInner)
+	chkSplitDebuffs = UI.CreateFrame("SimpleLifeCheckbox", "chkEnableFlashing", frmLayoutInner)
 	chkSplitDebuffs:SetText("Separate Debuffs from Buffs")
 	chkSplitDebuffs:SetChecked(true)
 	chkSplitDebuffs:SetPoint("TOP", radFillFromBottomLeft, "BOTTOM", nil, 12)
 	chkSplitDebuffs:SetPoint("LEFT", labFillFrom, "LEFT", 0, nil)
 	chkSplitDebuffs.Event.CheckboxChange = UpdatePreview
 
-	chkSortByTime = UI.CreateFrame("SimpleCheckbox", "chkEnableFlashing", frmLayoutInner)
+	chkSortByTime = UI.CreateFrame("SimpleLifeCheckbox", "chkEnableFlashing", frmLayoutInner)
 	chkSortByTime:SetText("Sort by Time Remaining")
 	chkSortByTime:SetChecked(false)
 	chkSortByTime:SetPoint("TOPLEFT", chkSplitDebuffs, "BOTTOMLEFT", 0, 8)
@@ -588,13 +588,13 @@ local function ConfigDialog(container)
 	colorDebuffBackground.OnColorChanged = UpdatePreview 
 	
 	-- Priority Panel
-	chkUsePriority = UI.CreateFrame("SimpleCheckbox", "chkUsePriority", frmPriority)
-	sldMyBuffPriority = UI.CreateFrame("SimpleSlider", "sldMyBuffPriority", frmPriority)
-	sldUnitBuffPriority = UI.CreateFrame("SimpleSlider", "sldUnitBuffPriority", frmPriority)
-	sldOtherBuffPriority = UI.CreateFrame("SimpleSlider", "sldOtherBuffPriority", frmPriority)
-	sldMyDebuffPriority = UI.CreateFrame("SimpleSlider", "sldMyDebuffPriority", frmPriority)
-	sldUnitDebuffPriority = UI.CreateFrame("SimpleSlider", "sldUnitDebuffPriority", frmPriority)
-	sldOtherDebuffPriority = UI.CreateFrame("SimpleSlider", "sldOtherDebuffPriority", frmPriority)
+	chkUsePriority = UI.CreateFrame("SimpleLifeCheckbox", "chkUsePriority", frmPriority)
+	sldMyBuffPriority = UI.CreateFrame("SimpleLifeSlider", "sldMyBuffPriority", frmPriority)
+	sldUnitBuffPriority = UI.CreateFrame("SimpleLifeSlider", "sldUnitBuffPriority", frmPriority)
+	sldOtherBuffPriority = UI.CreateFrame("SimpleLifeSlider", "sldOtherBuffPriority", frmPriority)
+	sldMyDebuffPriority = UI.CreateFrame("SimpleLifeSlider", "sldMyDebuffPriority", frmPriority)
+	sldUnitDebuffPriority = UI.CreateFrame("SimpleLifeSlider", "sldUnitDebuffPriority", frmPriority)
+	sldOtherDebuffPriority = UI.CreateFrame("SimpleLifeSlider", "sldOtherDebuffPriority", frmPriority)
 	labMyBuffPriority = UI.CreateFrame("Text", "labMyBuffPriority", frmPriority)
 	labMyBuffPriority:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 	labMyBuffPriority:SetFontColor(1,0.97,0.84,1)

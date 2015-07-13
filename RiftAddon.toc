@@ -62,7 +62,7 @@ Embed =
 	wtLibUnitDatabase = true,
 	wtLibGadget = true,
 	wtLibUnitFrame = true,
-	["Lib/LibSimpleWidgets"] = true,
+	["Lib/LibSimpleWidgets_LifeEdition"] = true,
 	["Lib/LibUnitChange"] = true,
 	["Lib/LibDraggable"] = true,
 }

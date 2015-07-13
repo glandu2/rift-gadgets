@@ -675,7 +675,7 @@ end
 local function OnPlayerAvailable()
 end
 
-if WT.VersionCheck("Gadgets", 0, 3, 78) then
+--if WT.VersionCheck("Gadgets", 0, 3, 78) then
 	WT.Gadget.RegisterFactory("BuffIcons",
 	{
 		name="Buff Icons",
@@ -690,4 +690,4 @@ if WT.VersionCheck("Gadgets", 0, 3, 78) then
 		["GetConfiguration"] = GetConfiguration, 
 		["SetConfiguration"] = SetConfiguration, 
 	})
-end
+--end

@@ -428,7 +428,7 @@ WT.Gadget.RegisterFactory("LIfeComboPoints",
 	})
 
 
-WT.Unit.CreateVirtualProperty("comboIndex", { "combo", "comboUnit" },
+WT.Unit.CreateVirtualProperty("comboIndex_Life", { "combo", "comboUnit" },
 	function(unit)
 		if not unit.combo or unit.combo == 0 then
 			return nil
@@ -443,9 +443,9 @@ table.insert(Library.LibUnitChange.Register("player.target"),
 		if not WT.Player then return end
 		if calling ~= "rogue_xx" then return end
 		if unitId and unitId == WT.Player.comboUnit and WT.Player.combo and WT.Player.combo > 0 then 
-			WT.Player.comboIndex = WT.Player.combo - 1
+			WT.Player.comboIndex_Life = WT.Player.combo - 1
 		else
-			WT.Player.comboIndex = nil
+			WT.Player.comboIndex_Life = nil
 		end 
 	end,  AddonId, AddonId .. "_ComboUnitChange" 
 })

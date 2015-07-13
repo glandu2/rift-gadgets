@@ -447,7 +447,6 @@ local function OnPlayerAvailable()
 	print("BuffBars player available triggered")
 end
 
-if WT.VersionCheck("Gadgets", 0, 3, 78) then
 	WT.Gadget.RegisterFactory("BuffBars",
 	{
 		name="Buff Bars",
@@ -462,4 +461,4 @@ if WT.VersionCheck("Gadgets", 0, 3, 78) then
 		["GetConfiguration"] = GetConfiguration, 
 		["SetConfiguration"] = SetConfiguration, 
 	})
-end
+

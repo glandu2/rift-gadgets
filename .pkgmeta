@@ -1,8 +1,1 @@
 package-as: Gadgets
-
-enable-nolib-creation: no
-
-externals:
-    Lib/LibSimpleWidgets:
-        url: git://git.curseforge.net/rift/libsimplewidgets/mainline.git
-        tag: latest

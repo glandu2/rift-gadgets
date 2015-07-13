@@ -48,7 +48,15 @@ RunOnStartup =
   "wtStatTextBar.lua",  
   "wtCurrenciesTextBar.lua",
  --"wtBuffWatch.lua",
-  "wtLifeComboPoints.lua"
+  "wtLifeComboPoints.lua",
+  "wtColourPicker.lua",
+  "wtBuffFilterConfig.lua",
+  "wtBuffFilter.lua",
+  "wtBuffTooltip.lua",
+  "wtBuffBars_Renderer.lua",
+  "wtBuffBars.lua", 
+  "wtBuffIcons_Renderer.lua",
+  "wtBuffIcons.lua",
 }
 
 SavedVariables = 

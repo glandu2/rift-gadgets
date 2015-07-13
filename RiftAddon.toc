@@ -64,6 +64,7 @@ Embed =
 	wtLibUnitFrame = true,
 	["Lib/LibSimpleWidgets"] = true,
 	["Lib/LibUnitChange"] = true,
+	["Lib/LibDraggable"] = true,
 }
 
 Dependencies = 

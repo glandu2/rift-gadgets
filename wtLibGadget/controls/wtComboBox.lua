@@ -33,13 +33,24 @@ function WT.Control.ComboBox.Create(parent, label, default, listItems, sort, onc
 	control.frameIndex = getmetatable(control).__index
 	setmetatable(control, WT.Control.ComboBox_mt) 
 
-	local tfValue = UI.CreateFrame("RiftTextfield", WT.UniqueName("GadgetControlUnitSpecSelector_TextField"), control)
+	local tfValue = UI.CreateFrame("Text", WT.UniqueName("GadgetControlUnitSpecSelector_TextField"), control)
 	tfValue:SetText(default or "")
-	tfValue:SetBackgroundColor(0.2,0.2,0.2,0.9)
+	tfValue:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+	tfValue:SetFontColor(1,0.97,0.84,1)
+	tfValue:SetFont(AddonId, "blank-Bold")
+	tfValue:SetFontSize(14)
+	tfValue:SetWidth(200)	
+	tfValue:SetHeight(22)
+	
+	tfValue:SetBackgroundColor(0.07,0.07,0.07,0.3)
 
 	if label then
 		local txtLabel = UI.CreateFrame("Text", WT.UniqueName("GadgetControlUnitSpecSelector_Label"), control)
 		txtLabel:SetText(label)
+		txtLabel:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		txtLabel:SetFontColor(1,0.97,0.84,1)
+		txtLabel:SetFont(AddonId, "blank-Bold")
+		txtLabel:SetFontSize(14)
 		txtLabel:SetPoint("TOPLEFT", control, "TOPLEFT")
 		tfValue:SetPoint("CENTERLEFT", txtLabel, "CENTERRIGHT", 8, 0)
 	else

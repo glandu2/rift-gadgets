@@ -78,6 +78,10 @@ local function LoadItems(control, listItems)
 		if not txtOption then 
 			txtOption = UI.CreateFrame("Text", WT.UniqueName("TextureName"), control) 
 			txtOption:SetPoint("TOPLEFT", frameScrollAnchor, "TOPLEFT", 0, 0)
+			txtOption:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+			txtOption:SetFontColor(1,0.97,0.84,1)
+			txtOption:SetFontSize(14)
+			txtOption:SetFont(AddonId, "blank-Bold")		
 
 			txtOption:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
 				TexMenuItemClicked(control, i)
@@ -164,9 +168,11 @@ function WT.Control.TexMenu.Create(parent, listItems, callback, sort)
 	for i,v in ipairs(listItems) do
 		local txtOption = UI.CreateFrame("Text", WT.UniqueName("TextureName"), control)
 		txtOption:SetPoint("TOPLEFT", frameScrollAnchor, "TOPLEFT", 0, 0)
+		txtOption:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		txtOption:SetFontColor(1,0.97,0.84,1)
+		txtOption:SetFontSize(14)
+		txtOption:SetFont(AddonId, "blank-Bold")
 		txtOption.TexMenuItem = v
-        --txtOption:SetEffectBlur
-		txtOption:SetEffectGlow({ strength = 3 })
 		local selected = i
 		
         if notselected == nil then  notselected = selected end

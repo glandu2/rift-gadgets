@@ -327,7 +327,7 @@ local function rfConfigDialog(container)
 		txt:SetPoint("TOPLEFT", tabContent, "TOPLEFT", 16, 16)
 		txt:SetPoint("BOTTOMRIGHT", tabContent, "BOTTOMRIGHT", -16, -16)
 		txt:SetText("")
-		txt:SetBackgroundColor(0.4,0.4,0.4,1)
+		txt:SetBorder(1,0,0,0,1)
 		rfEditors[idx] = txt
 		
 	end
@@ -445,7 +445,7 @@ local function gfConfigDialog(container)
 		txt:SetPoint("TOPLEFT", tabContent, "TOPLEFT", 16, 16)
 		txt:SetPoint("BOTTOMRIGHT", tabContent, "BOTTOMRIGHT", -16, -16)
 		txt:SetText("")
-		txt:SetBackgroundColor(0.4,0.4,0.4,1)
+		txt:SetBorder(1,0,0,0,1)
 		gfEditors[idx] = txt
 		
 	end

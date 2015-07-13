@@ -83,30 +83,48 @@ local listItemCount = 0
 -- that are relevant to that particular gadget type.
 -- Then, for things like UnitFrame gadgets, there is a further selection of template and then the template
 -- options also need to be displayed. Gets complicated!
+
 function WT.Gadget.ShowCreationUI()
 
 	if not WT.Gadget.CreateGadgetWindow then
-
-		local window  = UI.CreateFrame("SimpleWindow", "WTGadgetCreate", WT.Context)
-		window:SetCloseButtonVisible(true)
+		local window  = UI.CreateFrame("Texture", "WTGadgetCreate", WT.Context)
+		window:SetTexture(AddonId, "img/495.png")	
+		window:SetBackgroundColor(0.07,0.07,0.07,0)		
 		window:SetPoint("CENTER", UIParent, "CENTER")
-		-- window:SetController("content")
-		window:SetWidth(800)
-		window:SetHeight(700) -- added 100 pixels to make room for standard gadget options
+		window:SetWidth(900)
+		window:SetHeight(900)
 		window:SetLayer(11000)
+		window:SetAlpha(0.98)
+				  
+		Library.LibDraggable.draggify(window, nil)	
+		
+		local closeButton = UI.CreateFrame("Texture", window:GetName().."CloseButton", window)
+		closeButton:SetTexture(AddonId, "img/Ignore.png" )
+		closeButton:SetPoint("TOPRIGHT", window, "TOPRIGHT", -40, 40)
+				  
+		function closeButton.fnc_LeftClick()	
+			window:SetVisible(false)
+				if window.Event.Close then
+				 window.Event.Close(window)
+				end		
+		end			
+		closeButton:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+				closeButton.fnc_LeftClick()
+			end, "Event.UI.Input.Mouse.Left.Click")
 		
 		WT.Gadget.CreateGadgetWindow = window
 		
-		local content = window:GetContent()
+		local content = window--UI.CreateContext("wtContext")
 
 		local frameTypeList = UI.CreateFrame("Mask", "WTGadgetCreateTypeList", content)
-		frameTypeList:SetPoint("TOPLEFT", content, "TOPLEFT")
-		frameTypeList:SetPoint("BOTTOMRIGHT", content, "BOTTOMLEFT", 250, 0) -- 40% of the width given over to the type list
-		frameTypeList:SetBackgroundColor(0,0,0,0.3) -- Set the type list to an almost completely transparent white color, to seperate it from the options panel
+		frameTypeList:SetPoint("TOPLEFT", content, "TOPLEFT", 100, 100)
+		frameTypeList:SetPoint("BOTTOMRIGHT", content, "BOTTOMLEFT", 350, -100) -- 40% of the width given over to the type list
+		frameTypeList:SetBackgroundColor(0,0,0,0) -- Set the type list to an almost completely transparent white color, to seperate it from the options panel
 		window.frameTypeList = frameTypeList
 		
 		local frameScrollAnchor = UI.CreateFrame("Frame", "WTGadgetScrollAnchor", content)
 		frameScrollAnchor:SetPoint("TOPLEFT", frameTypeList, "TOPLEFT", 0, 0)
+		--frameScrollAnchor:SetBackgroundColor(0,0,0,1)
 
 		local typeListScrollbar = UI.CreateFrame("RiftScrollbar", "WTGadgetTypeScroll", frameTypeList)
 		typeListScrollbar:SetPoint("TOPRIGHT", frameTypeList, "TOPRIGHT", -1, 1)
@@ -116,23 +134,40 @@ function WT.Gadget.ShowCreationUI()
 		end, "Event.UI.Scrollbar.Change")
 			
 		frameTypeList:EventAttach(Event.UI.Input.Mouse.Wheel.Forward, function() typeListScrollbar:Nudge(-40) end, "WheelForward")
-		frameTypeList:EventAttach(Event.UI.Input.Mouse.Wheel.Back, function() typeListScrollbar:Nudge(40) end, "WheelBack")
+		frameTypeList:EventAttach(Event.UI.Input.Mouse.Wheel.Back, function() typeListScrollbar:Nudge(40) end, "WheelBack")		
 
 		local frameModifyOverlay = UI.CreateFrame("Texture", "ModifyOverlay", content)
 		frameModifyOverlay:SetAllPoints(frameTypeList)
 		frameModifyOverlay:SetLayer(1000)
-		frameModifyOverlay:SetTexture("Rift", "inner_textured_subwin.png.dds")
-		window.frameModifyOverlay = frameModifyOverlay		
-
-		local labModifyTitle = UI.CreateFrame("Text", "ModifyTitle", frameModifyOverlay)
-		labModifyTitle:SetText(TXT.ModifyGadget)
-		labModifyTitle:SetFontSize(16)
-		labModifyTitle:SetPoint("TOPLEFT", frameModifyOverlay, "TOPLEFT", 12, 12)
+		--frameModifyOverlay:SetTexture("Rift", "1inner_textured_subwin.png.dds")
+		frameModifyOverlay:SetTexture("Rift", "Guild_Guardian_bg.png.dds")
+		frameModifyOverlay:SetAlpha(1)
+		frameModifyOverlay:SetPoint("TOPLEFT", content, "TOPLEFT", 0, 150)
+		frameModifyOverlay:SetPoint("BOTTOMRIGHT", content, "BOTTOMLEFT", 400, -100) 
+		window.frameModifyOverlay = frameModifyOverlay
+		
+		--[[local labModifyTitle2 = UI.CreateFrame("Text", "ModifyTitle", frameModifyOverlay)
+		labModifyTitle2:SetText(TXT.ModifyGadget)
+		labModifyTitle2:SetFontSize(18)
+		labModifyTitle2:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labModifyTitle2:SetFontColor(1,0.97,0.84,1)
+		labModifyTitle2:SetFont(AddonId, "blank-Bold")
+		labModifyTitle2:SetPoint("TOPLEFT", frameModifyOverlay, "TOPLEFT", 100, 0)]]
+		
+		local labModifyTitle = UI.CreateFrame("Texture", "ModifyTitle", content)
+		labModifyTitle:SetTexture(AddonId, "img/Modify Gadgets.png")
+		labModifyTitle:SetPoint("TOPLEFT", content, "TOPRIGHT", -670, 10)
+		labModifyTitle:SetLayer(10000)
 
 		local frameOptions = UI.CreateFrame("Frame", "WTGadgetOptions", content)
 		frameOptions:SetPoint("TOPLEFT", frameTypeList, "TOPRIGHT", 0, 0)
-		frameOptions:SetPoint("BOTTOMRIGHT", content, "BOTTOMRIGHT" ,0, 0)		
-
+		frameOptions:SetPoint("BOTTOMRIGHT", content, "BOTTOMRIGHT" ,-75, -100)		
+		--frameOptions:SetBackgroundColor(0,0,0,1)
+		local framebackground = UI.CreateFrame("Texture", "WTGadgetOptions", frameOptions)
+		framebackground:SetPoint("TOPLEFT", frameTypeList, "TOPRIGHT", -10, 110)
+		framebackground:SetPoint("BOTTOMRIGHT", content, "BOTTOMRIGHT" ,-60, -125)	
+		framebackground:SetTexture(AddonId, "img/background.png")
+		
 		local btnCancel = UI.CreateFrame("RiftButton", "WTGadgetBtnCancel", frameOptions)
 		btnCancel:SetText(TXT.Cancel)
 		btnCancel:SetPoint("BOTTOMRIGHT", frameOptions, "BOTTOMRIGHT", -8, -8)
@@ -145,22 +180,28 @@ function WT.Gadget.ShowCreationUI()
 
 		local frameOptionsHeading = UI.CreateFrame("Text", "WTGadgetOptionsHeading", frameOptions)
 		frameOptionsHeading:SetFontSize(18)
+		frameOptionsHeading:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		frameOptionsHeading:SetFontColor(1,0.97,0.84,1)
+		frameOptionsHeading:SetFont(AddonId, "blank-Bold")
 		frameOptionsHeading:SetText(TXT.SelectGadgetType)
 		frameOptionsHeading:SetPoint("TOPLEFT", frameOptions, "TOPLEFT", 8, 8)
 		window.frameOptionsHeading = frameOptionsHeading
 
 		local gadgetDetails = UI.CreateFrame("Text", "WTGadgetDetails", frameOptions)
-		gadgetDetails:SetFontSize(10)
+		gadgetDetails:SetFontSize(12)
+		gadgetDetails:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		gadgetDetails:SetFontColor(1,0.97,0.84,1)
 		gadgetDetails:SetText("Gadgets, " .. TXT.Version .. "0.3.4")
 		gadgetDetails:SetPoint("TOPLEFT", frameOptionsHeading, "BOTTOMLEFT", 0, -4)
 		gadgetDetails:SetFontColor(0.8, 0.8, 0.8, 1.0)	
+		gadgetDetails:SetFont(AddonId, "blank-Bold")
 		window.gadgetDetails = gadgetDetails
 		
 		window.frameOptions = frameOptions
 		window.btnCancel = btnCancel
 
 		local standardOptions = UI.CreateFrame("Frame", "WTGadgetStandardOptions", frameOptions)
-		standardOptions:SetBackgroundColor(0,0,0,0.4)
+		standardOptions:SetBackgroundColor(0,0,0,0)
 		standardOptions:SetPoint("TOPLEFT", gadgetDetails, "BOTTOMLEFT", 0, 4)
 		standardOptions:SetHeight(72)
 		standardOptions:SetPoint("RIGHT", frameOptions, "RIGHT", -16, nil)
@@ -169,31 +210,60 @@ function WT.Gadget.ShowCreationUI()
 		
 		local labVisibility = UI.CreateFrame("Text", "txtVisibility", standardOptions)
 		labVisibility:SetText("Visible In Group:")
+		labVisibility:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labVisibility:SetFontColor(1,0.97,0.84,1)
+		labVisibility:SetFont(AddonId, "blank-Bold")
+		labVisibility:SetFontSize(14)
 		labVisibility:SetPoint("TOPLEFT", standardOptions, "TOPLEFT", 4, 2)
 		
 		local chkShow_Solo = UI.CreateFrame("SimpleCheckbox", "chkShow_Solo", standardOptions)
 		chkShow_Solo:SetText("Solo")
+		--chkShow_Solo:SetEffectGlow(2, 2, 1, 0, 0, 0, false, 0, 0, false,3)
+		chkShow_Solo:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		chkShow_Solo:SetFontColor(1,0.97,0.84,1)
+		chkShow_Solo:SetFontSize(14)
+		chkShow_Solo:SetFont(AddonId, "blank-Bold")
 		chkShow_Solo:SetPoint("TOPLEFT", labVisibility, "TOPLEFT", 130, 0)
 
 		local chkShow_Party = UI.CreateFrame("SimpleCheckbox", "chkShow_Party", standardOptions)
 		chkShow_Party:SetText("Party")
+		chkShow_Party:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		chkShow_Party:SetFontColor(1,0.97,0.84,1)
+		chkShow_Party:SetFontSize(14)
+		chkShow_Party:SetFont(AddonId, "blank-Bold")
 		chkShow_Party:SetPoint("TOPLEFT", labVisibility, "TOPLEFT", 210, 0)
 
 		local chkShow_Raid10 = UI.CreateFrame("SimpleCheckbox", "chkShow_Raid10", standardOptions)
 		chkShow_Raid10:SetText("Raid (10)")
+		chkShow_Raid10:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		chkShow_Raid10:SetFontColor(1,0.97,0.84,1)
+		chkShow_Raid10:SetFontSize(14)
+		chkShow_Raid10:SetFont(AddonId, "blank-Bold")
 		chkShow_Raid10:SetPoint("TOPLEFT", labVisibility, "TOPLEFT", 290, 0)
 
 		local chkShow_Raid20 = UI.CreateFrame("SimpleCheckbox", "chkShow_Raid20", standardOptions)
 		chkShow_Raid20:SetText("Raid (20)")
+		chkShow_Raid20:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		chkShow_Raid20:SetFontColor(1,0.97,0.84,1)
+		chkShow_Raid20:SetFontSize(14)
+		chkShow_Raid20:SetFont(AddonId, "blank-Bold")
 		chkShow_Raid20:SetPoint("TOPLEFT", labVisibility, "TOPLEFT", 370, 0)
 		
 		local labAlphaIC = UI.CreateFrame("Text", "labAlphaIC", standardOptions)
 		labAlphaIC:SetPoint("TOPLEFT", labVisibility, "BOTTOMLEFT", 0, 4)
 		labAlphaIC:SetText("In Combat Opacity:") 
+		labAlphaIC:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labAlphaIC:SetFontColor(1,0.97,0.84,1)
+		labAlphaIC:SetFontSize(14)
+		labAlphaIC:SetFont(AddonId, "blank-Bold")
 
 		local labAlphaOOC = UI.CreateFrame("Text", "labAlphaOOC", standardOptions)
 		labAlphaOOC:SetPoint("TOPLEFT", labAlphaIC, "BOTTOMLEFT", 0, 4)
 		labAlphaOOC:SetText("Out of Combat Opacity:") 
+		labAlphaOOC:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labAlphaOOC:SetFontColor(1,0.97,0.84,1)
+		labAlphaOOC:SetFontSize(14)
+		labAlphaOOC:SetFont(AddonId, "blank-Bold")
 		
 		local sldAlphaIC = UI.CreateFrame("SimpleSlider", "sldAlphaIC", standardOptions)
 		sldAlphaIC:SetRange(0, 100)
@@ -290,8 +360,8 @@ function WT.Gadget.ShowCreationUI()
 						
 			numListItems = numListItems + 1						
 						
-			local wrapper = UI.CreateFrame("Frame", "WTGadgetCreate_wrapper_" .. gadgetType, frameTypeList)
-
+			local wrapper = UI.CreateFrame("Texture", "WTGadgetCreate_wrapper_" .. gadgetType, frameTypeList)
+			
 			listItemCount = listItemCount + 1
 			listItems[listItemCount] = wrapper
 			
@@ -301,25 +371,34 @@ function WT.Gadget.ShowCreationUI()
 				wrapper:SetPoint("TOPLEFT", listItems[listItemCount-1], "BOTTOMLEFT", 0, 8)
 			end
 			wrapper:SetWidth(250-30)
-			wrapper:SetHeight(40)
+			wrapper:SetHeight(45)
 			
-			local icon = UI.CreateFrame("Texture", "WTGadgetCreate_icon_" .. gadgetType, wrapper)
+			local icon = UI.CreateFrame("Texture", "WTGadgetCreate_icon_" .. gadgetType, frameTypeList)
 			icon:SetTexture(iconTexAddon, iconTexFile)
 			icon:SetWidth(32)
 			icon:SetHeight(32)
+			icon:SetLayer(100)
 			icon:SetPoint("TOPLEFT", wrapper, "TOPLEFT", 4 ,4)
 			wrapper.icon = icon
 			
-			local label = UI.CreateFrame("Text", "WTGadgetCreate_label_" .. gadgetType, wrapper)
+			local label = UI.CreateFrame("Text", "WTGadgetCreate_label_" .. gadgetType, frameTypeList)
 			label:SetText(name)
-			label:SetFontSize(15)
+			label:SetFontSize(18)
+			label:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+			label:SetFont(AddonId, "blank-Bold")
+			label:SetFontColor(1,0.97,0.84,1)
 			label:SetPoint("TOPLEFT", icon, "TOPRIGHT", 3, -2)
+			label:SetLayer(100)
 			wrapper.label = label
 
-			local label2 = UI.CreateFrame("Text", "WTGadgetCreate_label2_" .. gadgetType, wrapper)
+			local label2 = UI.CreateFrame("Text", "WTGadgetCreate_label2_" .. gadgetType, frameTypeList)
 			label2:SetText(description)
-			label2:SetFontSize(10)
+			label2:SetFontSize(12)
+			label2:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+			label2:SetFontColor(1,0.97,0.84,1)
+			label2:SetFont(AddonId, "blank-Bold")
 			label2:SetPoint("TOPLEFT", label, "BOTTOMLEFT", 0, -4)
+			label2:SetLayer(100)
 			wrapper.label2 = label2
 			
 			wrapper.gadgetConfig = config
@@ -334,22 +413,26 @@ function WT.Gadget.ShowCreationUI()
 
 			wrapper:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
 				if (not window.selected) or (window.selected ~= wrapper) then
-					wrapper:SetBackgroundColor(0.1, 0.2, 0.3, 0.6)
+					wrapper:SetTexture(AddonId, "img/select.png")
+					wrapper:SetAlpha(0.6)
 				end 
 			end, "Event.UI.Input.Mouse.Cursor.In")
 
 			wrapper:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
 				if (not window.selected) or (window.selected ~= wrapper) then
-					wrapper:SetBackgroundColor(0, 0, 0, 0) 
+					wrapper:SetTexture(AddonId, "img/select.png")
+					wrapper:SetAlpha(0)
 				end 
 			end, "Event.UI.Input.Mouse.Cursor.Out")
 
 			function wrapper.fn_LeftClick()			
 				local gadget = wrapper.gadgetConfig
 				if (window.selected) then
-					window.selected:SetBackgroundColor(0, 0, 0, 0)
+					window.selected:SetTexture(AddonId, "img/select.png")
+					window.selected:SetAlpha(0)
 				end 
-				wrapper:SetBackgroundColor(0.2, 0.4, 0.6, 0.8)
+				wrapper:SetTexture(AddonId, "img/select.png")
+				wrapper:SetAlpha(0.8)
 				window.selected = wrapper
 				frameOptionsHeading:SetText(gadget.name)
 				gadgetDetails:SetText(TXT.Version .. " " .. gadget.version .. ", " .. TXT.writtenBy .. " " .. gadget.author)
@@ -423,7 +506,7 @@ function WT.Gadget.ShowCreationUI()
 	end
 
 	local window = WT.Gadget.CreateGadgetWindow
-	window:SetTitle(TXT.CreateGadget)
+	--window:SetTitle(TXT.CreateGadget)
 	window.btnCreate:SetVisible(true) 
 	window.btnModify:SetVisible(false) 
 	window.frameModifyOverlay:SetVisible(false)
@@ -446,7 +529,6 @@ function WT.Gadget.ShowModifyUI(id)
 
 	WT.Gadget.ShowCreationUI()
 	local window = WT.Gadget.CreateGadgetWindow
-	window:SetTitle(TXT.ModifyGadget)
 	window.btnCreate:SetVisible(false) 
 	window.btnModify:SetVisible(true)
 	window.StandardOptions:SetVisible(true)

@@ -25,6 +25,13 @@ GJK.AbilityNames = {
 	["Tow Cable"] = true,	
 	["Demonic Leash"] = true,
     ["Soul Siphon"] = true,	
+	["Ancient Flames"] = true,
+	["Lightning Rod"] = true,
+	["Soul Purification"] = true,
+	["Gaze of Akylios"] = true,
+	["Abyssal Torrent"] = true,	
+	["Explosive Venom"] = true,
+--[""] = true,	
 --	,
 }
 

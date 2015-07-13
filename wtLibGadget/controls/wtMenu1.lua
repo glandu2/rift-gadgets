@@ -4,9 +4,9 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : @project-version@
-      Project Date (UTC)  : @project-date-iso@
-      File Modified (UTC) : @file-date-iso@ (@file-author@)
+      Gadgets Framework   : v0.8.6
+      Project Date (UTC)  : 2015-05-12T12:04:48Z
+      File Modified (UTC) : 2013-10-01T06:37:08Z (lifeismystery)
       -----------------------------------------------------------------     
 --]]
 
@@ -73,12 +73,13 @@ local function LoadItems(control, listItems)
 		local txtOption = control.items[i]
 		
 		if not txtOption then 
-			txtOption = UI.CreateFrame("Text", WT.UniqueName("GadgetControlMenuOption"), control.dropDownBackground) 
-			txtOption:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
-			txtOption:SetFontColor(1,0.97,0.84,1)
-			txtOption:SetFontSize(14)
-			--txtOption:SetFont(AddonId, "blank-Bold")
+			txtOption = UI.CreateFrame("Text", WT.UniqueName("ComboOption"), control.dropDownBackground) 
 			txtOption.Event.LeftClick = function() MenuItemClicked(control, i) end
+----------------Error--------------------------------------------------------------------
+			--[[dropDownIcon:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+				MenuItemClicked(control, i)
+			end, "Event.UI.Input.Mouse.Left.Click")]]
+------------------------------------------------------------------------------------
 			table.insert(control.items, txtOption)
 		end
 
@@ -103,22 +104,21 @@ local function LoadItems(control, listItems)
 
 	if last then	
 		local top = control:GetTop()
-		local bottom = last:GetBottom() + 30
+		local bottom = last:GetBottom() + 5 
 		control:SetHeight(bottom-top)
 	else
 		control:SetHeight(10)
 	end
-	control:SetWidth(maxWidth + 50)
+	control:SetWidth(maxWidth + 10)
 	
 	for idx,item in ipairs(control.items) do
 		item:SetWidth(maxWidth)
 		item:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
-			item:SetBackgroundColor(1,0.97,0.84,0.5)
+			item:SetBackgroundColor(0.2, 0.4, 0.6, 1.0)
 		end, "Event.UI.Input.Mouse.Cursor.In")
 		item:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
 			item:SetBackgroundColor(0.0, 0.0, 0.0, 0.0)
 		end, "Event.UI.Input.Mouse.Cursor.Out")
-			
 	end
 
 end
@@ -139,19 +139,18 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 			end)
 	end
 
-	local control = UI.CreateFrame("Texture", WT.UniqueName("Menu"), parent)
+	local control = UI.CreateFrame("Frame", WT.UniqueName("Menu"), parent)
 	control.frameIndex = getmetatable(control).__index
 	setmetatable(control, WT.Control.Menu_mt) 
 	control:SetLayer(10001)
 	control:SetVisible(false)
-	control:SetBackgroundColor(1,1,1,0)
-	control:SetTexture(AddonId, "img/menu3.png")
+	control:SetBackgroundColor(1,1,1,1)
 	control.callback = callback
 
 	control.dropDownBackground = UI.CreateFrame("Frame", WT.UniqueName("MenuBG"), control)
-	control.dropDownBackground:SetBackgroundColor(0,0,0,0)
-	control.dropDownBackground:SetPoint("TOPLEFT", control, "TOPLEFT", 20, 20)
-	control.dropDownBackground:SetPoint("BOTTOMRIGHT", control, "BOTTOMRIGHT", 50, 50)
+	control.dropDownBackground:SetBackgroundColor(0,0,0,1)
+	control.dropDownBackground:SetPoint("TOPLEFT", control, "TOPLEFT", 1, 1)
+	control.dropDownBackground:SetPoint("BOTTOMRIGHT", control, "BOTTOMRIGHT", -1, -1)
 
 	local value = nil
 
@@ -160,19 +159,13 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 	local last = nil
 	local maxWidth = 0
 	for i,v in ipairs(listItems) do
-		local txtOption = UI.CreateFrame("Text", WT.UniqueName("GadgetControlMenuOption"), control.dropDownBackground)
-		txtOption:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
-		txtOption:SetFontColor(1,0.97,0.84,1)
-		txtOption:SetFontSize(14)
+		local txtOption = UI.CreateFrame("Text", WT.UniqueName("ComboOption"), control.dropDownBackground)
 		txtOption.menuItem = v
 		if type(v) == "table" then
 			txtOption:SetText(v.text or v.value)
 		else
 			txtOption:SetText(v)
 		end
-		
-		--txtOption:SetFont(AddonId, "blank-Bold")
-
 		local w = txtOption:GetWidth()
 		if w > maxWidth then maxWidth = w end 
 		if not last then
@@ -184,27 +177,36 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 			MenuItemClicked(control,i)
 		end, "Event.UI.Input.Mouse.Left.Click")
 
+		--[[ 
+			function()
+				if type(v) == "table" then
+					value = v.value or v.text
+					if type(v.value) == "function" then v.value(v.text) end 
+				else
+					value = v
+				end			
+				if callback then callback(value) end
+				control.Hide()
+			end
+		--]]
 		last = txtOption
 		table.insert(control.items, txtOption)
 	end
 	
 	local top = control:GetTop()
-	local bottom = last:GetBottom() + 30 
+	local bottom = last:GetBottom() + 5 
 	control:SetHeight(bottom-top)
-	control:SetWidth(maxWidth + 50)
+	control:SetWidth(maxWidth + 10)
 	
 	for idx,item in ipairs(control.items) do
 		item:SetWidth(maxWidth)
 		item:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
-			item:SetBackgroundColor(1,0.97,0.84,0.5)
+			item:SetBackgroundColor(0.2, 0.4, 0.6, 1.0)
 		end, "Event.UI.Input.Mouse.Cursor.In")
 		item:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
 			item:SetBackgroundColor(0.0, 0.0, 0.0, 0.0)
 		end, "Event.UI.Input.Mouse.Cursor.Out")
-	
 	end
-	
-	
 	
 	control.GetValue = function() return value end
 		

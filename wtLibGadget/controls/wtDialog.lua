@@ -46,17 +46,21 @@ function CDialog:add(id, label, control, labelFontSize, stretch, iconFile, label
 		if labelFontSize then
 			lbl:SetFontSize(labelFontSize)
 		else
-			lbl:SetFontSize(12)
+			lbl:SetFontSize(16)
 		end
 		lbl:SetText(label)
+		lbl:SetFont(AddonId, "blank-Bold")
+		lbl:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		lbl:SetFontColor(1,0.97,0.84,1)
 		if labelFontOutline then
-			lbl:SetEffectGlow({ strength = 3 })
+			lbl:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		end
 		if labelFontColor then
-			lbl:SetFontColor(0.2,0.4,0.7)
+			lbl:SetFontColor(1,0.97,0.84,1)
 		end
 		if labelFontColorY then
-			lbl:SetFontColor(0.9,0.9,0.3)
+			lbl:SetFontColor(0.2,0.4,0.7)
+			lbl:SetEffectGlow({ strength = 3, })
 		end
 	end
 	
@@ -66,7 +70,7 @@ function CDialog:add(id, label, control, labelFontSize, stretch, iconFile, label
 	if #self.fields == 0 then
 		frm:SetPoint("TOPLEFT", self.container, "TOPLEFT")
 	elseif #self.fields == 20 then
-		frm:SetPoint("TOPLEFT", self.fields[1], "BOTTOMRIGHT", -270 , 8)
+		frm:SetPoint("TOPLEFT", self.fields[1], "BOTTOMRIGHT", -245 , 8)
 	elseif #self.fields > 20 then
 		frm:SetPoint("TOPLEFT", self.fields[#self.fields], "BOTTOMLEFT", 0, 8)
 	else
@@ -103,17 +107,17 @@ function CDialog:GetControl(id)
 end
 
 function CDialog:Label(label)
-	self:add(nil, label, nil, 12)
-	return self
-end
-
-function CDialog:Title(label)
 	self:add(nil, label, nil, 14, false, false, true, true)
 	return self
 end
 
+function CDialog:Title(label)
+	self:add(nil, label, nil, 18, false, false, true, true)
+	return self
+end
+
 function CDialog:TitleY(label)
-	self:add(nil, label, nil, 14, false, false, false, false, true)
+	self:add(nil, label, nil, 18, false, false, false, false, true)
 	return self
 end
 
@@ -124,7 +128,7 @@ end
 
 function CDialog:FieldNote(note)
 	-- Double span notes... (note - setting stretch to true with no control will make the label span the full width)
-	self:add(nil, note, nil, 11, true, "img/wtInfo12.png")	
+	self:add(nil, note, nil, 14, true, "img/wtInfo12.png")	
 	return self
 end
 
@@ -141,7 +145,7 @@ end
 function CDialog:Checkbox(id, label, checked)
 	local control = UI.CreateFrame("RiftCheckbox", "DialogField", self.container)
 	control:SetChecked(checked)
-	local frm = self:add(id, label, control)
+	local frm = self:add(id, label, control, 16)
 	frm.getValue = control.GetChecked
 	frm.setValue = control.SetChecked
 	return self

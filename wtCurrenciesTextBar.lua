@@ -137,9 +137,10 @@ local function ConfigDialog(container)
 	
 	local CoinText = UI.CreateFrame("Text", "CoinText", frmCurrencies)
 	CoinText:SetText("Coin")
-	CoinText:SetFontColor(0.2,0.4,0.7)
 	CoinText:SetEffectGlow({ strength = 3 })
-	CoinText:SetFontSize(12)
+	CoinText:SetFontColor(0.2,0.4,0.7)
+	CoinText:SetFontSize(18)
+	CoinText:SetFont(AddonId, "blank-Bold")
 	CoinText:SetPoint("TOPLEFT", frmCurrencies, "TOPLEFT", 10, 4)
 	
 	lastName = CoinText
@@ -155,9 +156,10 @@ local function ConfigDialog(container)
 	
 	SourcestoneText = UI.CreateFrame("Text", "SourcestoneText", frmCurrencies)
 	SourcestoneText:SetText("Sourcestone")
-	SourcestoneText:SetFontColor(0.2,0.4,0.7)
 	SourcestoneText:SetEffectGlow({ strength = 3 })
-	SourcestoneText:SetFontSize(12)
+	SourcestoneText:SetFontColor(0.2,0.4,0.7)
+	SourcestoneText:SetFontSize(18)
+	SourcestoneText:SetFont(AddonId, "blank-Bold")
 	SourcestoneText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 
 	lastName = SourcestoneText
@@ -175,7 +177,8 @@ local function ConfigDialog(container)
 	PvPText:SetText("PvP")
 	PvPText:SetFontColor(0.2,0.4,0.7)
 	PvPText:SetEffectGlow({ strength = 3 })
-	PvPText:SetFontSize(12)
+	PvPText:SetFontSize(18)
+	PvPText:SetFont(AddonId, "blank-Bold")
 	PvPText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 	
 	lastName = PvPText
@@ -193,7 +196,8 @@ local function ConfigDialog(container)
 	DungeonsText:SetText("Dungeons")
 	DungeonsText:SetFontColor(0.2,0.4,0.7)
 	DungeonsText:SetEffectGlow({ strength = 3 })
-	DungeonsText:SetFontSize(12)
+	DungeonsText:SetFontSize(18)
+	DungeonsText:SetFont(AddonId, "blank-Bold")
 	DungeonsText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 
 	lastName = DungeonsText
@@ -211,7 +215,8 @@ local function ConfigDialog(container)
 	RaidsText:SetText("Raids")
 	RaidsText:SetFontColor(0.2,0.4,0.7)
 	RaidsText:SetEffectGlow({ strength = 3 })
-	RaidsText:SetFontSize(12)
+	RaidsText:SetFontSize(18)
+	RaidsText:SetFont(AddonId, "blank-Bold")
 	RaidsText:SetPoint("CENTERLEFT", CoinText, "CENTERRIGHT", 200, 0)
 	
 	lastName = RaidsText	
@@ -229,7 +234,8 @@ local function ConfigDialog(container)
 	CraftingText:SetText("Crafting")
 	CraftingText:SetFontColor(0.2,0.4,0.7)
 	CraftingText:SetEffectGlow({ strength = 3 })
-	CraftingText:SetFontSize(12)
+	CraftingText:SetFontSize(18)
+	CraftingText:SetFont(AddonId, "blank-Bold")
 	CraftingText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 	
 	lastName = CraftingText
@@ -247,7 +253,8 @@ local function ConfigDialog(container)
 	ArtifactsText:SetText("Artifacts")
 	ArtifactsText:SetFontColor(0.2,0.4,0.7)
 	ArtifactsText:SetEffectGlow({ strength = 3 })
-	ArtifactsText:SetFontSize(12)
+	ArtifactsText:SetFontSize(18)
+	ArtifactsText:SetFont(AddonId, "blank-Bold")
 	ArtifactsText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 
 	lastName = ArtifactsText	
@@ -265,7 +272,8 @@ local function ConfigDialog(container)
 	PromotionsText:SetText("Promotions")
 	PromotionsText:SetFontColor(0.2,0.4,0.7)
 	PromotionsText:SetEffectGlow({ strength = 3 })
-	PromotionsText:SetFontSize(12)
+	PromotionsText:SetFontSize(18)
+	PromotionsText:SetFont(AddonId, "blank-Bold")
 	PromotionsText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)	
 
 	lastName = PromotionsText	
@@ -283,7 +291,8 @@ local function ConfigDialog(container)
 	EventsText:SetText("Events")
 	EventsText:SetFontColor(0.2,0.4,0.7)
 	EventsText:SetEffectGlow({ strength = 3 })
-	EventsText:SetFontSize(12)
+	EventsText:SetFontSize(18)
+	EventsText:SetFont(AddonId, "blank-Bold")
 	EventsText:SetPoint("TOPLEFT", frmEvents, "TOPLEFT", 10, 4)	
 
 	lastName = EventsText	
@@ -303,7 +312,8 @@ local function ConfigDialog(container)
 	GadgetsOptions:SetText("Gadgets Options")
 	GadgetsOptions:SetFontColor(0.2,0.4,0.7)
 	GadgetsOptions:SetEffectGlow({ strength = 3 })
-	GadgetsOptions:SetFontSize(14)
+	GadgetsOptions:SetFontSize(18)
+	GadgetsOptions:SetFont(AddonId, "blank-Bold")
 	GadgetsOptions:SetPoint("TOPLEFT", frmOptions, "TOPLEFT", 10, 4)
 	
 	showBackground = UI.CreateFrame("SimpleCheckbox", "showBackground", frmOptions)
@@ -311,8 +321,8 @@ local function ConfigDialog(container)
 	showBackground:SetChecked(true)
 	showBackground:SetPoint("TOPLEFT", CoinText, "BOTTOMLEFT", 0, 4)
 
-	BackgroundColor = WT.CreateColourPicker(frmOptions,  0.07,0.07,0.07,0.85)
-	--BackgroundColor = WT.Control.ColorPicker.Create(frmOptions, "Label", 0.07,0.07,0.07,0.85)
+	--BackgroundColor = WT.CreateColourPicker(frmOptions,  0.07,0.07,0.07,0.85)
+	BackgroundColor = WT.Control.ColorPicker.Create(frmOptions, "Label", 0.07,0.07,0.07,0.85)
 
 	BackgroundColor:SetPoint("CENTERLEFT", showBackground, "CENTERRIGHT", 0, 0)
 

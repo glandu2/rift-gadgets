@@ -28,28 +28,48 @@ function WT.Gadget.ShowImportDialog()
 	end
 
 	if not window then
-		window = UI.CreateFrame("SimpleWindow", "winGadgetImport", WT.Context)
-		window:SetCloseButtonVisible(true)		
-		window:SetTitle("Import Layout")
+			
+		window  = UI.CreateFrame("Texture", "WTGadgetCreate", WT.Context)
+		window:SetTexture(AddonId, "img/495.png")	
+		window:SetBackgroundColor(0.07,0.07,0.07,0)		
 		window:SetPoint("CENTER", UIParent, "CENTER")
-		window:SetLayer(10010)
-		window:SetWidth(280)
-		window:SetHeight(650)
+		window:SetWidth(400)
+		--window:SetHeight(650)
+		window:SetLayer(11000)
+		window:SetAlpha(0.98)
 		window:SetSecureMode("restricted")
 		
-		window.Event.Close = OnWindowClosed
+	   Library.LibDraggable.draggify(window, nil)	
+		
+		local closeButton = UI.CreateFrame("Texture", window:GetName().."CloseButton", window)
+		closeButton:SetTexture(AddonId, "img/Ignore.png" )
+		closeButton:SetPoint("TOPRIGHT", window, "TOPRIGHT", 0, 60)
+		closeButton:SetWidth(25)
+		closeButton:SetHeight(25)
+		
+		function closeButton.fnc1_LeftClick()	
+			window:SetVisible(false)
+				if window.Event.Close then
+				 window.Event.Close(window)
+				end		
+		end			
+		closeButton:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+				closeButton.fnc1_LeftClick()
+			end, "Event.UI.Input.Mouse.Left.Click")
+			
+		local content = window
 		
 		local contentImportSettings = UI.CreateFrame("Frame", "contentImportSettings", window)
-		contentImportSettings:SetAllPoints(window:GetContent())
+		contentImportSettings:SetAllPoints(content)
 		contentImportSettings:SetSecureMode("restricted")
 		
-		local labImport = UI.CreateFrame("Text", "txtImportHeader", contentImportSettings)
-		labImport:SetText("Import Layout from Character:")
-		labImport:SetFontSize(14)
-		labImport:SetPoint("TOPLEFT", contentImportSettings, "TOPLEFT", 16, 8)
+		local labImport = UI.CreateFrame("Texture", "txtImportHeader", content)
+		labImport:SetPoint("TOPLEFT", content, "TOPLEFT", 16, 8)
+		labImport:SetTexture(AddonId, "img/Import Layout.png")
+		labImport:SetLayer(10000)
 
 		local lastButton = nil
-		
+		local maxWidth = 0
 		local charList = {}
 	
 		if wtxLayouts then
@@ -59,37 +79,53 @@ function WT.Gadget.ShowImportDialog()
 		
 		for idx, charId in ipairs(charList) do
 		
-			local btnImport = UI.CreateFrame("Frame", "btnFrame", contentImportSettings)
+			local btnImport = UI.CreateFrame("Texture", "btnFrame", contentImportSettings)
 			btnImport:SetWidth(220)
 			btnImport:SetHeight(30)
-			btnImport:SetBackgroundColor(1,1,1,1)
+			btnImport:SetTexture(AddonId, "img/select2.png")
 			btnImport:SetSecureMode("restricted")
-			
+			local w = btnImport:GetWidth()
+			if w > maxWidth then maxWidth = w end 
+		
 			if lastButton then
 				btnImport:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, 4)
 			else
-				btnImport:SetPoint("TOPLEFT", labImport, "BOTTOMLEFT", 0, 8)
+				btnImport:SetPoint("TOPLEFT", labImport, "BOTTOMLEFT", 20, 20)
 			end
 
-			local fillImport = UI.CreateFrame("Frame", "btnFrame", btnImport)
+			local fillImport = UI.CreateFrame("Texture", "btnFrame", contentImportSettings)
 			fillImport:SetPoint("TOPLEFT", btnImport, "TOPLEFT", 2, 2)
 			fillImport:SetPoint("BOTTOMRIGHT", btnImport, "BOTTOMRIGHT", -2, -2)
-			fillImport:SetBackgroundColor(0.2,0.4,0.6,1)
 			
-			local txtImport = UI.CreateFrame("Text", "txtFrame", fillImport)
+			local txtImport = UI.CreateFrame("Text", "txtFrame", btnImport)
 			txtImport:SetText(charId)
-			txtImport:SetFontColor(1,1,1,1)
+			txtImport:SetFontSize(14)
+			txtImport:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+			txtImport:SetFontColor(1,0.97,0.84,1)
+			txtImport:SetFont(AddonId, "blank-Bold")
 			txtImport:SetPoint("CENTER", btnImport, "CENTER")
 
 			btnImport:EventMacroSet(Event.UI.Input.Mouse.Left.Click, "gadget import " .. charId .. "\nreloadui")
 			btnImport:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
-				fillImport:SetBackgroundColor(0.4,0.6,0.8,1.0)
+				fillImport:SetTexture(AddonId, "img/select.png")
+				fillImport:SetAlpha(0.6)
 			end, "Event.UI.Input.Mouse.Cursor.In")
 			btnImport:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
-				fillImport:SetBackgroundColor(0.2,0.4,0.6,1.0)
+					fillImport:SetTexture(AddonId, "img/select.png")
+					fillImport:SetAlpha(0)
 			end, "Event.UI.Input.Mouse.Cursor.Out")
+			
+			fillImport:SetTexture(AddonId, "img/select.png")
+			fillImport:SetAlpha(0)
 			lastButton = btnImport
+	
 		end		
+		
+	local top = window:GetTop()
+	local bottom = lastButton:GetBottom() + 60 
+	window:SetHeight(bottom-top)
+	window:SetWidth(maxWidth + 70)
+		
 	end
 	
 	window:SetVisible(true)

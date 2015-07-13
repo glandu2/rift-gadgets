@@ -32,6 +32,8 @@ Library.Media.AddTexture("wtOrbDarkBlue", AddonId, "img/wtOrbDarkBlue.png", {"or
 Library.Media.AddTexture("gradientD2L", AddonId, "img/gradientD2L.png", {"bar"})
 Library.Media.AddTexture("gradientL2D", AddonId, "img/gradientL2D.png", {"bar"})
 
+Library.Media.AddTexture("background", AddonId, "img/background.png", {})
+
 Library.Media.AddTexture("HealerBackdrop01", "Rift", "mtx_window_medium_bg_(blue).png.dds", {"backdrop"})
 Library.Media.AddTexture("RaidFrameBackdrop01", "Rift", "window_conquest_dominion.png.dds", {"backdrop"})
 
@@ -114,3 +116,4 @@ Library.Media.AddFont("LiberationSans", AddonId, "font/LiberationSans.ttf", {"fo
 Library.Media.AddFont("SFAtarianSystem", AddonId, "font/SFAtarianSystem.ttf", {"font"})
 Library.Media.AddFont("pixel_numbers", AddonId, "font/pixel_numbers.ttf", {"font"})
 Library.Media.AddFont("blank-Bold", AddonId, "font/blank-Bold.ttf", {"font"})
+Library.Media.AddFont("Bloodlust", AddonId, "font/Bloodlust.ttf", {"font"})

@@ -41,18 +41,26 @@ function WT.Control.ImgSelect.Create(parent, label, default, mediaTag, onchange)
 	local tfValue = UI.CreateFrame("Text", WT.UniqueName("GadgetControlUnitSpecImgSelector_TextField"), control)
 	tfValue:SetText(default or "")
 	tfValue:SetWidth(200)
-	tfValue:SetBackgroundColor(0.2,0.2,0.2,0.9)
+	tfValue:SetBackgroundColor(0.07,0.07,0.07,0.3)
+	tfValue:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+	tfValue:SetFontColor(1,0.97,0.84,1)
+	tfValue:SetFontSize(14)
+	tfValue:SetFont(AddonId, "blank-Bold")
 
 	local texTexture = UI.CreateFrame("Texture", WT.UniqueName("GadgetControlUnitSpecImgSelector_Texture"), control)
 	texTexture:SetWidth(128)	
 	texTexture:SetHeight(128)
-	texTexture:SetBackgroundColor(0, 0, 0, 1)
+	texTexture:SetBackgroundColor(0, 0, 0, 0)
 
 	if label then
 		local txtLabel = UI.CreateFrame("Text", WT.UniqueName("GadgetControlUnitSpecImgSelector_Label"), control)
 		txtLabel:SetText(label)
 		txtLabel:SetPoint("TOPLEFT", control, "TOPLEFT")
 		tfValue:SetPoint("CENTERLEFT", txtLabel, "CENTERRIGHT", 8, 0)
+		txtLabel:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		txtLabel:SetFontColor(1,0.97,0.84,1)
+		txtLabel:SetFontSize(14)
+		txtLabel:SetFont(AddonId, "blank-Bold")		
 	else
 		tfValue:SetPoint("TOPLEFT", control, "TOPLEFT", 0, 0)
 	end	

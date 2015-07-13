@@ -83,7 +83,7 @@ function WT.Gadget.ShowModifyUI(id)
 			OnModifyClick()
 		end, "Event.UI.Button.Left.Press")
 
---[[ 
+
 	
 		local window  = UI.CreateFrame("SimpleWindow", "WTGadgetModify", WT.Context)
 		window:SetPoint("CENTER", UIParent, "CENTER")
@@ -91,7 +91,7 @@ function WT.Gadget.ShowModifyUI(id)
 		window:SetCloseButtonVisible(true)
 		window:SetWidth(800)
 		window:SetHeight(700) -- added 100 pixels to make room for standard gadget options
-		window:SetLayer(11000)
+		window:SetLayer(1000)
 		window:SetTitle(TXT.ModifyGadget)
 		WT.Gadget.ModifyGadgetWindow = window
 		
@@ -132,7 +132,7 @@ function WT.Gadget.ShowModifyUI(id)
 		gadgetDetails:SetPoint("TOPLEFT", frameOptionsHeading, "BOTTOMLEFT", 0, -4)
 		gadgetDetails:SetFontColor(0.8, 0.8, 0.8, 1.0)
 	else
-	--]]
+	
 	end
  
 	WT.Gadget.ModifyGadgetWindow:SetVisible(true)

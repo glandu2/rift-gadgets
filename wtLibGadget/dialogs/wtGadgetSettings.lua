@@ -85,19 +85,43 @@ function WT.Gadget.ShowSettings()
 
 	if not window then
 	
-		window = UI.CreateFrame("SimpleWindow", "winGadgetSettings", WT.Context)
-		window:SetCloseButtonVisible(true)		
-		window:SetTitle(TXT.Settings)
+		window  = UI.CreateFrame("Texture", "WTGadgetCreate", WT.Context)
+		window:SetTexture(AddonId, "img/495.png")	
+		window:SetBackgroundColor(0.07,0.07,0.07,0)		
 		window:SetPoint("CENTER", UIParent, "CENTER")
-		window:SetWidth(800)
-		window:SetHeight(650)
+		window:SetWidth(900)
+		window:SetHeight(900)
+		window:SetLayer(11000)
+		window:SetAlpha(0.98)
 		
-		window.Event.Close = OnWindowClosed
-
+	   Library.LibDraggable.draggify(window, nil)	
+		
+		local closeButton = UI.CreateFrame("Texture", window:GetName().."CloseButton", window)
+		closeButton:SetTexture(AddonId, "img/Ignore.png" )
+		closeButton:SetPoint("TOPRIGHT", window, "TOPRIGHT", -40, 40)
+				  
+		function closeButton.fnc1_LeftClick()	
+			window:SetVisible(false)
+				if window.Event.Close then
+				 window.Event.Close(window)
+				end		
+		end			
+		closeButton:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
+				closeButton.fnc1_LeftClick()
+			end, "Event.UI.Input.Mouse.Left.Click")
+			
+		local content = window
+		
+		local labSettingsTitle = UI.CreateFrame("Texture", "ModifyTitle", content)
+		labSettingsTitle:SetTexture(AddonId, "img/Settings.png")
+		labSettingsTitle:SetPoint("TOPLEFT", content, "TOPRIGHT", -550, 10)
+		labSettingsTitle:SetLayer(10000)
+		
 		local tabs = UI.CreateFrame("SimpleTabView", "buffTabs", window)
-		tabs:SetPoint("TOPLEFT", window:GetContent(), "TOPLEFT", 8, 8)
-		tabs:SetPoint("BOTTOMRIGHT", window:GetContent(), "BOTTOMRIGHT", -8, -50)
+		tabs:SetPoint("TOPLEFT", content, "TOPLEFT", 120, 120)
+		tabs:SetPoint("BOTTOMRIGHT", content, "BOTTOMRIGHT", -120, -120)
 		tabs:SetTabPosition("left")
+		tabs:SetBackgroundColor(0.07,0.07,0.07,0)	
 
 
 		local btnOK = UI.CreateFrame("RiftButton", "btnOK", window)
@@ -109,15 +133,22 @@ function WT.Gadget.ShowSettings()
 		end, "Event.UI.Input.Mouse.Left.Click")
 
 		local contentOptions = UI.CreateFrame("Frame", "contentOptions", tabs.tabContent)
-		contentOptions:SetAllPoints(window:GetContent())
+		contentOptions:SetAllPoints(content)
 		
 		local labNumberFormat = UI.CreateFrame("Text", "txtNumberFormat", contentOptions)
 		labNumberFormat:SetText("Number Format:")
-		labNumberFormat:SetFontSize(14)
+		labNumberFormat:SetFontSize(16)
+		labNumberFormat:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labNumberFormat:SetFontColor(1,0.97,0.84,1)
+		labNumberFormat:SetFont(AddonId, "blank-Bold")
 		labNumberFormat:SetPoint("TOPLEFT", contentOptions, "TOPLEFT", 8, 8)
 		
 		radFormatShort = UI.CreateFrame("SimpleRadioButton", "radFormatShort", contentOptions)
 		radFormatShort:SetText("Abbreviated (1.2K)")
+		--[[labNumberFormat:SetFontSize(16)
+		labNumberFormat:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labNumberFormat:SetFontColor(1,0.97,0.84,1)
+		labNumberFormat:SetFont(AddonId, "blank-Bold")]]
 		radFormatShort:SetPoint("TOPLEFT", labNumberFormat, "TOPLEFT", 150, 0)
 
 		radFormatLong = UI.CreateFrame("SimpleRadioButton", "radFormatLong", contentOptions)
@@ -143,11 +174,14 @@ function WT.Gadget.ShowSettings()
 		end
 		
 		local contentBuffSettings = UI.CreateFrame("Frame", "contentBuffSettings", tabs.tabContent)
-		contentBuffSettings:SetAllPoints(window:GetContent())
+		contentBuffSettings:SetAllPoints(content)
 
 		local labBlackList = UI.CreateFrame("Text", "txtBlackListHeader", contentBuffSettings)
 		labBlackList:SetText(TXT.BuffBlackList)
-		labBlackList:SetFontSize(14)
+		labBlackList:SetFontSize(16)
+		labBlackList:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labBlackList:SetFontColor(1,0.97,0.84,1)
+		labBlackList:SetFont(AddonId, "blank-Bold")
 		labBlackList:SetPoint("TOPLEFT", contentBuffSettings, "TOPLEFT", 8, 8)
 		
 		local frmBlackList = UI.CreateFrame("Frame", "frmBuffBlackList", contentBuffSettings)
@@ -167,11 +201,14 @@ function WT.Gadget.ShowSettings()
 -----------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------
 		local contentProfileSettings = UI.CreateFrame("Frame", "contentProfileSettings", tabs.tabContent)
-		contentProfileSettings:SetAllPoints(window:GetContent())
+		contentProfileSettings:SetAllPoints(content)
 -------------------------------Save Profile----------------------------------------------
 		local labProfile = UI.CreateFrame("Text", "txtProfile", contentProfileSettings)
 		labProfile:SetText("Enter name to save Profile")
-		labProfile:SetFontSize(14)
+		labProfile:SetFontSize(16)
+		labProfile:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labProfile:SetFontColor(1,0.97,0.84,1)
+		labProfile:SetFont(AddonId, "blank-Bold")
 		labProfile:SetPoint("TOPLEFT", contentProfileSettings, "TOPLEFT", 8, 8)
 			
 		txtProfile = UI.CreateFrame("RiftTextfield", "txtProfile", labProfile)
@@ -206,19 +243,28 @@ function WT.Gadget.ShowSettings()
 			
 		local btnSaveProfileTxt = UI.CreateFrame("Text", "txtbtnSaveProfileTxt", btnSaveProfile)
 		btnSaveProfileTxt:SetText("Save profile")
-		btnSaveProfileTxt:SetFontSize(14)
+		btnSaveProfileTxt:SetFontSize(16)
+		btnSaveProfileTxt:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		btnSaveProfileTxt:SetFontColor(1,0.97,0.84,1)
+		btnSaveProfileTxt:SetFont(AddonId, "blank-Bold")
 		btnSaveProfileTxt:SetPoint("TOPLEFT", btnSaveProfile, "TOPLEFT", 10, 0)
 -------------------------------Delete Profile--------------------------------------------		
 		local labProfileDelete = UI.CreateFrame("Text", "txtProfileDelete", contentProfileSettings)
 		labProfileDelete:SetText("Select profile for delete")
-		labProfileDelete:SetFontSize(14)
+		labProfileDelete:SetFontSize(16)
+		labProfileDelete:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labProfileDelete:SetFontColor(1,0.97,0.84,1)
+		labProfileDelete:SetFont(AddonId, "blank-Bold")
 		labProfileDelete:SetPoint("TOPLEFT", contentProfileSettings, "TOPLEFT", 8, 35)
 
 		layoutNameList = UI.CreateFrame("SimpleSelect", "Profile List", contentProfileSettings)
 		layoutNameList:SetPoint("TOPLEFT", labProfileDelete, "TOPLEFT", 200, 1)
 		layoutNameList:SetHeight(25)
 		layoutNameList:SetLayer(3)
-		layoutNameList:SetFontSize(14)
+		layoutNameList:SetFontSize(16)
+		--layoutNameList:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		--layoutNameList:SetFontColor(1,0.97,0.84,1)
+		--layoutNameList:SetFont(AddonId, "blank-Bold")
 		getlayoutNameList(layoutName)
 		layoutNameList:ResizeToFit()
 		
@@ -244,17 +290,26 @@ function WT.Gadget.ShowSettings()
 					
 		local btnDeleteProfileTxt = UI.CreateFrame("Text", "txtbtnDeleteProfileTxt", btnDeleteProfile)
 		btnDeleteProfileTxt:SetText("Delete profile")
-		btnDeleteProfileTxt:SetFontSize(14)
+		btnDeleteProfileTxt:SetFontSize(16)
+		btnDeleteProfileTxt:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		btnDeleteProfileTxt:SetFontColor(1,0.97,0.84,1)
+		btnDeleteProfileTxt:SetFont(AddonId, "blank-Bold")
 		btnDeleteProfileTxt:SetPoint("TOPLEFT", btnDeleteProfile, "TOPLEFT", 10, 0)	
 -------------------------------Profile - Roles--------------------------------------------	
 		local labProfileRoles = UI.CreateFrame("Text", "txtProfileRoles", contentProfileSettings)
 		labProfileRoles:SetText("__________________________Profile - Roles_____________________________")
-		labProfileRoles:SetFontSize(18)
+		labProfileRoles:SetFontSize(20)
+		labProfileRoles:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labProfileRoles:SetFontColor(1,0.97,0.84,1)
+		labProfileRoles:SetFont(AddonId, "blank-Bold")
 		labProfileRoles:SetPoint("TOPLEFT", contentProfileSettings, "TOPLEFT", 8, 70)
 		
 		ProfileRoles = UI.CreateFrame("SimpleCheckbox", "ProfileRoles", contentProfileSettings)
 		ProfileRoles:SetPoint("TOPLEFT", labProfileRoles, "TOPLEFT", 8, 50)
-		ProfileRoles:SetFontSize(14)
+		ProfileRoles:SetFontSize(16)
+		ProfileRoles:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		ProfileRoles:SetFontColor(1,0.97,0.84,1)
+		ProfileRoles:SetFont(AddonId, "blank-Bold")
 		ProfileRoles:SetText("Show window Importlayout when you change role")	
 		ProfileRoles:EventAttach(Event.UI.Checkbox.Change, function(self, h)
 			if ProfileRoles:GetChecked() == true then

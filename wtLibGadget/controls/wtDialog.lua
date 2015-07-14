@@ -49,7 +49,7 @@ function CDialog:add(id, label, control, labelFontSize, stretch, iconFile, label
 			lbl:SetFontSize(16)
 		end
 		lbl:SetText(label)
-		lbl:SetFont(AddonId, "blank-Bold")
+		--lbl:SetFont(AddonId, "blank-Bold")
 		lbl:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		lbl:SetFontColor(1,0.97,0.84,1)
 		if labelFontOutline then
@@ -282,7 +282,7 @@ end
 
 function WT.Dialog(container, labelWidth)
 	local obj = {}
-	obj.labelWidth = labelWidth or 200
+	obj.labelWidth = labelWidth or 220
 	obj.container = container
 	obj.fields = {}
 	obj.isWTDialog = true

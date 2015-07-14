@@ -81,7 +81,7 @@ local function LoadItems(control, listItems)
 			txtOption:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 			txtOption:SetFontColor(1,0.97,0.84,1)
 			txtOption:SetFontSize(14)
-			txtOption:SetFont(AddonId, "blank-Bold")		
+			--txtOption:SetFont(AddonId, "blank-Bold")		
 
 			txtOption:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
 				TexMenuItemClicked(control, i)
@@ -171,7 +171,7 @@ function WT.Control.TexMenu.Create(parent, listItems, callback, sort)
 		txtOption:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		txtOption:SetFontColor(1,0.97,0.84,1)
 		txtOption:SetFontSize(14)
-		txtOption:SetFont(AddonId, "blank-Bold")
+		--txtOption:SetFont(AddonId, "blank-Bold")
 		txtOption.TexMenuItem = v
 		local selected = i
 		

@@ -87,7 +87,7 @@ function data.CreateBuffFilterPanel(parent)
 	lblRemaining:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 	lblRemaining:SetFontColor(1,0.97,0.84,1)
 	lblRemaining:SetFontSize(14)
-	lblRemaining:SetFont(AddonId, "blank-Bold")
+	--lblRemaining:SetFont(AddonId, "blank-Bold")
 
 	panel.chkShowMyBuffs:SetChecked(true)
 	panel.chkShowUnitBuffs:SetChecked(true)

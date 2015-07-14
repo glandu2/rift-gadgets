@@ -166,9 +166,13 @@ local function ConfigDialog(container)
 	dialog = WT.Dialog(container)
 		:Label("The Range Finder dispays the distance, in meters, between you and your target. It reports the distance from the center of your character to the center of the target. An option will be added in future to take the radius of the characters into account.")
 		:Checkbox("showRangeCenter", "Range to center of target/focus", false)
+		:Title("")
+		:Title("")
 		:Checkbox("showTitle", TXT.ShowTitle, true)
 		:Checkbox("showTargetName", TXT.ShowTargetName, true)
 		:Checkbox("hideWhenNoTarget", TXT.HideWhenNoTarget, false)
+		:Title("")
+		:Title("")
 		:Checkbox("showBackground", TXT.ShowBackground, true)
 		:Combobox("unitSpec", TXT.UnitToTrack, "player.target",
 			{

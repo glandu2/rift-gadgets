@@ -140,7 +140,7 @@ local function ConfigDialog(container)
 	CoinText:SetEffectGlow({ strength = 3 })
 	CoinText:SetFontColor(0.2,0.4,0.7)
 	CoinText:SetFontSize(18)
-	CoinText:SetFont(AddonId, "blank-Bold")
+	--CoinText:SetFont(AddonId, "blank-Bold")
 	CoinText:SetPoint("TOPLEFT", frmCurrencies, "TOPLEFT", 10, 4)
 	
 	lastName = CoinText
@@ -159,7 +159,7 @@ local function ConfigDialog(container)
 	SourcestoneText:SetEffectGlow({ strength = 3 })
 	SourcestoneText:SetFontColor(0.2,0.4,0.7)
 	SourcestoneText:SetFontSize(18)
-	SourcestoneText:SetFont(AddonId, "blank-Bold")
+	--SourcestoneText:SetFont(AddonId, "blank-Bold")
 	SourcestoneText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 
 	lastName = SourcestoneText
@@ -178,7 +178,7 @@ local function ConfigDialog(container)
 	PvPText:SetFontColor(0.2,0.4,0.7)
 	PvPText:SetEffectGlow({ strength = 3 })
 	PvPText:SetFontSize(18)
-	PvPText:SetFont(AddonId, "blank-Bold")
+	--PvPText:SetFont(AddonId, "blank-Bold")
 	PvPText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 	
 	lastName = PvPText
@@ -197,7 +197,7 @@ local function ConfigDialog(container)
 	DungeonsText:SetFontColor(0.2,0.4,0.7)
 	DungeonsText:SetEffectGlow({ strength = 3 })
 	DungeonsText:SetFontSize(18)
-	DungeonsText:SetFont(AddonId, "blank-Bold")
+	--DungeonsText:SetFont(AddonId, "blank-Bold")
 	DungeonsText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 
 	lastName = DungeonsText
@@ -216,7 +216,7 @@ local function ConfigDialog(container)
 	RaidsText:SetFontColor(0.2,0.4,0.7)
 	RaidsText:SetEffectGlow({ strength = 3 })
 	RaidsText:SetFontSize(18)
-	RaidsText:SetFont(AddonId, "blank-Bold")
+	--RaidsText:SetFont(AddonId, "blank-Bold")
 	RaidsText:SetPoint("CENTERLEFT", CoinText, "CENTERRIGHT", 200, 0)
 	
 	lastName = RaidsText	
@@ -235,7 +235,7 @@ local function ConfigDialog(container)
 	CraftingText:SetFontColor(0.2,0.4,0.7)
 	CraftingText:SetEffectGlow({ strength = 3 })
 	CraftingText:SetFontSize(18)
-	CraftingText:SetFont(AddonId, "blank-Bold")
+	--CraftingText:SetFont(AddonId, "blank-Bold")
 	CraftingText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 	
 	lastName = CraftingText
@@ -254,7 +254,7 @@ local function ConfigDialog(container)
 	ArtifactsText:SetFontColor(0.2,0.4,0.7)
 	ArtifactsText:SetEffectGlow({ strength = 3 })
 	ArtifactsText:SetFontSize(18)
-	ArtifactsText:SetFont(AddonId, "blank-Bold")
+	--ArtifactsText:SetFont(AddonId, "blank-Bold")
 	ArtifactsText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
 
 	lastName = ArtifactsText	
@@ -273,7 +273,7 @@ local function ConfigDialog(container)
 	PromotionsText:SetFontColor(0.2,0.4,0.7)
 	PromotionsText:SetEffectGlow({ strength = 3 })
 	PromotionsText:SetFontSize(18)
-	PromotionsText:SetFont(AddonId, "blank-Bold")
+	--PromotionsText:SetFont(AddonId, "blank-Bold")
 	PromotionsText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)	
 
 	lastName = PromotionsText	
@@ -292,7 +292,7 @@ local function ConfigDialog(container)
 	EventsText:SetFontColor(0.2,0.4,0.7)
 	EventsText:SetEffectGlow({ strength = 3 })
 	EventsText:SetFontSize(18)
-	EventsText:SetFont(AddonId, "blank-Bold")
+	--EventsText:SetFont(AddonId, "blank-Bold")
 	EventsText:SetPoint("TOPLEFT", frmEvents, "TOPLEFT", 10, 4)	
 
 	lastName = EventsText	
@@ -313,7 +313,7 @@ local function ConfigDialog(container)
 	GadgetsOptions:SetFontColor(0.2,0.4,0.7)
 	GadgetsOptions:SetEffectGlow({ strength = 3 })
 	GadgetsOptions:SetFontSize(18)
-	GadgetsOptions:SetFont(AddonId, "blank-Bold")
+	--GadgetsOptions:SetFont(AddonId, "blank-Bold")
 	GadgetsOptions:SetPoint("TOPLEFT", frmOptions, "TOPLEFT", 10, 4)
 	
 	showBackground = UI.CreateFrame("SimpleLifeCheckbox", "showBackground", frmOptions)

@@ -102,7 +102,7 @@ function WT.Gadget.ShowImportDialog()
 			txtImport:SetFontSize(14)
 			txtImport:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 			txtImport:SetFontColor(1,0.97,0.84,1)
-			txtImport:SetFont(AddonId, "blank-Bold")
+			--txtImport:SetFont(AddonId, "blank-Bold")
 			txtImport:SetPoint("CENTER", btnImport, "CENTER")
 
 			btnImport:EventMacroSet(Event.UI.Input.Mouse.Left.Click, "gadget import " .. charId .. "\nreloadui")

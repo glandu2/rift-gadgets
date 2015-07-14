@@ -122,7 +122,7 @@ function Library.LibSimpleWidgetsLifeEdition.RadioButton(name, parent)
   widget.label:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
   widget.label:SetFontSize(14)
   widget.label:SetFontColor(1,0.97,0.84,1)
-  widget.label:SetFont(AddonId, "blank-Bold")
+  --widget.label:SetFont(AddonId, "blank-Bold")
   
   widget.enabled = true
 

@@ -146,8 +146,8 @@ function Library.LibSimpleWidgetsLifeEdition.Slider(name, parent)
   widget.current = UI.CreateFrame("Text", widget:GetName().."Current", widget)
   widget.current:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
   widget.current:SetFontColor(1,0.97,0.84,1)
-  widget.current:SetFontSize(14)
-  widget.current:SetFont(AddonId, "blank-Bold")
+  widget.current:SetFontSize(12)
+  --widget.current:SetFont(AddonId, "blank-Bold")
 
   widget.enabled = true
 

@@ -30,7 +30,11 @@ function WT.Gadget.ShowImportDialog()
 	if not window then
 			
 		window  = UI.CreateFrame("Texture", "WTGadgetCreate", WT.Context)
-		window:SetTexture(AddonId, "img/495.png")	
+		if wtxOptions.BackgroundTex == "BackgroundTexTrans" then		
+			window:SetTexture(AddonId, "img/menu4.png")
+		else
+			window:SetTexture(AddonId, "img/menu3.png")
+		end	
 		window:SetBackgroundColor(0.07,0.07,0.07,0)		
 		window:SetPoint("CENTER", UIParent, "CENTER")
 		window:SetWidth(400)

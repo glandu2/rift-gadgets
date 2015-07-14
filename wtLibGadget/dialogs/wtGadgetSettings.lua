@@ -28,6 +28,8 @@ local radFormatShort = nil
 local radFormatLong = nil
 local radFormatNone = nil
 local ProfileRoles = nil
+local radBackgroundTexTrans = nil
+local radBackgroundTexFull = nil
 local ufDialog = false
 
 local function OnWindowClosed()
@@ -57,6 +59,14 @@ local function SaveSettings()
 		wtxOptions.prRoles = true
 	else  
 		wtxOptions.prRoles = false 
+	end
+
+	if radBackgroundTexTrans:GetSelected() then
+		wtxOptions.BackgroundTex = "BackgroundTexTrans"
+	elseif radBackgroundTexFull:GetSelected() then
+		wtxOptions.BackgroundTex = "BackgroundTexFull"
+	else
+		wtxOptions.BackgroundTex = "BackgroundTexTrans"
 	end	
 
 	OnWindowClosed()
@@ -86,7 +96,11 @@ function WT.Gadget.ShowSettings()
 	if not window then
 	
 		window  = UI.CreateFrame("Texture", "WTGadgetCreate", WT.Context)
-		window:SetTexture(AddonId, "img/495.png")	
+		if wtxOptions.BackgroundTex == "BackgroundTexTrans" then		
+			window:SetTexture(AddonId, "img/menu4.png")
+		else
+			window:SetTexture(AddonId, "img/menu3.png")
+		end	
 		window:SetBackgroundColor(0.07,0.07,0.07,0)		
 		window:SetPoint("CENTER", UIParent, "CENTER")
 		window:SetWidth(900)
@@ -145,10 +159,6 @@ function WT.Gadget.ShowSettings()
 		
 		radFormatShort = UI.CreateFrame("SimpleLifeRadioButton", "radFormatShort", contentOptions)
 		radFormatShort:SetText("Abbreviated (1.2K)")
-		--[[labNumberFormat:SetFontSize(16)
-		labNumberFormat:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
-		labNumberFormat:SetFontColor(1,0.97,0.84,1)
-		labNumberFormat:SetFont(AddonId, "blank-Bold")]]
 		radFormatShort:SetPoint("TOPLEFT", labNumberFormat, "TOPLEFT", 150, 0)
 
 		radFormatLong = UI.CreateFrame("SimpleLifeRadioButton", "radFormatLong", contentOptions)
@@ -172,6 +182,36 @@ function WT.Gadget.ShowSettings()
 		else
 			radFormatShort:SetSelected(true)
 		end
+------------------------------------------------------------------------------------------------------------		
+		local labBackgroundTex = UI.CreateFrame("Text", "txtBackgroundTex", contentOptions)
+		labBackgroundTex:SetText("Background Tex:")
+		labBackgroundTex:SetFontSize(16)
+		labBackgroundTex:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labBackgroundTex:SetFontColor(1,0.97,0.84,1)
+		--labBackgroundTex:SetFont(AddonId, "blank-Bold")
+		labBackgroundTex:SetPoint("TOPLEFT", contentOptions, "TOPLEFT", 8, 95)
+		
+		radBackgroundTexTrans = UI.CreateFrame("SimpleLifeRadioButton", "radBackgroundTexTrans", contentOptions)
+		radBackgroundTexTrans:SetText("Background Tex Trans")
+		radBackgroundTexTrans:SetPoint("TOPLEFT", labBackgroundTex, "TOPLEFT", 150, 0)
+
+		radBackgroundTexFull = UI.CreateFrame("SimpleLifeRadioButton", "radBackgroundTexFull", contentOptions)
+		radBackgroundTexFull:SetText("Background Tex Full")
+		radBackgroundTexFull:SetPoint("TOPLEFT", radBackgroundTexTrans, "BOTTOMLEFT", 0, 4)
+		
+		local radGroupBackgroundTex = Library.LibSimpleWidgets.RadioButtonGroup("radGroupBackgroundTex")
+		radGroupBackgroundTex:AddRadioButton(radBackgroundTexTrans)
+		radGroupBackgroundTex:AddRadioButton(radBackgroundTexFull)
+		
+		local TexOption = wtxOptions.BackgroundTex or "BackgroundTexTrans"
+		if TexOption == "BackgroundTexTrans" then
+			radBackgroundTexTrans:SetSelected(true)
+		elseif TexOption == "BackgroundTexFull" then
+			radBackgroundTexFull:SetSelected(true)
+		else
+			radBackgroundTexTrans:SetSelected(true)
+		end
+---------------------------------------------------------------------------------------------------------
 		
 		local contentBuffSettings = UI.CreateFrame("Frame", "contentBuffSettings", tabs.tabContent)
 		contentBuffSettings:SetAllPoints(content)

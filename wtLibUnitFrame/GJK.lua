@@ -62,11 +62,11 @@ WT.Unit.CreateVirtualProperty("alertHealthColor", { "id", "cleansable", "buffAle
 	end
 )
 
-if WT.Unit.VirtualProperties["HealthColor"] ~= nil then
-	WT.Unit.VirtualProperties["HealthColor"] = nil
+if WT.Unit.VirtualProperties["alertHealthColor2"] ~= nil then
+	WT.Unit.VirtualProperties["alertHealthColor2"] = nil
 end
 
-WT.Unit.CreateVirtualProperty("HealthColor", { "id", "cleansable", "buffAlert" },
+WT.Unit.CreateVirtualProperty("alertHealthColor2", { "id", "cleansable", "buffAlert" },
 	function(unit)
 		if unit.offline then
 			return {r=0.07,g=0.07,b=0.09, a=0.85}

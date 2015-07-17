@@ -189,39 +189,38 @@ local function Create(configuration)
 		shardNameText:SetVisible(false)
 		shardNameText:SetWidth(-10)	
 	end
-	
+
 local function systemUpdate(handle, systemUpdate)
-	local now=Inspect.Time.Server()
-	if shardName==nil or now > lastQueried+5 then
-		lastQueried=now
-		local player=Inspect.Unit.Detail("player")
-		if not player.zone then return end
-		local zone=Inspect.Zone.Detail(player.zone)
-		if not zone.name then return end
+    local now=Inspect.Time.Server()
+    if (shardName==nil or now > lastQueried+5) and Inspect.System.Watchdog() > 0.1 then
+        lastQueried=now
 
-		local newShardName
-		local consoles=Inspect.Console.List()
-		for cid, flag in pairs(consoles) do
-			local console=Inspect.Console.Detail(cid)
-			if console.channel then
-				for cname, flag in pairs(console.channel) do
-					if cname == zone.name then
-						local shard=Inspect.Shard()
-						newShardName=shard and shard.name
-					elseif (cname:sub(1, zone.name:len()+1) == zone.name.."@") then
-						newShardName=cname:sub(zone.name:len()+2)
-					end
-				end
-			end
-		end
-		if newShardName and newShardName ~= shardName then
-			shardName=newShardName
-			shardNameText:SetText(shardName)
-		end
-		return
-	end
+        local ZoneID = Inspect.Unit.Detail("player")
+        if not ZoneID.zone then return end
+        local ZoneInfo = Inspect.Zone.Detail(ZoneID.zone)
+        local foundzone = 0
+        local consoles=Inspect.Console.List()
+        local newShardName = Inspect.Shard().name
+            for cid, flag in pairs(consoles) do
+                local console=Inspect.Console.Detail(cid)
+                if console.channel then
+                    for cname, flag in pairs(console.channel) do
+                        if ( (cname:sub(1, ZoneInfo.name:len()+1) == ZoneInfo.name.."@") and foundzone == 0) then
+                            -- we are in a "zone@server" channel
+                            newShardName=cname:sub(ZoneInfo.name:len()+2)
+                            foundzone = 1
+                        end
+                    end
+                end
+            end
+            if newShardName and newShardName ~= shardName then
+                shardNameText:SetText(newShardName)
+                shardname=newShardName
+            end
+        
+            
+    end
 end
-
 if newShardName == nil then 
 	local shardTemp=Inspect.Shard()
 	shardNameText:SetText(shardTemp.name)

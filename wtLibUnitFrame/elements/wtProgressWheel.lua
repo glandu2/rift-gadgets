@@ -22,8 +22,8 @@ function wtProgressWheel:Construct()
 
 	self.gauge = UI.CreateFrame("Text", "Gauge", self)
 
-	self:SetFont("wtLibUnitFrame", "font/wtProgress.ttf")
-	self.gauge:SetFont("wtLibUnitFrame", "font/wtProgress.ttf")
+	self:SetFont("wtLibUnitFrame", "wtProgress.ttf")
+	self.gauge:SetFont("wtLibUnitFrame", "wtProgress.ttf")
 	self:SetText("u")
 	self:SetFontSize(16)
 

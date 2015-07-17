@@ -106,7 +106,7 @@ function WT.Gadget.ShowSettings()
 		window:SetWidth(900)
 		window:SetHeight(900)
 		window:SetLayer(11000)
-		window:SetAlpha(0.98)
+		window:SetAlpha(1)
 		
 	   Library.LibDraggable.draggify(window, nil)	
 		

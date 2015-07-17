@@ -51,6 +51,45 @@ local function OnRangeCenterChange(rangeFinder, rangeCenter)
 	end
 end
 
+local function OnSmartRangeChange(rangeFinder, range)
+    if range then
+        if range <= 2.9 then
+        rangeFinder.txtRange:SetLabelText("MELEE ".." "..string.format("%.01f", range) .. "m")
+        elseif range <= 20 then
+        rangeFinder.txtRange:SetLabelText("RUPT".." "..string.format("%.01f", range) .. "m")
+        elseif range <= 28 then
+        rangeFinder.txtRange:SetLabelText("AREA ".." "..string.format("%.01f", range) .. "m")
+        elseif range <= 30 then
+        rangeFinder.txtRange:SetLabelText("RANGED ".." "..string.format("%.01f", range) .. "m")
+        elseif range <= 35 then
+        rangeFinder.txtRange:SetLabelText("MAX ".." "..string.format("%.01f", range) .. "m")
+        else            
+        rangeFinder.txtRange:SetLabelText(string.format("%.01f", range) .. "m")
+        end
+    else
+        rangeFinder.txtRange:SetLabelText(" ")
+    end
+end
+
+local function OnSmartRangeCenterChange(rangeFinder, rangeCenter)
+    if rangeCenter then
+        if rangeCenter <= 2.9 then
+        rangeFinder.txtRange:SetLabelText("MELEE ".." "..string.format("%.01f", rangeCenter) .. "m")
+        elseif rangeCenter <= 20 then 
+        rangeFinder.txtRange:SetLabelText("RUPT ".." "..string.format("%.01f", rangeCenter) .. "m")
+        elseif rangeCenter <= 28 then
+        rangeFinder.txtRange:SetLabelText("AREA ".." "..string.format("%.01f", rangeCenter) .. "m")
+        elseif rangeCenter <= 30 then
+        rangeFinder.txtRange:SetLabelText("RANGED ".." "..string.format("%.01f", rangeCenter) .. "m")
+        elseif rangeCenter <= 35 then
+        rangeFinder.txtRange:SetLabelText("MAX ".." "..string.format("%.01f", rangeCenter) .. "m")
+        else            
+        rangeFinder.txtRange:SetLabelText(string.format("%.01f", rangeCenter) .. "m")
+        end
+    else
+        rangeFinder.txtRange:SetLabelText(" ")
+    end
+end
 
 local function Create(configuration)
 
@@ -144,9 +183,17 @@ local function Create(configuration)
 	
 	rangeFinder:CreateBinding("name", rangeFinder, OnNameChange, nil)
 	if not configuration.showRangeCenter then
-		rangeFinder:CreateBinding("range", rangeFinder, OnRangeChange, nil)
+		if not configuration.rangeSmartText then
+			rangeFinder:CreateBinding("range", rangeFinder, OnRangeChange, nil)
+		else
+			rangeFinder:CreateBinding("range", rangeFinder, OnSmartRangeChange, nil)
+		end
 	elseif configuration.showRangeCenter == true then
-		rangeFinder:CreateBinding("rangeCenter", rangeFinder, OnRangeCenterChange, nil)
+		if configuration.rangeSmartText == true then
+			rangeFinder:CreateBinding("rangeCenter", rangeFinder, OnRangeCenterChange, nil)
+		else
+			rangeFinder:CreateBinding("rangeCenter", rangeFinder, OnSmartRangeCenterChange, nil)
+		end
 	end
 	
 	return rangeFinder, { resizable={50, 25, 250, 70} }
@@ -168,12 +215,12 @@ local function ConfigDialog(container)
 		:Checkbox("showRangeCenter", "Range to center of target/focus", false)
 		:Title("")
 		:Title("")
-		:Checkbox("showTitle", TXT.ShowTitle, true)
+		:Checkbox("showTitle", TXT.ShowTitle, false)
 		:Checkbox("showTargetName", TXT.ShowTargetName, true)
 		:Checkbox("hideWhenNoTarget", TXT.HideWhenNoTarget, false)
 		:Title("")
 		:Title("")
-		:Checkbox("showBackground", TXT.ShowBackground, true)
+		:Checkbox("showBackground", TXT.ShowBackground, false)
 		:Combobox("unitSpec", TXT.UnitToTrack, "player.target",
 			{
 				{text="Target", value="player.target"},
@@ -188,6 +235,7 @@ local function ConfigDialog(container)
 		:Select("font", "Font", "#Default", lfont, true)
 		:Slider("fontSize", "Font Size", 14, true)
 		:Slider("fontSizeRange", "Font Size for Range text", 18, true)
+		:Checkbox("rangeSmartText", "Snow range Smart Text", false)
 end
 
 local function GetConfiguration()

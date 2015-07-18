@@ -192,11 +192,11 @@ function WT.Gadget.ShowSettings()
 		labBackgroundTex:SetPoint("TOPLEFT", contentOptions, "TOPLEFT", 8, 95)
 		
 		radBackgroundTexTrans = UI.CreateFrame("SimpleLifeRadioButton", "radBackgroundTexTrans", contentOptions)
-		radBackgroundTexTrans:SetText("Background Tex Trans")
+		radBackgroundTexTrans:SetText("Background Texture Transparent")
 		radBackgroundTexTrans:SetPoint("TOPLEFT", labBackgroundTex, "TOPLEFT", 150, 0)
 
 		radBackgroundTexFull = UI.CreateFrame("SimpleLifeRadioButton", "radBackgroundTexFull", contentOptions)
-		radBackgroundTexFull:SetText("Background Tex Full")
+		radBackgroundTexFull:SetText("Background Texture Solid")
 		radBackgroundTexFull:SetPoint("TOPLEFT", radBackgroundTexTrans, "BOTTOMLEFT", 0, 4)
 		
 		local radGroupBackgroundTex = Library.LibSimpleWidgets.RadioButtonGroup("radGroupBackgroundTex")
@@ -255,19 +255,19 @@ function WT.Gadget.ShowSettings()
 		txtProfile:SetBackgroundColor(0.2, 0.2, 0.2, 1.0)
 		txtProfile:SetText("")
 		txtProfile:SetPoint("TOPLEFT", labProfile, "TOPLEFT", 200, 1)
-		txtProfile:SetWidth(200)
+		txtProfile:SetWidth(210)
 		local n = txtProfile:GetText()
 		
 		local btnSaveProfile = UI.CreateFrame("Frame", "btnSaveProfile", contentProfileSettings)
-		btnSaveProfile:SetWidth(100)
+		btnSaveProfile:SetWidth(150)
 		btnSaveProfile:SetHeight(20)
-		btnSaveProfile:SetBackgroundColor(0.2,0.4,0.6,1.0)
+		btnSaveProfile:SetBackgroundColor(0.2,0.2,0.2,0.4)
 		btnSaveProfile:SetPoint("TOPLEFT", txtProfile, "TOPLEFT", 220, 0)	
 		btnSaveProfile:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
-			btnSaveProfile:SetBackgroundColor(0.4,0.6,0.8,1.0)
+			btnSaveProfile:SetBackgroundColor(1,0.97,0.84,0.5)
 		end, "Event.UI.Input.Mouse.Cursor.In")
 		btnSaveProfile:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
-			btnSaveProfile:SetBackgroundColor(0.2,0.4,0.6,1.0)
+			btnSaveProfile:SetBackgroundColor(0.2,0.2,0.2,0.4)
 		end, "Event.UI.Input.Mouse.Cursor.Out")
 		btnSaveProfile:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
 			local layoutName = txtProfile:GetText()
@@ -297,27 +297,30 @@ function WT.Gadget.ShowSettings()
 		--labProfileDelete:SetFont(AddonId, "blank-Bold")
 		labProfileDelete:SetPoint("TOPLEFT", contentProfileSettings, "TOPLEFT", 8, 35)
 
-		layoutNameList = UI.CreateFrame("SimpleLifeSelect", "Profile List", contentProfileSettings)
-		layoutNameList:SetPoint("TOPLEFT", labProfileDelete, "TOPLEFT", 200, 1)
+		
+		addlist = nil
+		addlist = {}
+		for i, v in pairs(wtxLayouts) do
+			table.insert(addlist, ""..i)	-- Concatenated to a string incase the user saves thier entry as a number
+		end
+
+		layoutNameList = WT.Control.Select.Create(contentProfileSettings, "", "Select...", addlist, true)
+		layoutNameList:SetPoint("TOPLEFT", labProfileDelete, "TOPLEFT", 187, 10)
 		layoutNameList:SetHeight(25)
+		layoutNameList:SetWidth(170)
 		layoutNameList:SetLayer(3)
-		layoutNameList:SetFontSize(16)
-		--layoutNameList:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
-		--layoutNameList:SetFontColor(1,0.97,0.84,1)
-		--layoutNameList:SetFont(AddonId, "blank-Bold")
-		getlayoutNameList(layoutName)
-		layoutNameList:ResizeToFit()
+		
 		
 		local btnDeleteProfile = UI.CreateFrame("Frame", "btnDeleteProfile", contentProfileSettings)
-		btnDeleteProfile:SetWidth(100)
+		btnDeleteProfile:SetWidth(150)
 		btnDeleteProfile:SetHeight(20)
-		btnDeleteProfile:SetBackgroundColor(0.2,0.4,0.6,1.0)
+		btnDeleteProfile:SetBackgroundColor(0.2,0.2,0.2,0.4)
 		btnDeleteProfile:SetPoint("TOPLEFT", labProfileDelete, "TOPLEFT", 420, 1)	
 		btnDeleteProfile:EventAttach(Event.UI.Input.Mouse.Cursor.In, function(self, h)
-			btnDeleteProfile:SetBackgroundColor(0.4,0.6,0.8,1.0)
+			btnDeleteProfile:SetBackgroundColor(1,0.97,0.84,0.5)
 		end, "Event.UI.Input.Mouse.Cursor.In")
 		btnDeleteProfile:EventAttach(Event.UI.Input.Mouse.Cursor.Out, function(self, h)
-			btnDeleteProfile:SetBackgroundColor(0.2,0.4,0.6,1.0)
+			btnDeleteProfile:SetBackgroundColor(0.2,0.2,0.2,0.4)
 		end, "Event.UI.Input.Mouse.Cursor.Out")
 		btnDeleteProfile:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
 			if layoutNameList:GetSelectedItem()  then
@@ -337,7 +340,7 @@ function WT.Gadget.ShowSettings()
 		btnDeleteProfileTxt:SetPoint("TOPLEFT", btnDeleteProfile, "TOPLEFT", 10, 0)	
 -------------------------------Profile - Roles--------------------------------------------	
 		local labProfileRoles = UI.CreateFrame("Text", "txtProfileRoles", contentProfileSettings)
-		labProfileRoles:SetText("__________________________Profile - Roles_____________________________")
+		labProfileRoles:SetText("_____________________Profile - Roles________________________")
 		labProfileRoles:SetFontSize(20)
 		labProfileRoles:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		labProfileRoles:SetFontColor(1,0.97,0.84,1)
@@ -382,8 +385,8 @@ function getlayoutNameList(layoutName)
 	for i, v in pairs(wtxLayouts) do
 		table.insert(addlist, ""..i)	-- Concatenated to a string incase the user saves thier entry as a number
 	end
-	layoutNameList:SetItems(addlist)
-	layoutNameList:SetSelectedItem(layoutName, silent)
+	--layoutNameList:SetItems(addlist)
+	--layoutNameList:SetSelectedItem(layoutName, silent)
 end
 
 local CURRENT_ROLE_TYPE = nil

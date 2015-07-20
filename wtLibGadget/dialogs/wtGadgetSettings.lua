@@ -323,8 +323,8 @@ function WT.Gadget.ShowSettings()
 			btnDeleteProfile:SetBackgroundColor(0.2,0.2,0.2,0.4)
 		end, "Event.UI.Input.Mouse.Cursor.Out")
 		btnDeleteProfile:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
-			if layoutNameList:GetSelectedItem()  then
-				local layoutName = layoutNameList:GetSelectedItem()
+			if layoutNameList:GetText()  then
+				local layoutName = layoutNameList:GetText()
 				wtxLayouts[layoutName] = nil
 				print("Profile "..layoutName.." has been deleted.")
 				WT.Gadget.RecommendReload()	

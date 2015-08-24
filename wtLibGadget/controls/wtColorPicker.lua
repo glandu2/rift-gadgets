@@ -163,7 +163,6 @@ local function CreateSelector()
 	lblValid:SetFontSize(10)
 	lblValid:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 	lblValid:SetFontColor(1,0.97,0.84,1)
-	--lblValid:SetFont(AddonId, "blank-Bold")
 	
 	hexEditor:SetVisible(false)
 	
@@ -234,13 +233,13 @@ local function CreateSelector()
 		if offset < 0 then offset = 0 end
 		if offset > ctrlWidth then offset = ctrlWidth end
 		dragging.marker:SetPoint("CENTER", dragging, "TOPLEFT", 1 + offset, 6)
-		
 		local percent = offset / ctrlWidth
 		dragging.value = percent
 		
 		SetColor(olayRed.value, olayGreen.value, olayBlue.value, olayAlpha.value)
 		txtHex:SetText(string.format("%02X%02X%02X%02X", olayAlpha.value * 255, olayRed.value * 255, olayGreen.value * 255, olayBlue.value * 255))
 		hexEditor.text:SetText(string.format("%02X%02X%02X%02X", selector.olayAlpha.value * 255, selector.olayRed.value * 255, selector.olayGreen.value * 255, selector.olayBlue.value * 255))	
+		if WT.Gadget.CreateGadgetWindow.selected.gadgetConfig.gadgetType == "CastbarPresets" then WT.Control.UpdatePreview_Cast() end; 
 	end
 	
 	Command.Event.Attach(Event.Mouse.Move, UpdateMarker, "wtColourPicker_MouseMove")

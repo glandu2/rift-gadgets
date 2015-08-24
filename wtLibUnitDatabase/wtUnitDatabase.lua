@@ -244,7 +244,7 @@ local function UpdateCastbarDetails(unitId, cb)
 		end
 		-- Need to store some extra data to handle pushback properly
 		WT.Units[unitId].castUpdated = Inspect.Time.Frame()		
-		WT.Units[unitId].castRemaining = cb.remaining
+		WT.Units[unitId].castRemaining = cb.remaining	
 		WT.Units[unitId].castDuration = cb.duration
 		unit.castName = cb.abilityName or ""
 	else
@@ -254,6 +254,7 @@ local function UpdateCastbarDetails(unitId, cb)
 		WT.Units[unitId].castUpdated = nil
 		WT.Units[unitId].castDuration = nil
 		WT.Units[unitId].castRemaining = nil
+		WT.Units[unitId].castExpired = nil
 		WT.Units[unitId].castName = nil
 	end
 end
@@ -275,11 +276,19 @@ local function CalculateCastChanges()
 			local percent = 0
 			pcall(
 				function() 
+					if castbar.remaining < 0.05 then castbar.remaining = 0 end
 					percent = (1 - (castbar.remaining / castbar.duration)) * 100 
+					
 					if castbar.channeled then percent = 100 - percent end
 					unit.castTime = string.format("%.1f/%.1fs", castbar.duration - castbar.remaining, castbar.duration)
+					unit.castTime_s = string.format("%.1f/%.1f", castbar.duration - castbar.remaining, castbar.duration)
+					unit.castTimeShot = string.format("%.1f", castbar.remaining)
+					unit.castTimeShot_s = string.format("%.1fs", castbar.remaining)
 				end)
+				--dump(unit.castTime)
 			unit.castPercent = percent
+			if percent > 99.95 then percent = 100 end
+			if percent < 0.05 then percent = 0 end
 		end
 	end
 end
@@ -315,6 +324,7 @@ local function OnUnitCastbar(hEvent, units)
 				WT.Units[unitId].castUpdated = nil
 				WT.Units[unitId].castDuration = nil
 				WT.Units[unitId].castRemaining = nil
+				WT.Units[unitId].castExpired = nil
 			end
 		end
 	end

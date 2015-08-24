@@ -480,3 +480,12 @@ WT.Unit.CreateVirtualProperty("inCombat", { "id", "combat" },
 			return false
 		end
 	end)
+	
+WT.Unit.CreateVirtualProperty("notInCombat", { "id", "combat" },
+	function(unit)
+		if unit.combat then
+			return false
+		else
+			return true
+		end
+	end)	

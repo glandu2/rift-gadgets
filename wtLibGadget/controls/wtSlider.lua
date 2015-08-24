@@ -17,11 +17,13 @@ local TXT = Library.Translate
 
 
 WT.Control.Slider = {}
+WT.Control.SliderRange = {}
 WT.Control.Slider_mt = 
 { 
 	__index = function(tbl,name)
 		if tbl.frameIndex[name] then return tbl.frameIndex[name] end
 		if WT.Control.Slider[name] then return WT.Control.Slider[name] end  
+		if WT.Control.SliderRange[name] then return WT.Control.SliderRange[name] end  
 		if WT.Control[name] then return WT.Control[name] end
 		return nil  
 	end 
@@ -37,6 +39,21 @@ function WT.Control.Slider.Create(parent, id, label, default, onchange)
 	control:SetWidth(150)
 	control:SetPosition(default)
 	
+	return control
+			
+end
+
+function WT.Control.SliderRange.Create(parent, id, label, minRange, maxRange, default, onchange)
+
+	local control = UI.CreateFrame("SimpleLifeSlider", WT.UniqueName("Control"), parent)
+	control.frameIndex = getmetatable(control).__index
+	setmetatable(control, WT.Control.Slider_mt) 
+
+	control:SetRange(minRange, maxRange)
+	control:SetWidth(150)
+	control:SetPosition(default)
+
+  
 	return control
 			
 end

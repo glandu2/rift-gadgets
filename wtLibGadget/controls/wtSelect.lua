@@ -39,7 +39,6 @@ function WT.Control.Select.Create(parent, label, default, listItems, sort, oncha
 	tfValue:SetBackgroundColor(0.97,0.97,0.97,0.1)
 	tfValue:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 	tfValue:SetFontColor(1,0.97,0.84,1)
-	--tfValue:SetFont(AddonId, "blank-Bold")
 	tfValue:SetFontSize(14)
 
 	if label then
@@ -47,7 +46,6 @@ function WT.Control.Select.Create(parent, label, default, listItems, sort, oncha
 		txtLabel:SetText(label)
 		txtLabel:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		txtLabel:SetFontColor(1,0.97,0.84,1)
-		--txtLabel:SetFont(AddonId, "blank-Bold")
 		txtLabel:SetFontSize(14)
 		txtLabel:SetPoint("TOPLEFT", control, "TOPLEFT")
 		tfValue:SetPoint("CENTERLEFT", txtLabel, "CENTERRIGHT", 8, 0)
@@ -62,22 +60,29 @@ function WT.Control.Select.Create(parent, label, default, listItems, sort, oncha
 	dropDownIcon:SetWidth(tfValue:GetHeight())
 	dropDownIcon:SetPoint("TOPLEFT", tfValue, "TOPRIGHT", -10, 0)
 
-	local menu = WT.Control.Menu.Create(parent, listItems, function(value) tfValue:SetText(value); if onchange then onchange(tostring(value)) end; end, sort)
+	local menu = WT.Control.Menu.Create(parent, listItems, 
+		function(value) 
+		tfValue:SetText(value); 
+		if WT.Gadget.CreateGadgetWindow.selected.gadgetConfig.gadgetType == "CastbarPresets" then 
+		WT.Control.UpdatePreview_Cast() end; 
+		if onchange then onchange(tostring(value)) end; end, sort)
 	menu:SetPoint("TOPRIGHT", dropDownIcon, "BOTTOMCENTER")
 
 	dropDownIcon:EventAttach(Event.UI.Input.Mouse.Left.Click, function(self, h)
 		menu:Toggle()
 	end, "Event.UI.Input.Mouse.Left.Click")
 
-	control.GetText = function() return tfValue:GetText() end
+	control.GetText = function() 
+	return tfValue:GetText() end
+	
 	control.SetText = 
-		function(ctrl, value) 
+		 function(ctrl, value) 
 			tfValue:SetText(tostring(value))
 			if onchange then onchange(tostring(value)) end 
 		end
-		
+
 	control:SetHeight(20)
-		
+
 	return control
 			
 end

@@ -1,7 +1,7 @@
 local addon, shared = ...
 local id = addon.identifier
 
-local GJK = {buffID={}}
+GJK = {buffID={}}
 
 GJK.AbilityNames = {
 	["Unholy Dominion"] = true,
@@ -32,16 +32,11 @@ GJK.AbilityNames = {
 	["Abyssal Torrent"] = true,	
 	["Explosive Venom"] = true,
 	["Curse of Greed"] = true,
+	["The Point Protection"] = true,	
+	["Protection of Dance"] = true,		
 --[""] = true,	
 --	,
 }
-
---[[
-GJK.AbilityNames2 = {
-	--["Absolute Zero"] = true,	
-	
---	,
-}]]
 
 
 if WT.Unit.VirtualProperties["alertHealthColor"] ~= nil then
@@ -52,8 +47,6 @@ WT.Unit.CreateVirtualProperty("alertHealthColor", { "id", "cleansable", "buffAle
 	function(unit)
 		if unit.buffAlert then
 			return { r=0.5, g=0.5, b=0, a=0.85 }
-		--[[elseif unit.buffAlert2 then
-			return { r=0.2, g=0.2, b=0.2, a=0.85 }]]
 		elseif unit.cleansable then
 			return { r=0.2, g=0.15, b=0.4, a=0.85}
 		else
@@ -82,17 +75,14 @@ WT.Unit.CreateVirtualProperty("alertHealthColor2", { "id", "cleansable", "buffAl
 
 local buffID = ""
 local buffUnit = ""
+if not wtxOptions.buffsAlertlist then wtxOptions.buffsAlertlist = {} end
 
 function GJK.Event_Buff_Add(u,t)
 	for k,v in pairs(Inspect.Buff.Detail(u,t)) do
-		if GJK.AbilityNames[v.name] and WT.Units[u] then
+		if (GJK.AbilityNames[v.name] or wtxOptions.buffsAlertlist[v.name])and WT.Units[u] then
 			GJK.buffID[u] = k
 			WT.Units[u]["buffAlert"] = true
 		end
-		--[[if GJK.AbilityNames2[v.name] and WT.Units[u] then
-			GJK.buffID[u] = k
-			WT.Units[u]["buffAlert2"] = true
-		end]]
 	end
 end
 
@@ -102,10 +92,6 @@ function GJK.Event_Buff_Remove(u,t)
 			WT.Units[u]["buffAlert"] = false
 			GJK.buffID[u] = nil
 		end
-		--[[if GJK.buffID[u] == k then
-			WT.Units[u]["buffAlert2"] = false
-			GJK.buffID[u] = nil
-		end]]
 	end
 end
 

@@ -77,7 +77,6 @@ local function LoadItems(control, listItems)
 			txtOption:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 			txtOption:SetFontColor(1,0.97,0.84,1)
 			txtOption:SetFontSize(14)
-			--txtOption:SetFont(AddonId, "blank-Bold")
 			txtOption.Event.LeftClick = function() MenuItemClicked(control, i) end
 			table.insert(control.items, txtOption)
 		end

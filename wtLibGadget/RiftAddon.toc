@@ -26,6 +26,7 @@ RunOnStartup =
   "controls/wtSlider.lua",
 
   "wtGadget.lua",
+  "Preview.lua",
   "wtGadgetMessage.lua",
   "wtGadgetButton.lua",
   "wtGadgetRecommendReload.lua",
@@ -33,6 +34,7 @@ RunOnStartup =
 
   "themes/classic/classic.theme.lua",
   "themes/subtle/subtle.theme.lua",
+  "themes/subtle_preview/subtle_preview.theme.lua",
 
   "dialogs/wtGadgetSettings.lua",
   "dialogs/wtGadgetImport.lua",
@@ -70,6 +72,10 @@ Dependencies =
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline
 -- X-Curse-Packaged-Version: v0.9.4-beta
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline
+-- X-Curse-Packaged-Version: v0.10.2
 -- X-Curse-Project-Name: Gadgets
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline

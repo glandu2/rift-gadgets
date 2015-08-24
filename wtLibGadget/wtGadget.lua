@@ -187,6 +187,7 @@ function WT.Gadget.Create(configuration)
 			gadget:SetParent(gadget.displayRoot)
 			gadget.displayRoot:SetLayer(gadget:GetLayer())
 			
+			
 			gadget.showGroup = {}
 			
 			gadget.showGroup.solo = configuration.show_Solo
@@ -314,14 +315,14 @@ function WT.Gadget.AttachHandle(gadgetId, frame, createOptions)
 		frame.gadgetOverlay.resizer = szHandle
 	end
 	
-	--[[
+--[[	
 	if createOptions.caption then
 		local uiCaption = UI.CreateFrame("Text", "wtCaption", mvHandle)
 		uiCaption:SetText(createOptions.caption)
 		uiCaption:SetPoint("CENTERLEFT", mvHandle, "CENTERRIGHT")
 		uiCaption:SetFontSize(10)
 	end
-	--]]
+	]]
 	
 	--table.insert(WT.Gadgets, mvHandle)
 	WT.Gadgets[gadgetId].mvHandle = mvHandle
@@ -389,7 +390,7 @@ function WT.Gadget:DragMove()
 		local gs = WT.Gadget.GetGridSize()
 		x = math.floor(x / gs) * gs
 		y = math.floor(y / gs) * gs
-			
+
 		if WT.Gadget.alignTo then
 			local alignTop = WT.Gadget.alignTo.frame:GetTop()
 			local alignLeft = WT.Gadget.alignTo.frame:GetLeft()
@@ -409,6 +410,7 @@ function WT.Gadget:DragMove()
 				WT.Gadget.alignTo = nil
 				WT.Log.Debug("Alignment Mode Disengaged")
 			end
+			
 		else
 				-- mouseIn doesn't work if the frame isn't top level, so need to scan instead
 			for idx, hnd in pairs(WT.Gadgets) do
@@ -547,13 +549,83 @@ local function GadgetKeyUp(frame, hEvent, key)
 		end 
 	end
 end
+------------------------------------------------
+local linesActive = { }
+local linesQueued = { }
+
+local function Reallocate( )
+	for _, v in pairs( linesActive ) do
+		table.insert( linesQueued, v )
+		v:SetVisible( false )
+	end
+
+	linesActive = { }
+end
+
+local lastSize = 0
+local isDrawn = false
+local function Draw( gridSize )
+	if isDrawn then Reallocate( ) end
+
+	local lineSize = 1 -- Feel free to change this.
+	local blockSize = frame:GetWidth( ) / gridSize
+
+	for i = 1, gridSize do
+		local f = ( ( next( linesQueued ) == nil ) and UI.CreateFrame( "Frame", "", frame ) ) or table.remove( linesQueued )
+		f:SetBackgroundColor( ( ( i == ( gridSize / 2 ) ) and 1 ) or 0, 0, 0, 0.5 )
+		f:SetWidth( lineSize )
+		f:SetHeight( frame:GetHeight( ) )
+
+		f:SetPoint( "CENTER", frame, "CENTERLEFT", ( i * blockSize ) - ( lineSize / 2 ), 0 )
+		f:SetVisible( true )
+
+		table.insert( linesActive, f )
+	end
+
+	do -- Create the middle horizontal line first because we aren't going to perfectly divide our grid size into the height.
+		local f = ( ( next( linesQueued ) == nil ) and UI.CreateFrame( "Frame", "", frame ) ) or table.remove( linesQueued )
+		f:SetBackgroundColor( 1, 0, 0, 0.5 )
+		f:SetWidth( frame:GetWidth( ) )
+		f:SetHeight( lineSize )
+
+		f:SetPoint( "CENTER", frame, "CENTER", 0, lineSize / 2 )
+		f:SetVisible( true )
+
+		table.insert( linesActive, f )
+	end
+
+	local halfHeight = frame:GetHeight( ) / 2 -- Because we are starting from the middle (^) and working outwards.
+	for i = 1, math.floor( ( frame:GetHeight( ) / 2 ) / blockSize ) do
+		local f = ( ( next( linesQueued ) == nil ) and UI.CreateFrame( "Frame", "", frame ) ) or table.remove( linesQueued )
+		f:SetBackgroundColor( 0, 0, 0, 0.5 )
+		f:SetWidth( frame:GetWidth( ) )
+		f:SetHeight( lineSize )
+
+		f:SetPoint( "CENTER", frame, "CENTER", 0, -( i * blockSize ) + ( lineSize / 2 ) )
+		f:SetVisible( true )
+
+		table.insert( linesActive, f )
+		----- ^ Above the middle line. ^ ------ v Below the middle line. v --------------------------------------------
+		f = ( ( next( linesQueued ) == nil ) and UI.CreateFrame( "Frame", "", frame ) ) or table.remove ( linesQueued )
+		f:SetBackgroundColor( 0, 0, 0, 0.5 )
+		f:SetWidth( frame:GetWidth ( ) )
+		f:SetHeight( lineSize )
+
+		f:SetPoint( "CENTER", frame, "CENTER", 0, ( i * blockSize ) + ( lineSize / 2 ) )
+		f:SetVisible( true )
+
+		table.insert( linesActive, f )
+	end
+
+	lastSize = gridSize
+	if not isDrawn then isDrawn = true end
+end
 
 function WT.Gadget.UnlockAll()
 	if WT.Gadget.isSecure then
 		print("Cannot alter gadgets in combat")
 		return
 	end
-	
 	for gadgetId, gadget in pairs(WT.Gadgets) do
 		gadget.mvHandle:SetVisible(true)
 	end
@@ -571,7 +643,14 @@ function WT.Gadget.UnlockAll()
 		keyFocusFrame:SetKeyFocus(true)	
 		escMessageShown = false
 	end
-	
+---------------------Grid------------------------------	
+	context = UI.CreateContext( "" )
+	frame = UI.CreateFrame( "Frame", "", context )
+	frame:SetAllPoints( UIParent )
+	if wtxOptions.Grid == true then
+	Draw( wtxOptions.GridSize or 64 )	
+	end
+-----------------------------------------------------------	
 	WT.Event.Trigger.GadgetsUnlocked()
 end
 
@@ -581,7 +660,7 @@ function WT.Gadget.LockAll()
 		gadget.mvHandle:SetVisible(false)
 	end
 	gadgetsLocked = true
-
+	Reallocate( )
 	if keyFocusFrame then
 		keyFocusFrame:SetVisible(false)
 		keyFocusFrame:SetKeyFocus(false)
@@ -737,6 +816,7 @@ end
 
 local function Initialize()
 	if not wtxGadgets then wtxGadgets = {} end
+	if not wtxPreview then wtxPreview = {} end
 	for id, config in pairs(wtxGadgets) do
 		WT.Log.Info("Loading Gadget: " .. config.id)
 		WT.Gadget.Create(config)
@@ -746,6 +826,18 @@ local function Initialize()
 	for k,v in pairs(WT.GadgetFactories) do gadgetList = gadgetList .. v.name .. "; " end
 	Command.Console.Display("general", true, "<font color='#6688cc'>Gadgets Initialised</font> ", true)
 	-- Command.Console.Display("general", true, "<font color='#cccccc'>" .. gadgetList .. "</font> ", true)
+	--[[
+if wtxOptions.buffsAlertlist == GJK.AbilityNames then dump(true) end
+	if wtxOptions.buffsAlertlist == nil or {} then
+	wtxOptions.buffsAlertlist= {}
+			for k, v in pairs(GJK.AbilityNames) do
+				--local lalert = k:wtTrim()
+			--	if lalert:len() > 0 then
+					wtxOptions.buffsAlertlist[k] = true
+			end
+	end
+		for k,v in pairs(wtxOptions.buffsAlertlist) do print(tostring(k).."="..tostring(v)) end
+]]
 end
 
 

@@ -22,7 +22,7 @@ local deferSetup = {}
 local calling = nil
 
 local function OnComboSingle(uf, value)
-	 
+if  calling == "rogue" or calling == "warrior" then
 	uf.Elements["imgCombo01"]:SetVisible(false) 
 	uf.Elements["imgCombo02"]:SetVisible(false) 
 	uf.Elements["imgCombo03"]:SetVisible(false) 
@@ -48,7 +48,8 @@ local function OnComboSingle(uf, value)
 	if value >= 3 then uf.Elements["imgCombo03"]:SetVisible(true) end
 	if value >= 4 then uf.Elements["imgCombo04"]:SetVisible(true) end
 	if value >= 5 then uf.Elements["imgCombo05"]:SetVisible(true) end
-	 
+else
+end	 
 end
 
 local function Setup(unitFrame, configuration)

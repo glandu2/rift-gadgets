@@ -78,7 +78,7 @@ function wtLabel:Construct()
 		function(frame, text)
 			self:SetText(text)
 		end
-	
+	--local len = self:len()
 	unitFrame:CreateTokenBinding(config.text, self, self.SetLabelText, config.default or "", self.maxLength)
 	
 	if config.linkedHeightElement then

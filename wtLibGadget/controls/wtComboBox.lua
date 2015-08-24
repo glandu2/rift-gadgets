@@ -37,7 +37,6 @@ function WT.Control.ComboBox.Create(parent, label, default, listItems, sort, onc
 	tfValue:SetText(default or "")
 	tfValue:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 	tfValue:SetFontColor(1,0.97,0.84,1)
-	--tfValue:SetFont(AddonId, "blank-Bold")
 	tfValue:SetFontSize(14)
 	tfValue:SetWidth(200)	
 	tfValue:SetHeight(22)
@@ -50,7 +49,6 @@ function WT.Control.ComboBox.Create(parent, label, default, listItems, sort, onc
 		txtLabel:SetText(label)
 		txtLabel:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		txtLabel:SetFontColor(1,0.97,0.84,1)
-		--txtLabel:SetFont(AddonId, "blank-Bold")
 		txtLabel:SetFontSize(14)
 		txtLabel:SetPoint("TOPLEFT", control, "TOPLEFT")
 		tfValue:SetPoint("CENTERLEFT", txtLabel, "CENTERRIGHT", 8, 0)
@@ -64,8 +62,12 @@ function WT.Control.ComboBox.Create(parent, label, default, listItems, sort, onc
 	dropDownIcon:SetWidth(tfValue:GetHeight())
 	dropDownIcon:SetPoint("TOPLEFT", tfValue, "TOPRIGHT", -10, 0)
 
-	-- local menu = WT.Control.Menu.Create(parent, listItems, function(value) tfValue:SetText(value) end, sort)
-	local menu = WT.Control.Menu.Create(parent, listItems, function(value) control:SetText(value) end, sort)
+	--local menu = WT.Control.Menu.Create(parent, listItems, function(value) tfValue:SetText(value) end, sort)
+	local menu = WT.Control.Menu.Create(parent, listItems, 
+	function(value) 
+	control:SetText(value) 
+	if WT.Gadget.CreateGadgetWindow.selected.gadgetConfig.gadgetType == "CastbarPresets" then WT.Control.UpdatePreview_Cast() end; 
+	end, sort)
 	control.listItems = listItems
 	
 	menu:SetPoint("TOPRIGHT", dropDownIcon, "BOTTOMCENTER")

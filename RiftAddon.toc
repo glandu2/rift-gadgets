@@ -4,7 +4,7 @@
                             wildtide@wildtide.net
                            DoomSprout: Rift Forums 
       -----------------------------------------------------------------
-      Gadgets Framework   : v0.7.2
+      Gadgets Framework   : v0.10.3
       Project Date (UTC)  : 2013-10-06T09:26:25Z
       File Modified (UTC) : 2013-09-22T10:03:11Z (lifeismystery)
       -----------------------------------------------------------------     
@@ -15,11 +15,11 @@ Identifier = "Gadgets"
 Name = "Gadgets"
 Description = "Unit Frames and Other Stuff for RIFT"
 
-Author = "Wildtide"
-Website = "http://www.wildtide.net"
-Email = "wildtide@wildtide.net"
+Author = "Wildtide, Lifeismystery"
+Website = "http://www.curse.com/addons/rift/gadgets"
+Email = "wildtide@wildtide.net","lifeismystery@yandex.ru"
 
-Version = "v0.7.2"
+Version = "v0.10.3"
 
 Environment = "3.1"
 
@@ -37,6 +37,7 @@ RunOnStartup =
   "wtPlanarChargeGadget.lua",
   "wtSoulVitalityGadget.lua",
   "wtCastbarGadget.lua",
+  "wtCastbarPresets.lua",    
   "wtLiveDPS.lua",
   "wtLiveHPS.lua",
   "wtEncounterDPS.lua",

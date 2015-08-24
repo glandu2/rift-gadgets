@@ -23,6 +23,7 @@ local window = nil
 local btnOK = nil
 local btnCancel = nil
 local txtBlackList = nil
+local txtAlertList = nil
 
 local radFormatShort = nil
 local radFormatLong = nil
@@ -30,6 +31,8 @@ local radFormatNone = nil
 local ProfileRoles = nil
 local radBackgroundTexTrans = nil
 local radBackgroundTexFull = nil
+local GridCheckbox = nil
+local GridSize = nil
 local ufDialog = false
 
 local function OnWindowClosed()
@@ -44,6 +47,15 @@ local function SaveSettings()
 		local blBuff = buff:wtTrim()
 		if blBuff:len() > 0 then
 			wtxOptions.buffsBlacklist[blBuff] = true
+		end
+	end
+
+	wtxOptions.buffsAlertlist = {}
+	local alertslist = txtAlertList:GetText():wtSplit("\r")
+	for idx, buff in ipairs(alertslist) do
+		local lalert = buff:wtTrim()
+		if lalert:len() > 0 then
+			wtxOptions.buffsAlertlist[lalert] = true
 		end
 	end
 	
@@ -61,6 +73,11 @@ local function SaveSettings()
 		wtxOptions.prRoles = false 
 	end
 
+	if GridCheckbox:GetChecked() == true then
+		wtxOptions.Grid = true
+	else  
+		wtxOptions.Grid = false 
+	end
 	if radBackgroundTexTrans:GetSelected() then
 		wtxOptions.BackgroundTex = "BackgroundTexTrans"
 	elseif radBackgroundTexFull:GetSelected() then
@@ -68,11 +85,12 @@ local function SaveSettings()
 	else
 		wtxOptions.BackgroundTex = "BackgroundTexTrans"
 	end	
-
+	
 	OnWindowClosed()
 	window:SetVisible(false)
 	
 	WT.Event.Trigger.SettingsChanged()
+	WT.Gadget.RecommendReload()
 
 end
 
@@ -90,6 +108,22 @@ local function GetBlacklistedBuffs()
 	end
 	return blacklist
 end
+
+local function GetAlertsList()
+	local alertslist = ""
+	if wtxOptions.buffsAlertlist then
+		local sorted = {}
+		for buff in pairs(wtxOptions.buffsAlertlist) do
+			table.insert(sorted, buff)
+		end
+		table.sort(sorted)
+		for idx, buff in ipairs(sorted) do
+			alertslist = alertslist .. buff .. "\n"
+		end	
+	end
+	return alertslist
+end
+
 
 function WT.Gadget.ShowSettings()
 
@@ -174,10 +208,10 @@ function WT.Gadget.ShowSettings()
 		radGroupNumFormat:AddRadioButton(radFormatLong)
 		radGroupNumFormat:AddRadioButton(radFormatNone)
 		
-		local selOption = wtxOptions.numberFormat or "short"
-		if selOption == "none" then
+		wtxOptions.numberFormat = wtxOptions.numberFormat or "short"
+		if wtxOptions.numberFormat == "none" then
 			radFormatNone:SetSelected(true)
-		elseif selOption == "long" then
+		elseif wtxOptions.numberFormat == "long" then
 			radFormatLong:SetSelected(true)
 		else
 			radFormatShort:SetSelected(true)
@@ -203,16 +237,63 @@ function WT.Gadget.ShowSettings()
 		radGroupBackgroundTex:AddRadioButton(radBackgroundTexTrans)
 		radGroupBackgroundTex:AddRadioButton(radBackgroundTexFull)
 		
-		local TexOption = wtxOptions.BackgroundTex or "BackgroundTexTrans"
-		if TexOption == "BackgroundTexTrans" then
+		wtxOptions.BackgroundTex = wtxOptions.BackgroundTex or "BackgroundTexTrans"
+		if wtxOptions.BackgroundTex == "BackgroundTexTrans" then
 			radBackgroundTexTrans:SetSelected(true)
-		elseif TexOption == "BackgroundTexFull" then
+			wtxOptions.BackgroundTex = "BackgroundTexTrans"
+		elseif wtxOptions.BackgroundTex == "BackgroundTexFull" then
 			radBackgroundTexFull:SetSelected(true)
+			wtxOptions.BackgroundTex = "BackgroundTexFull"
 		else
 			radBackgroundTexTrans:SetSelected(true)
+			wtxOptions.BackgroundTex = "BackgroundTexTrans"
 		end
+
 ---------------------------------------------------------------------------------------------------------
+		local labGrid = UI.CreateFrame("Text", "labGrid", contentOptions)
+		labGrid:SetText("_________________Grid_Setup____________________________")
+		labGrid:SetFontSize(20)
+		labGrid:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labGrid:SetFontColor(1,0.97,0.84,1)
+		labGrid:SetPoint("TOPLEFT", contentOptions, "TOPLEFT", 8, 150)
 		
+		GridCheckbox = UI.CreateFrame("SimpleLifeCheckbox", "GridCheckbox", contentOptions)
+		GridCheckbox:SetPoint("TOPLEFT", labGrid, "TOPLEFT", 8, 50)
+		GridCheckbox:SetFontSize(16)
+		GridCheckbox:SetFontColor(1,0.97,0.84,1)
+		GridCheckbox:SetText("Use Grid")
+		if wtxOptions.Grid == nil then wtxOptions.Grid = true end
+		if wtxOptions.Grid == true then
+			GridCheckbox:SetChecked(true)
+			wtxOptions.Grid = GridCheckbox:GetChecked()
+		else	
+			GridCheckbox:SetChecked(false)
+			wtxOptions.Grid = GridCheckbox:GetChecked()
+		end
+		GridCheckbox:EventAttach(Event.UI.Checkbox.Change, function(self, h)
+
+				wtxOptions.Grid = GridCheckbox:GetChecked()
+
+		end, "Event.UI.Checkbox.Change")
+
+		local labGridSize = UI.CreateFrame("Text", "labGridSize", contentOptions)
+		labGridSize:SetText("Enter grid size: ")
+		labGridSize:SetFontSize(16)
+		labGridSize:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labGridSize:SetFontColor(1,0.97,0.84,1)
+		labGridSize:SetPoint("TOPLEFT", GridCheckbox, "TOPLEFT", 150, 0)
+			
+		GridSize = UI.CreateFrame("RiftTextfield", "GridSize", labGridSize)
+		GridSize:SetBackgroundColor(0.2, 0.2, 0.2, 1.0)
+		GridSize:SetText(wtxOptions.GridSize or "64")
+		GridSize:SetPoint("TOPLEFT", labGridSize, "TOPLEFT", 120, 4)
+		GridSize:SetWidth(50)
+		wtxOptions.GridSize = GridSize:GetText()
+		
+		GridSize:EventAttach(Event.UI.Textfield.Change, function(self, h)
+			wtxOptions.GridSize = GridSize:GetText()
+		end, "Event.UI.Textfield.Change")
+---------------------------------------------------------------------------------------------------------		
 		local contentBuffSettings = UI.CreateFrame("Frame", "contentBuffSettings", tabs.tabContent)
 		contentBuffSettings:SetAllPoints(content)
 
@@ -221,7 +302,6 @@ function WT.Gadget.ShowSettings()
 		labBlackList:SetFontSize(16)
 		labBlackList:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		labBlackList:SetFontColor(1,0.97,0.84,1)
-		--labBlackList:SetFont(AddonId, "blank-Bold")
 		labBlackList:SetPoint("TOPLEFT", contentBuffSettings, "TOPLEFT", 8, 8)
 		
 		local frmBlackList = UI.CreateFrame("Frame", "frmBuffBlackList", contentBuffSettings)
@@ -236,6 +316,27 @@ function WT.Gadget.ShowSettings()
 		txtBlackList:SetPoint("TOPLEFT", frmBlackList, "TOPLEFT", 1, 1)
 		txtBlackList:SetPoint("BOTTOMRIGHT", frmBlackList, "BOTTOMRIGHT", -1, -1)
 -----------------------------------------------------------------------------------------
+		local contentAlertSettings = UI.CreateFrame("Frame", "contentAlertSettings", tabs.tabContent)
+		contentAlertSettings:SetAllPoints(content)
+
+		local labAlertList = UI.CreateFrame("Text", "txtlabAlertList", contentAlertSettings)
+		labAlertList:SetText("Alerts for your raid frame")
+		labAlertList:SetFontSize(16)
+		labAlertList:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
+		labAlertList:SetFontColor(1,0.97,0.84,1)
+		labAlertList:SetPoint("TOPLEFT", contentAlertSettings, "TOPLEFT", 8, 8)
+		
+		local frmAlertList = UI.CreateFrame("Frame", "frmAlertList", contentAlertSettings)
+		frmAlertList:SetBackgroundColor(1,1,1,1)
+		frmAlertList:SetPoint("TOPLEFT", labAlertList, "BOTTOMLEFT", 0, 0)
+		frmAlertList:SetPoint("RIGHT", contentAlertSettings, "CENTERX", -8, nil)
+		frmAlertList:SetHeight(200)
+			
+		txtAlertList = UI.CreateFrame("SimpleLifeTextArea", "txtBuffAlertList", frmAlertList)
+		txtAlertList:SetBackgroundColor(0.3,0.3,0.3,1.0)
+		txtAlertList:SetText(GetAlertsList())
+		txtAlertList:SetPoint("TOPLEFT", frmAlertList, "TOPLEFT", 1, 1)
+		txtAlertList:SetPoint("BOTTOMRIGHT", frmAlertList, "BOTTOMRIGHT", -1, -1)
 -----------------------------------------------------------------------------------------
 -----------------------------Profile settings--------------------------------------------
 -----------------------------------------------------------------------------------------
@@ -248,7 +349,6 @@ function WT.Gadget.ShowSettings()
 		labProfile:SetFontSize(16)
 		labProfile:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		labProfile:SetFontColor(1,0.97,0.84,1)
-		--labProfile:SetFont(AddonId, "blank-Bold")
 		labProfile:SetPoint("TOPLEFT", contentProfileSettings, "TOPLEFT", 8, 8)
 			
 		txtProfile = UI.CreateFrame("RiftTextfield", "txtProfile", labProfile)
@@ -286,7 +386,6 @@ function WT.Gadget.ShowSettings()
 		btnSaveProfileTxt:SetFontSize(16)
 		btnSaveProfileTxt:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		btnSaveProfileTxt:SetFontColor(1,0.97,0.84,1)
-		--btnSaveProfileTxt:SetFont(AddonId, "blank-Bold")
 		btnSaveProfileTxt:SetPoint("TOPLEFT", btnSaveProfile, "TOPLEFT", 10, 0)
 -------------------------------Delete Profile--------------------------------------------		
 		local labProfileDelete = UI.CreateFrame("Text", "txtProfileDelete", contentProfileSettings)
@@ -294,9 +393,7 @@ function WT.Gadget.ShowSettings()
 		labProfileDelete:SetFontSize(16)
 		labProfileDelete:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		labProfileDelete:SetFontColor(1,0.97,0.84,1)
-		--labProfileDelete:SetFont(AddonId, "blank-Bold")
 		labProfileDelete:SetPoint("TOPLEFT", contentProfileSettings, "TOPLEFT", 8, 35)
-
 		
 		addlist = nil
 		addlist = {}
@@ -309,8 +406,7 @@ function WT.Gadget.ShowSettings()
 		layoutNameList:SetHeight(25)
 		layoutNameList:SetWidth(170)
 		layoutNameList:SetLayer(3)
-		
-		
+				
 		local btnDeleteProfile = UI.CreateFrame("Frame", "btnDeleteProfile", contentProfileSettings)
 		btnDeleteProfile:SetWidth(150)
 		btnDeleteProfile:SetHeight(20)
@@ -344,16 +440,21 @@ function WT.Gadget.ShowSettings()
 		labProfileRoles:SetFontSize(20)
 		labProfileRoles:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		labProfileRoles:SetFontColor(1,0.97,0.84,1)
-		--labProfileRoles:SetFont(AddonId, "blank-Bold")
 		labProfileRoles:SetPoint("TOPLEFT", contentProfileSettings, "TOPLEFT", 8, 70)
 		
 		ProfileRoles = UI.CreateFrame("SimpleLifeCheckbox", "ProfileRoles", contentProfileSettings)
 		ProfileRoles:SetPoint("TOPLEFT", labProfileRoles, "TOPLEFT", 8, 50)
 		ProfileRoles:SetFontSize(16)
-		--ProfileRoles:SetEffectGlow({ colorR = 0.23, colorG = 0.17, colorB = 0.027, strength = 3, })
 		ProfileRoles:SetFontColor(1,0.97,0.84,1)
-		--ProfileRoles:SetFont(AddonId, "blank-Bold")
 		ProfileRoles:SetText("Show window Importlayout when you change role")	
+		if wtxOptions.prRoles == nil then wtxOptions.Grid = false end
+		if wtxOptions.prRoles == true then
+			ProfileRoles:SetChecked(true)
+			wtxOptions.prRoles = ProfileRoles:GetChecked()
+		else	
+			ProfileRoles:SetChecked(false)
+			wtxOptions.prRoles = ProfileRoles:GetChecked()
+		end
 		ProfileRoles:EventAttach(Event.UI.Checkbox.Change, function(self, h)
 			if ProfileRoles:GetChecked() == true then
 				wtxOptions.prRoles = true
@@ -362,16 +463,11 @@ function WT.Gadget.ShowSettings()
 				wtxOptions.prRoles  = false
 			end
 		end, "Event.UI.Checkbox.Change")
-		if wtxOptions.prRoles == true then 
-			ProfileRoles:SetChecked(true) 
-		else  
-			ProfileRoles:SetChecked(false) 
-		end
-			
 ------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------
 		tabs:AddTab("General", contentOptions)
 		tabs:AddTab("Buffs/Debuffs", contentBuffSettings)
+		tabs:AddTab("Alerts", contentAlertSettings)
 		tabs:AddTab("Profiles", contentProfileSettings)
 		
 	end
@@ -385,8 +481,6 @@ function getlayoutNameList(layoutName)
 	for i, v in pairs(wtxLayouts) do
 		table.insert(addlist, ""..i)	-- Concatenated to a string incase the user saves thier entry as a number
 	end
-	--layoutNameList:SetItems(addlist)
-	--layoutNameList:SetSelectedItem(layoutName, silent)
 end
 
 local CURRENT_ROLE_TYPE = nil
@@ -411,7 +505,7 @@ local function RoleChange(hEvent, unitId)
 			end
 		end
 	end
-end	
+end	Command.Event.Attach(Event.Unit.Detail.Role, RoleChange, "RoleChange")
 
-Command.Event.Attach(Event.Unit.Detail.Role, RoleChange, "RoleChange")
+
 Command.Event.Attach(Event.Unit.Availability.Full, Event_Unit_Availability_Full, "Event.Unit.Availability.Full")

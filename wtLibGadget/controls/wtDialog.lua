@@ -180,6 +180,17 @@ function CDialog:Slider(id, label, default)
 	
 end
 
+function CDialog:SliderRange(id, label, minRange, maxRange, default)
+	
+	local control = WT.Control.SliderRange.Create(self.container, id, label, minRange, maxRange, default, onchange)
+	--control:SetText(default)
+	local frm = self:add(id, label, control)
+	frm.getValue = control.GetPosition
+	frm.setValue = control.SetPosition
+	return self
+	
+end
+
 function CDialog:MacroSet(id, label)
 	local control = WT.Control.MacroSet.Create(self.container, label)
 	local frm = self:add(id, "Mouse Macros", control)

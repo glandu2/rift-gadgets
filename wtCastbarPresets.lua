@@ -13,7 +13,7 @@
 local toc, data = ...
 local AddonId = toc.identifier
 
-local dialog, dialog = false
+local dialog = false
 local preview = nil
 
 local toc, data = ...
@@ -28,40 +28,43 @@ local testCast =
 	name= "Soul Recall",
 	castingTime = "8.0s",
 }
+local PHICON = "Data/\\UI\\texture\\global\\placeholder_icon.dds"
 
 local function OnCastName(unitFrame, castname)
 	if castname  then
-	if unitFrame.showcastName == true then unitFrame.labelCast:SetText(castname) else end
-	if unitFrame.showIcon == false then return 
-	else	
-		local unit = unitFrame.Unit
+	local unit = unitFrame.Unit
+		if unitFrame.showcastName == true then unitFrame.labelCast:SetText(castname) else end
+		if unitFrame.showIcon == false then 
+		--
+		else	
+		--local unit = unitFrame.Unit
 		if unitFrame.icon then
 			local cbd = Inspect.Unit.Castbar(unit.id)
-			if cbd then
-				if cbd.abilityNew then
-					local ad = Inspect.Ability.New.Detail(cbd.abilityNew)
-					if ad and ad.icon then
-						if ad.icon == PHICON then
-						unitFrame.icon:SetVisible(false)
+				if cbd then
+					if cbd.abilityNew then
+						local ad = Inspect.Ability.New.Detail(cbd.abilityNew)
+						if ad and ad.icon then
+							if ad.icon == PHICON then
+							unitFrame.icon:SetVisible(false)
+							else
+							unitFrame.icon:SetTexture("Rift", ad.icon)
+							unitFrame.icon:SetVisible(true)
+							end
 						else
-						unitFrame.icon:SetTexture("Rift", ad.icon)
-						unitFrame.icon:SetVisible(true)
+							unitFrame.icon:SetVisible(false)
 						end
 					else
 						unitFrame.icon:SetVisible(false)
 					end
 				else
-					unitFrame.icon:SetVisible(false)
+					WT.UnitDatabase.Casting[unit.id] = nil
+					WT.Units[unit.id].castName = nil
 				end
-			else
-				WT.UnitDatabase.Casting[unit.id] = nil
-				WT.Units[unit.id].castName = nil
-			end
-			if unit.Uninterruptible then
+		end
+		if unit.castUninterruptible then
 				unitFrame.barCast:SetShape(unitFrame.canvasSettings.pathCastbar, unitFrame.canvasSettings.fillCastbarNonInt, unitFrame.canvasSettings.strokeCastbar)
-			else
+		else
 				unitFrame.barCast:SetShape(unitFrame.canvasSettings.pathCastbar, unitFrame.canvasSettings.fillCastbar, unitFrame.canvasSettings.strokeCastbar)
-			end
 		end
 		end
 	else
@@ -823,7 +826,7 @@ WT.Gadget.RegisterFactory("CastbarPresets",
 	{
 		name="Castbar Presets",
 		description="Castbar Presets",
-		author="Fallenangel, Lifeismystery",
+		author="Lifeismystery, Fallenangel",
 		version="1.1.0",
 		iconTexAddon=AddonId,
 		iconTexFile="img/wtCastBar.png",

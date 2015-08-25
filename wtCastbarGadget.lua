@@ -154,21 +154,10 @@ local function Create(configuration)
 	end
 
 	if configuration.showIcon then
-		castBar.iconBackdrop = castBar:CreateElement({
-			id="iconBackdrop", type="Image", parent="frame", layer=20,
-			attach = {{ point = "TOPRIGHT", element="barCast", targetPoint = "TOPLEFT", offsetX=-2, offsetY=0 }},
-			visibilityBinding="castName", 
-			texAddon=AddonId, texFile="img/icons/Backdrop.png",
-
-		})
 		castBar.icon = castBar:CreateElement({
 			id="abilityIcon", type="Image", parent="frame", layer=30,
-			attach = {
-					{ point="TOPLEFT", element="iconBackdrop", targetPoint="TOPLEFT", offsetX=1, offsetY=1 },
-					{ point="BOTTOMRIGHT", element="iconBackdrop", targetPoint="BOTTOMRIGHT", offsetX=-1, offsetY=-1 },
-				},
-			visibilityBinding="castName", texAddon="Rift", texFile=PHICON, alpha = 1,
-
+			attach = {{ point = "TOPRIGHT", element="barCast", targetPoint = "TOPLEFT", offsetX=-2, offsetY=0 }},
+			visibilityBinding="castName", texAddon="Rift", texFile=PHICON
 		})
 	end
 	
@@ -183,25 +172,8 @@ local function Create(configuration)
 			color={r=0,g=0,b=0,a=0},
 			BorderColorBinding="BorderColor3", border=true, BorderColor3 = {r=0,g=0,b=0,a=1},
 	})
-	--[[	castBar.Border = castBar:CreateElement({
-			id="CastbarBorder", type="Image", parent="frame", layer=10,
-		attach = {
-			{ point="TOPLEFT", element="frame", targetPoint="TOPLEFT" },
-			{ point="BOTTOMRIGHT", element="frame", targetPoint="BOTTOMRIGHT" },
-		},
-			visibilityBinding="castName", 
-			--texAddon=AddonId, texFile="img/icons/Normal.png", --alpha = 1,
-			texAddon="Rift", texFile="Merchant_I2E2.dds", --alpha = 1,
-			--Merchant_I2E2.dds
-
-		})]]
 	end
-			
-		if configuration.showIcon then
-		local fh = castBar.barCast:GetHeight()
-			castBar.iconBackdrop:SetHeight(fh)
-			castBar.iconBackdrop:SetWidth(fh)
-		end
+	
 	castBar.OnResize = 
 		function(frame)		
 		local fh = frame:GetHeight()
@@ -212,8 +184,8 @@ local function Create(configuration)
 			s = 24
 			end
 			if configuration.showIcon then
-				castBar.iconBackdrop:SetHeight(fh)
-				castBar.iconBackdrop:SetWidth(fh)
+				castBar.icon:SetHeight(fh)
+				castBar.icon:SetWidth(fh)
 			end
 		end
 	
@@ -224,7 +196,6 @@ local function Create(configuration)
 	castBar:CreateBinding("castName", castBar, OnCastName, nil)
 
 	castBar.barCast:SetVisible(false)
-	castBar.Border:SetVisible(false)
 
 	return castBar, { resizable = { 140, 3, 1000, 300 } }
 end

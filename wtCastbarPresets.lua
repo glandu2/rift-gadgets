@@ -57,7 +57,7 @@ local function OnCastName(unitFrame, castname)
 				WT.UnitDatabase.Casting[unit.id] = nil
 				WT.Units[unit.id].castName = nil
 			end
-			if unit.castUninterruptible then
+			if unit.Uninterruptible then
 				unitFrame.barCast:SetShape(unitFrame.canvasSettings.pathCastbar, unitFrame.canvasSettings.fillCastbarNonInt, unitFrame.canvasSettings.strokeCastbar)
 			else
 				unitFrame.barCast:SetShape(unitFrame.canvasSettings.pathCastbar, unitFrame.canvasSettings.fillCastbar, unitFrame.canvasSettings.strokeCastbar)

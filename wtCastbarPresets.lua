@@ -33,6 +33,11 @@ local PHICON = "Data/\\UI\\texture\\global\\placeholder_icon.dds"
 local function OnCastName(unitFrame, castname)
 	if castname  then
 	local unit = unitFrame.Unit
+			if unit.castUninterruptible then
+				unitFrame.barCast:SetShape(unitFrame.canvasSettings.pathCastbar, unitFrame.canvasSettings.fillCastbarNonInt, unitFrame.canvasSettings.strokeCastbar)
+		else
+				unitFrame.barCast:SetShape(unitFrame.canvasSettings.pathCastbar, unitFrame.canvasSettings.fillCastbar, unitFrame.canvasSettings.strokeCastbar)
+		end
 		if unitFrame.showcastName == true then unitFrame.labelCast:SetText(castname) else end
 		if unitFrame.showIcon == false then 
 		--
@@ -60,11 +65,6 @@ local function OnCastName(unitFrame, castname)
 					WT.UnitDatabase.Casting[unit.id] = nil
 					WT.Units[unit.id].castName = nil
 				end
-		end
-		if unit.castUninterruptible then
-				unitFrame.barCast:SetShape(unitFrame.canvasSettings.pathCastbar, unitFrame.canvasSettings.fillCastbarNonInt, unitFrame.canvasSettings.strokeCastbar)
-		else
-				unitFrame.barCast:SetShape(unitFrame.canvasSettings.pathCastbar, unitFrame.canvasSettings.fillCastbar, unitFrame.canvasSettings.strokeCastbar)
 		end
 		end
 	else
@@ -232,7 +232,7 @@ local function ConfigDialog(container)
 		:Checkbox("insertCast", "insert Cast", false)   --9 
 		:Checkbox("TextRight", "Text to Right", false) -- 10
 		:SliderRange("Width", "CastBar Width", 150, 400, 250, true) --11
-		:SliderRange("Height", "CastBar Height", 10, 50, 10, true)--12
+		:SliderRange("Height", "CastBar Height", 5, 50, 10, true)--12
 		:SliderRange("angle", "Angle of the cast bar", 0, 180, 0, true)	--13		
 		:Checkbox("showIcon", "Show Icon", true)	--14
 		:SliderRange("iconSize", "Change Icon Size", 10, 50, 35, true)--15

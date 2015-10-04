@@ -151,6 +151,7 @@ function WT.Control.Menu.Create(parent, listItems, callback, sort)
 	control.dropDownBackground:SetBackgroundColor(0,0,0,0)
 	control.dropDownBackground:SetPoint("TOPLEFT", control, "TOPLEFT", 20, 20)
 	control.dropDownBackground:SetPoint("BOTTOMRIGHT", control, "BOTTOMRIGHT", 50, 50)
+	control.dropDownBackground:SetLayer(11000)
 
 	local value = nil
 

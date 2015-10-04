@@ -137,6 +137,7 @@ function WT.Gadget.ShowCreationUI()
 		local typeListScrollbar = UI.CreateFrame("RiftScrollbar", "WTGadgetTypeScroll", frameTypeList)
 		typeListScrollbar:SetPoint("TOPRIGHT", frameTypeList, "TOPRIGHT", -1, 1)
 		typeListScrollbar:SetPoint("BOTTOM", frameTypeList, "BOTTOM", nil, -1)
+		typeListScrollbar:SetBackgroundColor(0,0,0,1)
 		typeListScrollbar:EventAttach(Event.UI.Scrollbar.Change, function(self, h)
 			frameScrollAnchor:SetPoint("TOPLEFT", frameTypeList, "TOPLEFT", 0, -typeListScrollbar:GetPosition())
 		end, "Event.UI.Scrollbar.Change")
@@ -441,10 +442,10 @@ function WT.Gadget.ShowCreationUI()
 						container:SetVisible(false)
 						gadget.ConfigDialog(container)
 						gadget._configDialog = container
+					
 					end
 					window.dialog = gadget._configDialog 
 					if window.dialog.Reset then window.dialog.Reset() end
-					
 					window.dialog:SetParent(frameOptions)
 					window.dialog:SetPoint("TOPLEFT", standardOptions, "BOTTOMLEFT", 0, 8)
 					window.dialog:SetPoint("BOTTOMRIGHT", frameOptions, "BOTTOMRIGHT", -8, -8)

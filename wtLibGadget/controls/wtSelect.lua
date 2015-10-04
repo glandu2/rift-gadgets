@@ -63,8 +63,10 @@ function WT.Control.Select.Create(parent, label, default, listItems, sort, oncha
 	local menu = WT.Control.Menu.Create(parent, listItems, 
 		function(value) 
 		tfValue:SetText(value); 
+		if WT.Gadget.CreateGadgetWindow then
 		if WT.Gadget.CreateGadgetWindow.selected.gadgetConfig.gadgetType == "CastbarPresets" then 
 		WT.Control.UpdatePreview_Cast() end; 
+		end
 		if onchange then onchange(tostring(value)) end; end, sort)
 	menu:SetPoint("TOPRIGHT", dropDownIcon, "BOTTOMCENTER")
 

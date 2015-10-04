@@ -146,11 +146,13 @@ end
 
 function XBG.OnExperience(h, accum, rested, needed)
 	if not accum then return end
+	if not needed then return end
 	
 	local pLevel = Inspect.Unit.Detail("player").level
 	if pLevel == MAX_CH_LEVEL then
 		needed = -1
-	end
+	end	
+
 	
 	if needed == -1 then
 		for idx, gadget in ipairs(xpGadgets) do
@@ -319,8 +321,10 @@ function XBG.Create(configuration)
 		table.insert(paGadgets, wrapper)
 	elseif configuration.xpType == "PRXP" then
 		table.insert(prGadgets, wrapper)
-	end
+	end	
 
+	XBG.OnExperience(0, Inspect.TEMPORARY.Experience())
+	
 	return wrapper, { resizable={100, 8, 1500, 40 } } 
 end
 
@@ -403,7 +407,6 @@ function XBG.OnPlayerAvailable(h)
 end
 
 Command.Event.Attach(WT.Event.PlayerAvailable, XBG.OnPlayerAvailable, "XPBarGadget_OnPlayerAvailable")	
-
 Command.Event.Attach(Event.TEMPORARY.Experience, XBG.OnExperience, "OnExperienceBar")
 Command.Event.Attach(Event.Pvp.Prestige.Accumulated, XBG.OnPrestige, "Event.Pvp.Prestige.Accumulated")
 Command.Event.Attach(Event.Pvp.Prestige.Rank, XBG.RankChange, "Event.Pvp.Prestige.Rank")

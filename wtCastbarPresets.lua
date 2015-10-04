@@ -38,7 +38,10 @@ local function OnCastName(unitFrame, castname)
 		else
 				unitFrame.barCast:SetShape(unitFrame.canvasSettings.pathCastbar, unitFrame.canvasSettings.fillCastbar, unitFrame.canvasSettings.strokeCastbar)
 		end
-		if unitFrame.showcastName == true then unitFrame.labelCast:SetText(castname) else end
+		if unitFrame.showcastName == true then 
+		unitFrame.labelCast:SetText(castname) 
+		unitFrame.labelCast:SetVisible(true)
+		else end
 		if unitFrame.showIcon == false then 
 		--
 		else	
@@ -69,6 +72,10 @@ local function OnCastName(unitFrame, castname)
 		end
 	else
 		unitFrame.icon:SetVisible(false)
+		unitFrame.barCast:SetVisible(false)
+		unitFrame.labelTime:SetVisible(false)
+		unitFrame.labelCast:SetVisible(false)
+		unitFrame.Backdrop:SetVisible(false)
 	end
 end
 local function OncastTime(unitFrame, castTime)

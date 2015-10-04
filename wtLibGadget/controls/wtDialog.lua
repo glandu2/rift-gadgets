@@ -22,8 +22,9 @@ local CDialog_mt = { __index = CDialog }
 
 function CDialog:add(id, label, control, labelFontSize, stretch, iconFile, labelFontOutline, labelFontColor, labelFontColorY)
 
-	local lbl = false
+	local lbl = false		
 	local frm = UI.CreateFrame("Frame", "DialogFormRow", self.container)
+	
 	if label then
 
 		lbl = UI.CreateFrame("Text", "DialogFieldLbl", frm)
@@ -76,6 +77,7 @@ function CDialog:add(id, label, control, labelFontSize, stretch, iconFile, label
 	else
 		frm:SetPoint("TOPLEFT", self.fields[#self.fields], "BOTTOMLEFT", 0, 8)
 	end
+
 	
 	frm:SetPoint("RIGHT", self.container, "RIGHT")
 

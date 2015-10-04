@@ -102,6 +102,17 @@ WT.Unit.CreateVirtualProperty("tier", { "id", "tier" },
 		local tier = unit.tier or "normal"
 		return tier
 	end)
+	
+	WT.Unit.CreateVirtualProperty("tierColor", { "id", "tier" },
+	function(unit)
+		local tier = unit.tier or "normal"
+		if tier == "group" then
+		return "group"
+		elseif tier == "raid" then
+		return "raid"
+		end
+		
+	end)
 
 WT.Unit.CreateVirtualProperty("hostility", { "id", "relation" },
 	function(unit)
@@ -115,6 +126,15 @@ WT.Unit.CreateVirtualProperty("pvpAlliance", { "alliance", "pvp" },
 			return nil
 		else
 			return unit.alliance
+		end
+	end)
+
+WT.Unit.CreateVirtualProperty("pvp", { "id", "pvp" },
+	function(unit)
+		if unit.pvp then
+			return true
+		else
+			return false
 		end
 	end)
 	
@@ -186,6 +206,8 @@ WT.Unit.CreateVirtualProperty("BorderColor", { "playerTarget", "id", "aggro"},
 			return { r = 1.0, g = 0.86, b = 0.04, a = 1.0 }
 		elseif unit.playerTarget and unit.calling == "warrior" then
 			return { r = 1.0, g = 0.15, b = 0.15, a = 1.0 }
+		elseif  unit.playerTarget  and unit.calling == "primalist" then
+			return { r = 0.29, g = 0.83, b = 0.98, a = 1.0  }	
 		elseif not unit.playerTarget and unit.id then
 		    if unit.aggro then return { r=1, g=0, b =0, a=1 }
 			else return { r=0, g=0, b=0, a=1 } end
@@ -344,6 +366,8 @@ WT.Unit.CreateVirtualProperty("HealthCallingColor", { "id", "cleansable", "offli
 					return { r = 0.9, g = 0.76, b = 0.04, a = 0.85 }
 				elseif  unit.calling == "warrior" then
 					return { r = 0.9, g = 0.05, b = 0.05, a = 0.85}
+				elseif  unit.calling == "primalist" then
+					return { r = 0.29, g = 0.83, b = 0.98, a = 0.85}	
 				end	
 			else
 				if 	unit.relation == "hostile" then
@@ -372,6 +396,8 @@ WT.Unit.CreateVirtualProperty("NameColor", { "id", "calling", "relation", "offli
 					return { r = 1.0, g = 0.86, b = 0.04, a = 1.0 }
 				elseif  unit.calling == "warrior" then
 					return { r = 1.0, g = 0.15, b = 0.15, a = 1.0 }
+				elseif  unit.calling == "primalist" then
+					return { r = 0.29, g = 0.83, b = 0.98, a = 1.0 }
 				end	
 			else
 				if 	unit.relation == "hostile" then

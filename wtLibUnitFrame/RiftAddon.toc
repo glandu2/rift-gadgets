@@ -30,6 +30,7 @@ RunOnStartup =
   "elements/wtStaticLabel.lua",
   "elements/wtBar.lua",
   "elements/wtBarHealth.lua",
+  --"elements/wtCanvas.lua",  
   "elements/wtBarWithBorder.lua",
   "elements/wtHealthCap.lua",  
   "elements/wtImage.lua",

@@ -157,7 +157,7 @@ local function OnBuffAdd(hEvent, unitId, buffs)
 	local changes = { add = {} }
 	
 	for buffId, buff in pairs(bdesc) do
-
+	--dump(buff.name, buff.icon)
 		buff.unitId = unitId
 	
 		-- We learn all of the buffs the player is capable of casting in their current role, and store them
@@ -379,13 +379,17 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 			elseif detail.calling == "warrior" then
 				unit.callingColor = { r = 1.0, g = 0.15, b = 0.15, a = 1.0 }
 				unit.callingText = TXT.Warrior	
+			elseif detail.calling == "primalist" then
+				unit.callingColor = { r = 0.29, g = 0.83, b = 0.98, a = 1.0 }
+				unit.callingText = TXT.Primalist	
 		else	
 			unit.callingColor = { r = 0.2, g = 0.4, b = 0.6, a = 1.0 }
 			unit.callingText = ""
+
 		end
 
 		if unit.name:len() > 20 then
-			unit.nameShort = unit.name:sub(1, 19) .. "..."
+			unit.nameShort = unit.name:sub(1, 15) .. "..."
 		else
 			unit.nameShort = unit.name
 		end
@@ -917,8 +921,7 @@ Command.Event.Attach(Event.Unit.Detail.Coord, OnUnitDetailCoord, "OnUnitDetailCo
 local function OnChatNotify(hEvent, unitsValue)
 	for unitId,value in pairs(unitsValue) do SetProperty(unitId, "OnChatNotify", value) end
 end
-
-
+counter = nil
 
 Command.Event.Attach(Event.System.Update.Begin,	OnSystemUpdateBegin, "DB_OnSystemUpdateBegin")
 Command.Event.Attach(Event.Chat.Notify,	OnChatNotify, "OnChatNotify")

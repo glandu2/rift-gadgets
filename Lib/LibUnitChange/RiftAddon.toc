@@ -22,3 +22,7 @@ RunOnStartup = {
 -- X-Curse-Project-Name: Gadgets
 -- X-Curse-Project-ID: gadgets
 -- X-Curse-Repository-ID: rift/gadgets/mainline
+-- X-Curse-Packaged-Version: v0.10.3-beta
+-- X-Curse-Project-Name: Gadgets
+-- X-Curse-Project-ID: gadgets
+-- X-Curse-Repository-ID: rift/gadgets/mainline

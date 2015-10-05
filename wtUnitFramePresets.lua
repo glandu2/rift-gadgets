@@ -520,33 +520,44 @@ local function OnRangeChange(unitFrame, range)
 
 		local unit = unitFrame.Unit
 		if unit.id ~= WT.Player.id then	
+			if unitFrame.RangeFormat == "rangeShot" then
+				Range = string.format("%.0f", range)
+			else
+				Range = string.format("%.1f", range)
+			end
 			if range <= 2.9 then
-			unitFrame.txtRange:SetText(string.format("%.0f", range))
+			--unitFrame.txtRange:SetText(string.format("%.0f", range))
+			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(0.6, 1, 0.6, 1)
 			unitFrame.Range:SetVisible(true)
 			unitFrame.txtRange:SetVisible(true)
 			elseif range <= 20 then
-			unitFrame.txtRange:SetText(string.format("%.0f", range))
+			--unitFrame.txtRange:SetText(string.format("%.0f", range))
+			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(1, 1, 0.6, 1)
 			unitFrame.Range:SetVisible(true)
 			unitFrame.txtRange:SetVisible(true)
 			elseif range <= 28 then
-			unitFrame.txtRange:SetText(string.format("%.0f", range))
+			--unitFrame.txtRange:SetText(string.format("%.0f", range))
+			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(1, 1, 0.6, 1)
 			unitFrame.Range:SetVisible(true)
 			unitFrame.txtRange:SetVisible(true)
 			elseif range <= 30 then
-			unitFrame.txtRange:SetText(string.format("%.0f", range))
+			--unitFrame.txtRange:SetText(string.format("%.0f", range))
+			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(1, 0.7, 0.4, 1)
 			unitFrame.Range:SetVisible(true)
 			unitFrame.txtRange:SetVisible(true)
 			elseif range <= 35 then
-			unitFrame.txtRange:SetText(string.format("%.0f", range))
+			--unitFrame.txtRange:SetText(string.format("%.0f", range))
+			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(1, 0.2, 0.2, 1)
 			unitFrame.Range:SetVisible(true)
 			unitFrame.txtRange:SetVisible(true)
 			else            
-			unitFrame.txtRange:SetText(string.format("%.0f", range))
+			--unitFrame.txtRange:SetText(string.format("%.0f", range))
+			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(1, 0.2, 0.2, 1)
 			unitFrame.Range:SetVisible(true)
 			unitFrame.txtRange:SetVisible(true)
@@ -662,21 +673,21 @@ local function ConfigDialog(container)
 	tabs:SetPoint("TOPLEFT", container, "TOPLEFT")
 	tabs:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -20)
 	
-	local frmCurrencies = UI.CreateFrame("Frame", "frmCurrencies", tabs.tabContent)
-	frmCurrencies:SetPoint("TOPLEFT", container, "TOPLEFT")
-	frmCurrencies:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -20)
+	local frmOptions = UI.CreateFrame("Frame", "frmOptions", tabs.tabContent)
+	frmOptions:SetPoint("TOPLEFT", container, "TOPLEFT")
+	frmOptions:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -20)
 	
-	local frmEvents = UI.CreateFrame("Frame", "frmEvents", tabs.tabContent)
-	frmEvents:SetPoint("TOPLEFT", container, "TOPLEFT")
-	frmEvents:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -20)
+	local frmText = UI.CreateFrame("Frame", "frmText", tabs.tabContent)
+	frmText:SetPoint("TOPLEFT", container, "TOPLEFT")
+	frmText:SetPoint("BOTTOMRIGHT", container, "BOTTOMRIGHT", 0, -20)
 	
 	
 	tabs:SetTabPosition("top")
-	tabs:AddTab("Currencies", frmCurrencies)
-	tabs:AddTab("Events", frmEvents)
+	tabs:AddTab("Options", frmOptions)
+	tabs:AddTab("Text", frmText)
 
 	
-	dialog = WT.Dialog(frmCurrencies)
+	dialog = WT.Dialog(frmOptions)
 		:Checkbox("ToLeft", "Growth direction to left", false)--19
 		:Combobox("unitSpec", "Unit to track", "player",
 			{
@@ -706,7 +717,7 @@ local function ConfigDialog(container)
 		:Checkbox("MPE_bar_insert", "MPE bar insert", false)--17
 		:SliderRange("offset_MPE", "MPE offset from HP bar", 0, 10, 3, true) --18
 		
-	dialog2 = WT.Dialog(frmEvents)	
+	dialog2 = WT.Dialog(frmText)	
 		:Title("Text Options") --1
 		:Checkbox("text_name", "Show name", true)--2
 		:SliderRange("textFontSize_name", "Font Size Name", 6, 50, 12, true)  --3
@@ -720,6 +731,11 @@ local function ConfigDialog(container)
 		:Checkbox("text_range", "Show Range", true) --11
 		:SliderRange("textFontSize_range", "Font Size Range", 6, 50, 12, true)  --12
 		:Select("font_range", "Font range", "#Default", lfont, true, onchange) --13
+		:Combobox("RangeFormat", "Range Format", "rangeShot",
+			{
+				{text="5", value="rangeShot"},
+				{text="5.3", value="rangeFull"},
+			}, false) --14
 end
 
 local function Create(configuration)
@@ -758,6 +774,7 @@ local function Create(configuration)
 	UnitFrame.textFontSize_HP = configuration.textFontSize_HP
 	UnitFrame.textFontSize_MPE = configuration.textFontSize_MPE
 	UnitFrame.textFontSize_range = configuration.textFontSize_range
+	UnitFrame.RangeFormat = configuration.RangeFormat or "rangeShot"
 				
 	UnitFrame.canvasSettings = {
 		angle_HP = configuration.HP_bar_angle or 0, -- угол наклона в градусах, 0 - вертикально, 45/135 - по диагонали, допустимые значения 0-180

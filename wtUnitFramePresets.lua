@@ -12,13 +12,10 @@
 --for k,v in pairs(WT) do print(tostring(k).."="..tostring(v)) end
 local toc, data = ...
 local AddonId = toc.identifier
+local TXT = Library.Translate
 
 local dialog, dialog2 = false
 local preview = nil
-
-local toc, data = ...
-local AddonId = toc.identifier
-local TXT = Library.Translate
 
 local listItems = {}
 local listItemCount = 0
@@ -526,37 +523,31 @@ local function OnRangeChange(unitFrame, range)
 				Range = string.format("%.1f", range)
 			end
 			if range <= 2.9 then
-			--unitFrame.txtRange:SetText(string.format("%.0f", range))
 			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(0.6, 1, 0.6, 1)
 			unitFrame.Range:SetVisible(true)
 			unitFrame.txtRange:SetVisible(true)
 			elseif range <= 20 then
-			--unitFrame.txtRange:SetText(string.format("%.0f", range))
 			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(1, 1, 0.6, 1)
 			unitFrame.Range:SetVisible(true)
 			unitFrame.txtRange:SetVisible(true)
 			elseif range <= 28 then
-			--unitFrame.txtRange:SetText(string.format("%.0f", range))
 			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(1, 1, 0.6, 1)
 			unitFrame.Range:SetVisible(true)
 			unitFrame.txtRange:SetVisible(true)
 			elseif range <= 30 then
-			--unitFrame.txtRange:SetText(string.format("%.0f", range))
 			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(1, 0.7, 0.4, 1)
 			unitFrame.Range:SetVisible(true)
 			unitFrame.txtRange:SetVisible(true)
 			elseif range <= 35 then
-			--unitFrame.txtRange:SetText(string.format("%.0f", range))
 			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(1, 0.2, 0.2, 1)
 			unitFrame.Range:SetVisible(true)
 			unitFrame.txtRange:SetVisible(true)
 			else            
-			--unitFrame.txtRange:SetText(string.format("%.0f", range))
 			unitFrame.txtRange:SetText(Range)
 			unitFrame.txtRange:SetFontColor(1, 0.2, 0.2, 1)
 			unitFrame.Range:SetVisible(true)
@@ -741,13 +732,16 @@ end
 local function Create(configuration)
 
 	local UnitFrame = WT.UnitFrame:Create(configuration.unitSpec)	
+	UnitFrame.ToLeft = configuration.ToLeft
+	
 	UnitFrame.HP_bar_Width = configuration.HP_bar_Width
 	UnitFrame.HP_bar_Height = configuration.HP_bar_Height
 	UnitFrame.HP_bar_angle = configuration.HP_bar_angle
 	UnitFrame.HP_bar_color = configuration.HP_bar_color
 	UnitFrame.HP_bar_backgroundColor = configuration.HP_bar_backgroundColor
 	UnitFrame.HP_bar_insert = configuration.HP_bar_insert
-		
+	UnitFrame.HP_asy_angles = configuration.HP_asy_angles
+	
 	UnitFrame.MPE_bar_Width = configuration.MPE_bar_Width
 	UnitFrame.MPE_bar_Height = configuration.MPE_bar_Height
 	UnitFrame.MPE_bar_angle = configuration.MPE_bar_angle
@@ -755,26 +749,28 @@ local function Create(configuration)
 	UnitFrame.MPE_bar_backgroundColor = configuration.MPE_bar_backgroundColor or {0.5, 0, 0, 0.85}
 	UnitFrame.MPE_bar_insert = configuration.MPE_bar_insert
 	UnitFrame.offset_MPE = configuration.offset_MPE
-	UnitFrame.text_name = configuration.text_name
-	UnitFrame.fontEntry_name = Library.Media.GetFont(configuration.font_name)
-	UnitFrame.text_HP = configuration.text_HP
-	UnitFrame.fontEntry_HP = Library.Media.GetFont(configuration.font_HP)	
-	UnitFrame.text_MPE = configuration.text_MPE
-	UnitFrame.fontEntry_MPE = Library.Media.GetFont(configuration.font_MPE)
-	UnitFrame.clickToTarget = configuration.clickToTarget or true
-	UnitFrame.contextMenu = configuration.contextMenu or true
-	UnitFrame.ToLeft = configuration.ToLeft
-	UnitFrame.HP_asy_angles = configuration.HP_asy_angles
 	UnitFrame.MPE_asy_angles = configuration.MPE_asy_angles
 	UnitFrame.Show_MPE = configuration.Show_MPE or true
-	UnitFrame.textFontSizeName =  (configuration.textFontSizeName or 12)
-	UnitFrame.text_range = configuration.text_range
-	UnitFrame.fontEntry_range = Library.Media.GetFont(configuration.font_range or "#Default")
+	
+	UnitFrame.text_name = configuration.text_name
 	UnitFrame.textFontSize_name = configuration.textFontSize_name
+	UnitFrame.fontEntry_name = Library.Media.GetFont(configuration.font_name)
+	
+	UnitFrame.text_HP = configuration.text_HP
 	UnitFrame.textFontSize_HP = configuration.textFontSize_HP
+	UnitFrame.fontEntry_HP = Library.Media.GetFont(configuration.font_HP)	
+	
+	UnitFrame.text_MPE = configuration.text_MPE
 	UnitFrame.textFontSize_MPE = configuration.textFontSize_MPE
+	UnitFrame.fontEntry_MPE = Library.Media.GetFont(configuration.font_MPE)
+	
+	UnitFrame.text_range = configuration.text_range
 	UnitFrame.textFontSize_range = configuration.textFontSize_range
+	UnitFrame.fontEntry_range = Library.Media.GetFont(configuration.font_range or "#Default")
 	UnitFrame.RangeFormat = configuration.RangeFormat or "rangeShot"
+	
+	UnitFrame.clickToTarget = configuration.clickToTarget or true
+	UnitFrame.contextMenu = configuration.contextMenu or true
 				
 	UnitFrame.canvasSettings = {
 		angle_HP = configuration.HP_bar_angle or 0, -- угол наклона в градусах, 0 - вертикально, 45/135 - по диагонали, допустимые значения 0-180
@@ -1379,110 +1375,117 @@ local function Reconfigure(config)
 		gadgetConfig.unitSpec = config.unitSpec
 		requireRecreate = true
 	end
-
-	if gadgetConfig.angle ~= config.angle then
-		gadgetConfig.angle = config.angle
-		requireRecreate = true
-	end
-	if gadgetConfig.font ~= config.font then
-		gadgetConfig.font = config.font
-		gadget.font = config.font
-		requireRecreate = true
-	end
-	
-	if gadgetConfig.TextRight ~= config.TextRight then
-		gadgetConfig.TextRight = config.TextRight
-		gadget.TextRight = config.TextRight
-		requireRecreate = true
-	end
-	
-	if gadgetConfig.TimeFormat ~= config.TimeFormat then
-		gadgetConfig.TimeFormat = config.TimeFormat
-		requireRecreate = true
-	end
 		
-	if gadgetConfig.textFontSize_name ~= config.textFontSize_name then
-		gadgetConfig.textFontSize_name = config.textFontSize_name
-		gadget.textFontSize_name = config.textFontSize_name
+	if gadgetConfig.HP_bar_Width ~= config.HP_bar_Width then
+		gadgetConfig.HP_bar_Width = config.HP_bar_Width
+		requireRecreate = true
+	end	
+	if gadgetConfig.HP_bar_Height ~= config.HP_bar_Height then
+		gadgetConfig.HP_bar_Height = config.HP_bar_Height
 		requireRecreate = true
 	end
-	if gadgetConfig.textFontSize_HP ~= config.textFontSize_HP then
-		gadgetConfig.textFontSize_HP = config.textFontSize_HP
-		gadget.textFontSize_HP = config.textFontSize_HP
+	if gadgetConfig.HP_bar_angle ~= config.HP_bar_angle then
+		gadgetConfig.HP_bar_angle = config.HP_bar_angle
 		requireRecreate = true
 	end
-	
+	if gadgetConfig.HP_asy_angles ~= config.HP_asy_angles then
+		gadgetConfig.HP_asy_angles = config.HP_asy_angles
+		requireRecreate = true
+	end	
 	if gadgetConfig.HP_bar_color ~= config.HP_bar_color then
 		gadgetConfig.HP_bar_color = config.HP_bar_color
-		gadget.HP_bar_color = config.HP_bar_color
 		requireRecreate = true
 	end
-	
 	if gadgetConfig.HP_bar_backgroundColor ~= config.HP_bar_backgroundColor then
 		gadgetConfig.HP_bar_backgroundColor = config.HP_bar_backgroundColor
-		gadget.HP_bar_backgroundColor = config.HP_bar_backgroundColor
 		requireRecreate = true
 	end
-	
-	if gadgetConfig.showIcon ~= config.showIcon then
-		gadgetConfig.showIcon = config.showIcon
-		gadget.showIcon = config.showIcon
+	if gadgetConfig.HP_bar_insert ~= config.HP_bar_insert then
+		gadgetConfig.HP_bar_insert = config.HP_bar_insert
+		requireRecreate = true
+	end
+	if gadgetConfig.MPE_bar_Width ~= config.MPE_bar_Width then
+		gadgetConfig.MPE_bar_Width = config.MPE_bar_Width
+		requireRecreate = true
+	end
+	if gadgetConfig.MPE_bar_Height ~= config.MPE_bar_Height then
+		gadgetConfig.MPE_bar_Height = config.MPE_bar_Height
+		requireRecreate = true
+	end
+	if gadgetConfig.MPE_bar_angle ~= config.MPE_bar_angle then
+		gadgetConfig.MPE_bar_angle = config.MPE_bar_angle
+		requireRecreate = true
+	end
+	if gadgetConfig.MPE_asy_angles ~= config.MPE_asy_angles then
+		gadgetConfig.MPE_asy_angles = config.MPE_asy_angles
+		requireRecreate = true
+	end
+	if gadgetConfig.MPE_bar_color ~= config.MPE_bar_color then
+		gadgetConfig.MPE_bar_color = config.MPE_bar_color
+		requireRecreate = true
+	end
+	if gadgetConfig.MPE_bar_backgroundColor ~= config.MPE_bar_backgroundColor then
+		gadgetConfig.MPE_bar_backgroundColor = config.MPE_bar_backgroundColor
+		requireRecreate = true
+	end	
+	if gadgetConfig.MPE_bar_insert ~= config.MPE_bar_insert then
+		gadgetConfig.MPE_bar_insert = config.MPE_bar_insert
+		requireRecreate = true
+	end
+	if gadgetConfig.offset_MPE ~= config.offset_MPE then
+		gadgetConfig.offset_MPE = config.offset_MPE
 		requireRecreate = true
 	end
 
-	if gadgetConfig.iconSize ~= config.iconSize then
-		gadgetConfig.iconSize = config.iconSize
-		gadget.iconSize = config.iconSize
+	if gadgetConfig.text_name ~= config.text_name then
+		gadgetConfig.text_name = config.text_name
+		requireRecreate = true
+	end	
+	if gadgetConfig.textFontSize_name ~= config.textFontSize_name then
+		gadgetConfig.textFontSize_name = config.textFontSize_name
 		requireRecreate = true
 	end
-	
-	if gadgetConfig.iconPositionX ~= config.iconPositionX then
-		gadgetConfig.iconPositionX = config.iconPositionX
-		gadget.iconPositionX = config.iconPositionX
+	if gadgetConfig.font_name ~= config.font_name then
+		gadgetConfig.font_name = config.font_name
 		requireRecreate = true
 	end
-		
-	if gadgetConfig.iconPositionY ~= config.iconPositionY then
-		gadgetConfig.iconPositionY = config.iconPositionY
-		gadget.iconPositionY = config.iconPositionY
+	if gadgetConfig.text_HP ~= config.text_HP then
+		gadgetConfig.text_HP = config.text_HP
+		requireRecreate = true
+	end	
+	if gadgetConfig.textFontSize_HP ~= config.textFontSize_HP then
+		gadgetConfig.textFontSize_HP = config.textFontSize_HP
 		requireRecreate = true
 	end
-	
-	if gadgetConfig.showcastName ~= config.showcastName then
-		gadgetConfig.showcastName = config.showcastName
-		gadget.showcastName = config.showcastName
+	if gadgetConfig.font_HP ~= config.font_HP then
+		gadgetConfig.font_HP = config.font_HP
 		requireRecreate = true
 	end
-	
-	if gadgetConfig.namePositionX ~= config.namePositionX then
-		gadgetConfig.namePositionX = config.namePositionX
-		gadget.namePositionX = config.namePositionX
+	if gadgetConfig.text_MPE ~= config.text_MPE then
+		gadgetConfig.text_MPE = config.text_MPE
 		requireRecreate = true
 	end
-	
-	if gadgetConfig.namePositionY ~= config.namePositionY then
-		gadgetConfig.namePositionY = config.namePositionY
-		gadget.namePositionY = config.namePositionY
+	if gadgetConfig.textFontSize_MPE ~= config.textFontSize_MPE then
+		gadgetConfig.textFontSize_MPE = config.textFontSize_MPE
 		requireRecreate = true
 	end
-	
-	if gadgetConfig.showcastTime ~= config.showcastTime then
-		gadgetConfig.showcastTime = config.showcastTime
-		gadget.showcastTime = config.showcastTime
+	if gadgetConfig.text_range ~= config.text_range then
+		gadgetConfig.text_range = config.text_range
 		requireRecreate = true
 	end
-	
-	if gadgetConfig.timePositionX ~= config.timePositionX then
-		gadgetConfig.timePositionX = config.timePositionX
-		gadget.timePositionX = config.timePositionX
+	if gadgetConfig.textFontSize_range ~= config.textFontSize_range then
+		gadgetConfig.textFontSize_range = config.textFontSize_range
 		requireRecreate = true
 	end
-		
-	if gadgetConfig.timePositionY ~= config.timePositionY then
-		gadgetConfig.timePositionY = config.timePositionY
-		gadget.timePositionY = config.timePositionY
+	if gadgetConfig.font_range ~= config.font_range then
+		gadgetConfig.font_range = config.font_range
 		requireRecreate = true
-	end		
+	end
+	if gadgetConfig.RangeFormat ~= config.RangeFormat then
+		gadgetConfig.RangeFormat = config.RangeFormat
+		requireRecreate = true
+	end
+			
 	if requireRecreate then
 		WT.Gadget.Delete(gadgetConfig.id)
 		WT.Gadget.Create(gadgetConfig)

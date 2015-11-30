@@ -46,6 +46,15 @@ WT.Unit.CreateVirtualProperty("chargePercent", { "charge", "chargeMax" },
 		end 
 	end)
 
+WT.Unit.CreateVirtualProperty("primalistFocus", { "focus"}, 
+	function(unit)
+		if unit.focus then
+			return unit.focus
+		else 
+			return nil
+		end 
+	end)
+	
 WT.Unit.CreateVirtualProperty("resourcePercent", { "mana", "power", "energy", "manaMax", "energyMax" }, 
 	function(unit)
 		if unit.mana and unit.manaMax and unit.manaMax > 0 then
@@ -361,7 +370,7 @@ WT.Unit.CreateVirtualProperty("HealthCallingColor", { "id", "cleansable", "offli
 				elseif unit.calling == "mage" then
 					return { r = 0.7, g = 0.26, b = 0.9, a = 0.85}
 				elseif  unit.calling == "cleric" then
-					return { r = 0.37, g = 0.24, b = 0.0, a = 0.85 }
+					return { r = 0.47, g = 0.94, b = 0.0, a = 0.85 }
 				elseif  unit.calling == "rogue" then
 					return { r = 0.9, g = 0.76, b = 0.04, a = 0.85 }
 				elseif  unit.calling == "warrior" then

@@ -10,9 +10,6 @@
       -----------------------------------------------------------------     
 --]]
 --for k,v in pairs(WT) do print(tostring(k).."="..tostring(v)) end
-local toc, data = ...
-local AddonId = toc.identifier
-
 local dialog = false
 local preview = nil
 
@@ -73,7 +70,7 @@ local function OnCastName(unitFrame, castname)
 	else
 		unitFrame.icon:SetVisible(false)
 		unitFrame.barCast:SetVisible(false)
-		unitFrame.labelTime:SetVisible(false)
+		--unitFrame.labelTime:SetVisible(false)
 		unitFrame.labelCast:SetVisible(false)
 		unitFrame.Backdrop:SetVisible(false)
 	end

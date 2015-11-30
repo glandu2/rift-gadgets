@@ -7,7 +7,7 @@ local Draggable = {}
 if not Library.LibDraggable then Library.LibDraggable = Draggable end
 
 Draggable.DebugLevel = 0
-Draggable.Version = "0.5-130712-20:34:32"
+Draggable.Version = "0.6-151128-15:56:00"
 
 Draggable.printf = Library.printf.printf
 
@@ -17,10 +17,11 @@ function Draggable.draggify(window, callback)
   local newtab = { dragging = false, x = 0, y = 0 }
   Draggable.windows[window] = newtab
   newtab.callback = callback
-  window:EventAttach(Event.UI.Input.Mouse.Left.Down, function(...) Draggable.leftdown(window, ...) end, "draggable_left_down")
-  window:EventAttach(Event.UI.Input.Mouse.Cursor.Move, function(...) Draggable.mousemove(window, ...) end, "draggable_mouse_move")
-  window:EventAttach(Event.UI.Input.Mouse.Left.Up, function(...) Draggable.leftup(window, ...) end, "draggable_left_up")
-  window:EventAttach(Event.UI.Input.Mouse.Left.Upoutside, function(...) Draggable.leftupoutside(window, ...) end, "draggable_left_upoutside")
+  local border = window.GetBorder and window:GetBorder() or window
+  border:EventAttach(Event.UI.Input.Mouse.Left.Down, function(...) Draggable.leftdown(window, ...) end, "draggable_left_down")
+  border:EventAttach(Event.UI.Input.Mouse.Cursor.Move, function(...) Draggable.mousemove(window, ...) end, "draggable_mouse_move")
+  border:EventAttach(Event.UI.Input.Mouse.Left.Up, function(...) Draggable.leftup(window, ...) end, "draggable_left_up")
+  border:EventAttach(Event.UI.Input.Mouse.Left.Upoutside, function(...) Draggable.leftupoutside(window, ...) end, "draggable_left_upoutside")
   Draggable.windows[window] = newtab
 end
 

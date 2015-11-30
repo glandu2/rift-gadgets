@@ -108,7 +108,7 @@ function printf.cprintfs(console, fmt, ...)
 end
 
 function printf.printfhs(fmt, ...)
-  return printf.cprintfs(printf.console(), fmt, ...)
+  return printf.cprintfhs(printf.console(), fmt, ...)
 end
 
 function printf.cprintfhs(console, fmt, ...)

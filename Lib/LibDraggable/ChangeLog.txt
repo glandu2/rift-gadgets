@@ -1,3 +1,7 @@
+2015/11/28:
+	* Support the non-RiftWindow usage case, to unbreak compatibility with
+	  Gadgets.
+
 2012/07/12:
 	* Fix leftover code for new event system.
 

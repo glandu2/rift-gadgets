@@ -1,6 +1,6 @@
 Identifier = "printf"
 
-Version = "0.2-130712-20:34:14"
+Version = "0.3-140213-19:15:19"
 
 Email = "riftaddons@seebs.net"
 
@@ -21,11 +21,3 @@ RunOnStartup = {
 
 Environment = { "1.11" }
 
--- X-Curse-Packaged-Version: v0.9.4-beta
--- X-Curse-Project-Name: Gadgets
--- X-Curse-Project-ID: gadgets
--- X-Curse-Repository-ID: rift/gadgets/mainline
--- X-Curse-Packaged-Version: v0.10.3-beta
--- X-Curse-Project-Name: Gadgets
--- X-Curse-Project-ID: gadgets
--- X-Curse-Repository-ID: rift/gadgets/mainline

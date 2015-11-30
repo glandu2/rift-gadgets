@@ -1,6 +1,6 @@
 Identifier = "LibDraggable"
 
-Version = "0.5-130712-20:34:32"
+Version = "0.6-151128-15:56:00"
 
 Email = "riftaddons@seebs.net"
 
@@ -26,11 +26,3 @@ RunOnStartup = {
 
 Environment = { "2.3" }
 
--- X-Curse-Packaged-Version: v0.9.4-beta
--- X-Curse-Project-Name: Gadgets
--- X-Curse-Project-ID: gadgets
--- X-Curse-Repository-ID: rift/gadgets/mainline
--- X-Curse-Packaged-Version: v0.10.3-beta
--- X-Curse-Project-Name: Gadgets
--- X-Curse-Project-ID: gadgets
--- X-Curse-Repository-ID: rift/gadgets/mainline

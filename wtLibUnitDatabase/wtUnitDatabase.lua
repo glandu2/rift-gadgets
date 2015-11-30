@@ -348,6 +348,18 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 		else
 			unit.partial = false
 		end
+	--[[
+			if detail.focus < 100 then
+				unit["primalistFocus"] = detail.focus - 0
+				unit["primalistColor"] = { r = 0.66, g = 0.09, b = 0.09, a = 1.0 }
+			elseif detail.focus == 100  then
+				unit["primalistFocus"] = detail.focus - 100
+				unit["primalistColor"] = { r = 0.20, g = 0.15, b = 0.09, a = 1.0 }
+			elseif detail.focus > 100  then
+				unit["primalistFocus"] = detail.focus - 100
+				unit["primalistColor"] = { r = 0.26, g = 0.63, b = 0.73, a = 1.0 }
+			end
+		]]
 
 		if detail["manaMax"] then 
 			unit["resourceName"] = "mana"
@@ -367,21 +379,21 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 			unit["resourceColor"] = { r = 0.31, g = 0.31, b = 0.31, a = 1.0 }
 		end
 
-			if detail.calling == "mage" then
-				unit.callingColor = { r = 0.8, g = 0.36, b = 1.0, a = 1.0 }
-				unit.callingText = TXT.Mage
-			elseif detail.calling == "cleric" then
-				unit.callingColor = { r = 0.47, g = 0.94, b = 0.0, a = 1.0 }
-				unit.callingText = TXT.Cleric
-			elseif detail.calling == "rogue" then
-				unit.callingColor = { r = 1.0, g = 0.86, b = 0.04, a = 1.0 }
-				unit.callingText = TXT.Rogue
-			elseif detail.calling == "warrior" then
-				unit.callingColor = { r = 1.0, g = 0.15, b = 0.15, a = 1.0 }
-				unit.callingText = TXT.Warrior	
-			elseif detail.calling == "primalist" then
-				unit.callingColor = { r = 0.29, g = 0.83, b = 0.98, a = 1.0 }
-				unit.callingText = TXT.Primalist	
+		if detail.calling == "mage" then
+			unit.callingColor = { r = 0.8, g = 0.36, b = 1.0, a = 1.0 }
+			unit.callingText = TXT.Mage
+		elseif detail.calling == "cleric" then
+			unit.callingColor = { r = 0.47, g = 0.94, b = 0.0, a = 1.0 }
+			unit.callingText = TXT.Cleric
+		elseif detail.calling == "rogue" then
+			unit.callingColor = { r = 1.0, g = 0.86, b = 0.04, a = 1.0 }
+			unit.callingText = TXT.Rogue
+		elseif detail.calling == "warrior" then
+			unit.callingColor = { r = 1.0, g = 0.15, b = 0.15, a = 1.0 }
+			unit.callingText = TXT.Warrior	
+		elseif detail.calling == "primalist" then
+			unit.callingColor = { r = 0.29, g = 0.83, b = 0.98, a = 1.0 }
+			unit.callingText = TXT.Primalist	
 		else	
 			unit.callingColor = { r = 0.2, g = 0.4, b = 0.6, a = 1.0 }
 			unit.callingText = ""
@@ -412,17 +424,14 @@ local function PopulateUnit(unitId, unitObject, omitBuffScan)
 		
 		if unitId == Inspect.Unit.Lookup("player.target") then
 			unit.playerTarget = true
-			
-			
+					
 		--[[local targets = Inspect.Unit.Detail(Inspect.Unit.List()).name)
 		for k,v in pairs(targets) do
 			unit[k] = v
 		end]]
-			
-			
-		
-			--dump(Inspect.Unit.Detail(Inspect.Unit.List()).name)
+		--dump(Inspect.Unit.Detail(Inspect.Unit.List()).name)
 		end 
+		--dump(Inspect.Unit.Detail("player").vitality)
 		
 		-- Add all buffs currently on the unit
 		if not omitBuffScan then
@@ -779,7 +788,6 @@ local function CalculateHoTTrackers()
 
 end
 
-
 local function OnSystemUpdateBegin(hEvent)
 	CalculateCastChanges()
 	CalculateRanges()
@@ -879,6 +887,7 @@ Command.Event.Attach(Event.Unit.Detail.Afk,	OnUnitDetailAfk, "OnUnitDetailAfk")
 Command.Event.Attach(Event.Unit.Detail.Aggro, OnUnitDetailAggro, "OnUnitDetailAggro")
 Command.Event.Attach(Event.Unit.Detail.Blocked, OnUnitDetailBlocked, "OnUnitDetailBlocked")
 Command.Event.Attach(Event.Unit.Detail.Charge, OnUnitDetailCharge, "OnUnitDetailCharge")
+--Command.Event.Attach(Event.Unit.Detail.Focus, OnUnitDetailFocus, "OnUnitDetailFocus")
 Command.Event.Attach(Event.Unit.Detail.ChargeMax, OnUnitDetailChargeMax, "OnUnitDetailChargeMax")
 Command.Event.Attach(Event.Unit.Detail.Combat, OnUnitDetailCombat, "OnUnitDetailCombat")
 Command.Event.Attach(Event.Unit.Detail.Combo, OnUnitDetailCombo, "OnUnitDetailCombo")

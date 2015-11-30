@@ -54,7 +54,7 @@ WT.Unit.CreateVirtualProperty("alertHealthColor", { "id", "cleansable", "buffAle
 			return {r=wtxGadgets.RaidFrames1.CleanseColor[1],g=wtxGadgets.RaidFrames1.CleanseColor[2],b=wtxGadgets.RaidFrames1.CleanseColor[3],a=wtxGadgets.RaidFrames1.CleanseColor[4]}
 			else return { r=0.2, g=0.15, b=0.4, a=0.85} end
 		else
-			if wtxGadgets.RaidFrames1.colHealth then
+			if wtxGadgets.RaidFrames1.colHealth and wtxGadgets.RaidFrames1.ovHealthColor then
 				return {r=wtxGadgets.RaidFrames1.colHealth[1],g=wtxGadgets.RaidFrames1.colHealth[2],b=wtxGadgets.RaidFrames1.colHealth[3],a=wtxGadgets.RaidFrames1.colHealth[4]}
 			else 
 				return  { r=0.07, g=0.07, b=0.07, a=0.85} end
@@ -79,7 +79,7 @@ WT.Unit.CreateVirtualProperty("alertHealthColor2", { "id", "cleansable", "buffAl
 			return {r=wtxGadgets.RaidFrames1.CleanseColor[1],g=wtxGadgets.RaidFrames1.CleanseColor[2],b=wtxGadgets.RaidFrames1.CleanseColor[3],a=wtxGadgets.RaidFrames1.CleanseColor[4]}
 			else return { r=0.2, g=0.15, b=0.4, a=0.85 } end
 		else
-			if wtxGadgets.RaidFrames1.colHealth then
+			if wtxGadgets.RaidFrames1.colHealth and wtxGadgets.RaidFrames1.ovHealthColor then
 				return {r=wtxGadgets.RaidFrames1.colHealth[1],g=wtxGadgets.RaidFrames1.colHealth[2],b=wtxGadgets.RaidFrames1.colHealth[3],a=wtxGadgets.RaidFrames1.colHealth[4]}
 			else 
 				return  {r=0.22,g=0.55,b=0.06, a=0.85}  end

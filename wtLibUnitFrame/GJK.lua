@@ -46,11 +46,18 @@ end
 WT.Unit.CreateVirtualProperty("alertHealthColor", { "id", "cleansable", "buffAlert" },
 	function(unit)
 		if unit.buffAlert then
-			return {r=wtxGadgets.RaidFrames1.AlertColor[1],g=wtxGadgets.RaidFrames1.AlertColor[2],b=wtxGadgets.RaidFrames1.AlertColor[3],a=wtxGadgets.RaidFrames1.AlertColor[4]} or { r=0.5, g=0.5, b=0, a=0.85 } 
+			if wtxGadgets.RaidFrames1.AlertColor then
+				return {r=wtxGadgets.RaidFrames1.AlertColor[1],g=wtxGadgets.RaidFrames1.AlertColor[2],b=wtxGadgets.RaidFrames1.AlertColor[3],a=wtxGadgets.RaidFrames1.AlertColor[4]}
+			else return { r=0.5, g=0.5, b=0, a=0.85 }  end
 		elseif unit.cleansable then
-			return {r=wtxGadgets.RaidFrames1.CleanseColor[1],g=wtxGadgets.RaidFrames1.CleanseColor[2],b=wtxGadgets.RaidFrames1.CleanseColor[3],a=wtxGadgets.RaidFrames1.CleanseColor[4]} or { r=0.2, g=0.15, b=0.4, a=0.85}
+			if wtxGadgets.RaidFrames1.CleanseColor then
+			return {r=wtxGadgets.RaidFrames1.CleanseColor[1],g=wtxGadgets.RaidFrames1.CleanseColor[2],b=wtxGadgets.RaidFrames1.CleanseColor[3],a=wtxGadgets.RaidFrames1.CleanseColor[4]}
+			else return { r=0.2, g=0.15, b=0.4, a=0.85} end
 		else
-			return {r=wtxGadgets.RaidFrames1.colHealth[1],g=wtxGadgets.RaidFrames1.colHealth[2],b=wtxGadgets.RaidFrames1.colHealth[3],a=wtxGadgets.RaidFrames1.colHealth[4]} or { r=0.07, g=0.07, b=0.07, a=0.85}
+			if wtxGadgets.RaidFrames1.colHealth then
+				return {r=wtxGadgets.RaidFrames1.colHealth[1],g=wtxGadgets.RaidFrames1.colHealth[2],b=wtxGadgets.RaidFrames1.colHealth[3],a=wtxGadgets.RaidFrames1.colHealth[4]}
+			else 
+				return  { r=0.07, g=0.07, b=0.07, a=0.85} end
 		end	
 	end
 )
@@ -64,11 +71,18 @@ WT.Unit.CreateVirtualProperty("alertHealthColor2", { "id", "cleansable", "buffAl
 		if unit.offline then
 			return {r=0.07,g=0.07,b=0.09, a=0.85}
 		elseif unit.buffAlert then
-			return {r=wtxGadgets.RaidFrames1.AlertColor[1],g=wtxGadgets.RaidFrames1.AlertColor[2],b=wtxGadgets.RaidFrames1.AlertColor[3],a=wtxGadgets.RaidFrames1.AlertColor[4]} or { r=0.5, g=0.5, b=0, a=0.85 }
+			if wtxGadgets.RaidFrames1.AlertColor then
+			return {r=wtxGadgets.RaidFrames1.AlertColor[1],g=wtxGadgets.RaidFrames1.AlertColor[2],b=wtxGadgets.RaidFrames1.AlertColor[3],a=wtxGadgets.RaidFrames1.AlertColor[4]}
+			else return { r=0.5, g=0.5, b=0, a=0.85 } end
 		elseif unit.cleansable then
-			return {r=wtxGadgets.RaidFrames1.CleanseColor[1],g=wtxGadgets.RaidFrames1.CleanseColor[2],b=wtxGadgets.RaidFrames1.CleanseColor[3],a=wtxGadgets.RaidFrames1.CleanseColor[4]} or { r=0.2, g=0.15, b=0.4, a=0.85 }
+			if wtxGadgets.RaidFrames1.CleanseColor then
+			return {r=wtxGadgets.RaidFrames1.CleanseColor[1],g=wtxGadgets.RaidFrames1.CleanseColor[2],b=wtxGadgets.RaidFrames1.CleanseColor[3],a=wtxGadgets.RaidFrames1.CleanseColor[4]}
+			else return { r=0.2, g=0.15, b=0.4, a=0.85 } end
 		else
-			return {r=wtxGadgets.RaidFrames1.colHealth[1],g=wtxGadgets.RaidFrames1.colHealth[2],b=wtxGadgets.RaidFrames1.colHealth[3],a=wtxGadgets.RaidFrames1.colHealth[4]} or {r=0.22,g=0.55,b=0.06, a=0.85} 
+			if wtxGadgets.RaidFrames1.colHealth then
+				return {r=wtxGadgets.RaidFrames1.colHealth[1],g=wtxGadgets.RaidFrames1.colHealth[2],b=wtxGadgets.RaidFrames1.colHealth[3],a=wtxGadgets.RaidFrames1.colHealth[4]}
+			else 
+				return  {r=0.22,g=0.55,b=0.06, a=0.85}  end
 		end
 	end
 )

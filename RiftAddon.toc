@@ -59,6 +59,7 @@ RunOnStartup =
   "wtBuffIcons_Renderer.lua",
   "wtBuffIcons.lua",
   "wtUnitFramePresets.lua", 
+  "wtRangeTraker.lua"
 }
 
 SavedVariables = 

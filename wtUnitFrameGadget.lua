@@ -198,10 +198,16 @@ end
 local rfEditors = {}
 local macroTypes = { "Left", "Middle", "Right", "Mouse4", "Mouse5", "WheelForward", "WheelBack" } 
 local macroNames = { "Left", "Middle", "Right", "Button 4", "Button 5", "Wheel Forward", "Wheel Back" } 
-
+local rfBlackListHots = nil
+local rfBlackListDebuff = nil
+local rfWhiteListHots = nil
+local rfWhiteListDebuff = nil
 local rfDialog = false
 local rfAppearance = false
-
+local tabContentHotsWL= nil
+local tabContentDebuffWL= nil
+local tabContentHotsBL= nil
+local tabContentDebuffBL= nil
 
 local function rf_OnTemplateChange(templateId)
 	if rfDialog == false then return end
@@ -228,7 +234,7 @@ end
 local function rfConfigDialog(container)
 	
 	container.Reset = function()
-		for idx, editor in ipairs(rfEditors) do editor:SetText("") end
+	for idx, editor in ipairs(rfEditors) do editor:SetText("") end
 		rfEditors[1]:SetText("target @unit")
 		rfEditors[3]:SetText("menu")
 	end
@@ -254,16 +260,22 @@ local function rfConfigDialog(container)
 	frmMacrosInner:SetPoint("TOPLEFT", frmMacros, "TOPLEFT", 4, 4)
 	frmMacrosInner:SetPoint("BOTTOMRIGHT", frmMacros, "BOTTOMRIGHT", -4, -4)
 
-	local frmOverride = UI.CreateFrame("Frame", "rfMacros", rfTabs.tabContent)
-	local frmOverrideInner = UI.CreateFrame("Frame", "rfMacrosInner", frmOverride)
+	local frmOverride = UI.CreateFrame("Frame", "rfOverride", rfTabs.tabContent)
+	local frmOverrideInner = UI.CreateFrame("Frame", "rfOverrideInner", frmOverride)
 	frmOverrideInner:SetPoint("TOPLEFT", frmOverride, "TOPLEFT", 4, 4)
 	frmOverrideInner:SetPoint("BOTTOMRIGHT", frmOverride, "BOTTOMRIGHT", -4, -4)
+	
+	local frmBlackList = UI.CreateFrame("Frame", "rfBlackList", rfTabs.tabContent)
+	local frmBlackListInner = UI.CreateFrame("Frame", "rflackListInner", frmBlackList)
+	frmBlackListInner:SetPoint("TOPLEFT", frmBlackList, "TOPLEFT", 4, 4)
+	frmBlackListInner:SetPoint("BOTTOMRIGHT", frmBlackList, "BOTTOMRIGHT", -4, -4)
 
 	rfTabs:SetTabPosition("top")
 	rfTabs:AddTab("Configuration", frmConfig)
 	rfTabs:AddTab("Mouse Macros", frmMacros)	
 	rfTabs:AddTab("Appearance", frmOverride)	
-
+	rfTabs:AddTab("Black/White List", frmBlackList)
+	
 	rfDialog = WT.Dialog(frmConfigInner)
 		:Select("template", TXT.RaidFrameTemplate, "LifeRaidFrame1", templateListItems, true, rf_OnTemplateChange)
 		:Select("layout", "Layout", "4 x 5", { "4 x 5", "5 x 4", "2 x 10", "10 x 2", "1 x 20", "20 x 1" }, false)
@@ -305,7 +317,13 @@ local function rfConfigDialog(container)
 	local macroTabs = UI.CreateFrame("SimpleLifeTabView", "macroTabs", frmMacrosInner)
 	macroTabs:SetTabPosition("left")
 	macroTabs:SetAllPoints(frmMacrosInner)
-
+	
+	local BLTabs = UI.CreateFrame("SimpleLifeTabView", "BLTabs", frmBlackListInner)
+	BLTabs:SetTabPosition("left")
+	BLTabs:SetAllPoints(frmBlackListInner)
+	--BLTabs:SetPoint("TOPLEFT", frmBlackListInner, "TOPLEFT", 16, 16)
+	--BLTabs:SetPoint("BOTTOMRIGHT", frmBlackListInner, "BOTTOMRIGHT", -16, -16)
+	
 	rfAppearance = WT.Dialog(frmOverrideInner)
 		:Checkbox("ovHealthTexture", "Override Health Texture?", false)
 		:TexSelect("texHealth", "Health Texture", "Texture 68", "bar")
@@ -322,21 +340,55 @@ local function rfConfigDialog(container)
 		:Label("__________________Alert/Cleanse______________________")
 		:ColorPicker("CleanseColor", "Cleansable Color", 0.2, 0.15, 0.4, 0.85)
 		:ColorPicker("AlertColor", "Alert Color", 0.5, 0.5, 0, 0.85)
+
 	
 	for idx, name in ipairs(macroNames) do
-	
 		local tabContent = UI.CreateFrame("Frame", "content", macroTabs.tabContent)
 		macroTabs:AddTab(name, tabContent)
-	
 		local txt = UI.CreateFrame("SimpleLifeTextArea", "text", tabContent)
 		txt:SetPoint("TOPLEFT", tabContent, "TOPLEFT", 16, 16)
 		txt:SetPoint("BOTTOMRIGHT", tabContent, "BOTTOMRIGHT", -16, -16)
 		txt:SetText("")
 		txt:SetBorder(1,0,0,0,1)
-		rfEditors[idx] = txt
-		
+		rfEditors[idx] = txt		
 	end
+		
+		tabContentHotsBL = UI.CreateFrame("Frame", "tabContentHotsBL", BLTabs)
+		BLTabs:AddTab("Hots BL", tabContentHotsBL)
+		local txtHotsBL = UI.CreateFrame("SimpleLifeTextArea", "txtHotsBL", tabContentHotsBL)
+		txtHotsBL:SetPoint("TOPLEFT", tabContentHotsBL, "TOPLEFT", 16, 16)
+		txtHotsBL:SetPoint("BOTTOMRIGHT", tabContentHotsBL, "BOTTOMRIGHT", -16, -16)
+		txtHotsBL:SetText("")
+		txtHotsBL:SetBorder(1,0,0,0,1)
+		rfBlackListHots = txtHotsBL
 	
+		tabContentDebuffBL = UI.CreateFrame("Frame", "tabContentDebuffBL", BLTabs)
+		BLTabs:AddTab("Debuffs BL", tabContentDebuffBL)
+		local txtDebuffBL = UI.CreateFrame("SimpleLifeTextArea", "txtDebuffBL", tabContentDebuffBL)
+		txtDebuffBL:SetPoint("TOPLEFT", tabContentDebuffBL, "TOPLEFT", 16, 16)
+		txtDebuffBL:SetPoint("BOTTOMRIGHT", tabContentDebuffBL, "BOTTOMRIGHT", -16, -16)
+		txtDebuffBL:SetText("")
+		txtDebuffBL:SetBorder(1,0,0,0,1)
+		rfBlackListDebuff = txtDebuffBL
+		
+		tabContentHotsWL = UI.CreateFrame("Frame", "tabContentHotsWL", BLTabs)
+		BLTabs:AddTab("Hots WL", tabContentHotsWL)
+		local txtHotsWL = UI.CreateFrame("SimpleLifeTextArea", "txtHotsWL", tabContentHotsWL)
+		txtHotsWL:SetPoint("TOPLEFT", tabContentHotsWL, "TOPLEFT", 16, 16)
+		txtHotsWL:SetPoint("BOTTOMRIGHT", tabContentHotsWL, "BOTTOMRIGHT", -16, -16)
+		txtHotsWL:SetText("")
+		txtHotsWL:SetBorder(1,0,0,0,1)
+		rfWhiteListHots = txtHotsWL
+	
+		tabContentDebuffWL = UI.CreateFrame("Frame", "tabContentDebuffWL", BLTabs)
+		BLTabs:AddTab("Debuffs WL", tabContentDebuffWL)
+		local txtDebuffWL = UI.CreateFrame("SimpleLifeTextArea", "txtDebuffWL", tabContentDebuffWL)
+		txtDebuffWL:SetPoint("TOPLEFT", tabContentDebuffWL, "TOPLEFT", 16, 16)
+		txtDebuffWL:SetPoint("BOTTOMRIGHT", tabContentDebuffWL, "BOTTOMRIGHT", -16, -16)
+		txtDebuffWL:SetText("")
+		txtDebuffWL:SetBorder(1,0,0,0,1)
+		rfWhiteListDebuff = txtDebuffWL
+		
 end
 
 
@@ -353,14 +405,56 @@ local function rfGetConfiguration()
 			conf.macros[macroTypes[idx]] = nil 
 		end
 	end
+
+-----------------------	blacklist----------------------
+	local blacklistHots = rfBlackListHots:GetText():wtSplit("\r")
+	local blacklistHot = {}
+	for idx, buff in ipairs(blacklistHots) do
+		local blBuff = buff:wtTrim()
+		if blBuff:len() > 0 then
+			blacklistHot[blBuff]= true
+		end
+	end
+	conf.BlackListHots = blacklistHot
+
+	local blacklistDebuffs = rfBlackListDebuff:GetText():wtSplit("\r")
+	local blacklistDebuff = {}
+	for idx, debuff in ipairs(blacklistDebuffs) do
+		local blDeBuff = debuff:wtTrim()
+		if blDeBuff:len() > 0 then
+			blacklistDebuff[blDeBuff]= true
+		end
+	end
+	conf.BlackListDebuff = blacklistDebuff
+-----------------------whitelist-----------------
+	local whitelistHots = rfWhiteListHots:GetText():wtSplit("\r")
+	local whitelistHot = {}
+	for idx, buff in ipairs(whitelistHots) do
+		local wlBuff = buff:wtTrim()
+		if wlBuff:len() > 0 then
+			whitelistHot[wlBuff]= true
+		end
+	end
+	conf.WhiteListHots = whitelistHot
+
+	local whitelistDebuffs = rfWhiteListDebuff:GetText():wtSplit("\r")
+	local whitelistDebuff = {}
+	for idx, debuff in ipairs(whitelistDebuffs) do
+		local blDeBuff = debuff:wtTrim()
+		if blDeBuff:len() > 0 then
+			whitelistDebuff[blDeBuff]= true
+		end
+	end
+	conf.WhiteListDebuff = whitelistDebuff
+
 	return conf
 end
 
 local function rfSetConfiguration(config)
 	rfDialog:SetValues(config)
 	rfAppearance:SetValues(config)
-	if not config.macros then config.macros = {} end
 	
+	if not config.macros then config.macros = {} end
 	for idx, editor in ipairs(rfEditors) do
 		local macroText = config.macros[macroTypes[idx]]
 		if macroText and (macroText:len() > 0) then
@@ -369,7 +463,64 @@ local function rfSetConfiguration(config)
 			rfEditors[idx]:SetText("")
 		end
 	end
+	
+	-----------------------	blacklist----------------------
+	if not config.BlackListHots then config.BlackListHots = {} end
+	local BLHots = ""
+	if config.BlackListHots then
+		local sortedHots = {}
+		for buff in pairs(config.BlackListHots) do
+			table.insert(sortedHots, buff)
+		end
+		table.sort(sortedHots)
+		for idx, buff in ipairs(sortedHots) do
+			BLHots = BLHots .. buff .. "\n"
+		end	
+	end
+	rfBlackListHots:SetText(BLHots)
 
+	if not config.BlackListDebuff then config.BlackListDebuff = {} end
+	local BLDebuffs = ""
+	if config.BlackListDebuff then
+		local sortedDebuffs = {}
+		for debuff in pairs(config.BlackListDebuff) do
+			table.insert(sortedDebuffs, debuff)
+		end
+		table.sort(sortedDebuffs)
+		for idx, debuff in ipairs(sortedDebuffs) do
+			BLDebuffs = BLDebuffs .. debuff .. "\n"
+		end	
+	end
+	rfBlackListDebuff:SetText(BLDebuffs)
+-----------------------	whitelist----------------------
+	if not config.WhiteListHots then config.WhiteListHots = {} end
+	local WLHots = ""
+	if config.WhiteListHots then
+		local sortedHots = {}
+		for buff in pairs(config.WhiteListHots) do
+			table.insert(sortedHots, buff)
+		end
+		table.sort(sortedHots)
+		for idx, buff in ipairs(sortedHots) do
+			WLHots = WLHots .. buff .. "\n"
+		end	
+	end
+	rfWhiteListHots:SetText(WLHots)
+
+	if not config.WhiteListDebuff then config.WhiteListDebuff = {} end
+	local WLDebuffs = ""
+	if config.WhiteListDebuff then
+		local sortedDebuffs = {}
+		for debuff in pairs(config.WhiteListDebuff) do
+			table.insert(sortedDebuffs, debuff)
+		end
+		table.sort(sortedDebuffs)
+		for idx, debuff in ipairs(sortedDebuffs) do
+			WLDebuffs = WLDebuffs .. debuff .. "\n"
+		end	
+	end
+	rfWhiteListDebuff:SetText(WLDebuffs)
+	
 end
 
 
@@ -458,7 +609,6 @@ local function gfConfigDialog(container)
 	end
 
 end
-
 
 local function gfGetConfiguration()
 	local conf = gfDialog:GetValues()

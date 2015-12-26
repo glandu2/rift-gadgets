@@ -196,6 +196,8 @@ function HealFrame:Construct(options)
 				-- Type Specific Element Configuration
 				rows=1, cols=3, iconSize=16, iconSpacing=1, borderThickness=1,
 				auraType="debuff", 
+				rejectBuffs= options.BlackListDebuff,
+				acceptBuffs = options.WhiteListDebuff,
 				growthDirection = "left_up"
 			},
 
@@ -204,6 +206,8 @@ function HealFrame:Construct(options)
 				attach = {{ point="TOPRIGHT", element="frameBackdrop", targetPoint="TOPRIGHT", offsetX=-1, offsetY=1 }},
 				rows=1, cols=6, iconSize=14, iconSpacing=0, borderThickness=1,
 				auraType="hot",selfCast=true, 
+				rejectBuffs= options.BlackListHots,
+				acceptBuffs = options.WhiteListHots,
 				growthDirection = "left_up",
 			},
 

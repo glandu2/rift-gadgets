@@ -47,7 +47,15 @@ function wtBuffPanel:Construct()
 	self.config = {}
 
 	self.config.id = config.id
-
+	
+	--dump(config.acceptBuffs)
+	--local x = {}
+	if config.acceptBuffs then
+	if not next(config.acceptBuffs) then config.acceptBuffs = nil end
+	end
+	if config.rejectBuffs then
+	if not next(config.rejectBuffs) then config.rejectBuffs = nil end
+	end
 	self.config.acceptBuffs = config.acceptBuffs or nil -- table of buff names mapped to 'true'. If provided, only these buffs will ever be loaded, and all other filters are ignored
 	self.config.rejectBuffs = config.rejectBuffs or nil -- table of buff names mapped to 'true'. If provided, these buffs will never be loaded
 

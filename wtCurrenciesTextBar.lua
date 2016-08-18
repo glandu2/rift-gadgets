@@ -211,6 +211,26 @@ local function ConfigDialog(container)
 	end
 	end
 	
+	StoreText = UI.CreateFrame("Text", "Rift Store", frmCurrencies)
+	StoreText:SetText("Rift Store")
+	StoreText:SetFontColor(0.2,0.4,0.7)
+	StoreText:SetEffectGlow({ strength = 3 })
+	StoreText:SetFontSize(18)
+	--StoreText:SetFont(AddonId, "blank-Bold")
+	StoreText:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 4)
+
+	lastName = StoreText
+	if MoneyGadgets.Currencies.Store then
+	for i,v in pairs(MoneyGadgets.Currencies.Store) do
+		MoneyGadgets.curName[i] = UI.CreateFrame("SimpleLifeCheckbox", "Rift Store", frmCurrencies)
+		MoneyGadgets.curName[i]:SetText(i.."")
+		MoneyGadgets.curName[i]:SetChecked(false)
+		MoneyGadgets.curName[i]:SetPoint("TOPLEFT", lastName, "BOTTOMLEFT", 0, 3)
+		lastName = MoneyGadgets.curName[i]
+	end
+	end
+	
+	
 	RaidsText = UI.CreateFrame("Text", "RaidsText", frmCurrencies)
 	RaidsText:SetText("Raids")
 	RaidsText:SetFontColor(0.2,0.4,0.7)

@@ -312,6 +312,7 @@ function StandardFrame:Construct(options)
 	
 	self:SetSecureMode("restricted")
 	self:SetMouseoverUnit(self.UnitSpec)
+	self:SetMouseMasking("limited")
 	
 	if options.clickToTarget then 
 		self:EventMacroSet(Event.UI.Input.Mouse.Left.Click, "target @" .. self.UnitSpec)

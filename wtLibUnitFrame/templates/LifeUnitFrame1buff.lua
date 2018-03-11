@@ -2,24 +2,24 @@ local toc, data = ...
 local AddonId = toc.identifier
 
 -- Frame Configuration Options --------------------------------------------------
-local LifeUnitFrame1 = WT.UnitFrame:Template("LifeUnitFrame1")
-LifeUnitFrame1.Configuration.Name = "Life Unit Frame1 (Green health)"
-LifeUnitFrame1.Configuration.RaidSuitable = false
-LifeUnitFrame1.Configuration.UnitSuitable = true
-LifeUnitFrame1.Configuration.FrameType = "Frame"
-LifeUnitFrame1.Configuration.Width = 250
-LifeUnitFrame1.Configuration.Height = 40
-LifeUnitFrame1.Configuration.Resizable = { 10, 10, 500, 100 }
-LifeUnitFrame1.Configuration.SupportsOwnBuffsPanel = false
-LifeUnitFrame1.Configuration.SupportsOwnDebuffsPanel = false
-LifeUnitFrame1.Configuration.SupportsExcludeBuffsPanel = false
-LifeUnitFrame1.Configuration.SupportsExcludeCastsPanel = true
-LifeUnitFrame1.Configuration.SupportsShowRadius = true
-LifeUnitFrame1.Configuration.SupportsShowCombo = true
-LifeUnitFrame1.Configuration.SupportsShowRankIconPanel = true
+local LifeUnitFrame1Buff = WT.UnitFrame:Template("LifeUnitFrame1Buff")
+LifeUnitFrame1Buff.Configuration.Name = "Life Unit Frame1 with buff (Green health)"
+LifeUnitFrame1Buff.Configuration.RaidSuitable = false
+LifeUnitFrame1Buff.Configuration.UnitSuitable = true
+LifeUnitFrame1Buff.Configuration.FrameType = "Frame"
+LifeUnitFrame1Buff.Configuration.Width = 250
+LifeUnitFrame1Buff.Configuration.Height = 40
+LifeUnitFrame1Buff.Configuration.Resizable = { 10, 10, 500, 100 }
+LifeUnitFrame1Buff.Configuration.SupportsOwnBuffsPanel = false
+LifeUnitFrame1Buff.Configuration.SupportsOwnDebuffsPanel = false
+LifeUnitFrame1Buff.Configuration.SupportsExcludeBuffsPanel = false
+LifeUnitFrame1Buff.Configuration.SupportsExcludeCastsPanel = true
+LifeUnitFrame1Buff.Configuration.SupportsShowRadius = true
+LifeUnitFrame1Buff.Configuration.SupportsShowCombo = true
+LifeUnitFrame1Buff.Configuration.SupportsShowRankIconPanel = true
 
 --------------------------------------------------------------
-function LifeUnitFrame1:Construct(options)
+function LifeUnitFrame1Buff:Construct(options)
 	local template =
 	{
 		elements = 
@@ -306,6 +306,30 @@ function LifeUnitFrame1:Construct(options)
 				stack = true, stackSize = 12, outline=true,
 				growthDirection = "right_down",
 			},]]
+		{
+			id="buffPanelBuffs", type="BuffPanel", parent="HorizontalBar", layer=20,
+			attach = {{ point="BOTTOMLEFT", element="frameBackdrop", targetPoint="TOPLEFT", offsetX=0, offsetY=-5 }},
+			rows=3, cols=4, iconSize=26, iconSpacingHorizontal=0, iconSpacingVertical=13, borderThickness=1,
+			acceptLowPriorityBuffs=true, acceptMediumPriorityBuffs=true, acceptHighPriorityBuffs=true, acceptCriticalPriorityBuffs=true,
+			acceptLowPriorityDebuffs=false, acceptMediumPriorityDebuffs=false, acceptHighPriorityDebuffs=false, acceptCriticalPriorityDebuffs=false,
+			growthDirection = "right_up", selfCast=false,
+			timerSize=10, timerOffsetX=0, timerOffsetY=-19,
+			stackSize=12, stackOffsetX=0, stackOffsetY=0, stackBackgroundColor={r=0,g=0,b=0,a=0.7},
+			borderColor={r=0,g=0,b=0,a=1},
+			sweepOverlay=true,
+		},
+		{
+			id="buffPanelDebuffs", type="BuffPanel", parent="HorizontalBar", layer=20,
+			attach = {{ point="BOTTOMRIGHT", element="frameBackdrop", targetPoint="TOPRIGHT", offsetX=0, offsetY=-5 }},
+			rows=3, cols=2, iconSize=26, iconSpacingHorizontal=0, iconSpacingVertical=13, borderThickness=1, 
+			acceptLowPriorityBuffs=false, acceptMediumPriorityBuffs=false, acceptHighPriorityBuffs=false, acceptCriticalPriorityBuffs=false,
+			acceptLowPriorityDebuffs=true, acceptMediumPriorityDebuffs=true, acceptHighPriorityDebuffs=true, acceptCriticalPriorityDebuffs=true,
+			growthDirection = "left_up",
+			timerSize=10, timerOffsetX=0, timerOffsetY=-19,
+			stackSize=12, stackOffsetX=0, stackOffsetY=0, stackBackgroundColor={r=0,g=0,b=0,a=0.7},
+			borderColor={r=1,g=0,b=0,a=1},
+			sweepOverlay=true,
+		},
 			{
 			id="imgInCombat", type="Image", parent="frame", layer=55,
 			attach = {{ point="CENTER", element="frameBackdrop", targetPoint="TOPLEFT", offsetX=0, offsetY=20 }}, visibilityBinding="combat",
@@ -340,8 +364,8 @@ function LifeUnitFrame1:Construct(options)
 		function(el)
 			local newWidth = self:GetWidth()
 			local newHeight = self:GetHeight()
-			local fracWidth = newWidth / LifeUnitFrame1.Configuration.Width
-			local fracHeight = newHeight / LifeUnitFrame1.Configuration.Height
+			local fracWidth = newWidth / LifeUnitFrame1Buff.Configuration.Width
+			local fracHeight = newHeight / LifeUnitFrame1Buff.Configuration.Height
 			local fracMin = math.min(fracWidth, fracHeight)
 			local fracMax = math.max(fracWidth, fracHeight)
 			local labName = self.Elements.labelName

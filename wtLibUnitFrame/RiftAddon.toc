@@ -52,6 +52,7 @@ RunOnStartup =
   "templates/LifeRaidFrame2.lua",
   "templates/LifeRaidFrameCallingColor.lua",
   "templates/LifeUnitFrame1.lua",
+  "templates/LifeUnitFrame1buff.lua",
   "templates/LifeUnitFrame2.lua",
   "templates/LifeTargetOfTarget.lua",
   "templates/LifeGroupFrame.lua",

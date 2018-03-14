@@ -1,0 +1,5 @@
+﻿# GIT ignores
+.idea/workspace.xml
+.idea/inspectionProfiles
+Documentation.bbcode
+.idea/dictionaries

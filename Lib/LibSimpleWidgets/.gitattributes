@@ -1,0 +1,5 @@
+.idea		export-ignore
+.idea/*		export-ignore
+*.iml		export-ignore
+.bzrignore	export-ignore
+.gitattributes  export-ignore
